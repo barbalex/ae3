@@ -27,10 +27,9 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-// TODO:
 // Use react-router with outlets
 // render routes in outlet inside Data
-const App = () => {
+const RouterComponent = () => {
   const store = useContext(storeContext)
   const { stacked } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -55,6 +54,8 @@ const App = () => {
     activeNodeArray[1] &&
     activeNodeArray.length === 3 &&
     activeNodeArray[2] === 'Beziehungen'
+
+  console.log('Router rendering')
 
   return (
     <ErrorBoundary>
@@ -101,4 +102,4 @@ const App = () => {
   )
 }
 
-export default observer(App)
+export default observer(RouterComponent)

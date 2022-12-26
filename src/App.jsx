@@ -24,7 +24,7 @@ import Store from './store'
 import Stacker from './components/Stacker'
 import IdParameter from './components/IdParameter'
 import ActiveNodeArraySetter from './components/ActiveNodeArraySetter'
-import AppComponent from './components/App'
+import Router from './components/Router'
 import Layout from './components/Layout'
 
 const App = () => {
@@ -71,7 +71,7 @@ const App = () => {
                 <IdParameter />
                 <ThemeProvider theme={theme}>
                   <Layout>
-                    <AppComponent />
+                    <Router />
                   </Layout>
                 </ThemeProvider>
                 <Stacker />
