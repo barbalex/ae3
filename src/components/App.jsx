@@ -16,9 +16,9 @@ import PCO from './PropertyCollection/PCO'
 import RCO from './PropertyCollection/RCO'
 import Taxonomy from './Taxonomy'
 import PropertyCollection from './PropertyCollection'
-import Dokumentation from '../pages/Dokumentation'
+// import Dokumentation from '../routes/Dokumentation'
 import ExportStacked from './Export/ExportStacked'
-import ExportFlexed from './Export/ExportFlexed' 
+import ExportFlexed from './Export/ExportFlexed'
 
 const Container = styled.div`
   height: 100%;
@@ -92,7 +92,7 @@ const App = () => {
             <Route path="Daten/Benutzer/*" element={<Benutzer />} />
             <Route path="Daten/Organisationen/*" element={<Organisation />} />
           </Route>
-          <Route path="/Dokumentation/*" element={<Dokumentation />} />
+          {/* <Route path="/Dokumentation/*" element={<Dokumentation />} /> */}
           <Route
             path="/Export/*"
             element={stacked ? <ExportStacked /> : <ExportFlexed />}

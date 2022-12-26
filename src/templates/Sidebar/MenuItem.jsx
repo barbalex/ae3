@@ -1,8 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import { useLocation } from 'react-router-dom'
-import { navigate } from 'gatsby'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 
 import storeContext from '../../storeContext'
@@ -15,6 +14,7 @@ const MenuItem = ({ node }) => {
   const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
 
   const location = useLocation()
+  const navigate = useNavigate()
 
   const { slug, title } = node.frontmatter
   const activeUrl = `/Dokumentation/${slug}`
@@ -24,7 +24,7 @@ const MenuItem = ({ node }) => {
   const onClickMenuItem = useCallback(() => {
     navigate(`${activeUrl}/`)
     sidebarWidth && setSidebarWidth(null)
-  }, [activeUrl, setSidebarWidth, sidebarWidth])
+  }, [activeUrl, navigate, setSidebarWidth, sidebarWidth])
 
   return (
     <>

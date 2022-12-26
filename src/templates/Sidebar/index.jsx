@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'gatsby'
+import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { withResizeDetector } from 'react-resize-detector'

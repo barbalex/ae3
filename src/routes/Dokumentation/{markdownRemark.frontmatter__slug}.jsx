@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useState } from 'react'
-import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -46,6 +45,7 @@ const Content = styled.div`
   height: 100%;
 `
 
+// TODO: build own pages
 const DocTemplate = ({ data, height }) => {
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html ?? `<div>no data</div>`
@@ -142,31 +142,5 @@ const DocTemplate = ({ data, height }) => {
     </ErrorBoundary>
   )
 }
-
-export const pageQuery = graphql`
-  query ($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
-      frontmatter {
-        date(formatString: "DD.MM.YYYY")
-        slug
-        title
-      }
-    }
-    allMarkdownRemark(sort: { frontmatter: { sort1: ASC } }) {
-      edges {
-        node {
-          id
-          frontmatter {
-            date(formatString: "DD.MM.YYYY")
-            slug
-            title
-            sort1
-          }
-        }
-      }
-    }
-  }
-`
 
 export default DocTemplate

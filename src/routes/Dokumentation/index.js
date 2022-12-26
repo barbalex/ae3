@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -115,22 +114,5 @@ const Dokumentation = ({ data }) => {
     </ErrorBoundary>
   )
 }
-
-export const pageQuery = graphql`
-  query {
-    allMarkdownRemark(sort: { frontmatter: { sort1: ASC } }) {
-      edges {
-        node {
-          id
-          frontmatter {
-            title
-            date(formatString: "DD.MM.YYYY")
-            slug
-          }
-        }
-      }
-    }
-  }
-`
 
 export default Dokumentation
