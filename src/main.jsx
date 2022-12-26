@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 
 import App from './App'
-import './index.css'
 
 // https://vite-plugin-pwa.netlify.app/guide/prompt-for-update.html#runtime
 registerSW({
@@ -23,8 +22,9 @@ registerSW({
   },
 })
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+// .render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>
+// )

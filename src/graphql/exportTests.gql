@@ -1,0 +1,94 @@
+{
+  exportPcoFloraExample: exportPco(exportTaxonomies: ["SISF (2005)"], taxFilters: [{comparator: "ILIKE", pname: "Artname vollständig", taxname: "SISF (2005)", value: "ivapfl"}], pcoFilters: []) {
+    totalCount
+    nodes {
+      id
+      objectId
+      properties
+    }
+  }
+  exportSynonymPcoFloraExample: exportSynonymPco(exportTaxonomies: ["SISF (2005)"], taxFilters: [{comparator: "ILIKE", pname: "Artname vollständig", taxname: "SISF (2005)", value: "ivapfl"}], pcoFilters: []) {
+    totalCount
+    nodes {
+      id
+      objectId
+      properties
+    }
+  }
+  exportRelationFloraExample: exportRco(exportTaxonomies: ["SISF (2005)"], taxFilters: [{comparator: "ILIKE", pname: "Artname vollständig", taxname: "SISF (2005)", value: "ivapfl"}], rcoFilters: []) {
+    totalCount
+    nodes {
+      id
+      objectId
+      relationType
+      properties
+    }
+  }
+  exportSynonymRelationFloraExample: exportSynonymRco(exportTaxonomies: ["SISF (2005)"], taxFilters: [{comparator: "ILIKE", pname: "Artname vollständig", taxname: "SISF (2005)", value: "ivapfl"}], rcoFilters: []) {
+    totalCount
+    nodes {
+      id
+      objectId
+      relationType
+      properties
+    }
+  }
+  exportPcoFaunaExample: exportPco(
+    exportTaxonomies: ["CSCF (2009)"], 
+    taxFilters: [{comparator: "ILIKE", pname: "Gattung", taxname: "CSCF (2009)", value: "anis"}], 
+    pcoFilters: [{comparator: "ILIKE", pname: "Priorität", pcname: "CH Prioritäten (2011)", value: "och"}],
+    rcoFilters: [],
+    pcoProperties: [{pcname: "Blaue Liste (1998)", pname: "Aufwand"}],
+    considersynonyms: true
+  ) {
+    totalCount
+    nodes {
+      id
+      objectId
+      properties
+    }
+  }
+  exportPcoFloraExample: exportPco(
+    exportTaxonomies: ["SISF (2005)"], 
+    taxFilters: [], 
+    pcoFilters: [],
+    rcoFilters: [],
+    pcoProperties: [{pcname: "Blaue Liste (1998)", pname: "Aufwand"}],
+    considersynonyms: true
+  ) {
+    totalCount
+    nodes {
+      id
+      objectId
+      properties
+    }
+  }
+  exportObjectFaunaExample: exportObject(
+    exportTaxonomies: ["CSCF (2009)"],
+    taxFilters: [{comparator: "ILIKE", pname: "Gattung", taxname: "SISF (2005)", value: "Canis"}],
+    pcoFilters: [{comparator: "ILIKE", pname: "Priorität", pcname: "CH Prioritäten (2011)", value: "och"}],
+    rcoFilters: [],
+    considersynonyms: true
+  ) {
+    totalCount
+    nodes {
+      id
+      name
+      properties
+    }
+  }
+  exportObjectFloraExample: exportObject(
+    exportTaxonomies: ["SISF (2005)"], 
+    taxFilters: [{comparator: "ILIKE", pname: "Artname vollständig", taxname: "SISF (2005)", value: "ivapfl"}], 
+    pcoFilters: [], 
+    rcoFilters: [],
+    considersynonyms: true
+  ) {
+    totalCount
+    nodes {
+      id
+      name
+      properties
+    }
+  }
+}
