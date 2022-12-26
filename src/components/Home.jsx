@@ -7,6 +7,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../storeContext'
+// maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
 import ProgressiveImg from './shared/ProgressiveImg'
 import image from '../images/home.jpg'
 import placeholderSrc from '../images/home_small.jpg'
