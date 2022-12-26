@@ -191,8 +191,6 @@ const Header = () => {
   const { pathname } = location
   const pathArray = pathname.split('/').filter((a) => !!a)
 
-  console.log('Header: pathArray:', pathArray)
-
   return (
     <ErrorBoundary>
       <Container>
