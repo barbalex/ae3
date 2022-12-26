@@ -177,15 +177,6 @@ const TreeComponent = () => {
 
   const client = useApolloClient()
 
-  // TODO: not registering changes?
-  // or is only url changed but not activeNodeArray?
-  console.log('TreeComponent', {
-    activeNodeArray,
-    variables,
-  })
-
-  useEffect(() => console.log('TreeComponent first render'), [])
-
   const { isLoading, error, data } = useQuery({
     queryKey: ['treeQuery', variables],
     queryFn: () =>
@@ -203,11 +194,11 @@ const TreeComponent = () => {
   // if isLoading, return previous value to avoid flickering
   const nodes = useMemo(() => {
     if (isLoading) {
-      console.log('Tree, memo', {
-        isLoading,
-        previousData: previousData.current,
-        data,
-      })
+      // console.log('TreeComponent, memo', {
+      //   isLoading,
+      //   previousData: previousData.current,
+      //   data,
+      // })
       return previousData.current ?? []
     }
     if (data?.data?.treeFunction?.nodes) {
@@ -221,16 +212,30 @@ const TreeComponent = () => {
 
   useEffect(() => {
     const index = findIndex(nodes, (node) => isEqual(node.url, activeNodeArray))
+    // console.log('TreeComponent, scrolling to node at index', index)
     listRef?.current?.scrollToItem(index)
   }, [activeNodeArray, nodes])
 
   const userId = data?.data?.userByName?.id
 
-  const userRoles = (
-    data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
-  ).map((r) => r?.role)
-  const userIsTaxWriter =
-    userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
+  const userIsTaxWriter = useMemo(() => {
+    const userRoles = (
+      data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
+    ).map((r) => r?.role)
+    return (
+      userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
+    )
+  }, [data?.data?.userByName?.organizationUsersByUserId?.nodes])
+
+  // console.log('TreeComponent', {
+  //   activeNodeArray,
+  //   variables,
+  //   width,
+  //   height,
+  //   userIsTaxWriter,
+  //   nodes,
+  //   isLoading,
+  // })
 
   if (error) {
     return (
