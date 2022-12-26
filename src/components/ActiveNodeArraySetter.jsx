@@ -12,10 +12,10 @@ const ActiveNodeArraySetter = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  console.log('ActiveNodeArraySetter', { pathname })
+  // console.log('ActiveNodeArraySetter', { pathname })
 
   useEffect(() => {
-    console.log('ActiveNodeArraySetter: setting activeNodeArray')
+    // console.log('ActiveNodeArraySetter: setting activeNodeArray')
     setActiveNodeArray(getActiveNodeArrayFromPathname(), navigate)
   }, [navigate, pathname, setActiveNodeArray])
 }
