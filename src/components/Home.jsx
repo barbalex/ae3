@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { StaticImage } from 'gatsby-plugin-image'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
@@ -8,6 +7,9 @@ import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../storeContext'
+import ProgressiveImg from './shared/ProgressiveImg'
+import image from '../images/home.jpg'
+import placeholderSrc from '../images/home_small.jpg'
 
 const StyledSimpleBar = styled(SimpleBar)`
   max-height: 100%;
@@ -110,12 +112,7 @@ const Home = () => {
   return (
     <StyledSimpleBar>
       <Container ref={ref} data-width={width}>
-        <StaticImage
-          src="../images/home.jpg"
-          alt="Bläuling"
-          style={bgImageStyle}
-          layout="fullWidth"
-        />
+        <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
         <CardContainer data-width={width}>
           <Card>
             <CardTitle>Informationen zu:</CardTitle>
