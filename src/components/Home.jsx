@@ -22,18 +22,20 @@ const StyledSimpleBar = styled(SimpleBar)`
     background: rgba(0, 0, 0, 0.7) !important;
   }
 `
-const Container = styled.div`
-  padding: ${(props) =>
-    props['data-width'] > 1700
-      ? '55px'
-      : props['data-width'] > 1200
-      ? '45px'
-      : props['data-width'] > 800
-      ? '35px'
-      : '25px'};
-  position: relative;
+const OuterContainer = styled.div`
+  height: 100%;
   min-height: 100%;
-  color: black !important;
+  position: relative;
+  overflow: hidden;
+`
+const ScrollContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  overflow-y: auto;
+  /* prevent layout shift when scrollbar appears */
+  scrollbar-gutter: stable;
 `
 const CardContainer = styled.div`
   display: grid;
@@ -60,6 +62,16 @@ const CardContainer = styled.div`
     margin-bottom: 0 !important;
     margin-top: 10px !important;
   }
+  padding: ${(props) =>
+    props['data-width'] > 1700
+      ? '55px'
+      : props['data-width'] > 1200
+      ? '45px'
+      : props['data-width'] > 800
+      ? '35px'
+      : '25px'};
+  position: relative;
+  color: black !important;
 `
 const Card = styled(MaterialCard)`
   padding: 20px;
@@ -110,9 +122,9 @@ const Home = () => {
   }, [homeWidth, setHomeWidth, width])
 
   return (
-    <StyledSimpleBar>
-      <Container ref={ref} data-width={width}>
-        <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+    <OuterContainer ref={ref} data-width={width}>
+      <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+      <ScrollContainer>
         <CardContainer data-width={width}>
           <Card>
             <CardTitle>Informationen zu:</CardTitle>
@@ -141,8 +153,8 @@ const Home = () => {
             </DokuLink>
           </Card>
         </CardContainer>
-      </Container>
-    </StyledSimpleBar>
+      </ScrollContainer>
+    </OuterContainer>
   )
 }
 

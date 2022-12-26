@@ -10,7 +10,7 @@ const DataElement = styled(ReflexElement)`
   overflow-x: hidden !important;
 `
 
-const DataFlexed = () => (
+const DataFlexed = () => ( 
   <ErrorBoundary>
     <ReflexContainer orientation="vertical">
       <ReflexElement flex={0.35} className="tree-reflex-element">
