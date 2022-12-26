@@ -20,6 +20,7 @@ import PropertyCollection from './PropertyCollection'
 import ExportStacked from './Export/ExportStacked'
 import ExportFlexed from './Export/ExportFlexed'
 import Login from './Login'
+import FourOhFour from './404'
 
 const Container = styled.div`
   height: 100%;
@@ -94,6 +95,7 @@ const RouterComponent = () => {
             element={stacked ? <ExportStacked /> : <ExportFlexed />}
           />
           <Route path="/Login" element={<Login />} />
+          <Route path="*" element={<FourOhFour />} />
         </Routes>
       </Container>
     </ErrorBoundary>

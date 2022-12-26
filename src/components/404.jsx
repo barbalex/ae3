@@ -4,8 +4,8 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
-import Layout from '../components/Layout'
-import ErrorBoundary from '../components/shared/ErrorBoundary'
+import Layout from './Layout'
+import ErrorBoundary from './shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -43,27 +43,25 @@ const FourOFour = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <Layout>
-          <TextContainer>
-            <PageTitle align="center" variant="h6">
-              Oh je
-            </PageTitle>
-          </TextContainer>
-          <TextContainer>
-            <Text align="center" variant="h6">
-              Diese Seite ist nicht verfügbar.
-            </Text>
-          </TextContainer>
-          <TextContainer>
-            <StyledButton
-              variant="outlined"
-              onClick={onClickBack}
-              color="inherit"
-            >
-              Zurück zur Startseite
-            </StyledButton>
-          </TextContainer>
-        </Layout>
+        <TextContainer>
+          <PageTitle align="center" variant="h6">
+            Oh je
+          </PageTitle>
+        </TextContainer>
+        <TextContainer>
+          <Text align="center" variant="h6">
+            Diese Seite ist nicht verfügbar.
+          </Text>
+        </TextContainer>
+        <TextContainer>
+          <StyledButton
+            variant="outlined"
+            onClick={onClickBack}
+            color="inherit"
+          >
+            Zurück zur Startseite
+          </StyledButton>
+        </TextContainer>
       </Container>
     </ErrorBoundary>
   )
