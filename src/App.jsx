@@ -25,6 +25,7 @@ import Stacker from './components/Stacker'
 import IdParameter from './components/IdParameter'
 import ActiveNodeArraySetter from './components/ActiveNodeArraySetter'
 import AppComponent from './components/App'
+import Layout from './components/Layout'
 
 const App = () => {
   const idb = initializeIdb()
@@ -69,7 +70,9 @@ const App = () => {
                 <ActiveNodeArraySetter />
                 <IdParameter />
                 <ThemeProvider theme={theme}>
-                  <AppComponent />
+                  <Layout>
+                    <AppComponent />
+                  </Layout>
                 </ThemeProvider>
                 <Stacker />
               </StyledEngineProvider>
