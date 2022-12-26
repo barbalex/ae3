@@ -55,8 +55,6 @@ const RouterComponent = () => {
     activeNodeArray.length === 3 &&
     activeNodeArray[2] === 'Beziehungen'
 
-  console.log('Router rendering')
-
   return (
     <ErrorBoundary>
       <Container>
