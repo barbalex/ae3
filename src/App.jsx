@@ -24,7 +24,7 @@ import Store from './store'
 import Stacker from './components/Stacker'
 import IdParameter from './components/IdParameter'
 import ActiveNodeArraySetter from './components/ActiveNodeArraySetter'
-import AppComponent from './App'
+import AppComponent from './components/App'
 
 const App = () => {
   const idb = initializeIdb()

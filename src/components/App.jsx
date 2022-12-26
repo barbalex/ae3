@@ -18,7 +18,7 @@ import Taxonomy from './Taxonomy'
 import PropertyCollection from './PropertyCollection'
 import Dokumentation from '../pages/Dokumentation'
 import ExportStacked from './Export/ExportStacked'
-import ExportFlexed from './Export/ExportFlexed'
+import ExportFlexed from './Export/ExportFlexed' 
 
 const Container = styled.div`
   height: 100%;
