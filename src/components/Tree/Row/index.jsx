@@ -54,6 +54,7 @@ const SymbolIcon = styled(Icon)`
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
+  max-width: 26px;
   &:hover {
     color: #f57c00 !important;
   }
@@ -67,7 +68,6 @@ const SymbolSpan = styled.span`
   margin-top: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '-9px' : '-9px'};
   font-size: 28px !important;
-  width: 26px;
 `
 const TextSpan = styled.span`
   margin-left: 0;
@@ -190,7 +190,7 @@ const Row = ({ index = 0, style, data, userId }) => {
             <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
               {data.label}
             </TextSpan>
-            <InfoSpan>{data.info ? `(${data.info})` : ''}</InfoSpan>
+            {data.info && <InfoSpan>{`(${data.info})`}</InfoSpan>}
           </StyledNode>
         </ContextMenuTrigger>
       </ErrorBoundary>
