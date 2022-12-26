@@ -4,7 +4,7 @@ import {
   ContextMenu,
   MenuItem,
   connectMenu,
-} from '../../../modules/react-contextmenu'
+} from 'react-contextmenu'
 
 const dataDelete = {
   action: 'delete',

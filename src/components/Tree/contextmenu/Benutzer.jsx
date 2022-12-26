@@ -1,10 +1,6 @@
 import React from 'react'
 
-import {
-  ContextMenu,
-  MenuItem,
-  connectMenu,
-} from '../../../modules/react-contextmenu'
+import { ContextMenu, MenuItem, connectMenu } from 'react-contextmenu'
 
 const dataInsert = {
   action: 'insert',

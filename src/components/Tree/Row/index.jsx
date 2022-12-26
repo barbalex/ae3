@@ -14,7 +14,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { ContextMenuTrigger } from '../../../modules/react-contextmenu'
+import { ContextMenuTrigger } from 'react-contextmenu'
 import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath'
 import onClickContextMenuDo from './onClickContextMenu'
 import storeContext from '../../../storeContext'
