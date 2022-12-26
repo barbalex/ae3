@@ -162,7 +162,7 @@ const Header = () => {
     navigate('/Dokumentation')
   }, [navigate])
   const onClickColumnButtonData = useCallback(() => {
-    navigate('/Daten')
+    navigate('/')
   }, [navigate])
   const onClickColumnButtonExport = useCallback(() => {
     navigate('/Export')

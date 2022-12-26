@@ -8,6 +8,7 @@ body {
   font-family: sans-serif;
   background-color: #fff9f1 !important;
   hyphens: auto;
+  margin: 0;
 }
 
 #root {

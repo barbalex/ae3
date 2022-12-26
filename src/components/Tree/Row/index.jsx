@@ -115,7 +115,7 @@ const Row = ({ index = 0, style, data, userId }) => {
   const onClickNode = useCallback(async () => {
     // or if node is already active
     if (!isEqual(url, activeNodeArray)) {
-      navigate(`/Daten/${url.join('/')}`)
+      navigate(`/${url.join('/')}`)
     }
   }, [activeNodeArray, navigate, url])
   const onClickExpandMore = useCallback(
@@ -124,7 +124,7 @@ const Row = ({ index = 0, style, data, userId }) => {
         // close node if its expand more symbol was clicked
         const newUrl = [...url]
         newUrl.pop()
-        navigate(`/Daten/${newUrl.join('/')}`)
+        navigate(`/${newUrl.join('/')}`)
         // prevent onClick on node
         event.preventDefault()
       }

@@ -19,6 +19,7 @@ import PropertyCollection from './PropertyCollection'
 // import Dokumentation from '../routes/Dokumentation'
 import ExportStacked from './Export/ExportStacked'
 import ExportFlexed from './Export/ExportFlexed'
+import Login from './Login'
 
 const Container = styled.div`
   height: 100%;
@@ -35,50 +36,46 @@ const App = () => {
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
   const showObjekt =
-    ['Arten', 'Lebensräume'].includes(activeNodeArray[1]) &&
-    activeNodeArray.length > 1
+    ['Arten', 'Lebensräume'].includes(activeNodeArray[0]) &&
+    activeNodeArray.length > 0
   const showTaxonomy =
-    ['Arten', 'Lebensräume'].includes(activeNodeArray[1]) &&
-    activeNodeArray.length === 2
+    ['Arten', 'Lebensräume'].includes(activeNodeArray[0]) &&
+    activeNodeArray.length === 1
   const showPC =
-    activeNodeArray[1] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[2] &&
-    activeNodeArray.length === 3
+    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
+    activeNodeArray[1] &&
+    activeNodeArray.length === 2
   const showPCO =
-    activeNodeArray[1] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[2] &&
-    activeNodeArray.length === 4 &&
-    activeNodeArray[3] === 'Eigenschaften'
+    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
+    activeNodeArray[1] &&
+    activeNodeArray.length === 3 &&
+    activeNodeArray[2] === 'Eigenschaften'
   const showRCO =
-    activeNodeArray[1] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[2] &&
-    activeNodeArray.length === 4 &&
-    activeNodeArray[3] === 'Beziehungen'
+    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
+    activeNodeArray[1] &&
+    activeNodeArray.length === 3 &&
+    activeNodeArray[2] === 'Beziehungen'
 
   return (
     <ErrorBoundary>
       <Container>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="Daten/*"
-            element={stacked ? <DataStacked /> : <DataFlexed />}
-          >
-            {/* <Route path="*" element={<Home />} /> */}
+          <Route path="/" element={stacked ? <DataStacked /> : <DataFlexed />}>
+            <Route path="/" element={<Home />} />
             <Route
-              path="Daten/Arten/*"
+              path="/Arten/*"
               element={
                 showTaxonomy ? <Taxonomy /> : showObjekt ? <Objekt /> : null
               }
             />
             <Route
-              path="Daten/Lebensräume/*"
+              path="/Lebensräume/*"
               element={
                 showTaxonomy ? <Taxonomy /> : showObjekt ? <Objekt /> : null
               }
             />
             <Route
-              path="Daten/Eigenschaften-Sammlungen/*"
+              path="/Eigenschaften-Sammlungen/*"
               element={
                 showPC ? (
                   <PropertyCollection />
@@ -89,14 +86,15 @@ const App = () => {
                 ) : null
               }
             />
-            <Route path="Daten/Benutzer/*" element={<Benutzer />} />
-            <Route path="Daten/Organisationen/*" element={<Organisation />} />
+            <Route path="/Benutzer/*" element={<Benutzer />} />
+            <Route path="/Organisationen/*" element={<Organisation />} />
           </Route>
           {/* <Route path="/Dokumentation/*" element={<Dokumentation />} /> */}
           <Route
             path="/Export/*"
             element={stacked ? <ExportStacked /> : <ExportFlexed />}
           />
+          <Route path="/Login" element={<Login />} />
         </Routes>
       </Container>
     </ErrorBoundary>
