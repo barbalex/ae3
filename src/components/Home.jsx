@@ -1,12 +1,9 @@
-import React, { useEffect, useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
-import { useResizeDetector } from 'react-resize-detector'
-import { observer } from 'mobx-react-lite'
 
-import storeContext from '../storeContext'
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
 import ProgressiveImg from './shared/ProgressiveImg'
 import image from '../images/home.jpg'
@@ -38,24 +35,26 @@ const ScrollContainer = styled.div`
   /* prevent layout shift when scrollbar appears */
   scrollbar-gutter: stable;
 `
+// TODO:
+// use container-queries when they are supported by all browsers
+// meanwhile: dedice width from window width
+// stacked when < 700
+// tree: in standard .35 of width
 const CardContainer = styled.div`
   display: grid;
-  grid-template-columns: ${(props) =>
-    props['data-width'] > 1700
-      ? '1fr 1fr 1fr 1fr'
-      : props['data-width'] > 1200
-      ? '1fr 1fr 1fr'
-      : props['data-width'] > 800
-      ? '1fr 1fr'
-      : '1fr'};
-  gap: ${(props) =>
-    props['data-width'] > 1700
-      ? '65px'
-      : props['data-width'] > 1200
-      ? '50px'
-      : props['data-width'] > 800
-      ? '40px'
-      : '30px'};
+  grid-template-columns: 1fr;
+  gap: 30px;
+  padding: 25px;
+  @media (min-width: 1231px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 35px;
+  }
+  @media (min-width: 1847px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+    padding: 45px;
+  }
   p {
     margin-bottom: 10px !important;
   }
@@ -63,14 +62,6 @@ const CardContainer = styled.div`
     margin-bottom: 0 !important;
     margin-top: 10px !important;
   }
-  padding: ${(props) =>
-    props['data-width'] > 1700
-      ? '55px'
-      : props['data-width'] > 1200
-      ? '45px'
-      : props['data-width'] > 800
-      ? '35px'
-      : '25px'};
   position: relative;
   color: black !important;
 `
@@ -108,55 +99,40 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Home = () => {
-  // trick to prevent with from being reset on routing
-  const store = useContext(storeContext)
-  const { homeWidth, setHomeWidth } = store
-  const { width, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-  useEffect(() => {
-    if (width && width !== homeWidth) {
-      setHomeWidth(width)
-    }
-  }, [homeWidth, setHomeWidth, width])
+const Home = () => (
+  <OuterContainer>
+    <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+    <ScrollContainer>
+      <CardContainer>
+        <Card>
+          <CardTitle>Informationen zu:</CardTitle>
+          <CardTitle>Arten, Lebensräumen und ihren Taxonomien</CardTitle>
+        </Card>
+        <Card>
+          <CardTitle>...nachschlagen</CardTitle>Eigenschaften finden. Auch von
+          Synonymen aus anderen Taxonomien
+        </Card>
+        <Card>
+          <CardTitle>...exportieren</CardTitle>Eigenschaften wählen, Arten
+          filtern
+        </Card>
+        <Card>
+          <CardTitle>...direkt einbinden</CardTitle>Daten direkt aus anderen
+          Anwendungen abfragen
+        </Card>
+        <Card>
+          <CardTitle>...importieren und ändern</CardTitle>Benutzer mit Konto
+          können Eigenschaften importieren oder direkt bearbeiten
+        </Card>
+        <Card>
+          <CardTitle>Mehr Info:</CardTitle>
+          <DokuLink to="/Dokumentation/projektbeschreibung">
+            in der Dokumentation
+          </DokuLink>
+        </Card>
+      </CardContainer>
+    </ScrollContainer>
+  </OuterContainer>
+)
 
-  return (
-    <OuterContainer ref={ref} data-width={width}>
-      <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
-      <ScrollContainer>
-        <CardContainer data-width={width}>
-          <Card>
-            <CardTitle>Informationen zu:</CardTitle>
-            <CardTitle>Arten, Lebensräumen und ihren Taxonomien</CardTitle>
-          </Card>
-          <Card>
-            <CardTitle>...nachschlagen</CardTitle>Eigenschaften finden. Auch von
-            Synonymen aus anderen Taxonomien
-          </Card>
-          <Card>
-            <CardTitle>...exportieren</CardTitle>Eigenschaften wählen, Arten
-            filtern
-          </Card>
-          <Card>
-            <CardTitle>...direkt einbinden</CardTitle>Daten direkt aus anderen
-            Anwendungen abfragen
-          </Card>
-          <Card>
-            <CardTitle>...importieren und ändern</CardTitle>Benutzer mit Konto
-            können Eigenschaften importieren oder direkt bearbeiten
-          </Card>
-          <Card>
-            <CardTitle>Mehr Info:</CardTitle>
-            <DokuLink to="/Dokumentation/projektbeschreibung">
-              in der Dokumentation
-            </DokuLink>
-          </Card>
-        </CardContainer>
-      </ScrollContainer>
-    </OuterContainer>
-  )
-}
-
-export default observer(Home)
+export default Home
