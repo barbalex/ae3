@@ -9,7 +9,7 @@ import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import storeContext from '../../../../../storeContext'
@@ -69,7 +69,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const TaxonomyCard = ({ pc, initiallyExpanded, width = 500 }) => {
+const TaxonomyCard = ({ pc, initiallyExpanded }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -89,6 +89,11 @@ const TaxonomyCard = ({ pc, initiallyExpanded, width = 500 }) => {
 
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
+
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
   if (propsByTaxDataError) {
@@ -101,7 +106,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded, width = 500 }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
+      <StyledCard ref={ref}>
         <StyledCardActions
           disableSpacing
           onClick={() => setExpanded(!expanded)}
@@ -135,4 +140,4 @@ const TaxonomyCard = ({ pc, initiallyExpanded, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(observer(TaxonomyCard))
+export default observer(TaxonomyCard)

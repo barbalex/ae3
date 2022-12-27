@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import AllChooser from './Taxonomy/AllChooser'
@@ -48,15 +48,20 @@ const Count = styled.span`
   padding-left: 5px;
 `
 
-const JointTaxonomy = ({ jointTaxProperties, width = 500 }) => {
+const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
 
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
   return (
     <ErrorBoundary>
-      <StyledCard key="jointTax">
+      <StyledCard key="jointTax" ref={ref}>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {`Gemeinsame Felder`}
@@ -85,4 +90,4 @@ const JointTaxonomy = ({ jointTaxProperties, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(observer(JointTaxonomy))
+export default observer(JointTaxonomy)

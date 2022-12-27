@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import storeContext from '../../../../../../../storeContext'
 import getConstants from '../../../../../../../modules/constants'
@@ -39,7 +39,7 @@ const query = gql`
   }
 `
 
-const ChooserRouter = ({ pcName, count, width = 500 }) => {
+const ChooserRouter = ({ pcName, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -51,6 +51,11 @@ const ChooserRouter = ({ pcName, count, width = 500 }) => {
   })
 
   const properties = data?.pcoPropertiesByTaxonomiesAndPc?.nodes ?? []
+
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
 
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
@@ -65,13 +70,13 @@ const ChooserRouter = ({ pcName, count, width = 500 }) => {
   }
 
   return (
-    <>
+    <div ref={ref}>
       {count > 1 && <AllChooser properties={properties} pcName={pcName} />}
       <PropertiesContainer>
         <Properties properties={properties} columns={columns} pcName={pcName} />
       </PropertiesContainer>
-    </>
+    </div>
   )
 }
 
-export default withResizeDetector(observer(ChooserRouter))
+export default observer(ChooserRouter)

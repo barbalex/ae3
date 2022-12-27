@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import AllChooser from './AllChooser'
 import Properties from '../Properties'
@@ -70,7 +70,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const Taxonomy = ({ initiallyExpanded, tax, width = 500 }) => {
+const Taxonomy = ({ initiallyExpanded, tax }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -91,6 +91,11 @@ const Taxonomy = ({ initiallyExpanded, tax, width = 500 }) => {
     propsByTaxData?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
+
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
@@ -99,7 +104,7 @@ const Taxonomy = ({ initiallyExpanded, tax, width = 500 }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
+      <StyledCard ref={ref}>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {tax}
@@ -132,4 +137,4 @@ const Taxonomy = ({ initiallyExpanded, tax, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(observer(Taxonomy))
+export default observer(Taxonomy)

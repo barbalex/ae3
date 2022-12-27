@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Comparator from './Comparator'
 import Value from './Value'
@@ -11,17 +11,10 @@ const Container = styled.div`
   display: flex;
   align-content: stretch;
   padding: 4px 16px;
-  width: ${(props) => `${props['data-width']}%`};
+  width: ${(props) => `calc(${props['data-width']}% - 32px)`};
 `
 
-const TaxField = ({
-  taxname,
-  pname,
-  jsontype,
-  columns,
-  width,
-  propertiesLength,
-}) => {
+const TaxField = ({ taxname, pname, jsontype, columns, propertiesLength }) => {
   const store = useContext(storeContext)
   const { taxFilters } = store.export
 
@@ -41,7 +34,6 @@ const TaxField = ({
         value={value}
         jsontype={jsontype}
         comparator={comparator}
-        width={width - 32}
       />
       {value !== undefined && value !== null && (
         <Comparator
@@ -55,4 +47,4 @@ const TaxField = ({
   )
 }
 
-export default withResizeDetector(observer(TaxField))
+export default observer(TaxField)
