@@ -23,6 +23,7 @@ import FourOhFour from './404'
 import Docs from './Docs'
 import BrowserDoc from './Docs/docs/Browser'
 import MeldenDoc from './Docs/docs/Melden'
+import NeueArtDoc from './Docs/docs/NeueArt'
 
 const Container = styled.div`
   height: 100%;
@@ -91,7 +92,6 @@ const RouterComponent = () => {
             <Route path="/Benutzer/*" element={<Benutzer />} />
             <Route path="/Organisationen/*" element={<Organisation />} />
           </Route>
-          {/* <Route path="/Dokumentation/*" element={<Dokumentation />} /> */}
           <Route
             path="/Export/*"
             element={stacked ? <ExportStacked /> : <ExportFlexed />}
@@ -100,6 +100,7 @@ const RouterComponent = () => {
           <Route path="/Dokumentation/*" element={<Docs />}>
             <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
             <Route path="fehler-melden" element={<MeldenDoc />} />
+            <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
           </Route>
           <Route path="*" element={<FourOhFour />} />
         </Routes>

@@ -17,7 +17,8 @@ const Container = styled.div`
 `
 const Doku = styled.div`
   padding: 25px;
-  ul {
+  ul,
+  ol {
     margin-top: 5px;
     padding-inline-start: 20px;
   }

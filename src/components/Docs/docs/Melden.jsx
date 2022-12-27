@@ -27,8 +27,8 @@ const MeldenDoc = () => (
       den Verlauf dokumentieren kann. Jeder, der sich an einem Issue beteiligt,
       wird bei neuen Bemerkungen (z.B. wenn der Fehler korrigiert wurde)
       automatisch per email darüber informiert. Allerdings ist GitHub
-      öffentlich. Man kann mir daher Anliegen auch per
-      [email](mailto:alex@gabriel-software.ch) melden.
+      öffentlich. Man kann mir daher Anliegen auch per{' '}
+      <a href="mailto:alex@gabriel-software.ch">email</a> melden.
     </p>
     <p>
       arteigenschaften.ch wird im Auftrag der Fachstelle Naturschutz des Kantons
