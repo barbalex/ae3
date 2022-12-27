@@ -58,12 +58,12 @@ const Docs = ({ height, children }) => {
   const [tab, setTab] = useState(0)
   const onChangeTab = useCallback(
     (event, value) => {
-      console.log('Dokumentation, onChangeTab', { event, value, pathElements })
+      // console.log('Dokumentation, onChangeTab', { event, value, pathElements })
       setTab(value)
       if (value === 0) {
         // eslint-disable-next-line no-unused-vars
         const [first, ...rest] = pathElements
-        navigate(`${first}/`)
+        navigate(`/${first}/`)
       }
     },
     [navigate, pathElements],
