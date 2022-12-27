@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
 
 import Comparator from './Comparator'
 import Value from './Value'
@@ -11,7 +10,7 @@ const Container = styled.div`
   display: flex;
   align-content: stretch;
   padding: 4px 16px;
-  width: ${(props) => `${props['data-width']}%`};
+  width: ${(props) => `calc(${props['data-width']}% - 32px)`};
   > div {
     height: auto;
   }
@@ -22,7 +21,6 @@ const RcoField = ({
   relationtype,
   pname,
   jsontype,
-  width,
   columns,
   propertiesLength,
 }) => {
@@ -49,7 +47,6 @@ const RcoField = ({
         value={value}
         comparator={comparator}
         jsontype={jsontype}
-        width={width - 32}
       />
       {value !== undefined && value !== null && (
         <Comparator
@@ -64,4 +61,4 @@ const RcoField = ({
   )
 }
 
-export default withResizeDetector(observer(RcoField))
+export default observer(RcoField)

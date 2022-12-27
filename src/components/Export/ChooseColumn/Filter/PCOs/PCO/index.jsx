@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
@@ -44,8 +44,13 @@ const PropertiesContainer = styled.div`
   flex-wrap: wrap;
 `
 
-const PcoCard = ({ pc, count, width = 500 }) => {
+const PcoCard = ({ pc, count }) => {
   const [expanded, setExpanded] = useState(false)
+
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
 
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
@@ -53,7 +58,7 @@ const PcoCard = ({ pc, count, width = 500 }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard key={pc}>
+      <StyledCard key={pc} ref={ref}>
         <StyledCardActions disableSpacing onClick={onClickAction}>
           <CardActionTitle>
             {pc}
@@ -79,4 +84,4 @@ const PcoCard = ({ pc, count, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(PcoCard)
+export default PcoCard

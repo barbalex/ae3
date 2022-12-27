@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -43,15 +43,20 @@ const PropertiesContainer = styled.div`
   flex-wrap: wrap;
 `
 
-const JointTaxonomiesCard = ({ jointTaxProperties, width = 500 }) => {
+const JointTaxonomiesCard = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
 
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
   return (
     <ErrorBoundary>
-      <StyledCard>
+      <StyledCard ref={ref}>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {`Gemeinsame Felder`}
@@ -77,4 +82,4 @@ const JointTaxonomiesCard = ({ jointTaxProperties, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(JointTaxonomiesCard)
+export default JointTaxonomiesCard

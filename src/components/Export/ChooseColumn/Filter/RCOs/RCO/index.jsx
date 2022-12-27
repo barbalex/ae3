@@ -9,7 +9,7 @@ import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import storeContext from '../../../../../../storeContext'
@@ -70,7 +70,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RcoCard = ({ pc, width = 500 }) => {
+const RcoCard = ({ pc }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -97,6 +97,11 @@ const RcoCard = ({ pc, width = 500 }) => {
     return `${x.propertyCollectionName}: ${x.relationType}`
   })
 
+  const { width = 500, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+  })
+
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
   if (propsByTaxDataError) {
@@ -109,7 +114,7 @@ const RcoCard = ({ pc, width = 500 }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
+      <StyledCard ref={ref}>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {pc}
@@ -142,4 +147,4 @@ const RcoCard = ({ pc, width = 500 }) => {
   )
 }
 
-export default withResizeDetector(observer(RcoCard))
+export default observer(RcoCard)

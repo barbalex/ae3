@@ -97,7 +97,6 @@ const IntegrationAutosuggest = ({
   jsontype,
   comparator,
   value: propsValue,
-  width,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -139,25 +138,6 @@ const IntegrationAutosuggest = ({
     [client, focusCount, pcname, pname],
   )
 
-  const onBlur = useCallback(() => setFilter(value), [setFilter, value])
-
-  const onChange = useCallback(
-    (newValue, actionMeta) => {
-      let value
-      switch (actionMeta.action) {
-        case 'clear':
-          value = ''
-          break
-        default:
-          value = newValue?.value
-          break
-      }
-      setValue(value)
-      setFilter(value)
-    },
-    [setFilter],
-  )
-
   const setFilter = useCallback(
     (val) => {
       // 1. change filter value
@@ -176,6 +156,25 @@ const IntegrationAutosuggest = ({
       }
     },
     [addFilterFields, addPcoProperty, comparator, pcname, pname, setPcoFilter],
+  )
+
+  const onBlur = useCallback(() => setFilter(value), [setFilter, value])
+
+  const onChange = useCallback(
+    (newValue, actionMeta) => {
+      let value
+      switch (actionMeta.action) {
+        case 'clear':
+          value = ''
+          break
+        default:
+          value = newValue?.value
+          break
+      }
+      setValue(value)
+      setFilter(value)
+    },
+    [setFilter],
   )
 
   if (error) {
@@ -213,7 +212,6 @@ const IntegrationAutosuggest = ({
         isClearable
         openMenuOnFocus={true}
         spellCheck={false}
-        data-width={width}
       />
     </Container>
   )

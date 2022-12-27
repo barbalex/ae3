@@ -2,18 +2,17 @@ import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { withResizeDetector } from 'react-resize-detector'
 
-import Comparator from './Comparator' 
+import Comparator from './Comparator'
 import Value from './Value'
 import Checkbox from './Checkbox'
-import storeContext from '../../../../../../../storeContext' 
+import storeContext from '../../../../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
   align-content: stretch;
   padding: 4px 16px;
-  width: ${(props) => `${props['data-width']}%`};
+  width: ${(props) => `calc(${props['data-width']}% - 32px)`};
   > div {
     height: auto;
   }
@@ -23,7 +22,6 @@ const PcoProperty = ({
   pcname,
   pname,
   jsontype,
-  width,
   columns,
   propertiesLength,
 }) => {
@@ -55,7 +53,6 @@ const PcoProperty = ({
         value={value}
         comparator={comparator}
         jsontype={jsontype}
-        width={width - 32}
       />
       {value !== undefined && value !== null && value !== ' ' && (
         <Comparator
@@ -69,4 +66,4 @@ const PcoProperty = ({
   )
 }
 
-export default withResizeDetector(observer(PcoProperty))
+export default observer(PcoProperty)
