@@ -241,6 +241,14 @@ const Header = () => {
                     {loginLabel}
                   </LoginButton>
                 </div>
+                <div>
+                  <StyledButton
+                    data-active={pathname.includes('/Dokumentation')}
+                    onClick={onClickColumnButtonDocs}
+                  >
+                    Dokumentation
+                  </StyledButton>
+                </div>
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
                     <>
@@ -255,14 +263,6 @@ const Header = () => {
                       </ShareButton>
                     </>
                   )}
-                <div>
-                  <StyledButton
-                    data-active={pathname.includes('/Dokumentation')}
-                    onClick={onClickColumnButtonDocs}
-                  >
-                    Dokumentation
-                  </StyledButton>
-                </div>
                 <div>
                   <MoreMenu />
                 </div>
