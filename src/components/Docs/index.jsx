@@ -5,6 +5,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Sidebar from './Sidebar'
@@ -15,14 +16,15 @@ const Container = styled.div`
   display: flex;
 `
 const Doku = styled.div`
-  width: 100%;
   padding: 25px;
   ul {
-    margin-top: 0;
+    margin-top: 5px;
+    padding-inline-start: 20px;
   }
   p,
   li {
     margin-bottom: 0;
+    line-height: 1.5em;
   }
   h1,
   h3,
@@ -47,7 +49,7 @@ const Content = styled.div`
 `
 
 // TODO: build own pages
-const DocTemplate = ({ height, children }) => {
+const Docs = ({ height, children }) => {
   const store = useContext(storeContext)
   const { stacked } = store
 
@@ -89,16 +91,14 @@ const DocTemplate = ({ height, children }) => {
           </Tabs>
         </StyledPaper>
         <Content>
-          {tab === 0 && (
-            <Sidebar
-              stacked={true}
-            />
-          )}
+          {tab === 0 && <Sidebar stacked={true} />}
           {tab === 1 && (
             <SimpleBar
               style={{ maxHeight: height, height: '100%', width: '100%' }}
             >
-              <Doku>{children}</Doku>
+              <Doku>
+                <Outlet />
+              </Doku>
             </SimpleBar>
           )}
         </Content>
@@ -112,7 +112,8 @@ const DocTemplate = ({ height, children }) => {
         <Sidebar />
         <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
           <Doku>
-            {children ? children : <p>Hoffentlich nützliche Infos für Sie</p>}
+            {/* {children ? children : <p>Hoffentlich nützliche Infos für Sie</p>} */}
+            <Outlet />
           </Doku>
         </SimpleBar>
       </Container>
@@ -120,4 +121,4 @@ const DocTemplate = ({ height, children }) => {
   )
 }
 
-export default DocTemplate
+export default Docs

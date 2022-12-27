@@ -6,7 +6,6 @@ const BrowserDoc = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
     <DokuDate>29.09.2019</DokuDate>
-    <h1>Technische Voraussetzungen</h1>
     <p>Es braucht einen modernen Browser:</p>
     <ul>
       <li>Auf Google Chrome wird arteigenschaften.ch entwickelt</li>
@@ -19,8 +18,14 @@ const BrowserDoc = () => (
       </li>
       <li>
         Wer auf Windows arbeitet und keinen modernen Browser einsetzen darf (wie
-        z.B. die Fachstelle Naturschutz Kt. Zürich), kann
-        [hier](https://www.dropbox.com/sh/woc2mg53znyzrh4/AAC8DaKNABkAWYMCidCzMXYpa?dl=0)
+        z.B. die Fachstelle Naturschutz Kt. Zürich), kann{' '}
+        <a
+          href="https://www.dropbox.com/sh/woc2mg53znyzrh4/AAC8DaKNABkAWYMCidCzMXYpa?dl=0"
+          target="_blank"
+          rel="noreferrer"
+        >
+          hier
+        </a>{' '}
         die lokal installierbare Version beziehen.
         <br />
         Für die Installation den aktuellsten `arteigenschaften-win32-x64`-Ordner

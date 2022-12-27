@@ -65,7 +65,7 @@ const MoreMenu = () => {
   }, [])
   const onClickMelden = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://github.com/FNSKtZH/ae2/issues')
+      window.open('https://github.com/barbalex/ae3/issues')
     setAnchorEl(null)
   }, [])
   // const onClickGqlQuery = useCallback(() => {

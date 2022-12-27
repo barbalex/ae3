@@ -12,7 +12,7 @@ const StyledDivider = styled(Divider)`
   background: unset !important;
 `
 
-const items = [
+const nodes = [
   {
     slug: 'projektbeschreibung',
     date: '2019-09-29',
@@ -48,7 +48,7 @@ const items = [
 const MenuItems = () => (
   <List component="nav">
     <StyledDivider />
-    {items.map(({ node }) => (
+    {nodes.map((node) => (
       <MenuItem node={node} key={node.slug} />
     ))}
   </List>

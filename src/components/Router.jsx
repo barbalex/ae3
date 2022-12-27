@@ -16,11 +16,13 @@ import PCO from './PropertyCollection/PCO'
 import RCO from './PropertyCollection/RCO'
 import Taxonomy from './Taxonomy'
 import PropertyCollection from './PropertyCollection'
-// import Dokumentation from '../routes/Dokumentation'
 import ExportStacked from './Export/ExportStacked'
 import ExportFlexed from './Export/ExportFlexed'
 import Login from './Login'
 import FourOhFour from './404'
+import Docs from './Docs'
+import BrowserDoc from './Docs/docs/Browser'
+import MeldenDoc from './Docs/docs/Melden'
 
 const Container = styled.div`
   height: 100%;
@@ -95,6 +97,10 @@ const RouterComponent = () => {
             element={stacked ? <ExportStacked /> : <ExportFlexed />}
           />
           <Route path="/Login" element={<Login />} />
+          <Route path="/Dokumentation/*" element={<Docs />}>
+            <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
+            <Route path="fehler-melden" element={<MeldenDoc />} />
+          </Route>
           <Route path="*" element={<FourOhFour />} />
         </Routes>
       </Container>

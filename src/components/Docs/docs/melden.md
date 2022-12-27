@@ -7,7 +7,7 @@ sort1: 3
 
 Das geht so:
 
-- Auf [GitHub](https://github.com/FNSKtZH/ae2/issues)...
+- Auf [GitHub](https://github.com/barbalex/ae3/issues)...
 - ...schaut ihr bitte zuerst, ob euer Anliegen schon gemeldet wurde
 - Wenn nicht, könnt ihr einen neuen `Issue` eröffnen
 
