@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { withResizeDetector } from 'react-resize-detector'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../../storeContext'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
-import getConstants from '../../modules/constants'
+import getConstants from '../../../modules/constants'
 
 const constants = getConstants()
 
@@ -33,29 +33,20 @@ const MenuTitleLink = styled(Link)`
   }
 `
 
-const Sidebar = ({ title, titleLink, edges, stacked, height }) => {
+const Sidebar = ({ stacked, height }) => {
   const store = useContext(storeContext)
   const { docFilter, sidebarWidth } = store
 
-  const items = edges
-    .filter((n) => !!n && !!n.node)
-    .filter((n) =>
-      docFilter
-        ? (n?.node?.frontmatter?.title ?? '(Titel fehlt)')
-            .toLowerCase()
-            .includes(docFilter.toLowerCase())
-        : true,
-    )
-
   if (sidebarWidth === 0) return null
+
   return (
     <Menu data-stacked={stacked}>
       <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
         <MenuTitle>
-          <MenuTitleLink to={titleLink}>{title}</MenuTitleLink>
+          <MenuTitleLink to={`/Dokumentation/`}>Dokumentation</MenuTitleLink>
           <Filter />
         </MenuTitle>
-        <MenuItems items={items} />
+        <MenuItems  />
       </SimpleBar>
     </Menu>
   )

@@ -4,7 +4,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../../storeContext'
 
 const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
@@ -16,7 +16,7 @@ const MenuItem = ({ node }) => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { slug, title } = node.frontmatter
+  const { slug, title } = node
   const activeUrl = `/Dokumentation/${slug}`
   const active =
     activeUrl === location.pathname || `${activeUrl}/` === location.pathname

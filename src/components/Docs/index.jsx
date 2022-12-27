@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback, useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -6,8 +6,9 @@ import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import ErrorBoundary from '../../components/shared/ErrorBoundary'
-import Sidebar from '../../templates/Sidebar'
+import ErrorBoundary from '../shared/ErrorBoundary'
+import Sidebar from './Sidebar'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -34,7 +35,7 @@ const Doku = styled.div`
     margin-bottom: 10px;
   }
 `
-const DokuDate = styled.p`
+export const DokuDate = styled.p`
   margin-bottom: 15px !important;
   color: grey;
 `
@@ -46,10 +47,9 @@ const Content = styled.div`
 `
 
 // TODO: build own pages
-const DocTemplate = ({ data, height }) => {
-  const frontmatter = data?.markdownRemark?.frontmatter
-  const html = data?.markdownRemark?.html ?? `<div>no data</div>`
-  const edges = data?.allMarkdownRemark?.edges
+const DocTemplate = ({ height, children }) => {
+  const store = useContext(storeContext)
+  const { stacked } = store
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -69,16 +69,6 @@ const DocTemplate = ({ data, height }) => {
     [navigate, pathElements],
   )
 
-  const [stacked, setStacked] = useState(false)
-  useEffect(() => {
-    const w = window
-    const d = document
-    const e = d.documentElement
-    const g = d.getElementsByTagName('body')[0]
-    const windowWidth = w.innerWidth || e.clientWidth || g.clientWidth
-    const stacked = windowWidth < 700
-    setStacked(stacked)
-  }, [])
   useEffect(() => {
     pathElements.length > 1 && tab === 0 && setTab(1)
     pathElements.length === 1 && tab === 1 && setTab(0)
@@ -101,9 +91,6 @@ const DocTemplate = ({ data, height }) => {
         <Content>
           {tab === 0 && (
             <Sidebar
-              title="Dokumentation"
-              titleLink="/Dokumentation/"
-              edges={edges}
               stacked={true}
             />
           )}
@@ -111,11 +98,7 @@ const DocTemplate = ({ data, height }) => {
             <SimpleBar
               style={{ maxHeight: height, height: '100%', width: '100%' }}
             >
-              <Doku>
-                <h1>{frontmatter?.title ?? 'no title'}</h1>
-                <DokuDate>{frontmatter.date ?? 'no date'}</DokuDate>
-                <div dangerouslySetInnerHTML={{ __html: html }} />
-              </Doku>
+              <Doku>{children}</Doku>
             </SimpleBar>
           )}
         </Content>
@@ -126,16 +109,10 @@ const DocTemplate = ({ data, height }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <Sidebar
-          title="Dokumentation"
-          titleLink="/Dokumentation/"
-          edges={edges}
-        />
+        <Sidebar />
         <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
           <Doku>
-            <h1>{frontmatter?.title ?? 'no title'}</h1>
-            <DokuDate>{frontmatter.date ?? 'no date'}</DokuDate>
-            <div dangerouslySetInnerHTML={{ __html: html }} />
+            {children ? children : <p>Hoffentlich nützliche Infos für Sie</p>}
           </Doku>
         </SimpleBar>
       </Container>
