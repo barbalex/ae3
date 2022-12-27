@@ -399,7 +399,7 @@ const PropertyCollection = () => {
                 <span>
                   Mehr infos{' '}
                   <StyledA
-                    href="https://github.com/barbalex/ae2#zusammenfassende-eigenschaften-sammlungen"
+                    href="https://github.com/barbalex/ae3#zusammenfassende-eigenschaften-sammlungen"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

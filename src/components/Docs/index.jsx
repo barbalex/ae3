@@ -28,15 +28,16 @@ const Doku = styled.div`
     line-height: 1.5em;
   }
   h1,
+  h2,
   h3,
   h4,
   ol {
     margin-bottom: 10px;
   }
-  h2 {
+  /* h2 {
     margin-top: 10px;
     margin-bottom: 10px;
-  }
+  } */
 `
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;

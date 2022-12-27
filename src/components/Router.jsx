@@ -24,6 +24,7 @@ import Docs from './Docs'
 import BrowserDoc from './Docs/docs/Browser'
 import MeldenDoc from './Docs/docs/Melden'
 import NeueArtDoc from './Docs/docs/NeueArt'
+import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 
 const Container = styled.div`
   height: 100%;
@@ -101,6 +102,10 @@ const RouterComponent = () => {
             <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
             <Route path="fehler-melden" element={<MeldenDoc />} />
             <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
+            <Route
+              path="projektbeschreibung"
+              element={<ProjektbeschreibungDoc />}
+            />
           </Route>
           <Route path="*" element={<FourOhFour />} />
         </Routes>
