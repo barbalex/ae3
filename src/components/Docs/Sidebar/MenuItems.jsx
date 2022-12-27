@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
 
 import MenuItem from './MenuItem'
+import storeContext from '../../../storeContext'
 
 // dont know why but divider is too thick,
 // thicker than ListItemButton divider
@@ -45,13 +47,20 @@ const nodes = [
   },
 ]
 
-const MenuItems = () => (
-  <List component="nav">
-    <StyledDivider />
-    {nodes.map((node) => (
-      <MenuItem node={node} key={node.slug} />
-    ))}
-  </List>
-)
+const MenuItems = () => {
+  const { docFilter } = useContext(storeContext)
+  const nodesFiltered = nodes.filter(
+    (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
+  )
 
-export default MenuItems
+  return (
+    <List component="nav">
+      <StyledDivider />
+      {nodesFiltered.map((node) => (
+        <MenuItem node={node} key={node.slug} />
+      ))}
+    </List>
+  )
+}
+
+export default observer(MenuItems)

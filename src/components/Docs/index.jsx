@@ -34,10 +34,6 @@ const Doku = styled.div`
   ol {
     margin-bottom: 10px;
   }
-  /* h2 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  } */
 `
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;
