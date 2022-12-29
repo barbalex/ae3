@@ -46,7 +46,6 @@ const Content = styled.div`
   height: 100%;
 `
 
-// TODO: build own pages
 const Docs = ({ height, children }) => {
   const store = useContext(storeContext)
   const { stacked } = store
@@ -110,7 +109,6 @@ const Docs = ({ height, children }) => {
         <Sidebar />
         <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
           <Doku>
-            {/* {children ? children : <p>Hoffentlich nützliche Infos für Sie</p>} */}
             <Outlet />
           </Doku>
         </SimpleBar>
