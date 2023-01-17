@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { Outlet } from 'react-router'
 
 import AppBar from './AppBar'
 
@@ -10,10 +11,10 @@ const Container = styled.div`
   }
 `
 
-const Layout = ({ children }) => (
+const Layout = () => (
   <Container>
     <AppBar />
-    {children}
+    <Outlet />
   </Container>
 )
 

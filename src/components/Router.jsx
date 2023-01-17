@@ -22,6 +22,7 @@ import TaxonomyOrObject from './TaxonomyOrObject'
 import PcPcoOrRco from './PcPcoOrRco'
 import Export from './Export'
 import Data from './Data'
+import Layout from './Layout'
 
 const Container = styled.div`
   height: 100%;
@@ -35,27 +36,32 @@ const RouterComponent = () => (
   <ErrorBoundary>
     <Container>
       <Routes>
-        <Route path="/" element={<Data />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/Arten/*" element={<TaxonomyOrObject />} />
-          <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
-          <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
-          <Route path="/Benutzer/*" element={<Benutzer />} />
-          <Route path="/Organisationen/*" element={<Organisation />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<Data />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/Arten/*" element={<TaxonomyOrObject />} />
+            <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
+            <Route
+              path="/Eigenschaften-Sammlungen/*"
+              element={<PcPcoOrRco />}
+            />
+            <Route path="/Benutzer/*" element={<Benutzer />} />
+            <Route path="/Organisationen/*" element={<Organisation />} />
+          </Route>
+          <Route path="/Export/*" element={<Export />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Dokumentation/*" element={<Docs />}>
+            <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
+            <Route path="fehler-melden" element={<MeldenDoc />} />
+            <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
+            <Route
+              path="projektbeschreibung"
+              element={<ProjektbeschreibungDoc />}
+            />
+            <Route path="schnittstellen" element={<SchnittstellenDoc />} />
+          </Route>
+          <Route path="*" element={<FourOhFour />} />
         </Route>
-        <Route path="/Export/*" element={<Export />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Dokumentation/*" element={<Docs />}>
-          <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
-          <Route path="fehler-melden" element={<MeldenDoc />} />
-          <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
-          <Route
-            path="projektbeschreibung"
-            element={<ProjektbeschreibungDoc />}
-          />
-          <Route path="schnittstellen" element={<SchnittstellenDoc />} />
-        </Route>
-        <Route path="*" element={<FourOhFour />} />
       </Routes>
     </Container>
   </ErrorBoundary>

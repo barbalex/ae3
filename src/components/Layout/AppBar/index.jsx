@@ -101,7 +101,7 @@ const query = gql`
   }
 `
 
-const Header = () => {
+const AppBarComponent = () => {
   const store = useContext(storeContext)
   const { login, singleColumnView } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -275,4 +275,4 @@ const Header = () => {
   )
 }
 
-export default observer(Header)
+export default observer(AppBarComponent)

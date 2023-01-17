@@ -6,7 +6,7 @@ import storeContext from '../../storeContext'
 import DataFlexed from './DataFlexed'
 import DataStacked from './DataStacked'
 
-const DataComponent = () => {
+const DataComponent = () => { 
   const store = useContext(storeContext)
   const { stacked } = store
 
