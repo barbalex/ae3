@@ -1,5 +1,10 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom'
 
 import Home from './Home'
 import Benutzer from './Benutzer'
@@ -20,9 +25,9 @@ import Layout from './Layout'
 
 // Use react-router with outlets
 // render routes in outlet inside Data
-const RouterComponent = () => (
-  <BrowserRouter>
-    <Routes>
+const RouterComponent = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
       <Route element={<Layout />}>
         <Route path="/" element={<Data />}>
           <Route index element={<Home />} />
@@ -36,6 +41,7 @@ const RouterComponent = () => (
         <Route path="/Export/*" element={<Export />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Dokumentation/*" element={<Docs />}>
+          <Route index element={null} />
           <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
           <Route path="fehler-melden" element={<MeldenDoc />} />
           <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
@@ -47,9 +53,11 @@ const RouterComponent = () => (
           <Route path="*" element={<FourOhFour />} />
         </Route>
         <Route path="*" element={<FourOhFour />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
-)
+      </Route>,
+    ),
+  )
+
+  return <RouterProvider router={router} />
+}
 
 export default RouterComponent

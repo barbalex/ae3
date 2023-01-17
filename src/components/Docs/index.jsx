@@ -46,7 +46,7 @@ const Content = styled.div`
   height: 100%;
 `
 
-const Docs = ({ height, children }) => {
+const Docs = ({ height }) => {
   const store = useContext(storeContext)
   const { stacked } = store
 
