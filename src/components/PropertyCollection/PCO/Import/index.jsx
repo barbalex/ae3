@@ -376,7 +376,7 @@ const ImportPco = ({ setImport }) => {
     const posts = []
     // need a list of all fields
     // loop all rows, build variables and create pco
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const d of importData) {
       const variables = {
         objectId: d.objectId || null,

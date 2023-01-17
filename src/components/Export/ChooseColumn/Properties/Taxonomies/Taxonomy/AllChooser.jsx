@@ -24,8 +24,8 @@ const AllTaxChooser = ({ properties }) => {
 
   const onCheck = useCallback(
     async (event, isChecked) => {
-      // eslint-disable-next-line no-unused-vars
-      for (let p of properties) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      for (const p of properties) {
         const taxname = p.taxname ? p.taxname : p.taxonomyName
         const pname = p.propertyName
         if (isChecked) {

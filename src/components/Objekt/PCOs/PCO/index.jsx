@@ -66,7 +66,7 @@ const PCO = ({ pCO, relations, stacked }) => {
     (o) => o[1] || o[1] === 0 || o[1] === false,
   )
   propertiesArray = sortBy(propertiesArray, (e) => e[0]).filter(
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([key, value]) => value || value === 0 || value === false,
   )
   const relationsTitleText =

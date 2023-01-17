@@ -220,7 +220,7 @@ const OrgUser = ({ orgUser }) => {
           __typename: 'Mutation',
         },
       },
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       update: (proxy, { data: { deleteOrgUserMutation } }) => {
         const data = proxy.readQuery({
           query: orgUsersQuery,

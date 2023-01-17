@@ -60,7 +60,7 @@ const Docs = ({ height }) => {
       // console.log('Dokumentation, onChangeTab', { event, value, pathElements })
       setTab(value)
       if (value === 0) {
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [first, ...rest] = pathElements
         navigate(`/${first}/`)
       }
