@@ -39,12 +39,6 @@ const RouterComponent = () => {
   const { stacked } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
-  const showObjekt =
-    ['Arten', 'Lebensräume'].includes(activeNodeArray[0]) &&
-    activeNodeArray.length > 0
-  const showTaxonomy =
-    ['Arten', 'Lebensräume'].includes(activeNodeArray[0]) &&
-    activeNodeArray.length === 1
   const showPC =
     activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
     activeNodeArray[1] &&
