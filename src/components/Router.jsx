@@ -1,15 +1,10 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Routes, Route } from 'react-router-dom'
-import { getSnapshot } from 'mobx-state-tree'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import ErrorBoundary from './shared/ErrorBoundary'
 import Home from './Home'
 import Benutzer from './Benutzer'
 import Organisation from './Organisation'
-import PCO from './PropertyCollection/PCO'
-import RCO from './PropertyCollection/RCO'
-import PropertyCollection from './PropertyCollection'
 import Login from './Login'
 import FourOhFour from './404'
 import Docs from './Docs'
@@ -33,7 +28,7 @@ const Container = styled.div`
 // Use react-router with outlets
 // render routes in outlet inside Data
 const RouterComponent = () => (
-  <Container>
+  <BrowserRouter>
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Data />}>
@@ -59,7 +54,7 @@ const RouterComponent = () => (
         <Route path="*" element={<FourOhFour />} />
       </Route>
     </Routes>
-  </Container>
+  </BrowserRouter>
 )
 
 export default RouterComponent

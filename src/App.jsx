@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import { BrowserRouter } from 'react-router-dom'
 
 import 'simplebar/dist/simplebar.min.css'
 
@@ -22,8 +21,6 @@ import { Provider as IdbProvider } from './idbContext'
 import { Provider as MobxProvider } from './storeContext'
 import Store from './store'
 import Stacker from './components/Stacker'
-import IdParameter from './components/IdParameter'
-import ActiveNodeArraySetter from './components/ActiveNodeArraySetter'
 import Router from './components/Router'
 
 const App = () => {
@@ -60,24 +57,20 @@ const App = () => {
   const queryClient = new QueryClient()
 
   return (
-    <BrowserRouter>
-      <IdbProvider value={idb}>
-        <MobxProvider value={store}>
-          <ApolloProvider client={myClient}>
-            <QueryClientProvider client={queryClient}>
-              <StyledEngineProvider injectFirst>
-                <ActiveNodeArraySetter />
-                <IdParameter />
-                <ThemeProvider theme={theme}>
-                  <Router />
-                </ThemeProvider>
-                <Stacker />
-              </StyledEngineProvider>
-            </QueryClientProvider>
-          </ApolloProvider>
-        </MobxProvider>
-      </IdbProvider>
-    </BrowserRouter>
+    <IdbProvider value={idb}>
+      <MobxProvider value={store}>
+        <ApolloProvider client={myClient}>
+          <QueryClientProvider client={queryClient}>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={theme}>
+                <Router />
+              </ThemeProvider>
+              <Stacker />
+            </StyledEngineProvider>
+          </QueryClientProvider>
+        </ApolloProvider>
+      </MobxProvider>
+    </IdbProvider>
   )
 }
 
