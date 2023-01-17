@@ -19,12 +19,6 @@ import Export from './Export'
 import Data from './Data'
 import Layout from './Layout'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
 // Use react-router with outlets
 // render routes in outlet inside Data
 const RouterComponent = () => (
