@@ -25,6 +25,7 @@ import NeueArtDoc from './Docs/docs/NeueArt'
 import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 import SchnittstellenDoc from './Docs/docs/Schnittstellen'
 import TaxonomyOrObject from './TaxonomyOrObject'
+import PcPcoOrRco from './PcPcoOrRco'
 
 const Container = styled.div`
   height: 100%;
@@ -37,22 +38,6 @@ const Container = styled.div`
 const RouterComponent = () => {
   const store = useContext(storeContext)
   const { stacked } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
-
-  const showPC =
-    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[1] &&
-    activeNodeArray.length === 2
-  const showPCO =
-    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[1] &&
-    activeNodeArray.length === 3 &&
-    activeNodeArray[2] === 'Eigenschaften'
-  const showRCO =
-    activeNodeArray[0] === 'Eigenschaften-Sammlungen' &&
-    activeNodeArray[1] &&
-    activeNodeArray.length === 3 &&
-    activeNodeArray[2] === 'Beziehungen'
 
   return (
     <ErrorBoundary>
@@ -64,15 +49,7 @@ const RouterComponent = () => {
             <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
             <Route
               path="/Eigenschaften-Sammlungen/*"
-              element={
-                showPC ? (
-                  <PropertyCollection />
-                ) : showPCO ? (
-                  <PCO />
-                ) : showRCO ? (
-                  <RCO />
-                ) : null
-              }
+              element={<PcPcoOrRco />}
             />
             <Route path="/Benutzer/*" element={<Benutzer />} />
             <Route path="/Organisationen/*" element={<Organisation />} />
