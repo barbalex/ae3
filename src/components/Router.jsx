@@ -26,12 +26,13 @@ const RouterComponent = () => (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Data />}>
-          <Route path="/" element={<Home />} />
+          <Route index element={<Home />} />
           <Route path="/Arten/*" element={<TaxonomyOrObject />} />
           <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
           <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
           <Route path="/Benutzer/*" element={<Benutzer />} />
           <Route path="/Organisationen/*" element={<Organisation />} />
+          <Route path="*" element={<FourOhFour />} />
         </Route>
         <Route path="/Export/*" element={<Export />} />
         <Route path="/Login" element={<Login />} />
@@ -44,6 +45,7 @@ const RouterComponent = () => (
             element={<ProjektbeschreibungDoc />}
           />
           <Route path="schnittstellen" element={<SchnittstellenDoc />} />
+          <Route path="*" element={<FourOhFour />} />
         </Route>
         <Route path="*" element={<FourOhFour />} />
       </Route>
