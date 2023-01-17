@@ -33,38 +33,33 @@ const Container = styled.div`
 // Use react-router with outlets
 // render routes in outlet inside Data
 const RouterComponent = () => (
-  <ErrorBoundary>
-    <Container>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Data />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/Arten/*" element={<TaxonomyOrObject />} />
-            <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
-            <Route
-              path="/Eigenschaften-Sammlungen/*"
-              element={<PcPcoOrRco />}
-            />
-            <Route path="/Benutzer/*" element={<Benutzer />} />
-            <Route path="/Organisationen/*" element={<Organisation />} />
-          </Route>
-          <Route path="/Export/*" element={<Export />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Dokumentation/*" element={<Docs />}>
-            <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
-            <Route path="fehler-melden" element={<MeldenDoc />} />
-            <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
-            <Route
-              path="projektbeschreibung"
-              element={<ProjektbeschreibungDoc />}
-            />
-            <Route path="schnittstellen" element={<SchnittstellenDoc />} />
-          </Route>
-          <Route path="*" element={<FourOhFour />} />
+  <Container>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Data />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/Arten/*" element={<TaxonomyOrObject />} />
+          <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
+          <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
+          <Route path="/Benutzer/*" element={<Benutzer />} />
+          <Route path="/Organisationen/*" element={<Organisation />} />
         </Route>
-      </Routes>
-    </Container>
-  </ErrorBoundary>
+        <Route path="/Export/*" element={<Export />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Dokumentation/*" element={<Docs />}>
+          <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
+          <Route path="fehler-melden" element={<MeldenDoc />} />
+          <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
+          <Route
+            path="projektbeschreibung"
+            element={<ProjektbeschreibungDoc />}
+          />
+          <Route path="schnittstellen" element={<SchnittstellenDoc />} />
+        </Route>
+        <Route path="*" element={<FourOhFour />} />
+      </Route>
+    </Routes>
+  </Container>
 )
 
 export default RouterComponent

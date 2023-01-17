@@ -58,9 +58,10 @@
     "xlsx": "0.18.5"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.19.1",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "@typescript-eslint/eslint-plugin": "5.48.0",
+    "@typescript-eslint/parser": "5.48.2",
     "@vitejs/plugin-react-swc": "3.0.1",
     "eslint": "8.30.0",
     "eslint-plugin-import": "2.26.0",

@@ -6,7 +6,7 @@
       "jsx": true
     }
   },
-  // "parser": "@babel/eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "root": true,
   "rules": {
     "strict": 0,
@@ -24,7 +24,11 @@
     "browser": true,
     "es2022": true
   },
-  "plugins": ["react", "react-hooks"],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
   "settings": { "react": { "version": "detect" } }
 }
