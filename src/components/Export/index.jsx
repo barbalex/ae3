@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 import ExportFlexed from './ExportFlexed'
