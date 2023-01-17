@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DokuDate } from '..'
+import { DokuDate } from '..' 
 
 const BrowserDoc = () => (
   <>

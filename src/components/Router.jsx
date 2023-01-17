@@ -11,10 +11,8 @@ import DataFlexed from './Data/DataFlexed'
 import Home from './Home'
 import Benutzer from './Benutzer'
 import Organisation from './Organisation'
-import Objekt from './Objekt'
 import PCO from './PropertyCollection/PCO'
 import RCO from './PropertyCollection/RCO'
-import Taxonomy from './Taxonomy'
 import PropertyCollection from './PropertyCollection'
 import ExportStacked from './Export/ExportStacked'
 import ExportFlexed from './Export/ExportFlexed'
@@ -26,6 +24,7 @@ import MeldenDoc from './Docs/docs/Melden'
 import NeueArtDoc from './Docs/docs/NeueArt'
 import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 import SchnittstellenDoc from './Docs/docs/Schnittstellen'
+import TaxonomyOrObject from './TaxonomyOrObject'
 
 const Container = styled.div`
   height: 100%;
@@ -67,18 +66,8 @@ const RouterComponent = () => {
         <Routes>
           <Route path="/" element={stacked ? <DataStacked /> : <DataFlexed />}>
             <Route path="/" element={<Home />} />
-            <Route
-              path="/Arten/*"
-              element={
-                showTaxonomy ? <Taxonomy /> : showObjekt ? <Objekt /> : null
-              }
-            />
-            <Route
-              path="/Lebensräume/*"
-              element={
-                showTaxonomy ? <Taxonomy /> : showObjekt ? <Objekt /> : null
-              }
-            />
+            <Route path="/Arten/*" element={<TaxonomyOrObject />} />
+            <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
             <Route
               path="/Eigenschaften-Sammlungen/*"
               element={
