@@ -1,21 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { Routes, Route } from 'react-router-dom'
 import { getSnapshot } from 'mobx-state-tree'
 
 import ErrorBoundary from './shared/ErrorBoundary'
-import storeContext from '../storeContext'
-import DataStacked from './Data/DataStacked'
-import DataFlexed from './Data/DataFlexed'
 import Home from './Home'
 import Benutzer from './Benutzer'
 import Organisation from './Organisation'
 import PCO from './PropertyCollection/PCO'
 import RCO from './PropertyCollection/RCO'
 import PropertyCollection from './PropertyCollection'
-import ExportStacked from './Export/ExportStacked'
-import ExportFlexed from './Export/ExportFlexed'
 import Login from './Login'
 import FourOhFour from './404'
 import Docs from './Docs'
@@ -26,6 +20,8 @@ import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 import SchnittstellenDoc from './Docs/docs/Schnittstellen'
 import TaxonomyOrObject from './TaxonomyOrObject'
 import PcPcoOrRco from './PcPcoOrRco'
+import Export from './Export'
+import Data from './Data'
 
 const Container = styled.div`
   height: 100%;
@@ -35,45 +31,34 @@ const Container = styled.div`
 
 // Use react-router with outlets
 // render routes in outlet inside Data
-const RouterComponent = () => {
-  const store = useContext(storeContext)
-  const { stacked } = store
-
-  return (
-    <ErrorBoundary>
-      <Container>
-        <Routes>
-          <Route path="/" element={stacked ? <DataStacked /> : <DataFlexed />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/Arten/*" element={<TaxonomyOrObject />} />
-            <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
-            <Route
-              path="/Eigenschaften-Sammlungen/*"
-              element={<PcPcoOrRco />}
-            />
-            <Route path="/Benutzer/*" element={<Benutzer />} />
-            <Route path="/Organisationen/*" element={<Organisation />} />
-          </Route>
+const RouterComponent = () => (
+  <ErrorBoundary>
+    <Container>
+      <Routes>
+        <Route path="/" element={<Data />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/Arten/*" element={<TaxonomyOrObject />} />
+          <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
+          <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
+          <Route path="/Benutzer/*" element={<Benutzer />} />
+          <Route path="/Organisationen/*" element={<Organisation />} />
+        </Route>
+        <Route path="/Export/*" element={<Export />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Dokumentation/*" element={<Docs />}>
+          <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
+          <Route path="fehler-melden" element={<MeldenDoc />} />
+          <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
           <Route
-            path="/Export/*"
-            element={stacked ? <ExportStacked /> : <ExportFlexed />}
+            path="projektbeschreibung"
+            element={<ProjektbeschreibungDoc />}
           />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Dokumentation/*" element={<Docs />}>
-            <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
-            <Route path="fehler-melden" element={<MeldenDoc />} />
-            <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
-            <Route
-              path="projektbeschreibung"
-              element={<ProjektbeschreibungDoc />}
-            />
-            <Route path="schnittstellen" element={<SchnittstellenDoc />} />
-          </Route>
-          <Route path="*" element={<FourOhFour />} />
-        </Routes>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+          <Route path="schnittstellen" element={<SchnittstellenDoc />} />
+        </Route>
+        <Route path="*" element={<FourOhFour />} />
+      </Routes>
+    </Container>
+  </ErrorBoundary>
+)
 
-export default observer(RouterComponent)
+export default RouterComponent
