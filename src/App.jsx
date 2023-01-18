@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
-import 'simplebar-core/dist/simplebar.css'
+import 'simplebar-react/dist/simplebar.min.css'
 
 // see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
 import '@fontsource/roboto'
