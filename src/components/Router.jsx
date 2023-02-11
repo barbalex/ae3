@@ -34,6 +34,10 @@ const RouterComponent = () => {
           <Route path="/Arten/*" element={<TaxonomyOrObject />} />
           <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
           <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
+          <Route
+            path="/Eigenschaften-Sammlungen/:pcId/*"
+            element={<PcPcoOrRco />}
+          />
           <Route path="/Benutzer/*" element={<Benutzer />} />
           <Route path="/Organisationen/*" element={<Organisation />} />
           <Route path="*" element={<FourOhFour />} />

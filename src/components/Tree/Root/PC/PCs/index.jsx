@@ -1,10 +1,14 @@
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router'
 
 import Row from '../../../Row'
+import Folders from './Folders'
 
 const PCs = () => {
+  const { pcId } = useParams()
   const client = useApolloClient()
+  console.log('Tree Pcs, pcId:', pcId)
 
   const { data, isLoading } = useQuery({
     queryKey: ['treePcs'],
@@ -43,8 +47,14 @@ const PCs = () => {
       info: undefined,
       menuType: 'CmPC',
     }
+    const isOpen = pcId === node.id
 
-    return <Row key={node.id} data={data} />
+    return (
+      <>
+        <Row key={node.id} data={data} />
+        {isOpen && <Folders pc={node} />}
+      </>
+    )
   })
 }
 
