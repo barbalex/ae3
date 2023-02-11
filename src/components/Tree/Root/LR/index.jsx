@@ -7,7 +7,7 @@ const LrNode = ({ isLoading, count }) => {
     url: ['Lebensräume'],
     childrenCount: count,
     info: `${isLoading ? '...' : count} Taxonomien`,
-    menuType: 'TODO:',
+    menuType: 'CmType',
   }
 
   return <Row data={data} />
