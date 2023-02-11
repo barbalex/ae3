@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import Arten from './Arten'
 import LR from './LR'
+import PC from './PC'
 
 const Root = () => {
   const client = useApolloClient()
@@ -42,6 +43,10 @@ const Root = () => {
     <>
       <Arten isLoading={isLoading} count={data?.data?.arten?.totalCount} />
       <LR isLoading={isLoading} count={data?.data?.lebensraeume?.totalCount} />
+      <PC
+        isLoading={isLoading}
+        count={data?.data?.allPropertyCollections?.totalCount}
+      />
     </>
   )
 }
