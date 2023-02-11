@@ -5,8 +5,8 @@ const treeQueryVariables = (store) => {
 
   return {
     username: store.login.username ?? '',
-    url: activeNodeArray.filter((n) => n !== 0),
-    hasToken: !!store.login.token,
+    // url: activeNodeArray.filter((n) => n !== 0),
+    // hasToken: !!store.login.token,
   }
 }
 

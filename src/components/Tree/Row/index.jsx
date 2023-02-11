@@ -85,7 +85,7 @@ function collect(props) {
   return props
 }
 
-const Row = ({ index = 0, style, data, userId }) => {
+const Row = ({ data, userId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -151,50 +151,46 @@ const Row = ({ index = 0, style, data, userId }) => {
   //console.log('Row, data:', data)
 
   return (
-    <div key={index} style={style}>
-      <ErrorBoundary>
-        <ContextMenuTrigger
-          id={data.menuType}
-          collect={collect}
-          nodeId={data.id}
-          nodeLabel={data.label}
-          key={data.id}
-          onItemClick={onClickContextMenu}
-        >
-          <StyledNode
-            data-level={level}
+    <ContextMenuTrigger
+      id={data.menuType}
+      collect={collect}
+      nodeId={data.id}
+      nodeLabel={data.label}
+      key={data.id}
+      onItemClick={onClickContextMenu}
+    >
+      <StyledNode
+        data-level={level}
+        data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+        data-id={data.id}
+        data-url={data.url}
+        onClick={onClickNode}
+      >
+        {useSymbolIcon && (
+          <SymbolIcon
+            id="symbol"
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-            data-id={data.id}
-            data-url={data.url}
-            onClick={onClickNode}
+            className="material-icons"
           >
-            {useSymbolIcon && (
-              <SymbolIcon
-                id="symbol"
-                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                className="material-icons"
-              >
-                {symbol === 'Loading' && <LoadingIcon />}
-                {symbol === 'ExpandMore' && (
-                  <ExpandMoreIcon onClick={onClickExpandMore} />
-                )}
-                {symbol === 'ChevronRight' && <ChevronRightIcon />}
-                {symbol === 'MoreHoriz' && <MoreHorizIcon />}
-              </SymbolIcon>
+            {symbol === 'Loading' && <LoadingIcon />}
+            {symbol === 'ExpandMore' && (
+              <ExpandMoreIcon onClick={onClickExpandMore} />
             )}
-            {useSymbolSpan && (
-              <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-                {'-'}
-              </SymbolSpan>
-            )}
-            <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-              {data.label}
-            </TextSpan>
-            {data.info && <InfoSpan>{`(${data.info})`}</InfoSpan>}
-          </StyledNode>
-        </ContextMenuTrigger>
-      </ErrorBoundary>
-    </div>
+            {symbol === 'ChevronRight' && <ChevronRightIcon />}
+            {symbol === 'MoreHoriz' && <MoreHorizIcon />}
+          </SymbolIcon>
+        )}
+        {useSymbolSpan && (
+          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            {'-'}
+          </SymbolSpan>
+        )}
+        <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+          {data.label}
+        </TextSpan>
+        {data.info && <InfoSpan>{`(${data.info})`}</InfoSpan>}
+      </StyledNode>
+    </ContextMenuTrigger>
   )
 }
 

@@ -161,18 +161,6 @@ const StyledList = styled(List)`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
-  const { activeNodeArray: activeNodeArrayProxy } = store
-  const activeNodeArray = getSnapshot(activeNodeArrayProxy)
-
-  const {
-    height = 250,
-    width = 250,
-    ref: sizeRef,
-  } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 500,
-    refreshOptions: { leading: true },
-  })
 
   const variables = getTreeDataVariables(store)
 
@@ -186,38 +174,9 @@ const TreeComponent = () => {
         variables,
         // seems that react-query cache is not working
         // no idea why
-        // fetchPolicy: 'no-cache',
+        fetchPolicy: 'no-cache',
       }),
   })
-
-  const previousData = useRef(null)
-
-  // if isLoading, return previous value to avoid flickering
-  const nodes = useMemo(() => {
-    if (isLoading) {
-      // console.log('TreeComponent, memo', {
-      //   isLoading,
-      //   previousData: previousData.current,
-      //   data,
-      // })
-      return previousData.current ?? []
-    }
-    if (data?.data?.treeFunction?.nodes) {
-      previousData.current = data?.data?.treeFunction?.nodes
-      return data?.data?.treeFunction?.nodes
-    }
-    return []
-  }, [data, isLoading])
-
-  const listRef = useRef(null)
-
-  useEffect(() => {
-    const index = findIndex(nodes, (node) => isEqual(node.url, activeNodeArray))
-    // console.log('TreeComponent, scrolling to node at index', index)
-    listRef?.current?.scrollToItem(index)
-  }, [activeNodeArray, nodes])
-
-  const userId = data?.data?.userByName?.id
 
   const userIsTaxWriter = useMemo(() => {
     const userRoles = (
@@ -256,8 +215,8 @@ const TreeComponent = () => {
           }}
         >
           <Root />
-          <IntoViewScroller />
         </SimpleBar>
+        <IntoViewScroller />
         <StyledSnackbar open={isLoading} message="lade Daten..." />
         <CmBenutzerFolder />
         <CmBenutzer />

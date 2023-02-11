@@ -13,6 +13,7 @@ const onClickContextMenu = async ({
   target,
   client,
   treeRefetch,
+  // TODO: better to fetch userId here instead of passing it to ALL tree rows?
   userId,
   store,
   navigate,
