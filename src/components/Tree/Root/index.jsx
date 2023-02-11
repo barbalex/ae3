@@ -2,6 +2,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
 import Arten from './Arten'
+import LR from './LR'
 
 const Root = () => {
   const client = useApolloClient()
@@ -40,6 +41,7 @@ const Root = () => {
   return (
     <>
       <Arten isLoading={isLoading} count={data?.data?.arten?.totalCount} />
+      <LR isLoading={isLoading} count={data?.data?.lebensraeume?.totalCount} />
     </>
   )
 }

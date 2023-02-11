@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useEffect, useRef } from 'react'
+import React, { useMemo, useContext } from 'react'
 import styled from '@emotion/styled'
 import Snackbar from '@mui/material/Snackbar'
 import { useApolloClient } from '@apollo/client'
@@ -6,9 +6,6 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { FixedSizeList as List } from 'react-window'
 import SimpleBar from 'simplebar-react'
-import findIndex from 'lodash/findIndex'
-import isEqual from 'lodash/isEqual'
-import { useResizeDetector } from 'react-resize-detector'
 import { useQuery } from '@tanstack/react-query'
 
 import Filter from './Filter'
@@ -122,10 +119,6 @@ const Container = styled.div`
     bottom: 3px;
   }
 `
-const AutoSizerContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px - 39px);
-  padding: 0;
-`
 const StyledSnackbar = styled(Snackbar)`
   div {
     min-width: auto;
@@ -161,6 +154,7 @@ const StyledList = styled(List)`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
+  console.log('Tree, activeNodeArray:', store.activeNodeArray.slice())
 
   const variables = getTreeDataVariables(store)
 

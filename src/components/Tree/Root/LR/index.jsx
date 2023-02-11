@@ -1,10 +1,10 @@
 import Row from '../../Row'
 
-const ArtenNode = ({ isLoading, count }) => {
+const LrNode = ({ isLoading, count }) => {
   const data = {
-    label: 'Arten',
-    id: 'Arten',
-    url: ['Arten'],
+    label: 'Lebensräume',
+    id: 'Lebensraeume',
+    url: ['Lebensräume'],
     childrenCount: count,
     info: `${isLoading ? '...' : count} Taxonomien`,
     menu_type: 'TODO:',
@@ -13,4 +13,4 @@ const ArtenNode = ({ isLoading, count }) => {
   return <Row data={data} />
 }
 
-export default ArtenNode
+export default LrNode
