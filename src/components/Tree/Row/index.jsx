@@ -97,6 +97,7 @@ const Row = ({ data, userId }) => {
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
+  let useLoadingSpan = false
   let symbol
   if (data.childrenCount && nodeIsInActiveNodePath) {
     symbol = 'ExpandMore'
@@ -107,6 +108,11 @@ const Row = ({ data, userId }) => {
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
+  }
+  if (data.label === '...') {
+    useSymbolSpan = false
+    useSymbolIcon = false
+    useLoadingSpan = true
   }
   const { url } = data
   const level = url?.length ?? 0
@@ -182,6 +188,11 @@ const Row = ({ data, userId }) => {
         {useSymbolSpan && (
           <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
             {'-'}
+          </SymbolSpan>
+        )}
+        {useLoadingSpan && (
+          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            {' '}
           </SymbolSpan>
         )}
         <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
