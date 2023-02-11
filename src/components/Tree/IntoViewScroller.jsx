@@ -1,13 +1,13 @@
 import { useEffect, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../storeContext'
-import isElementInViewport from '../../../../modules/isElementInViewport'
-import getLastIdFromUrl from '../../../../modules/getLastIdFromUrl'
+import storeContext from '../../storeContext'
+import isElementInViewport from '../../modules/isElementInViewport'
+import getLastIdFromUrl from '../../modules/getLastIdFromUrl'
 
 const IntoViewScroller = () => {
   const store = useContext(storeContext)
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray } = store
 
   const scroller = useCallback(() => {
     // console.log('IntoViewScroller running')

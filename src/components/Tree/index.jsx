@@ -11,7 +11,6 @@ import isEqual from 'lodash/isEqual'
 import { useResizeDetector } from 'react-resize-detector'
 import { useQuery } from '@tanstack/react-query'
 
-import Row from './Row'
 import Filter from './Filter'
 import treeQuery from './treeQuery'
 import CmBenutzerFolder from './contextmenu/BenutzerFolder'
@@ -25,6 +24,8 @@ import storeContext from '../../storeContext'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import getTreeDataVariables from './treeQueryVariables'
 import getConstants from '../../modules/constants'
+import Root from './Root'
+import IntoViewScroller from './IntoViewScroller'
 
 const constants = getConstants()
 
@@ -254,31 +255,8 @@ const TreeComponent = () => {
             overflowY: 'auto',
           }}
         >
-          {({ scrollableNodeRef, contentNodeRef }) => {
-            return (
-              <AutoSizerContainer ref={sizeRef}>
-                <StyledList
-                  height={height}
-                  itemCount={nodes.length}
-                  itemSize={23}
-                  width={width}
-                  ref={listRef}
-                  innerRef={contentNodeRef}
-                  outerRef={scrollableNodeRef}
-                >
-                  {({ index, style }) => (
-                    <Row
-                      key={index}
-                      style={style}
-                      index={index}
-                      data={nodes[index]}
-                      userId={userId}
-                    />
-                  )}
-                </StyledList>
-              </AutoSizerContainer>
-            )
-          }}
+          <Root />
+          <IntoViewScroller />
         </SimpleBar>
         <StyledSnackbar open={isLoading} message="lade Daten..." />
         <CmBenutzerFolder />
