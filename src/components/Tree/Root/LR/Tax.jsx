@@ -1,10 +1,13 @@
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
-import Row from '../../../Row'
+import Row from '../../Row'
+import TopLevelObject from './TopLevelObject'
 
 const LrTax = () => {
   const client = useApolloClient()
+  const { taxId } = useParams()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeLrTaxonomies'],
@@ -47,8 +50,14 @@ const LrTax = () => {
       info: isLoading ? '...' : count,
       menuType: 'CmTaxonomy',
     }
+    const isOpen = taxId === node.id
 
-    nodes.push(<Row key={node.id} data={data} />)
+    nodes.push(
+      <div key={node.id}>
+        <Row data={data} />
+        {isOpen && <TopLevelObject  />}
+      </div>,
+    )
   }
 
   return nodes

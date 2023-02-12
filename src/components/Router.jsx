@@ -33,6 +33,7 @@ const RouterComponent = () => {
           <Route index element={<Home />} />
           <Route path="/Arten/*" element={<TaxonomyOrObject />} />
           <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
+          <Route path="/Lebensräume/:taxId/*" element={<TaxonomyOrObject />} />
           <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
           <Route
             path="/Eigenschaften-Sammlungen/:pcId/*"
