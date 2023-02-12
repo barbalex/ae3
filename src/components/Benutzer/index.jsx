@@ -15,7 +15,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { useQuery, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useParams } from 'react-router-dom'
 
 import query from './query'
 import treeQuery from '../Tree/treeQuery'
@@ -45,10 +45,11 @@ const StyledPaper = styled(Paper)`
 `
 
 const User = () => {
+  const { userId } = useParams()
+
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { login } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
 
   const { refetch: treeDataRefetch } = useQuery(treeQuery, {
     variables: getTreeDataVariables(store),
@@ -60,7 +61,7 @@ const User = () => {
     refetch: dataRefetch,
   } = useQuery(query, {
     variables: {
-      id: activeNodeArray[1] || '99999999-9999-9999-9999-999999999999',
+      id: userId,
     },
   })
   const user = useMemo(() => data?.userById ?? {}, [data?.userById])
