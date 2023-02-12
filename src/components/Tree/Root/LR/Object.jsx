@@ -9,11 +9,11 @@ const Object = ({ parentData }) => {
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeLrObject', parentData.id],
+    queryKey: ['treeObject', parentData.id],
     queryFn: () => {
       return client.query({
         query: gql`
-          query treeLrObjectQuery($parentId: UUID!) {
+          query treeObjectQuery($parentId: UUID!) {
             objectById(id: $parentId) {
               id
               name
@@ -55,10 +55,10 @@ const Object = ({ parentData }) => {
     const isOpen = pathname.includes(node.id)
 
     nodes.push(
-      <>
+      <div key={node.id}>
         <Row data={nodeData} />
         {isOpen && !!count && <Object parentData={nodeData} />}
-      </>,
+      </div>,
     )
   }
 

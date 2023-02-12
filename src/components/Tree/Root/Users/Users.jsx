@@ -2,6 +2,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
 import Row from '../../Row'
+import LoadingRow from '../../LoadingRow'
 
 const Users = () => {
   const client = useApolloClient()
@@ -25,7 +26,7 @@ const Users = () => {
     },
   })
 
-  if (isLoading) return <Row data={{ label: '...' }} />
+  if (isLoading) return <LoadingRow level={2} />
 
   if (!data) return null
 

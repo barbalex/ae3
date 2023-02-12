@@ -3,20 +3,23 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import Row from '../../Row'
+import LoadingRow from '../../LoadingRow'
 import TopLevelObject from './TopLevelObject'
 
-const LrTax = () => {
+const Tax = ({ type = 'Lebensräume' }) => {
   const client = useApolloClient()
   const { taxId } = useParams()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeLrTaxonomies'],
+    queryKey: ['treeTaxonomies', type],
     queryFn: () => {
       return client.query({
         query: gql`
-          query treeLrTaxonomiesQuery {
+          query treeTaxonomiesQuery {
             allTaxonomies(
-              filter: { type: { equalTo: LEBENSRAUM } }
+              filter: { type: { equalTo: ${
+                type === 'Lebensräume' ? 'LEBENSRAUM' : 'ART'
+              } } }
               orderBy: NAME_ASC
             ) {
               nodes {
@@ -34,7 +37,7 @@ const LrTax = () => {
     },
   })
 
-  if (isLoading) return <Row data={{ label: '...' }} />
+  if (isLoading) return <LoadingRow level={2} />
 
   if (!data) return null
 
@@ -45,7 +48,7 @@ const LrTax = () => {
     const data = {
       label: node.name,
       id: node.id,
-      url: ['Lebensräume', node.id],
+      url: [type, node.id],
       childrenCount: count,
       info: isLoading ? '...' : count,
       menuType: 'CmTaxonomy',
@@ -55,7 +58,7 @@ const LrTax = () => {
     nodes.push(
       <div key={node.id}>
         <Row data={data} />
-        {isOpen && <TopLevelObject  />}
+        {isOpen && <TopLevelObject type={type} />}
       </div>,
     )
   }
@@ -63,4 +66,4 @@ const LrTax = () => {
   return nodes
 }
 
-export default LrTax
+export default Tax

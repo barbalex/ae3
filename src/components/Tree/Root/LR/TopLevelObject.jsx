@@ -3,19 +3,20 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router-dom'
 
 import Row from '../../Row'
+import LoadingRow from '../../LoadingRow'
 import Object from './Object'
 
-const TopLevelObject = () => {
+const TopLevelObject = ({ type = 'Lebensräume' }) => {
   const client = useApolloClient()
   const { taxId } = useParams()
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeLrTopLevelObjects', taxId],
+    queryKey: ['treeTopLevelObjects', taxId],
     queryFn: () => {
       return client.query({
         query: gql`
-          query treeLrTopLevelObjectsQuery($taxId: UUID!) {
+          query treeTopLevelObjectsQuery($taxId: UUID!) {
             allObjects(
               filter: {
                 taxonomyId: { equalTo: $taxId }
@@ -39,7 +40,8 @@ const TopLevelObject = () => {
     },
   })
 
-  // if (isLoading) return <Row data={{ label: '...' }} />
+  console.log('TopLevelObject', { data, isLoading })
+  if (isLoading) return <LoadingRow level={3} />
 
   if (!data) return null
 
@@ -50,7 +52,7 @@ const TopLevelObject = () => {
     const data = {
       label: node.name,
       id: node.id,
-      url: ['Lebensräume', taxId, node.id],
+      url: [type, taxId, node.id],
       childrenCount: count,
       info: isLoading ? '...' : count,
       menuType: 'CmObject',

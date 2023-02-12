@@ -3,11 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import Row from '../../../Row'
+import LoadingRow from '../../../LoadingRow'
 import Folders from './Folders'
 
 const PCs = () => {
   const { pcId } = useParams()
-  const client = useApolloClient()  
+  const client = useApolloClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treePcs'],
@@ -39,7 +40,7 @@ const PCs = () => {
     },
   })
 
-  if (isLoading) return <Row data={{ label: '...' }} />
+  if (isLoading) return <LoadingRow level={2} />
 
   if (!data) return null
 

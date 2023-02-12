@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
 import Row from '../../Row'
-import LrTax from './Tax'
+import Tax from './Tax'
 
 const LrNode = ({ isLoading, count }) => {
   const { pathname } = useLocation()
@@ -19,7 +19,7 @@ const LrNode = ({ isLoading, count }) => {
   return (
     <>
       <Row data={data} />
-      {isOpen && <LrTax />}
+      {isOpen && <Tax type="Lebensräume" />}
     </>
   )
 }
