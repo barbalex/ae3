@@ -16,8 +16,6 @@ const LrNode = ({ isLoading, count }) => {
     menuType: 'CmType',
   }
 
-  console.log('LrNode', { isLoading, count, isOpen, pathname })
-
   return (
     <>
       <Row data={data} />

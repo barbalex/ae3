@@ -1,6 +1,12 @@
+import { useLocation } from 'react-router-dom'
+
 import Row from '../../Row'
+import Tax from './Tax'
 
 const ArtenNode = ({ isLoading, count }) => {
+  const { pathname } = useLocation()
+  const isOpen = pathname.startsWith('/Arten')
+
   const data = {
     label: 'Arten',
     id: 'Arten',
@@ -10,7 +16,12 @@ const ArtenNode = ({ isLoading, count }) => {
     menuType: 'CmType',
   }
 
-  return <Row data={data} />
+  return (
+    <>
+      <Row data={data} />
+      {isOpen && <Tax />}
+    </>
+  )
 }
 
 export default ArtenNode
