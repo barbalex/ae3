@@ -154,7 +154,7 @@ const StyledList = styled(List)`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
-  console.log('Tree, activeNodeArray:', store.activeNodeArray.slice())
+  // console.log('Tree, activeNodeArray:', store.activeNodeArray.slice())
 
   const variables = getTreeDataVariables(store)
 

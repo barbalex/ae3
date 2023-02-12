@@ -7,8 +7,7 @@ import Folders from './Folders'
 
 const PCs = () => {
   const { pcId } = useParams()
-  const client = useApolloClient()
-  console.log('Tree Pcs, pcId:', pcId)
+  const client = useApolloClient()  
 
   const { data, isLoading } = useQuery({
     queryKey: ['treePcs'],
@@ -25,6 +24,12 @@ const PCs = () => {
               nodes {
                 id
                 name
+                propertyCollectionObjectsByPropertyCollectionId {
+                  totalCount
+                }
+                relationsByPropertyCollectionId {
+                  totalCount
+                }
               }
             }
           }
@@ -38,24 +43,34 @@ const PCs = () => {
 
   if (!data) return null
 
-  return data?.data?.allPropertyCollections?.nodes?.map((node) => {
+  const nodes = []
+
+  for (const node of data?.data?.allPropertyCollections?.nodes ?? []) {
+    const pcoCount =
+      node.propertyCollectionObjectsByPropertyCollectionId?.totalCount ?? 0
+    const relCount = node.relationsByPropertyCollectionId?.totalCount ?? 0
+
     const data = {
       label: node.name,
       id: node.id,
       url: ['Eigenschaften-Sammlungen', node.id],
       childrenCount: 2,
-      info: undefined,
+      info: pcoCount + relCount,
       menuType: 'CmPC',
     }
     const isOpen = pcId === node.id
 
-    return (
-      <>
-        <Row key={node.id} data={data} />
-        {isOpen && <Folders pc={node} />}
-      </>
+    nodes.push(
+      <div key={node.id}>
+        <Row data={data} />
+        {isOpen && (
+          <Folders pc={node} pcoCount={pcoCount} relCount={relCount} />
+        )}
+      </div>,
     )
-  })
+  }
+
+  return nodes
 }
 
 export default PCs

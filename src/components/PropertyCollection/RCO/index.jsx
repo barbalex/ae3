@@ -222,7 +222,7 @@ const RCO = () => {
       rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
       []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       nP['Beziehung ID'] = p.objectIdRelation
@@ -274,8 +274,6 @@ const RCO = () => {
   const totalCount =
     rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.totalCount
 
-  console.log('RCO', { rcoData, rCOWriters, userIsWriter, rCO, showImportRco })
-
   // enable sorting
   const setOrder = useCallback(({ orderBy, direction }) => {
     setOrderBy(orderBy)
@@ -293,7 +291,7 @@ const RCO = () => {
     const rCORaw = (
       data?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ?? []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       nP['Beziehung ID'] = p.objectIdRelation

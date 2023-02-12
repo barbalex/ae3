@@ -157,7 +157,7 @@ const Row = ({ data, userId }) => {
 
   return (
     <ContextMenuTrigger
-      id={data.menuType}
+      id={data.menuType}  
       collect={collect}
       nodeId={data.id}
       nodeLabel={data.label}
