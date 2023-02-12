@@ -9,11 +9,6 @@ const Users = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['treeUsers'],
     queryFn: () => {
-      // This query is re-run under certain circumstances
-      // when focus was out of app and comes back in
-      // EVENT THOUGH component is not re-rendered
-      // Seems that was a feature of tanstack-query:
-      // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
       return client.query({
         query: gql`
           query treeUsersQuery {
