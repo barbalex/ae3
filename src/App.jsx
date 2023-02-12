@@ -54,7 +54,13 @@ const App = () => {
   if (!store) return null
 
   const myClient = client({ idb, store })
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false, // prevent tree refetching in dev mode
+      },
+    },
+  })
 
   return (
     <IdbProvider value={idb}>
