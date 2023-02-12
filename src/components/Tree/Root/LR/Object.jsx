@@ -36,7 +36,7 @@ const Object = ({ parentData }) => {
     },
   })
 
-  if (isLoading) return <Row data={{ label: '...' }} />
+  // if (isLoading) return <Row data={{ label: '...' }} />
 
   if (!data) return null
 
