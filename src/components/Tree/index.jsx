@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import Snackbar from '@mui/material/Snackbar'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { FixedSizeList as List } from 'react-window'
 import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -18,7 +17,6 @@ import CmPCFolder from './contextmenu/PCFolder'
 import CmPC from './contextmenu/PC'
 import storeContext from '../../storeContext'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import getTreeDataVariables from './treeQueryVariables'
 import getConstants from '../../modules/constants'
 import Root from './Root'
 import IntoViewScroller from './IntoViewScroller'
@@ -129,42 +127,18 @@ const StyledSnackbar = styled(Snackbar)`
     flex-grow: 0;
   }
 `
-const StyledList = styled(List)`
-  overflow-x: hidden !important;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 1px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
-  /* &::-webkit-scrollbar-thumb:hover {
-    background: '#6B2500';
-  } */
-`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
-  // console.log('Tree, activeNodeArray:', store.activeNodeArray.slice())
-
-  const variables = getTreeDataVariables(store)
 
   const client = useApolloClient()
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ['treeQuery', variables],
+    queryKey: ['treeQuery', store.login.username],
     queryFn: () =>
       client.query({
         query: treeQuery,
-        variables,
+        variables:{username: store.login.username ?? ''},
         // seems that react-query cache is not working
         // no idea why
         fetchPolicy: 'no-cache',
@@ -180,15 +154,6 @@ const TreeComponent = () => {
     )
   }, [data?.data?.userByName?.organizationUsersByUserId?.nodes])
 
-  // console.log('TreeComponent', {
-  //   activeNodeArray,
-  //   variables,
-  //   width,
-  //   height,
-  //   userIsTaxWriter,
-  //   nodes,
-  //   isLoading,
-  // })
 
   if (error) {
     return (

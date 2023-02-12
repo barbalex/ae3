@@ -11,15 +11,5 @@ export default gql`
         }
       }
     }
-    # treeFunction(activeUrl: $url, hasToken: $hasToken) {
-    #   nodes {
-    #     label
-    #     id
-    #     url
-    #     childrenCount
-    #     info
-    #     menuType
-    #   }
-    # }
   }
 `
