@@ -198,7 +198,7 @@ const Row = ({ data, userId }) => {
         <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
           {data.label}
         </TextSpan>
-        {data.info && <InfoSpan>{`(${data.info})`}</InfoSpan>}
+        {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
       </StyledNode>
     </ContextMenuTrigger>
   )
