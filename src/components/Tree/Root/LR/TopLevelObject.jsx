@@ -40,7 +40,6 @@ const TopLevelObject = ({ type = 'Lebensräume' }) => {
     },
   })
 
-  console.log('TopLevelObject', { data, isLoading })
   if (isLoading) return <LoadingRow level={3} />
 
   if (!data) return null

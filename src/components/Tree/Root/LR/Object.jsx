@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useLocation } from 'react-router-dom'
 
 import Row from '../../Row'
+import LoadingRow from '../../LoadingRow'
 
 const Object = ({ parentData }) => {
   const client = useApolloClient()
@@ -36,7 +37,7 @@ const Object = ({ parentData }) => {
     },
   })
 
-  // if (isLoading) return <Row data={{ label: '...' }} />
+  if (isLoading) return <LoadingRow level={parentData.url.length + 1} />
 
   if (!data) return null
 
