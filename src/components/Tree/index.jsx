@@ -138,7 +138,7 @@ const TreeComponent = () => {
     queryFn: () =>
       client.query({
         query: treeQuery,
-        variables:{username: store.login.username ?? ''},
+        variables: { username: store.login.username ?? '' },
         // seems that react-query cache is not working
         // no idea why
         fetchPolicy: 'no-cache',
@@ -153,7 +153,6 @@ const TreeComponent = () => {
       userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
     )
   }, [data?.data?.userByName?.organizationUsersByUserId?.nodes])
-
 
   if (error) {
     return (

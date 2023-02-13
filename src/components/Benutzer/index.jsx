@@ -13,10 +13,10 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import query from './query'
 import Roles from './Roles'
@@ -54,15 +54,19 @@ const User = () => {
 
   const {
     data,
+    isLoading: dataLoading,
     error: dataError,
-    loading: dataLoading,
-    refetch: dataRefetch,
-  } = useQuery(query, {
-    variables: {
-      id: userId,
-    },
+  } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () =>
+      client.query({
+        query,
+        variables: {
+          id: userId,
+        },
+      }),
   })
-  const user = useMemo(() => data?.userById ?? {}, [data?.userById])
+  const user = useMemo(() => data?.data?.userById ?? {}, [data?.data?.userById])
 
   const [name, setName] = useState(user?.name)
   const [nameErrorText, setNameErrorText] = useState('')
@@ -122,17 +126,19 @@ const User = () => {
       return console.log(error)
     }
     // refetch to update
-    dataRefetch()
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     queryClient.invalidateQueries({
       queryKey: [`treeUsers`],
     })
+    queryClient.invalidateQueries({
+      queryKey: [`user`],
+    })
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')
-  }, [passNew, name, email, id, dataRefetch, queryClient, client])
+  }, [passNew, name, email, id, queryClient, client])
 
   if (dataLoading) {
     return <Spinner />

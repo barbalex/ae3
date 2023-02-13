@@ -156,8 +156,8 @@ const ImportPco = ({ setImport }) => {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
-    queryFn: async () => {
-      const { data } = await client.query({
+    queryFn: () =>
+      client.query({
         query: importPcoQuery,
         variables: {
           getObjectIds: objectIds.length > 0,
@@ -168,9 +168,7 @@ const ImportPco = ({ setImport }) => {
               : ['99999999-9999-9999-9999-999999999999'],
         },
         fetchPolicy: 'no-cache',
-      })
-      return data
-    },
+      }),
   })
 
   const [importData, setImportData] = useState([])

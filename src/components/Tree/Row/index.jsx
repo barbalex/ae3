@@ -13,6 +13,7 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 import { getSnapshot } from 'mobx-state-tree'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { ContextMenuTrigger } from 'react-contextmenu'
 import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath'
@@ -85,7 +86,9 @@ function collect(props) {
 }
 
 const Row = ({ data, userId }) => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const navigate = useNavigate()
@@ -148,16 +151,17 @@ const Row = ({ data, userId }) => {
         userId,
         store,
         navigate,
+        queryClient,
       })
     },
-    [client, userId, store, navigate],
+    [client, userId, store, navigate, queryClient],
   )
 
   //console.log('Row, data:', data)
 
   return (
     <ContextMenuTrigger
-      id={data.menuType}  
+      id={data.menuType}
       collect={collect}
       nodeId={data.id}
       nodeLabel={data.label}
