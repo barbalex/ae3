@@ -16,11 +16,7 @@ import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
 import { read, utils } from 'xlsx'
 import isUuid from 'is-uuid'
-import {
-  useQuery as useApolloQuery,
-  useApolloClient,
-  gql,
-} from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
@@ -28,7 +24,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertRCOMutation from './upsertRCOMutation'
 import storeContext from '../../../../storeContext'
-import { rcoPreviewQuery } from '..'
 import DataTable from '../../../shared/DataTable'
 import CountInput from '../../../Export/PreviewColumn/CountInput'
 import Instructions from './Instructions'
@@ -170,13 +165,6 @@ const ImportRco = ({ setImport }) => {
     setSortDirection(direction.toLowerCase())
   }, [])
 
-  const { refetch: rcoRefetch } = useApolloQuery(rcoPreviewQuery, {
-    variables: {
-      pCId,
-      first: 15,
-    },
-  })
-
   const { isLoading, error, data } = useQuery({
     queryKey: [
       'importRcoQuery',
@@ -201,6 +189,7 @@ const ImportRco = ({ setImport }) => {
               ? pCOfOriginIds
               : ['99999999-9999-9999-9999-999999999999'],
         },
+        fetchPolicy: 'no-cache',
       })
       return data
     },
@@ -467,32 +456,18 @@ const ImportRco = ({ setImport }) => {
       )
     }
     await Promise.all(posts)
-    try {
-      rcoRefetch()
-    } catch (error) {
-      console.log('Error refetching rco:', error)
-    }
-    try {
-      queryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [`treePcs`],
-      })
-    } catch (error) {
-      console.log('Error refetching tree:', error)
-    }
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treePcs`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`rcoPreviewQuery`],
+    })
     setImport(false)
     setImporting(false)
-  }, [
-    client,
-    importData,
-    incrementImported,
-    pCId,
-    queryClient,
-    rcoRefetch,
-    setImport,
-  ])
+  }, [client, importData, incrementImported, pCId, queryClient, setImport])
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

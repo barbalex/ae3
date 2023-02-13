@@ -4,10 +4,11 @@ import forOwn from 'lodash/forOwn'
 import union from 'lodash/union'
 import doOrderBy from 'lodash/orderBy'
 import Button from '@mui/material/Button'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 import ImportPco from './Import'
 import booleanToJaNein from '../../../modules/booleanToJaNein'
@@ -182,14 +183,10 @@ export const pcoPreviewQuery = gql`
 const PCO = () => {
   const queryClient = useQueryClient()
   const client = useApolloClient()
+  const { pcId } = useParams()
 
   const store = useContext(storeContext)
   const { login } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
-  const pCId =
-    activeNodeArray.length > 0
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
 
   const [count, setCount] = useState(15)
 
@@ -198,16 +195,22 @@ const PCO = () => {
   const [deleteLoading, setDeleteLoading] = useState(false)
 
   const {
-    data: pcoData,
-    loading: pcoLoading,
+    data,
+    isLoading: pcoLoading,
     error: pcoError,
-    refetch: pcoRefetch,
-  } = useQuery(pcoPreviewQuery, {
-    variables: {
-      pCId,
-      first: count,
-    },
+  } = useQuery({
+    queryKey: ['pcoPreviewQuery', pcId, count],
+    queryFn: () =>
+      client.query({
+        query: pcoPreviewQuery,
+        variables: {
+          pCId: pcId,
+          first: count,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
+  const pcoData = data?.data
 
   // enable sorting
   const [orderBy, setOrderBy] = useState('Objekt Name')
@@ -267,7 +270,13 @@ const PCO = () => {
   const writerNames = union(pCOWriters.map((w) => w.userByUserId.name))
   const { username } = login
   const userIsWriter = !!username && writerNames.includes(username)
-  const showImportPco = (pCO.length === 0 && userIsWriter) || importing
+  const showImportPco =
+    ((
+      pcoData?.propertyCollectionById
+        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
+    ).length === 0 &&
+      userIsWriter) ||
+    importing
 
   const totalCount =
     pcoData?.propertyCollectionById
@@ -277,7 +286,7 @@ const PCO = () => {
     const { data, loading, error } = await client.query({
       query: pcoQuery,
       variables: {
-        pCId,
+        pCId: pcId,
       },
     })
     // collect all keys
@@ -308,7 +317,7 @@ const PCO = () => {
     })
     const pCO = doOrderBy(pCOUnsorted, orderBy, sortDirection)
     return { data: pCO, loading, error }
-  }, [client, pCId, propKeys, sortDirection, orderBy])
+  }, [client, pcId, propKeys, sortDirection, orderBy])
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
@@ -330,17 +339,19 @@ const PCO = () => {
     setDeleteLoading(true)
     await client.mutate({
       mutation: deletePcoOfPcMutation,
-      variables: { pcId: pCId },
+      variables: { pcId: pcId },
     })
     setDeleteLoading(false)
-    pcoRefetch()
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     queryClient.invalidateQueries({
       queryKey: [`treePcs`],
     })
-  }, [client, pCId, pcoRefetch, queryClient])
+    queryClient.invalidateQueries({
+      queryKey: [`pcoPreviewQuery`],
+    })
+  }, [client, pcId, queryClient])
 
   const onClickImport = useCallback(() => {
     setImport(true)
