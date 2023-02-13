@@ -16,10 +16,9 @@ import styled from '@emotion/styled'
 import { useQuery, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 import query from './query'
-import treeQuery from '../Tree/treeQuery'
-import getTreeDataVariables from '../Tree/treeQueryVariables'
 import Roles from './Roles'
 import PCs from './PCs'
 import TCs from './TCs'
@@ -47,13 +46,12 @@ const StyledPaper = styled(Paper)`
 const User = () => {
   const { userId } = useParams()
 
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const { login } = store
 
-  const { refetch: treeDataRefetch } = useQuery(treeQuery, {
-    variables: getTreeDataVariables(store),
-  })
   const {
     data,
     error: dataError,
@@ -125,11 +123,16 @@ const User = () => {
     }
     // refetch to update
     dataRefetch()
-    treeDataRefetch()
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treeUsers`],
+    })
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')
-  }, [passNew, name, email, id, dataRefetch, treeDataRefetch, client])
+  }, [passNew, name, email, id, dataRefetch, queryClient, client])
 
   if (dataLoading) {
     return <Spinner />

@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import omit from 'lodash/omit'
 import forOwn from 'lodash/forOwn'
 import union from 'lodash/union'
 import doOrderBy from 'lodash/orderBy'
@@ -8,13 +7,12 @@ import Button from '@mui/material/Button'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useQueryClient } from '@tanstack/react-query'
 
 import ImportPco from './Import'
 import booleanToJaNein from '../../../modules/booleanToJaNein'
 import exportXlsx from '../../../modules/exportXlsx'
 import exportCsv from '../../../modules/exportCsv'
-import treeQuery from '../../Tree/treeQuery'
-import treeQueryVariables from '../../Tree/treeQueryVariables'
 import deletePcoOfPcMutation from './deletePcoOfPcMutation'
 import storeContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
@@ -182,7 +180,9 @@ export const pcoPreviewQuery = gql`
 `
 
 const PCO = () => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const { login } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -197,9 +197,6 @@ const PCO = () => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
-  const { refetch: treeDataRefetch } = useQuery(treeQuery, {
-    variables: treeQueryVariables(store),
-  })
   const {
     data: pcoData,
     loading: pcoLoading,
@@ -232,7 +229,7 @@ const PCO = () => {
       pcoData?.propertyCollectionById
         ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       if (p.properties) {
@@ -288,7 +285,7 @@ const PCO = () => {
       data?.propertyCollectionById
         ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       if (p.properties) {
@@ -315,7 +312,7 @@ const PCO = () => {
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportXlsx({
       rows: data,
       onSetMessage: console.log,
@@ -324,7 +321,7 @@ const PCO = () => {
   }, [fetchAllData])
   const onClickCsv = useCallback(async () => {
     setCsvExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportCsv(data)
     setCsvExportLoading(false)
   }, [fetchAllData])
@@ -337,8 +334,13 @@ const PCO = () => {
     })
     setDeleteLoading(false)
     pcoRefetch()
-    treeDataRefetch()
-  }, [client, pCId, pcoRefetch, treeDataRefetch])
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treePcs`],
+    })
+  }, [client, pCId, pcoRefetch, queryClient])
 
   const onClickImport = useCallback(() => {
     setImport(true)

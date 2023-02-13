@@ -7,14 +7,13 @@ import Button from '@mui/material/Button'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useQueryClient } from '@tanstack/react-query'
 
 import ImportRco from './Import'
 import booleanToJaNein from '../../../modules/booleanToJaNein'
 import exportXlsx from '../../../modules/exportXlsx'
 import exportCsv from '../../../modules/exportCsv'
 import deleteRcoOfPcMutation from './deleteRcoOfPcMutation'
-import treeQuery from '../../Tree/treeQuery'
-import treeQueryVariables from '../../Tree/treeQueryVariables'
 import storeContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
 import DataTable from '../../shared/DataTable'
@@ -178,7 +177,9 @@ export const rcoPreviewQuery = gql`
 `
 
 const RCO = () => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const { login } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -189,9 +190,6 @@ const RCO = () => {
 
   const [count, setCount] = useState(15)
 
-  const { refetch: treeDataRefetch } = useQuery(treeQuery, {
-    variables: treeQueryVariables(store),
-  })
   const {
     data: rcoData,
     loading: rcoLoading,
@@ -320,7 +318,7 @@ const RCO = () => {
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportXlsx({
       rows: data,
       onSetMessage: console.log,
@@ -330,7 +328,7 @@ const RCO = () => {
   const onClickCsv = useCallback(async () => {
     // TODO: download all data
     setCsvExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportCsv(data)
     setCsvExportLoading(false)
   }, [fetchAllData])
@@ -343,8 +341,13 @@ const RCO = () => {
     })
     setDeleteLoading(false)
     rcoRefetch()
-    treeDataRefetch()
-  }, [client, pCId, rcoRefetch, treeDataRefetch])
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treePcs`],
+    })
+  }, [client, pCId, queryClient, rcoRefetch])
   const onClickImport = useCallback(() => {
     setImport(true)
   }, [])

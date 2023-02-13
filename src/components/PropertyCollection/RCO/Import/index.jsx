@@ -24,15 +24,13 @@ import {
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertRCOMutation from './upsertRCOMutation'
 import storeContext from '../../../../storeContext'
 import { rcoPreviewQuery } from '..'
-import treeQuery from '../../../Tree/treeQuery'
 import DataTable from '../../../shared/DataTable'
 import CountInput from '../../../Export/PreviewColumn/CountInput'
-import getTreeDataVariables from '../../../Tree/treeQueryVariables'
 import Instructions from './Instructions'
 
 const Container = styled.div`
@@ -149,7 +147,9 @@ const initialCheckState = {
 }
 
 const ImportRco = ({ setImport }) => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const pCId =
@@ -175,9 +175,6 @@ const ImportRco = ({ setImport }) => {
       pCId,
       first: 15,
     },
-  })
-  const { refetch: treeDataRefetch } = useApolloQuery(treeQuery, {
-    variables: getTreeDataVariables(store),
   })
 
   const { isLoading, error, data } = useQuery({
@@ -476,7 +473,12 @@ const ImportRco = ({ setImport }) => {
       console.log('Error refetching rco:', error)
     }
     try {
-      treeDataRefetch()
+      queryClient.invalidateQueries({
+        queryKey: [`treeRoot`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treePcs`],
+      })
     } catch (error) {
       console.log('Error refetching tree:', error)
     }
@@ -487,9 +489,9 @@ const ImportRco = ({ setImport }) => {
     importData,
     incrementImported,
     pCId,
+    queryClient,
     rcoRefetch,
     setImport,
-    treeDataRefetch,
   ])
 
   return (
