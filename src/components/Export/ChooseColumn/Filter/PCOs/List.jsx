@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import PCO from './PCO'
@@ -27,15 +28,23 @@ const query = gql`
 `
 
 const PcosCardList = () => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(query, {
-    variables: {
-      exportTaxonomies,
-    },
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['filterPcosList', exportTaxonomies],
+    queryFn: () =>
+      client.query({
+        query,
+        variables: {
+          exportTaxonomies,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const nodes = data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []
+  const nodes = data?.data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []
 
   if (error) {
     return (
@@ -43,7 +52,7 @@ const PcosCardList = () => {
     )
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <SpinnerContainer>
         <Spinner message="" />
