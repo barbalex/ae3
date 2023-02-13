@@ -15,25 +15,18 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
 import { read, utils } from 'xlsx'
-import {
-  useQuery as useApolloQuery,
-  useApolloClient,
-  gql,
-} from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertPCOMutation from './upsertPCOMutation'
 import storeContext from '../../../../storeContext'
 import isUuid from '../../../../modules/isUuid'
-import { pcoPreviewQuery } from '..'
-import treeQuery from '../../../Tree/treeQuery'
 import DataTable from '../../../shared/DataTable'
 import CountInput from '../../../Export/PreviewColumn/CountInput'
 import Instructions from './Instructions'
-import getTreeDataVariables from '../../../Tree/treeQueryVariables'
 
 const Container = styled.div`
   height: 100%;
@@ -137,7 +130,9 @@ const initialCheckState = {
 }
 
 const ImportPco = ({ setImport }) => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const pCId =
@@ -159,20 +154,10 @@ const ImportPco = ({ setImport }) => {
     setSortDirection(direction.toLowerCase())
   }, [])
 
-  const { refetch: pcoRefetch } = useApolloQuery(pcoPreviewQuery, {
-    variables: {
-      pCId,
-      first: 15,
-    },
-  })
-  const { refetch: treeDataRefetch } = useApolloQuery(treeQuery, {
-    variables: getTreeDataVariables(store),
-  })
-
   const { isLoading, error, data } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
-    queryFn: async () => {
-      const { data } = await client.query({
+    queryFn: () =>
+      client.query({
         query: importPcoQuery,
         variables: {
           getObjectIds: objectIds.length > 0,
@@ -182,9 +167,8 @@ const ImportPco = ({ setImport }) => {
               ? pCOfOriginIds
               : ['99999999-9999-9999-9999-999999999999'],
         },
-      })
-      return data
-    },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const [importData, setImportData] = useState([])
@@ -404,25 +388,16 @@ const ImportPco = ({ setImport }) => {
     await Promise.all(posts)
     setImport(false)
     setImporting(false)
-    try {
-      pcoRefetch()
-    } catch (error) {
-      console.log('Error refetching pco:', error)
-    }
-    try {
-      treeDataRefetch()
-    } catch (error) {
-      console.log('Error refetching tree:', error)
-    }
-  }, [
-    setImport,
-    pcoRefetch,
-    treeDataRefetch,
-    importData,
-    pCId,
-    client,
-    incrementImported,
-  ])
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treePcs`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`pcoPreviewQuery`],
+    })
+  }, [setImport, importData, pCId, client, incrementImported, queryClient])
 
   // console.log('ImportPco', { importData, importDataFields })
 

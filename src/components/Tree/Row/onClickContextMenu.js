@@ -13,9 +13,11 @@ const onClickContextMenu = async ({
   target,
   client,
   treeRefetch,
+  // TODO: better to fetch userId here instead of passing it to ALL tree rows?
   userId,
   store,
   navigate,
+  queryClient,
 }) => {
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
@@ -46,6 +48,12 @@ const onClickContextMenu = async ({
         }
         const newUserId = newUser?.data?.createUser?.user?.id
         !!newUserId && navigate(`/Benutzer/${newUserId}`)
+        queryClient.invalidateQueries({
+          queryKey: [`treeRoot`],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [`treeUsers`],
+        })
       }
       if (table === 'object') {
         let newObjectData
@@ -126,6 +134,12 @@ const onClickContextMenu = async ({
           console.log(error)
         }
         navigate('/Benutzer')
+        queryClient.invalidateQueries({
+          queryKey: [`treeRoot`],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [`treeUsers`],
+        })
       }
       if (table === 'object') {
         await client.mutate({

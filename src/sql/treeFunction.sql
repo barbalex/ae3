@@ -1,3 +1,5 @@
+-- NO MORE USED
+-- querying took often > 3s
 DROP TYPE IF EXISTS ae.tree CASCADE;
 
 CREATE TYPE ae.tree AS (

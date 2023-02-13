@@ -13,13 +13,12 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useParams } from 'react-router-dom'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import query from './query'
-import treeQuery from '../Tree/treeQuery'
-import getTreeDataVariables from '../Tree/treeQueryVariables'
 import Roles from './Roles'
 import PCs from './PCs'
 import TCs from './TCs'
@@ -45,25 +44,29 @@ const StyledPaper = styled(Paper)`
 `
 
 const User = () => {
+  const { userId } = useParams()
+
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const { login } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
 
-  const { refetch: treeDataRefetch } = useQuery(treeQuery, {
-    variables: getTreeDataVariables(store),
-  })
   const {
     data,
+    isLoading: dataLoading,
     error: dataError,
-    loading: dataLoading,
-    refetch: dataRefetch,
-  } = useQuery(query, {
-    variables: {
-      id: activeNodeArray[1] || '99999999-9999-9999-9999-999999999999',
-    },
+  } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () =>
+      client.query({
+        query,
+        variables: {
+          id: userId,
+        },
+      }),
   })
-  const user = useMemo(() => data?.userById ?? {}, [data?.userById])
+  const user = useMemo(() => data?.data?.userById ?? {}, [data?.data?.userById])
 
   const [name, setName] = useState(user?.name)
   const [nameErrorText, setNameErrorText] = useState('')
@@ -123,12 +126,19 @@ const User = () => {
       return console.log(error)
     }
     // refetch to update
-    dataRefetch()
-    treeDataRefetch()
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treeUsers`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`user`],
+    })
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')
-  }, [passNew, name, email, id, dataRefetch, treeDataRefetch, client])
+  }, [passNew, name, email, id, queryClient, client])
 
   if (dataLoading) {
     return <Spinner />

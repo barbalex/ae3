@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query TreeDataQuery($username: String!, $url: [String], $hasToken: Boolean!) {
+  query TreeDataQuery($username: String!) {
     userByName(name: $username) {
       id
       organizationUsersByUserId {
@@ -9,16 +9,6 @@ export default gql`
           id
           role
         }
-      }
-    }
-    treeFunction(activeUrl: $url, hasToken: $hasToken) {
-      nodes {
-        label
-        id
-        url
-        childrenCount
-        info
-        menuType
       }
     }
   }

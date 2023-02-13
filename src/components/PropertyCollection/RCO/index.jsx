@@ -4,17 +4,16 @@ import forOwn from 'lodash/forOwn'
 import union from 'lodash/union'
 import doOrderBy from 'lodash/orderBy'
 import Button from '@mui/material/Button'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 import ImportRco from './Import'
 import booleanToJaNein from '../../../modules/booleanToJaNein'
 import exportXlsx from '../../../modules/exportXlsx'
 import exportCsv from '../../../modules/exportCsv'
 import deleteRcoOfPcMutation from './deleteRcoOfPcMutation'
-import treeQuery from '../../Tree/treeQuery'
-import treeQueryVariables from '../../Tree/treeQueryVariables'
 import storeContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
 import DataTable from '../../shared/DataTable'
@@ -178,31 +177,29 @@ export const rcoPreviewQuery = gql`
 `
 
 const RCO = () => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+  const { pcId } = useParams()
+
   const store = useContext(storeContext)
   const { login } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
-  const pCId =
-    activeNodeArray.length > 0
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
 
   const [count, setCount] = useState(15)
 
-  const { refetch: treeDataRefetch } = useQuery(treeQuery, {
-    variables: treeQueryVariables(store),
-  })
   const {
-    data: rcoData,
-    loading: rcoLoading,
+    data,
+    isLoading: rcoLoading,
     error: rcoError,
-    refetch: rcoRefetch,
-  } = useQuery(rcoPreviewQuery, {
-    variables: {
-      pCId,
-      count,
-    },
+  } = useQuery({
+    queryKey: ['rcoPreviewQuery', pcId, count],
+    queryFn: () =>
+      client.query({
+        query: rcoPreviewQuery,
+        variables: { pCId: pcId, count },
+        fetchPolicy: 'no-cache',
+      }),
   })
+  const rcoData = data?.data
 
   const [orderBy, setOrderBy] = useState('Objekt Name')
   const [sortDirection, setSortDirection] = useState('asc')
@@ -222,7 +219,7 @@ const RCO = () => {
       rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
       []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       nP['Beziehung ID'] = p.objectIdRelation
@@ -269,12 +266,16 @@ const RCO = () => {
   const writerNames = union(rCOWriters.map((w) => w.userByUserId.name))
   const { username } = login
   const userIsWriter = !!username && writerNames.includes(username)
-  const showImportRco = (rCO.length === 0 && userIsWriter) || importing
+  const showImportRco =
+    ((
+      rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
+      []
+    ).length === 0 &&
+      userIsWriter) ||
+    importing
 
   const totalCount =
     rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.totalCount
-
-  console.log('RCO', { rcoData, rCOWriters, userIsWriter, rCO, showImportRco })
 
   // enable sorting
   const setOrder = useCallback(({ orderBy, direction }) => {
@@ -287,13 +288,13 @@ const RCO = () => {
     const { data, loading, error } = await client.query({
       query: rcoQuery,
       variables: {
-        pCId,
+        pCId: pcId,
       },
     })
     const rCORaw = (
       data?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ?? []
     ).map((p) => {
-      let nP = {}
+      const nP = {}
       nP['Objekt ID'] = p.objectId
       nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
       nP['Beziehung ID'] = p.objectIdRelation
@@ -318,11 +319,11 @@ const RCO = () => {
       return nP
     })
     return { data: doOrderBy(rCORaw, orderBy, sortDirection), loading, error }
-  }, [client, pCId, propKeys, sortDirection, orderBy])
+  }, [client, pcId, propKeys, sortDirection, orderBy])
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportXlsx({
       rows: data,
       onSetMessage: console.log,
@@ -332,7 +333,7 @@ const RCO = () => {
   const onClickCsv = useCallback(async () => {
     // TODO: download all data
     setCsvExportLoading(true)
-    const { data, error } = await fetchAllData()
+    const { data } = await fetchAllData()
     exportCsv(data)
     setCsvExportLoading(false)
   }, [fetchAllData])
@@ -341,12 +342,19 @@ const RCO = () => {
     setDeleteLoading(true)
     await client.mutate({
       mutation: deleteRcoOfPcMutation,
-      variables: { pcId: pCId },
+      variables: { pcId: pcId },
     })
     setDeleteLoading(false)
-    rcoRefetch()
-    treeDataRefetch()
-  }, [client, pCId, rcoRefetch, treeDataRefetch])
+    queryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`treePcs`],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [`rcoPreviewQuery`],
+    })
+  }, [client, pcId, queryClient])
   const onClickImport = useCallback(() => {
     setImport(true)
   }, [])

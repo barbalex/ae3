@@ -13,12 +13,12 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 import { getSnapshot } from 'mobx-state-tree'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { ContextMenuTrigger } from 'react-contextmenu'
 import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath'
 import onClickContextMenuDo from './onClickContextMenu'
 import storeContext from '../../../storeContext'
-import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -85,8 +85,10 @@ function collect(props) {
   return props
 }
 
-const Row = ({ index = 0, style, data, userId }) => {
+const Row = ({ data, userId }) => {
+  const queryClient = useQueryClient()
   const client = useApolloClient()
+
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const navigate = useNavigate()
@@ -98,6 +100,7 @@ const Row = ({ index = 0, style, data, userId }) => {
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
+  let useLoadingSpan = false
   let symbol
   if (data.childrenCount && nodeIsInActiveNodePath) {
     symbol = 'ExpandMore'
@@ -108,6 +111,11 @@ const Row = ({ index = 0, style, data, userId }) => {
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
+  }
+  if (data.label === '...') {
+    useSymbolSpan = false
+    useSymbolIcon = false
+    useLoadingSpan = true
   }
   const { url } = data
   const level = url?.length ?? 0
@@ -143,58 +151,60 @@ const Row = ({ index = 0, style, data, userId }) => {
         userId,
         store,
         navigate,
+        queryClient,
       })
     },
-    [client, userId, store, navigate],
+    [client, userId, store, navigate, queryClient],
   )
 
   //console.log('Row, data:', data)
 
   return (
-    <div key={index} style={style}>
-      <ErrorBoundary>
-        <ContextMenuTrigger
-          id={data.menuType}
-          collect={collect}
-          nodeId={data.id}
-          nodeLabel={data.label}
-          key={data.id}
-          onItemClick={onClickContextMenu}
-        >
-          <StyledNode
-            data-level={level}
+    <ContextMenuTrigger
+      id={data.menuType}
+      collect={collect}
+      nodeId={data.id}
+      nodeLabel={data.label}
+      key={data.id}
+      onItemClick={onClickContextMenu}
+    >
+      <StyledNode
+        data-level={level}
+        data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+        data-id={data.id}
+        data-url={data.url}
+        onClick={onClickNode}
+      >
+        {useSymbolIcon && (
+          <SymbolIcon
+            id="symbol"
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-            data-id={data.id}
-            data-url={data.url}
-            onClick={onClickNode}
+            className="material-icons"
           >
-            {useSymbolIcon && (
-              <SymbolIcon
-                id="symbol"
-                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                className="material-icons"
-              >
-                {symbol === 'Loading' && <LoadingIcon />}
-                {symbol === 'ExpandMore' && (
-                  <ExpandMoreIcon onClick={onClickExpandMore} />
-                )}
-                {symbol === 'ChevronRight' && <ChevronRightIcon />}
-                {symbol === 'MoreHoriz' && <MoreHorizIcon />}
-              </SymbolIcon>
+            {symbol === 'Loading' && <LoadingIcon />}
+            {symbol === 'ExpandMore' && (
+              <ExpandMoreIcon onClick={onClickExpandMore} />
             )}
-            {useSymbolSpan && (
-              <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-                {'-'}
-              </SymbolSpan>
-            )}
-            <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-              {data.label}
-            </TextSpan>
-            {data.info && <InfoSpan>{`(${data.info})`}</InfoSpan>}
-          </StyledNode>
-        </ContextMenuTrigger>
-      </ErrorBoundary>
-    </div>
+            {symbol === 'ChevronRight' && <ChevronRightIcon />}
+            {symbol === 'MoreHoriz' && <MoreHorizIcon />}
+          </SymbolIcon>
+        )}
+        {useSymbolSpan && (
+          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            {'-'}
+          </SymbolSpan>
+        )}
+        {useLoadingSpan && (
+          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            {' '}
+          </SymbolSpan>
+        )}
+        <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+          {data.label}
+        </TextSpan>
+        {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
+      </StyledNode>
+    </ContextMenuTrigger>
   )
 }
 

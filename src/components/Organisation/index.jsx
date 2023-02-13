@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useQuery, gql } from '@apollo/client'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useParams } from 'react-router-dom'
 
 import PropertyReadOnly from '../shared/PropertyReadOnly'
 import UserReadOnly from '../shared/UserReadOnly'
@@ -14,7 +13,6 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import OrgUsers from './OrgUsers'
 import TCs from './TCs'
 import PCs from './PCs'
-import storeContext from '../../storeContext'
 
 const Container = styled.div``
 const OrgContainer = styled.div`
@@ -67,8 +65,7 @@ const orgQuery = gql`
 `
 
 const Organization = () => {
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const { orgId } = useParams()
 
   const {
     data: orgData,
@@ -76,7 +73,7 @@ const Organization = () => {
     error: orgError,
   } = useQuery(orgQuery, {
     variables: {
-      orgId: activeNodeArray[1],
+      orgId,
     },
   })
 
@@ -131,4 +128,4 @@ const Organization = () => {
   )
 }
 
-export default observer(Organization)
+export default Organization

@@ -12,9 +12,11 @@ import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useParams } from 'react-router-dom'
 
 import Property from './Property'
 import onBlur from './onBlur'
@@ -74,8 +76,8 @@ const allUsersQuery = gql`
   }
 `
 const pcQuery = gql`
-  query pCQuery($pCId: UUID!) {
-    propertyCollectionById(id: $pCId) {
+  query pCQuery($pcId: UUID!) {
+    propertyCollectionById(id: $pcId) {
       id
       name
       description
@@ -104,29 +106,36 @@ const pcQuery = gql`
 `
 
 const PropertyCollection = () => {
+  const { pcId } = useParams()
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { editingPCs, setEditingPCs, login } = store
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
-  const pCId =
-    activeNodeArray.length > 0
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
 
   const {
-    data: allUsersData,
-    loading: allUsersLoading,
+    data: dataAllUsers,
+    isLoading: allUsersLoading,
     error: allUsersError,
-  } = useQuery(allUsersQuery)
-  const {
-    data: pcData,
-    loading: pcLoading,
-    error: pcError,
-  } = useQuery(pcQuery, {
-    variables: {
-      pCId,
-    },
+  } = useQuery({
+    queryKey: 'allUsersForPc',
+    queryFn: () =>
+      client.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
   })
+  const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
+
+  const {
+    data: dataPc,
+    isLoading: pcLoading,
+    error: pcError,
+  } = useQuery({
+    queryKey: ['pc', pcId],
+    queryFn: () =>
+      client.query({
+        query: pcQuery,
+        variables: { pcId },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+  const pcData = dataPc?.data
 
   const pC = useMemo(
     () => pcData?.propertyCollectionById ?? {},
@@ -134,7 +143,6 @@ const PropertyCollection = () => {
   )
   const org = pC?.organizationByOrganizationId?.name ?? ''
   const { username } = login
-  const allUsers = allUsersData?.allUsers?.nodes ?? []
   const user = allUsers.find((u) => u.name === username)
   const orgsUserIsPCWriter = (user?.organizationUsersByUserId?.nodes ?? [])
     .filter((o) => ['orgCollectionWriter', 'orgAdmin'].includes(o.role))

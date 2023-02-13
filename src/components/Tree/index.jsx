@@ -1,17 +1,11 @@
-import React, { useMemo, useContext, useEffect, useRef } from 'react'
+import React, { useMemo, useContext } from 'react'
 import styled from '@emotion/styled'
 import Snackbar from '@mui/material/Snackbar'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
-import { FixedSizeList as List } from 'react-window'
 import SimpleBar from 'simplebar-react'
-import findIndex from 'lodash/findIndex'
-import isEqual from 'lodash/isEqual'
-import { useResizeDetector } from 'react-resize-detector'
 import { useQuery } from '@tanstack/react-query'
 
-import Row from './Row'
 import Filter from './Filter'
 import treeQuery from './treeQuery'
 import CmBenutzerFolder from './contextmenu/BenutzerFolder'
@@ -23,8 +17,9 @@ import CmPCFolder from './contextmenu/PCFolder'
 import CmPC from './contextmenu/PC'
 import storeContext from '../../storeContext'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import getTreeDataVariables from './treeQueryVariables'
 import getConstants from '../../modules/constants'
+import Root from './Root'
+import IntoViewScroller from './IntoViewScroller'
 
 const constants = getConstants()
 
@@ -121,10 +116,6 @@ const Container = styled.div`
     bottom: 3px;
   }
 `
-const AutoSizerContainer = styled.div`
-  height: calc(100vh - ${constants.appBarHeight}px - 39px);
-  padding: 0;
-`
 const StyledSnackbar = styled(Snackbar)`
   div {
     min-width: auto;
@@ -136,87 +127,23 @@ const StyledSnackbar = styled(Snackbar)`
     flex-grow: 0;
   }
 `
-const StyledList = styled(List)`
-  overflow-x: hidden !important;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-
-  /* hide native scrollbar */
-  &::-webkit-scrollbar {
-    width: 1px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    box-shadow: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    box-shadow: none;
-  }
-  /* &::-webkit-scrollbar-thumb:hover {
-    background: '#6B2500';
-  } */
-`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
-  const { activeNodeArray: activeNodeArrayProxy } = store
-  const activeNodeArray = getSnapshot(activeNodeArrayProxy)
-
-  const {
-    height = 250,
-    width = 250,
-    ref: sizeRef,
-  } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 500,
-    refreshOptions: { leading: true },
-  })
-
-  const variables = getTreeDataVariables(store)
 
   const client = useApolloClient()
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ['treeQuery', variables],
+    queryKey: ['treeQuery', store.login.username],
     queryFn: () =>
       client.query({
         query: treeQuery,
-        variables,
+        variables: { username: store.login.username ?? '' },
         // seems that react-query cache is not working
         // no idea why
-        // fetchPolicy: 'no-cache',
+        fetchPolicy: 'no-cache',
       }),
   })
-
-  const previousData = useRef(null)
-
-  // if isLoading, return previous value to avoid flickering
-  const nodes = useMemo(() => {
-    if (isLoading) {
-      // console.log('TreeComponent, memo', {
-      //   isLoading,
-      //   previousData: previousData.current,
-      //   data,
-      // })
-      return previousData.current ?? []
-    }
-    if (data?.data?.treeFunction?.nodes) {
-      previousData.current = data?.data?.treeFunction?.nodes
-      return data?.data?.treeFunction?.nodes
-    }
-    return []
-  }, [data, isLoading])
-
-  const listRef = useRef(null)
-
-  useEffect(() => {
-    const index = findIndex(nodes, (node) => isEqual(node.url, activeNodeArray))
-    // console.log('TreeComponent, scrolling to node at index', index)
-    listRef?.current?.scrollToItem(index)
-  }, [activeNodeArray, nodes])
-
-  const userId = data?.data?.userByName?.id
 
   const userIsTaxWriter = useMemo(() => {
     const userRoles = (
@@ -226,16 +153,6 @@ const TreeComponent = () => {
       userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
     )
   }, [data?.data?.userByName?.organizationUsersByUserId?.nodes])
-
-  // console.log('TreeComponent', {
-  //   activeNodeArray,
-  //   variables,
-  //   width,
-  //   height,
-  //   userIsTaxWriter,
-  //   nodes,
-  //   isLoading,
-  // })
 
   if (error) {
     return (
@@ -254,32 +171,9 @@ const TreeComponent = () => {
             overflowY: 'auto',
           }}
         >
-          {({ scrollableNodeRef, contentNodeRef }) => {
-            return (
-              <AutoSizerContainer ref={sizeRef}>
-                <StyledList
-                  height={height}
-                  itemCount={nodes.length}
-                  itemSize={23}
-                  width={width}
-                  ref={listRef}
-                  innerRef={contentNodeRef}
-                  outerRef={scrollableNodeRef}
-                >
-                  {({ index, style }) => (
-                    <Row
-                      key={index}
-                      style={style}
-                      index={index}
-                      data={nodes[index]}
-                      userId={userId}
-                    />
-                  )}
-                </StyledList>
-              </AutoSizerContainer>
-            )
-          }}
+          <Root />
         </SimpleBar>
+        <IntoViewScroller />
         <StyledSnackbar open={isLoading} message="lade Daten..." />
         <CmBenutzerFolder />
         <CmBenutzer />
