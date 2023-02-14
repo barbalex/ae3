@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../storeContext'
@@ -63,17 +64,25 @@ const query = gql`
 `
 
 const RcosCard = ({ rcoExpanded, onToggleRco }) => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(query, {
-    variables: {
-      exportTaxonomies,
-    },
+  const { data, error, isLoading } = useQuery(query, {
+    queryKey: ['exportChooseColumnFilterRcos', exportTaxonomies],
+    queryFn: () =>
+      client.query({
+        query,
+        variables: {
+          exportTaxonomies,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const pcCount = data?.pc_count?.totalCount ?? 0
-  const propertyCount = data?.property_count ?? 0
+  const pcCount = data?.data?.pc_count?.totalCount ?? 0
+  const propertyCount = data?.data?.property_count ?? 0
 
   if (error) {
     return (
@@ -90,9 +99,9 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
               Beziehungssammlungen
               {
                 <Count>{`(${
-                  loading ? '...' : pcCount
+                  isLoading ? '...' : pcCount
                 } Sammlungen, ${propertyCount} ${
-                  loading ? '...' : propertyCount === 1 ? 'Feld' : 'Felder'
+                  isLoading ? '...' : propertyCount === 1 ? 'Feld' : 'Felder'
                 })`}</Count>
               }
             </CardActionTitle>
