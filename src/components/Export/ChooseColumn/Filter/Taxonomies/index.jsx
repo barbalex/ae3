@@ -8,7 +8,8 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import sumBy from 'lodash/sumBy'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Taxonomy from './Taxonomy'
@@ -62,16 +63,25 @@ const propsByTaxQuery = gql`
 `
 
 const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(propsByTaxQuery, {
-    variables: {
-      exportTaxonomies,
-      queryExportTaxonomies: exportTaxonomies.length > 0,
-    },
+  const { data, error, loading } = useQuery({
+    queryKey: ['exportChooseColumnFilterTaxonomiesCard', exportTaxonomies],
+    queryFn: () =>
+      client.query({
+        query: propsByTaxQuery,
+        variables: {
+          exportTaxonomies,
+          queryExportTaxonomies: exportTaxonomies.length > 0,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const taxProperties = data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+  const taxProperties =
+    data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
   const taxPropertiesFields = groupBy(taxProperties, 'propertyName')
