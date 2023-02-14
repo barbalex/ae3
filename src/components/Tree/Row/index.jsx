@@ -174,6 +174,8 @@ const Row = ({ data, userId }) => {
         data-id={data.id}
         data-url={data.url}
         onClick={onClickNode}
+        // need this id to scroll elements into view
+        id={data.id}
       >
         {useSymbolIcon && (
           <SymbolIcon

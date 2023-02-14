@@ -91,7 +91,7 @@ const TreeFilter = () => {
   // TODO: use local state instead of mobx for label, id
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { treeFilter } = store
+  const { treeFilter, scrollIntoView } = store
   const { setTreeFilter } = treeFilter
 
   const navigate = useNavigate()
@@ -117,6 +117,7 @@ const TreeFilter = () => {
       switch (option.type) {
         case 'pC':
           navigate(`/Eigenschaften-Sammlungen/${option.val}`)
+          setTimeout(() => scrollIntoView())
           break
         case 'art':
         case 'lr':
@@ -130,10 +131,11 @@ const TreeFilter = () => {
            * mutates history
            */
           setTreeFilter({ id: option.val, text: option.label })
+          setTimeout(() => scrollIntoView())
         }
       }
     },
-    [navigate, setTreeFilter],
+    [navigate, scrollIntoView, setTreeFilter],
   )
 
   useEffect(() => {
@@ -155,7 +157,7 @@ const TreeFilter = () => {
       navigate(`/${url.join('/')}`)
       setTreeFilter({ id: null, text: '' })
     }
-  }, [treeFilterId, setTreeFilter, objectUrlData?.objectById])
+  }, [treeFilterId, setTreeFilter, objectUrlData?.objectById, navigate])
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({ client, treeFilter, cb, val })

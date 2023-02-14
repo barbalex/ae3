@@ -7,10 +7,9 @@ import getLastIdFromUrl from '../../modules/getLastIdFromUrl'
 
 const IntoViewScroller = () => {
   const store = useContext(storeContext)
-  const { activeNodeArray } = store
+  const { activeNodeArray, scrollIntoViewCounter } = store
 
   const scroller = useCallback(() => {
-    // console.log('IntoViewScroller running')
     // 1. Get id from url
     const id = getLastIdFromUrl(activeNodeArray)
     if (!id) return setTimeout(scroller, 150)
@@ -30,7 +29,7 @@ const IntoViewScroller = () => {
 
   useEffect(() => {
     scroller()
-  }, [scroller])
+  }, [scroller, scrollIntoViewCounter])
 
   return null
 }

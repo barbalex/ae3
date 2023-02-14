@@ -24,8 +24,12 @@ const store = () =>
       windowWidth: types.optional(types.number, 800),
       windowHeight: types.optional(types.number, 800),
       stacked: types.optional(types.boolean, false),
+      scrollIntoViewCounter: types.optional(types.number, 0),
     })
     .actions((self) => ({
+      scrollIntoView() {
+        self.scrollIntoViewCounter += 1
+      },
       setStacked(val) {
         self.stacked = val
       },
