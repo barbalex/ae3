@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -23,19 +24,27 @@ const query = gql`
 `
 
 const PCOs = () => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(query, {
-    variables: {
-      exportTaxonomies,
-    },
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['exportChooseColumnPropertiesPcos', exportTaxonomies],
+    queryFn: () =>
+      client.query({
+        query,
+        variables: {
+          exportTaxonomies,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const nodes = data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []
+  const nodes = data?.data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []
 
   if (error) return `Error fetching data: ${error.message}`
 
-  if (loading) {
+  if (isLoading) {
     return (
       <SpinnerContainer>
         <Spinner message="" />

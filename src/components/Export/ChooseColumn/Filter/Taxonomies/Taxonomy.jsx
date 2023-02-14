@@ -7,7 +7,8 @@ import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useResizeDetector } from 'react-resize-detector'
 
@@ -70,20 +71,28 @@ const propsByTaxQuery = gql`
 `
 
 const TaxonomyCard = ({ pc, initiallyExpanded }) => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data: propsByTaxData, error: propsByTaxDataError } = useQuery(
-    propsByTaxQuery,
-    {
-      variables: {
-        exportTaxonomies,
-        queryExportTaxonomies: exportTaxonomies.length > 0,
-      },
-    },
-  )
+  const { data, error } = useQuery({
+    queryKey: [
+      'exportChooseColumnFilterTaxonomiesTaxonomyCard',
+      exportTaxonomies,
+    ],
+    queryFn: () =>
+      client.query({
+        query: propsByTaxQuery,
+        variables: {
+          exportTaxonomies,
+          queryExportTaxonomies: exportTaxonomies.length > 0,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
   const taxProperties =
-    propsByTaxData?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+    data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
   const [expanded, setExpanded] = useState(initiallyExpanded)
 
@@ -96,11 +105,9 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   const columns = Math.floor(width / constants.export.properties.columnWidth)
 
-  if (propsByTaxDataError) {
+  if (error) {
     return (
-      <ErrorContainer>
-        `Error loading data: ${propsByTaxDataError.message}`
-      </ErrorContainer>
+      <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
     )
   }
 
