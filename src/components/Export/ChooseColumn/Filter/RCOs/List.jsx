@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
-import { useQuery, gql } from '@apollo/client'
+import { gql, useApolloClient } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import RCO from './RCO'
@@ -35,17 +36,26 @@ const propsByTaxQuery = gql`
 `
 
 const RcosCardList = () => {
+  const client = useApolloClient()
+
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(propsByTaxQuery, {
-    variables: {
-      exportTaxonomies,
-      queryExportTaxonomies: exportTaxonomies.length > 0,
-    },
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['exportChooseColumnFilterRcoList', exportTaxonomies],
+    queryFn: () =>
+      client.query({
+        query: propsByTaxQuery,
+        variables: {
+          exportTaxonomies,
+          queryExportTaxonomies: exportTaxonomies.length > 0,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const rcoProperties = data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
+  const rcoProperties =
+    data?.data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
 
   const rcoPropertiesByPropertyCollection = groupBy(rcoProperties, (x) => {
     if (x.propertyCollectionName.includes(x.relationType)) {
@@ -60,7 +70,7 @@ const RcosCardList = () => {
     )
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <SpinnerContainer>
         <Spinner message="" />
