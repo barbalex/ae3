@@ -69,7 +69,7 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery(query, {
+  const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnFilterRcos', exportTaxonomies],
     queryFn: () =>
       client.query({
