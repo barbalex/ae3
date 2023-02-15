@@ -100,7 +100,8 @@ const organizationUsersQuery = gql`
 
 const TaxonomyObject = ({ objekt, showLink, stacked }) => {
   const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies, login } = store
+  const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
+    store
 
   const navigate = useNavigate()
 
@@ -143,10 +144,12 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickLink = useCallback(
     (e) => {
+      // TODO:
       e.stopPropagation()
       navigate(linkUrl)
+      setTimeout(() => scrollIntoView())
     },
-    [linkUrl, navigate],
+    [linkUrl, navigate, scrollIntoView],
   )
   const onClickStopEditing = useCallback(
     (e) => {
