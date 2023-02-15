@@ -66,7 +66,7 @@ const PcoList = ({ pcoExpanded, onTogglePco }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery(query, {
+  const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcosList', exportTaxonomies],
     queryFn: () =>
       client.query({
