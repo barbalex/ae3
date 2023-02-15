@@ -18,7 +18,6 @@ const store = () =>
       ),
       treeFilter: types.optional(TreeFilter, defaultTreeFilter),
       login: types.optional(Login, defaultLogin),
-      historyAfterLogin: types.optional(types.string, ''),
       sidebarWidth: types.maybeNull(types.number, null),
       docFilter: types.optional(types.union(types.string, types.number), ''),
       windowWidth: types.optional(types.number, 800),
@@ -57,9 +56,6 @@ const store = () =>
         if (!isEqual(activeNodeArrayFromUrl, value) && navigate) {
           navigate(`/${value.join('/')}`)
         }
-      },
-      setHistoryAfterLogin(value) {
-        self.historyAfterLogin = value
       },
     }))
     .views((self) => ({

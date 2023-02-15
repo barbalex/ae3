@@ -19,7 +19,7 @@ const fetchLogin = async ({
   passwordInput,
   navigate,
 }) => {
-  const { historyAfterLogin, setHistoryAfterLogin, login } = store
+  const {  login } = store
   const { setLogin } = login
   // when bluring fields need to pass event value
   // on the other hand when clicking on Anmelden button,
@@ -86,12 +86,7 @@ const fetchLogin = async ({
       changeName('')
       changePass('')
       changeLoginSuccessfull(false)
-      if (historyAfterLogin) {
-        navigate(historyAfterLogin)
-        setHistoryAfterLogin('')
-      } else {
         navigate('/')
-      }
     }, 2000)
   }
 }
