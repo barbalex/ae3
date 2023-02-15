@@ -1,14 +1,6 @@
 import updatePCMutation from './updatePCMutation'
 
-const onBlur = async ({
-  client,
-  field,
-  pC,
-  value,
-  prevValue,
-  setError,
-  navigate,
-}) => {
+const onBlur = async ({ client, field, pC, value, prevValue, navigate }) => {
   //setError(null)
   if (value !== prevValue) {
     const variables = {
