@@ -19,6 +19,7 @@ const onClickContextMenu = async ({
   navigate,
   queryClient,
 }) => {
+  const {scrollIntoView} = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
@@ -47,7 +48,10 @@ const onClickContextMenu = async ({
           console.log(error)
         }
         const newUserId = newUser?.data?.createUser?.user?.id
-        !!newUserId && navigate(`/Benutzer/${newUserId}`)
+        if (newUserId) {
+          navigate(`/Benutzer/${newUserId}`)
+          setTimeout(()=>scrollIntoView())
+        }
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
@@ -72,6 +76,7 @@ const onClickContextMenu = async ({
         }
         const newId = newObjectData?.data?.createObject?.object?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
+        setTimeout(()=>scrollIntoView())
         // if not editing, set editing true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -93,6 +98,7 @@ const onClickContextMenu = async ({
         const newId =
           newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
+        setTimeout(()=>scrollIntoView())
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -107,6 +113,7 @@ const onClickContextMenu = async ({
           newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
           null
         navigate(`/${[...url, newId].join('/')}`)
+        setTimeout(()=>scrollIntoView())
         // if not editing, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingPCs(true)
@@ -134,6 +141,7 @@ const onClickContextMenu = async ({
           console.log(error)
         }
         navigate('/Benutzer')
+        setTimeout(()=>scrollIntoView())
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
@@ -158,6 +166,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
+          setTimeout(()=>scrollIntoView())
         }
       }
       if (table === 'taxonomy') {
@@ -177,6 +186,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
+          setTimeout(()=>scrollIntoView())
         }
       }
       if (table === 'pc') {
@@ -196,6 +206,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
+          setTimeout(()=>scrollIntoView())
         }
       }
       treeRefetch()

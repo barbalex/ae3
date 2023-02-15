@@ -155,9 +155,16 @@ const TreeFilter = () => {
     ) {
       const url = getUrlForObject(urlObject)
       navigate(`/${url.join('/')}`)
+      setTimeout(() => scrollIntoView())
       setTreeFilter({ id: null, text: '' })
     }
-  }, [treeFilterId, setTreeFilter, objectUrlData?.objectById, navigate])
+  }, [
+    treeFilterId,
+    setTreeFilter,
+    objectUrlData?.objectById,
+    navigate,
+    scrollIntoView,
+  ])
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({ client, treeFilter, cb, val })

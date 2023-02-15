@@ -55,6 +55,7 @@ const store = () =>
         const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
         if (!isEqual(activeNodeArrayFromUrl, value) && navigate) {
           navigate(`/${value.join('/')}`)
+          setTimeout(() => self.scrollIntoView())
         }
       },
     }))
