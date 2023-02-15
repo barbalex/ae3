@@ -17,7 +17,8 @@ import MeldenDoc from './Docs/docs/Melden'
 import NeueArtDoc from './Docs/docs/NeueArt'
 import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 import SchnittstellenDoc from './Docs/docs/Schnittstellen'
-import TaxonomyOrObject from './TaxonomyOrObject'
+import Taxonomy from './Taxonomy'
+import Objekt from './Objekt'
 import PcPcoOrRco from './PcPcoOrRco'
 import Export from './Export'
 import Data from './Data'
@@ -31,10 +32,12 @@ const RouterComponent = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Data />}>
           <Route index element={<Home />} />
-          <Route path="/Arten/*" element={<TaxonomyOrObject />} />
-          <Route path="/Arten/:taxId/*" element={<TaxonomyOrObject />} />
-          <Route path="/Lebensräume/*" element={<TaxonomyOrObject />} />
-          <Route path="/Lebensräume/:taxId/*" element={<TaxonomyOrObject />} />
+          <Route path="/Arten/*" element={() => null} />
+          <Route path="/Arten/:taxId/*" element={<Taxonomy />} />
+          <Route path="/Arten/:taxId/:objId/*" element={<Objekt />} />
+          <Route path="/Lebensräume/*" element={() => null} />
+          <Route path="/Lebensräume/:taxId/*" element={<Taxonomy />} />
+          <Route path="/Lebensräume/:taxId/:objId/*" element={<Objekt />} />
           <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
           <Route
             path="/Eigenschaften-Sammlungen/:pcId/*"
