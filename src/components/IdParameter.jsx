@@ -1,10 +1,12 @@
+import { useContext, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client'
 import isUuid from 'is-uuid'
 import { observer } from 'mobx-react-lite'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import getUrlForObject from '../modules/getUrlForObject'
 import getUrlParamByName from '../modules/getUrlParamByName'
+import storeContext from '../storeContext'
 
 const objectQuery = gql`
   query ObjectQuery($id: UUID!, $hasObjectId: Boolean!) {
@@ -46,7 +48,7 @@ const objectQuery = gql`
 `
 
 const IdParameter = () => {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const store = useContext(storeContext)
   const navigate = useNavigate()
   /**
    * check if old url was passed that contains objectId-Param
@@ -62,15 +64,16 @@ const IdParameter = () => {
     variables: { id: objectId, hasObjectId },
   })
 
-  if (hasObjectId) {
-    if (error) return null
-    // if idParam was passed, open object
-    const url = getUrlForObject(data.objectById)
-    navigate(`/${url.join('/')}`)
-    // remove id param from url
-    searchParams.delete('id')
-    setSearchParams(searchParams)
-  }
+  useEffect(() => {
+    if (hasObjectId && data?.objectById) {
+      if (error) return null
+      // if idParam was passed, open object
+      const url = getUrlForObject(data?.objectById)
+      navigate(`/${url.join('/')}`)
+      setTimeout(() => store.scrollIntoView())
+      // remove id param from url. Nope, not needed
+    }
+  }, [data?.objectById, error, hasObjectId, navigate, store])
   return null
 }
 
