@@ -60,11 +60,18 @@ const Root = () => {
         isLoading={isLoading}
         count={data?.data?.allPropertyCollections?.totalCount}
       />
-      <Users isLoading={isLoading} count={data?.data?.allUsers?.totalCount} />
-      <Organizations
-        isLoading={isLoading}
-        count={data?.data?.allOrganizations?.totalCount}
-      />
+      {hasToken && (
+        <>
+          <Users
+            isLoading={isLoading}
+            count={data?.data?.allUsers?.totalCount}
+          />
+          <Organizations
+            isLoading={isLoading}
+            count={data?.data?.allOrganizations?.totalCount}
+          />
+        </>
+      )}
     </>
   )
 }
