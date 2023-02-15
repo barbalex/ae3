@@ -116,7 +116,7 @@ const PropertyCollection = () => {
     isLoading: allUsersLoading,
     error: allUsersError,
   } = useQuery({
-    queryKey: 'allUsersForPc',
+    queryKey: ['allUsersForPc'],
     queryFn: () =>
       client.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
   })
