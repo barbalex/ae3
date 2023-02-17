@@ -34,13 +34,13 @@ const RouterComponent = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Data />}>
           <Route index element={<Home />} />
-          <Route path="/Arten/*" element={() => null} />
+          <Route path="/Arten/*" element={<Home />} />
           <Route path="/Arten/:taxId/*" element={<Taxonomy />} />
           <Route path="/Arten/:taxId/:objId/*" element={<Objekt />} />
-          <Route path="/Lebensräume/*" element={() => null} />
+          <Route path="/Lebensräume/*" element={<Home />} />
           <Route path="/Lebensräume/:taxId/*" element={<Taxonomy />} />
           <Route path="/Lebensräume/:taxId/:objId/*" element={<Objekt />} />
-          <Route path="/Eigenschaften-Sammlungen/*" element={() => null} />
+          <Route path="/Eigenschaften-Sammlungen/*" element={<Home />} />
           <Route
             path="/Eigenschaften-Sammlungen/:pcId/*"
             element={<PropertyCollection />}
@@ -53,9 +53,9 @@ const RouterComponent = () => {
             path="/Eigenschaften-Sammlungen/:pcId/Beziehungen"
             element={<RCO />}
           />
-          <Route path="/Benutzer/*" element={() => null} />
+          <Route path="/Benutzer/*" element={<Home />} />
           <Route path="/Benutzer/:userId" element={<Benutzer />} />
-          <Route path="/Organisationen/*" element={() => null} />
+          <Route path="/Organisationen/*" element={<Home />} />
           <Route path="/Organisationen/:orgId" element={<Organisation />} />
           <Route path="*" element={<FourOhFour />} />
         </Route>
