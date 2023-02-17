@@ -2,24 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
-import SimpleBar from 'simplebar-react'
 
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
 import ProgressiveImg from './shared/ProgressiveImg'
 import image from '../images/home.jpg'
 import placeholderSrc from '../images/home_small.jpg'
 
-const StyledSimpleBar = styled(SimpleBar)`
-  max-height: 100%;
-  height: 100%;
-  .simplebar-content {
-    /* without this image did not cover 100% on large screens */
-    height: 100%;
-  }
-  .simplebar-scrollbar:before {
-    background: rgba(0, 0, 0, 0.7) !important;
-  }
-`
 const OuterContainer = styled.div`
   height: 100%;
   min-height: 100%;
