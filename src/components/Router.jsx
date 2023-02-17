@@ -19,7 +19,9 @@ import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
 import SchnittstellenDoc from './Docs/docs/Schnittstellen'
 import Taxonomy from './Taxonomy'
 import Objekt from './Objekt'
-import PcPcoOrRco from './PcPcoOrRco'
+import PropertyCollection from './PropertyCollection'
+import PCO from './PropertyCollection/PCO'
+import RCO from './PropertyCollection/RCO'
 import Export from './Export'
 import Data from './Data'
 import Layout from './Layout'
@@ -38,10 +40,18 @@ const RouterComponent = () => {
           <Route path="/Lebensräume/*" element={() => null} />
           <Route path="/Lebensräume/:taxId/*" element={<Taxonomy />} />
           <Route path="/Lebensräume/:taxId/:objId/*" element={<Objekt />} />
-          <Route path="/Eigenschaften-Sammlungen/*" element={<PcPcoOrRco />} />
+          <Route path="/Eigenschaften-Sammlungen/*" element={() => null} />
           <Route
             path="/Eigenschaften-Sammlungen/:pcId/*"
-            element={<PcPcoOrRco />}
+            element={<PropertyCollection />}
+          />
+          <Route
+            path="/Eigenschaften-Sammlungen/:pcId/Eigenschaften"
+            element={<PCO />}
+          />
+          <Route
+            path="/Eigenschaften-Sammlungen/:pcId/Beziehungen"
+            element={<RCO />}
           />
           <Route path="/Benutzer/*" element={() => null} />
           <Route path="/Benutzer/:userId" element={<Benutzer />} />
