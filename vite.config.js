@@ -18,8 +18,8 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       includeAssets: [
-        'favicon.svg',
-        'favicon.ico',
+        'android-chrome-192x192.png',
+        'android-chrome-256x256.png',
         'robots.txt',
         'apple-touch-icon.png',
       ],
