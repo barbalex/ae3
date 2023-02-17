@@ -32,9 +32,24 @@ export default defineConfig({
         background_color: '#e65100',
         theme_color: '#e65100',
         display: 'minimal-ui',
-        icon: 'src/images/favicon256.png',
-        include_favicon: true,
-        lang: 'de-CH',
+        icons: [
+          {
+            src: '/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/android-chrome-256x256.png',
+            sizes: '256x256',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: '/android-chrome-256x256.png',
+            sizes: '256x256',
+            type: 'image/png',
+          },
+        ],
         orientation: 'portrait',
         description:
           'Eigenschaften von Flora, Fauna, Moosen und Lebensräumen: Sichten, exportieren, importieren',
