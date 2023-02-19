@@ -8,6 +8,7 @@ import PC from './PC'
 import Users from './Users'
 import Organizations from './Organizations'
 import storeContext from '../../../storeContext'
+import LoadingRow from '../LoadingRow'
 
 const Root = () => {
   const client = useApolloClient()
@@ -49,6 +50,8 @@ const Root = () => {
       })
     },
   })
+
+  if (isLoading) return <LoadingRow level={1} />
 
   if (!data) return null
 
