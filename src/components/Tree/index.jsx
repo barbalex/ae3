@@ -116,24 +116,13 @@ const Container = styled.div`
     bottom: 3px;
   }
 `
-const StyledSnackbar = styled(Snackbar)`
-  div {
-    min-width: auto;
-    background-color: #2e7d32 !important;
-    /* for unknown reason only this snackbar gets
-     * flex-grow 1 set
-     * which makes it fill 100% width
-     */
-    flex-grow: 0;
-  }
-`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
 
   const client = useApolloClient()
 
-  const { isLoading, error, data } = useQuery({
+  const { error, data } = useQuery({
     queryKey: ['treeQuery', store.login.username],
     queryFn: () =>
       client.query({
@@ -174,7 +163,6 @@ const TreeComponent = () => {
           <Root />
         </SimpleBar>
         <IntoViewScroller />
-        <StyledSnackbar open={isLoading} message="lade Daten..." />
         <CmBenutzerFolder />
         <CmBenutzer />
         {userIsTaxWriter && (
