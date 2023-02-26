@@ -1,8 +1,6 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-// see: https://github.com/guyonroche/exceljs/issues/313
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import keys from 'lodash/keys'
 import flatten from 'lodash/flatten'
 import uniq from 'lodash/uniq'
@@ -26,7 +24,9 @@ const getXlsxBuffer = async (jsonArray) => {
     ),
   )
   const dataArray = [columns, ...values]
-  const workbook = new ExcelJs.Workbook()
+  // https://github.com/exceljs/exceljs/issues/1236#issuecomment-643023969
+  const { Workbook } = await import('exceljs')
+  const workbook = new Workbook()
   const worksheet = workbook.addWorksheet('Daten', {
     views: [
       {

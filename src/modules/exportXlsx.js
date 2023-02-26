@@ -1,8 +1,6 @@
 import FileSaver from 'file-saver'
 import format from 'date-fns/format'
 
-import getXlsxBuffer from './getXlsxBuffer'
-
 /**
  * TODO:
  * use https://github.com/GoogleChromeLabs/import-from-worker
@@ -10,6 +8,7 @@ import getXlsxBuffer from './getXlsxBuffer'
  */
 
 const exportXlsx = async ({ rows, onSetMessage }) => {
+  const { default: getXlsxBuffer } = await import('./getXlsxBuffer')
   let buffer
   try {
     buffer = await getXlsxBuffer(rows)
