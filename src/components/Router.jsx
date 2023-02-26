@@ -6,7 +6,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-import Layout from './Layout'
+const Layout = lazy(() => import('./Layout'))
 const Home = lazy(() => import('./Home'))
 const Benutzer = lazy(() => import('./Benutzer'))
 const Organisation = lazy(() => import('./Organisation'))

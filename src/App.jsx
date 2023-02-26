@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense, lazy } from 'react'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
@@ -20,8 +20,9 @@ import client from './client'
 import { Provider as IdbProvider } from './idbContext'
 import { Provider as MobxProvider } from './storeContext'
 import Store from './store'
-import Stacker from './components/Stacker'
 import Router from './components/Router'
+import Spinner from './components/shared/Spinner'
+const Stacker = lazy(() => import('./components/Stacker'))
 
 const App = () => {
   const idb = initializeIdb()
@@ -69,9 +70,13 @@ const App = () => {
           <QueryClientProvider client={queryClient}>
             <StyledEngineProvider injectFirst>
               <ThemeProvider theme={theme}>
-                <Router />
+                <Suspense fallback={<Spinner />}>
+                  <Router />
+                </Suspense>
               </ThemeProvider>
-              <Stacker />
+              <Suspense fallback={<div />}>
+                <Stacker />
+              </Suspense>
             </StyledEngineProvider>
           </QueryClientProvider>
         </ApolloProvider>

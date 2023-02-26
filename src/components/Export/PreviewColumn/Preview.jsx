@@ -7,8 +7,6 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import exportXlsx from '../../../modules/exportXlsx'
-import exportCsv from '../../../modules/exportCsv'
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import CountInput from './CountInput'
@@ -284,6 +282,7 @@ const Preview = () => {
     const rows = data?.data?.exportAll?.exportDatum?.exportData
       ? JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
       : []
+    const { default: exportXlsx } = await import('../../../modules/exportXlsx')
     exportXlsx({ rows, onSetMessage })
   }, [
     client,
@@ -299,7 +298,10 @@ const Preview = () => {
     taxonomies,
     withSynonymData,
   ])
-  const onClickCsv = useCallback(() => exportCsv(rows), [rows])
+  const onClickCsv = useCallback(async () => {
+    const { default: exportCsv } = await import('../../../modules/exportCsv')
+    exportCsv(rows)
+  }, [rows])
 
   if (exportError) {
     return (
