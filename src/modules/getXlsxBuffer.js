@@ -13,7 +13,7 @@ const getXlsxBuffer = async (jsonArray) => {
   // add missing columns to each object
   jsonArray.forEach((o) => {
     columns.forEach((k) => {
-      if (!o.hasOwnProperty(k)) {
+      if (!(k in o)) {
         o[k] = ''
       }
     })
