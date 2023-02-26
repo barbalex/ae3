@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import {
   Route,
   createBrowserRouter,
@@ -6,25 +6,27 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-import Home from './Home'
-import Benutzer from './Benutzer'
-import Organisation from './Organisation'
-import Login from './Login'
-import FourOhFour from './404'
-import Docs from './Docs'
-import BrowserDoc from './Docs/docs/Browser'
-import MeldenDoc from './Docs/docs/Melden'
-import NeueArtDoc from './Docs/docs/NeueArt'
-import ProjektbeschreibungDoc from './Docs/docs/Projektbeschreibung'
-import SchnittstellenDoc from './Docs/docs/Schnittstellen'
-import Taxonomy from './Taxonomy'
-import Objekt from './Objekt'
-import PropertyCollection from './PropertyCollection'
-import PCO from './PropertyCollection/PCO'
-import RCO from './PropertyCollection/RCO'
-import Export from './Export'
-import Data from './Data'
 import Layout from './Layout'
+const Home = lazy(() => import('./Home'))
+const Benutzer = lazy(() => import('./Benutzer'))
+const Organisation = lazy(() => import('./Organisation'))
+const Login = lazy(() => import('./Login'))
+const FourOhFour = lazy(() => import('./404'))
+const Docs = lazy(() => import('./Docs'))
+const BrowserDoc = lazy(() => import('./Docs/docs/Browser'))
+const MeldenDoc = lazy(() => import('./Docs/docs/Melden'))
+const NeueArtDoc = lazy(() => import('./Docs/docs/NeueArt'))
+const ProjektbeschreibungDoc = lazy(() =>
+  import('./Docs/docs/Projektbeschreibung'),
+)
+const SchnittstellenDoc = lazy(() => import('./Docs/docs/Schnittstellen'))
+const Taxonomy = lazy(() => import('./Taxonomy'))
+const Objekt = lazy(() => import('./Objekt'))
+const PropertyCollection = lazy(() => import('./PropertyCollection'))
+const PCO = lazy(() => import('./PropertyCollection/PCO'))
+const RCO = lazy(() => import('./PropertyCollection/RCO'))
+const Export = lazy(() => import('./Export'))
+const Data = lazy(() => import('./Data'))
 
 // Use react-router with outlets
 // render routes in outlet inside Data
