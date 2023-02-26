@@ -12,8 +12,6 @@ import { useParams } from 'react-router-dom'
 
 import ImportPco from './Import'
 import booleanToJaNein from '../../../modules/booleanToJaNein'
-import exportXlsx from '../../../modules/exportXlsx'
-import exportCsv from '../../../modules/exportCsv'
 import deletePcoOfPcMutation from './deletePcoOfPcMutation'
 import storeContext from '../../../storeContext'
 import Spinner from '../../shared/Spinner'
@@ -322,6 +320,7 @@ const PCO = () => {
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
     const { data } = await fetchAllData()
+    const { default: exportXlsx } = await import('../../../modules/exportXlsx')
     exportXlsx({
       rows: data,
       onSetMessage: console.log,
@@ -331,6 +330,7 @@ const PCO = () => {
   const onClickCsv = useCallback(async () => {
     setCsvExportLoading(true)
     const { data } = await fetchAllData()
+    const { default: exportCsv } = await import('../../../modules/exportCsv')
     exportCsv(data)
     setCsvExportLoading(false)
   }, [fetchAllData])

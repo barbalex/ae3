@@ -1,11 +1,11 @@
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
 import AppBar from './AppBar'
-import ActiveNodeArraySetter from '../ActiveNodeArraySetter'
-import IdParameter from '../IdParameter'
 import Spinner from '../shared/Spinner'
+const ActiveNodeArraySetter = lazy(() => import('../ActiveNodeArraySetter'))
+const IdParameter = lazy(() => import('../IdParameter'))
 
 const Container = styled.div`
   @media print {
@@ -20,8 +20,10 @@ const Layout = () => (
     <Suspense fallback={<Spinner />}>
       <Outlet />
     </Suspense>
-    <ActiveNodeArraySetter />
-    <IdParameter />
+    <Suspense fallback={<div />}>
+      <ActiveNodeArraySetter />
+      <IdParameter />
+    </Suspense>
   </Container>
 )
 
