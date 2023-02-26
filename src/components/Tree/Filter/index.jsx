@@ -273,6 +273,7 @@ const TreeFilter = () => {
       <Container>
         <SearchIcon />
         <StyledSelect
+          aria-label="treeFilter"
           styles={customStyles}
           onInputChange={onInputChange}
           onChange={onChange}
