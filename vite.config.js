@@ -33,8 +33,8 @@ export default defineConfig({
         name: 'arteigenschaften.ch',
         short_name: 'arteigenschaften',
         start_url: './',
-        background_color: '#e65100',
-        theme_color: '#e65100',
+        background_color: '#943400',
+        theme_color: '#943400',
         display: 'minimal-ui',
         icons: [
           {
