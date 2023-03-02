@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
-import { useResizeDetector } from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import MenuItems from './MenuItems'
@@ -19,6 +18,7 @@ const Menu = styled.div`
   height: calc(100vh - 64px);
   padding: 25px 0;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+  container-type: size;
 `
 const MenuTitle = styled.div`
   padding: 0 16px;
@@ -32,27 +32,25 @@ const MenuTitleLink = styled(Link)`
     text-decoration: underline;
   }
 `
+const StyledSimpleBar = styled(SimpleBar)`
+  height: calc(100cqh - 25px);
+`
 
 const Sidebar = ({ stacked }) => {
   const store = useContext(storeContext)
-  const { docFilter, sidebarWidth } = store
-
-  const { height, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
+  const { sidebarWidth } = store
 
   if (sidebarWidth === 0) return null
 
   return (
-    <Menu data-stacked={stacked} ref={ref}>
-      <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
+    <Menu data-stacked={stacked}>
+      <StyledSimpleBar>
         <MenuTitle>
           <MenuTitleLink to={`/Dokumentation/`}>Dokumentation</MenuTitleLink>
           <Filter />
         </MenuTitle>
         <MenuItems />
-      </SimpleBar>
+      </StyledSimpleBar>
     </Menu>
   )
 }
