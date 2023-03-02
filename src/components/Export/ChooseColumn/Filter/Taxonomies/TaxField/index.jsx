@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Comparator from './Comparator'
 import Value from './Value'
