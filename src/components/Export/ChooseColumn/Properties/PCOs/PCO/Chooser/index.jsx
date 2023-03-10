@@ -11,6 +11,7 @@ import Spinner from '../../../../../../shared/Spinner'
 const PropertiesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 const SpinnerContainer = styled.div`
   padding-top: 15px;
@@ -35,7 +36,7 @@ const query = gql`
   }
 `
 
-const ChooserRouter = ({ pcName, count, columns }) => {
+const ChooserRouter = ({ pcName, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -62,7 +63,7 @@ const ChooserRouter = ({ pcName, count, columns }) => {
     <>
       {count > 1 && <AllChooser properties={properties} pcName={pcName} />}
       <PropertiesContainer>
-        <Properties properties={properties} columns={columns} pcName={pcName} />
+        <Properties properties={properties} pcName={pcName} />
       </PropertiesContainer>
     </>
   )

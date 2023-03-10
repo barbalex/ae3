@@ -6,13 +6,9 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Chooser from './Chooser'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../../modules/constants'
-
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -45,16 +41,9 @@ const PCO = ({ pcName, count }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
-
   return (
     <ErrorBoundary>
-      <StyledCard ref={ref}>
+      <StyledCard>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {pcName}
@@ -71,7 +60,7 @@ const PCO = ({ pcName, count }) => {
           </CardActionIconButton>
         </StyledCardActions>
         <StyledCollapse in={expanded} timeout="auto" unmountOnExit>
-          {expanded && <Chooser count={count} pcName={pcName} columns={columns} />}
+          {expanded && <Chooser count={count} pcName={pcName} />}
         </StyledCollapse>
       </StyledCard>
     </ErrorBoundary>
