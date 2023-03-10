@@ -7,24 +7,29 @@ import Comparator from './Comparator'
 import Value from './Value'
 import Checkbox from './Checkbox'
 import storeContext from '../../../../../../../storeContext'
+import getConstants from '../../../../../../../modules/constants'
+const constants = getConstants()
 
 const Container = styled.div`
   display: flex;
   align-content: stretch;
   padding: 4px 16px;
-  width: ${(props) => `calc(${props['data-width']}% - 32px)`};
+  width: 100%;
+  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
+    width: calc(50cqw - 32px);
+  }
+  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
+    width: calc(33cqw - 32px);
+  }
+  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
+    width: calc(25cqw - 32px);
+  }
   > div {
     height: auto;
   }
 `
 
-const PcoProperty = ({
-  pcname,
-  pname,
-  jsontype,
-  columns,
-  propertiesLength,
-}) => {
+const PcoProperty = ({ pcname, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { pcoFilters: pcoFiltersPassed } = store.export
   const pcoFilters = getSnapshot(pcoFiltersPassed)
@@ -34,18 +39,16 @@ const PcoProperty = ({
   ) || { comparator: null, value: null }
   const { comparator, value } = pcoFilter
 
-  const containerWidth = propertiesLength === 1 ? 100 : 100 / columns
-
   if (jsontype === 'Boolean') {
     return (
-      <Container data-width={containerWidth}>
+      <Container>
         <Checkbox pcname={pcname} pname={pname} value={value} />
       </Container>
     )
   }
 
   return (
-    <Container data-width={containerWidth}>
+    <Container>
       <Value
         key={`${pcname}/${pname}/${jsontype}/${value}`}
         pcname={pcname}

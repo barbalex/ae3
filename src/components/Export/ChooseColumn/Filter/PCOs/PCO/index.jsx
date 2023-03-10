@@ -6,12 +6,9 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../../modules/constants'
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -42,23 +39,17 @@ const PropertiesContainer = styled.div`
   padding-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 
 const PcoCard = ({ pc, count }) => {
   const [expanded, setExpanded] = useState(false)
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
-
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
 
   return (
     <ErrorBoundary>
-      <StyledCard key={pc} ref={ref}>
+      <StyledCard key={pc}>
         <StyledCardActions disableSpacing onClick={onClickAction}>
           <CardActionTitle>
             {pc}
@@ -76,7 +67,7 @@ const PcoCard = ({ pc, count }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            {expanded && <Properties pc={pc} columns={columns} />}
+            {expanded && <Properties pc={pc} />}
           </PropertiesContainer>
         </Collapse>
       </StyledCard>

@@ -31,7 +31,7 @@ const query = gql`
   }
 `
 
-const Properties = ({ columns, pc }) => {
+const Properties = ({ pc }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
@@ -70,8 +70,6 @@ const Properties = ({ columns, pc }) => {
       pcname={pc}
       pname={p.property}
       jsontype={p.type}
-      columns={columns}
-      propertiesLength={properties.length}
     />
   ))
 }
