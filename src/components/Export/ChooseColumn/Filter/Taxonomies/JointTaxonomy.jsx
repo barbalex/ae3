@@ -6,12 +6,9 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../modules/constants'
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -41,22 +38,16 @@ const PropertiesContainer = styled.div`
   padding-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 
 const JointTaxonomiesCard = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
-
   return (
     <ErrorBoundary>
-      <StyledCard ref={ref}>
+      <StyledCard>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {`Gemeinsame Felder`}
@@ -74,7 +65,7 @@ const JointTaxonomiesCard = ({ jointTaxProperties }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            <Properties properties={jointTaxProperties} columns={columns} />
+            <Properties properties={jointTaxProperties} />
           </PropertiesContainer>
         </Collapse>
       </StyledCard>

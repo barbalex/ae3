@@ -10,13 +10,10 @@ import groupBy from 'lodash/groupBy'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../modules/constants'
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -51,6 +48,7 @@ const PropertiesContainer = styled.div`
   padding-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 
 const propsByTaxQuery = gql`
@@ -98,12 +96,8 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
 
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
+
 
   if (error) {
     return (
@@ -113,15 +107,15 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard ref={ref}>
+      <StyledCard >
         <StyledCardActions
           disableSpacing
           onClick={() => setExpanded(!expanded)}
         >
           <CardActionTitle>
             {pc}
-            <Count>{`(${taxPropertiesByTaxonomy[pc].length} ${
-              taxPropertiesByTaxonomy[pc].length === 1 ? 'Feld' : 'Felder'
+            <Count>{`(${taxPropertiesByTaxonomy?.[pc]?.length} ${
+              taxPropertiesByTaxonomy?.[pc]?.length === 1 ? 'Feld' : 'Felder'
             })`}</Count>
           </CardActionTitle>
           <CardActionIconButton
@@ -136,10 +130,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            <Properties
-              properties={taxPropertiesByTaxonomy[pc]}
-              columns={columns}
-            />
+            <Properties properties={taxPropertiesByTaxonomy[pc]} />
           </PropertiesContainer>
         </Collapse>
       </StyledCard>
