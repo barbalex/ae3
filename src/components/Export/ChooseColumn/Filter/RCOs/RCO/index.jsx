@@ -10,13 +10,10 @@ import groupBy from 'lodash/groupBy'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useResizeDetector } from 'react-resize-detector'
 
 import Properties from './Properties'
 import storeContext from '../../../../../../storeContext'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../../modules/constants'
-const constants = getConstants()
 
 const ErrorContainer = styled.div`
   padding: 5px;
@@ -51,6 +48,7 @@ const PropertiesContainer = styled.div`
   padding-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 
 const propsByTaxQuery = gql`
@@ -71,7 +69,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RcoCard = ({ pc }) => {
+const RCO = ({ pc }) => {
   const client = useApolloClient()
 
   const store = useContext(storeContext)
@@ -103,12 +101,8 @@ const RcoCard = ({ pc }) => {
     return `${x.propertyCollectionName}: ${x.relationType}`
   })
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
 
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
+
 
   if (error) {
     return (
@@ -118,12 +112,12 @@ const RcoCard = ({ pc }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard ref={ref}>
+      <StyledCard >
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {pc}
-            <Count>{`(${rcoPropertiesByPropertyCollection[pc].length} ${
-              rcoPropertiesByPropertyCollection[pc].length === 1
+            <Count>{`(${rcoPropertiesByPropertyCollection?.[pc]?.length} ${
+              rcoPropertiesByPropertyCollection?.[pc]?.length === 1
                 ? 'Feld'
                 : 'Felder'
             })`}</Count>
@@ -142,7 +136,6 @@ const RcoCard = ({ pc }) => {
           <PropertiesContainer>
             <Properties
               properties={rcoPropertiesByPropertyCollection[pc]}
-              columns={columns}
             />
           </PropertiesContainer>
         </Collapse>
@@ -151,4 +144,4 @@ const RcoCard = ({ pc }) => {
   )
 }
 
-export default observer(RcoCard)
+export default observer(RCO)

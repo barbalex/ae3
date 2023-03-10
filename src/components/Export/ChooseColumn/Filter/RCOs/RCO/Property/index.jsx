@@ -5,25 +5,29 @@ import { observer } from 'mobx-react-lite'
 import Comparator from './Comparator'
 import Value from './Value'
 import storeContext from '../../../../../../../storeContext'
+import getConstants from '../../../../../../../modules/constants'
+const constants = getConstants()
 
 const Container = styled.div`
   display: flex;
   align-content: stretch;
   padding: 4px 16px;
-  width: ${(props) => `calc(${props['data-width']}% - 32px)`};
+  width: 100%;
+  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
+    width: calc(50cqw - 32px);
+  }
+  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
+    width: calc(33cqw - 32px);
+  }
+  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
+    width: calc(25cqw - 32px);
+  }
   > div {
     height: auto;
   }
 `
 
-const RcoField = ({
-  pcname,
-  relationtype,
-  pname,
-  jsontype,
-  columns,
-  propertiesLength,
-}) => {
+const RcoField = ({ pcname, relationtype, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { rcoFilters } = store.export
 
@@ -35,10 +39,8 @@ const RcoField = ({
   ) || { comparator: null, value: null }
   const { comparator, value } = exportRcoFilter
 
-  const containerWidth = propertiesLength === 1 ? 100 : 100 / columns
-
   return (
-    <Container data-width={containerWidth}>
+    <Container>
       <Value
         key={`${pcname}/${pname}/${jsontype}/${value}`}
         pcname={pcname}
