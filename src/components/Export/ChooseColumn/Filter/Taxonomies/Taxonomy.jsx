@@ -96,9 +96,6 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
-
-
-
   if (error) {
     return (
       <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
@@ -107,7 +104,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard >
+      <StyledCard>
         <StyledCardActions
           disableSpacing
           onClick={() => setExpanded(!expanded)}
@@ -130,7 +127,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            <Properties properties={taxPropertiesByTaxonomy[pc]} />
+            <Properties properties={taxPropertiesByTaxonomy?.[pc] ?? []} />
           </PropertiesContainer>
         </Collapse>
       </StyledCard>
