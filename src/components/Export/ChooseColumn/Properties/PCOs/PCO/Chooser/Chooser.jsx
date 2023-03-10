@@ -11,13 +11,13 @@ const constants = getConstants()
 const Container = styled.div`
   width: 100%;
   @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
-    width: calc(50cqw);
+    width: 50cqw;
   }
   @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
-    width: calc(33cqw);
+    width: 33cqw;
   }
   @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
-    width: calc(25cqw);
+    width: 25cqw;
   }
 `
 const Label = styled(FormControlLabel)`

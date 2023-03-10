@@ -5,9 +5,20 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../storeContext'
+import getConstants from '../../../../../../modules/constants'
+const constants = getConstants()
 
 const Container = styled.div`
-  width: ${(props) => `${props['data-width']}%`};
+  width: 100%;
+  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
+    width: 50cqw;
+  }
+  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
+    width: 33cqw;
+  }
+  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
+    width: 25cqw;
+  }
 `
 const Count = styled.span`
   font-size: xx-small;
@@ -21,7 +32,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const TaxChooser = ({ taxname, pname, count, columns, propertiesLength }) => {
+const TaxChooser = ({ taxname, pname, count }) => {
   const store = useContext(storeContext)
   const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
 
@@ -39,10 +50,8 @@ const TaxChooser = ({ taxname, pname, count, columns, propertiesLength }) => {
     taxProperties.filter((x) => /*x.taxname === taxname && */ x.pname === pname)
       .length > 0
 
-  const containerWidth = propertiesLength === 1 ? 100 : 100 / columns
-
   return (
-    <Container data-width={containerWidth}>
+    <Container>
       <Label
         control={
           <Checkbox color="primary" checked={checked} onChange={onCheck} />

@@ -10,14 +10,11 @@ import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useResizeDetector } from 'react-resize-detector'
 
 import AllChooser from './AllChooser'
 import Properties from '../Properties'
 import storeContext from '../../../../../../storeContext'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../../modules/constants'
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -47,6 +44,7 @@ const StyledCardContent = styled(CardContent)`
 const PropertiesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 const Count = styled.span`
   font-size: x-small;
@@ -91,20 +89,13 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
     propsByTaxData?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
-
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
 
   const properties = taxPropertiesByTaxonomy[tax]
 
   return (
     <ErrorBoundary>
-      <StyledCard ref={ref}>
+      <StyledCard>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {tax}
@@ -127,7 +118,7 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
             <>
               {properties.length > 1 && <AllChooser properties={properties} />}
               <PropertiesContainer>
-                <Properties properties={properties} columns={columns} />
+                <Properties properties={properties} />
               </PropertiesContainer>
             </>
           </StyledCardContent>

@@ -6,14 +6,11 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import AllChooser from './Taxonomy/AllChooser'
 import Properties from './Properties'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import getConstants from '../../../../../modules/constants'
-const constants = getConstants()
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -42,6 +39,7 @@ const StyledCollapse = styled(Collapse)`
 const PropertiesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  container-type: inline-size;
 `
 const Count = styled.span`
   font-size: x-small;
@@ -52,16 +50,9 @@ const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
 
-  const { width = 500, ref } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-  })
-
-  const columns = Math.floor(width / constants.export.properties.columnWidth)
-
   return (
     <ErrorBoundary>
-      <StyledCard key="jointTax" ref={ref}>
+      <StyledCard key="jointTax">
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {`Gemeinsame Felder`}
@@ -82,7 +73,7 @@ const JointTaxonomy = ({ jointTaxProperties }) => {
             <AllChooser properties={jointTaxProperties} />
           )}
           <PropertiesContainer>
-            <Properties properties={jointTaxProperties} columns={columns} />
+            <Properties properties={jointTaxProperties} />
           </PropertiesContainer>
         </StyledCollapse>
       </StyledCard>
