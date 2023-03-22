@@ -81,7 +81,7 @@ const MoreMenu = () => {
     const uptimeUrl =
       hostname === 'localhost'
         ? 'https://uptime.artdaten.ch'
-        : `http://uptime.${hostname}`
+        : `//uptime.${hostname}`
     window.open(uptimeUrl)
     setAnchorEl(null)
   }, [])

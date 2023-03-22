@@ -11,7 +11,7 @@ const hostname = isLocalhost
   ? window.location.hostname
   : ''
 const appHost = isLocalhost
-  ? `http://${hostname}:8000/`
+  ? `http://localhost:${window.location.port}/`
   : `https://${hostname}/`
 
 export default appHost

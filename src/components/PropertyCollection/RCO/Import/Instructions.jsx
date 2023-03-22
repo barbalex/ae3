@@ -7,6 +7,8 @@ import {
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
 
+import appBaseUrl from '../../../../modules/appBaseUrl'
+
 const StyledUl = styled.ul`
   ul {
     margin-top: 0;
@@ -455,7 +457,7 @@ const ImportRcoInstructions = ({
               Zweck: In zusammenfassenden Eigenschaften-Sammlungen markieren,
               aus welcher Eigenschaften-Sammlung diese Beziehungen stammen.{' '}
               <a
-                href="http://localhost:8000/Dokumentation/projektbeschreibung/#zusammenfassende-eigenschaften-sammlungen"
+                href={`${appBaseUrl}Dokumentation/projektbeschreibung#zusammenfassende-eigenschaften-sammlungen`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

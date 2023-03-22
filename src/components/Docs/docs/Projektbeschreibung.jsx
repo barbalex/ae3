@@ -148,8 +148,8 @@ const ProjektbeschreibungDoc = () => (
           <li>von jedem Gerät im Internet</li>
           <li>
             als Export in den Formaten{' '}
-            <a href="http://de.wikipedia.org/wiki/CSV_(Dateiformat)">csv</a> und
-            Excel
+            <a href="https://de.wikipedia.org/wiki/CSV_(Dateiformat)">csv</a>{' '}
+            und Excel
           </li>
           <li>
             über die API für GIS und beliebige weitere Applikationen (da die API
@@ -190,11 +190,11 @@ const ProjektbeschreibungDoc = () => (
     <p>Ja, das ist alles.</p>
     <h3>Taxonomien</h3>
     <p>
-      <a href="http://de.wikipedia.org/wiki/Taxonomie">Taxonomien</a>{' '}
+      <a href="https://de.wikipedia.org/wiki/Taxonomie">Taxonomien</a>{' '}
       klassifizieren{' '}
-      <a href="http://de.wikipedia.org/wiki/Objekt_(Philosophie)">Objekte</a>{' '}
+      <a href="https://de.wikipedia.org/wiki/Objekt_(Philosophie)">Objekte</a>{' '}
       (z.B. Arten) mit einer{' '}
-      <a href="http://de.wikipedia.org/wiki/Hierarchie">Hierarchie</a>. Die
+      <a href="https://de.wikipedia.org/wiki/Hierarchie">Hierarchie</a>. Die
       Entwicklung von Taxonomien und der Umgang mit unterschiedlichen und sich
       laufend verändernden Taxonomien sind höchst anspruchsvoll.
     </p>
@@ -282,7 +282,9 @@ const ProjektbeschreibungDoc = () => (
       Eigenschaften-Sammlung darzustellen. Z.B. bei der Anzeige in der Anwendung
       oder wenn Daten für Exporte ausgewählt werden.
     </p>
-    <h3>Zusammenfassende Eigenschaften-Sammlungen</h3>
+    <h3 id="zusammenfassende-eigenschaften-sammlungen">
+      Zusammenfassende Eigenschaften-Sammlungen
+    </h3>
     <p>
       Für bestimmte Zwecke ist zusätzlich das Gegenteil interessant: Daten aus
       verschiedenen Eigenschaften-Sammlungen zusammenfassen. Z.B. wenn man über
@@ -332,7 +334,7 @@ const ProjektbeschreibungDoc = () => (
     </ul>
     <h3>Eigenschaften</h3>
     <p>
-      <a href="http://de.wikipedia.org/wiki/Eigenschaft">Eigenschaften</a>{' '}
+      <a href="https://de.wikipedia.org/wiki/Eigenschaft">Eigenschaften</a>{' '}
       beschreiben einzelne Objekte. Beispiele:
     </p>
     <ul>
