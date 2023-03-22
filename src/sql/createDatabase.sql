@@ -1,24 +1,37 @@
-CREATE DATABASE ae encoding 'UTF8';
+CREATE DATABASE ae ENCODING 'UTF8';
+
 -- We put things inside the auth schema to hide
 -- them from public view. Certain public procs/views will
 -- refer to helpers and tables inside.
-CREATE EXTENSION if not exists "uuid-ossp";
-create extension if not exists "postgres_fdw";
-create extension if not exists pgcrypto;
-create user fdw_user with encrypted password 'secret';
-grant select on table ae.v_vermehrung_arten to fdw_user;
-grant select on table ae.v_apflora_lr_delarze to fdw_user;
-grant select on table ae.v_apflora_taxonomies to fdw_user;
-create role anon;
-create role authenticator with login password 'secret' noinherit;
-create role org_admin;
-create role org_writer;
+CREATE EXTENSION IF NOT EXISTS "postgres_fdw";
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE USER fdw_user WITH encrypted PASSWORD 'secret';
+
+GRANT SELECT ON TABLE ae.v_vermehrung_arten TO fdw_user;
+
+GRANT SELECT ON TABLE ae.v_apflora_lr_delarze TO fdw_user;
+
+GRANT SELECT ON TABLE ae.v_apflora_taxonomies TO fdw_user;
+
+CREATE ROLE anon;
+
+CREATE ROLE authenticator WITH LOGIN PASSWORD 'secret' noinherit;
+
+CREATE ROLE org_admin;
+
+CREATE ROLE org_writer;
+
 -- restore from backup, then:
 -- run this once with real secret
 ALTER DATABASE ae SET "app.jwt_secret" TO 'secret';
+
 ALTER USER "authenticator" WITH PASSWORD 'secret';
 
 -- dont run these, they come with restoring ae:
 CREATE SCHEMA IF NOT EXISTS ae;
+
 CREATE SCHEMA IF NOT EXISTS auth;
+
 -- once: alter TYPE auth.jwt_token add attribute exp integer;

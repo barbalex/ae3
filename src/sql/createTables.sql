@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS ae.user CASCADE;
 
 CREATE TABLE ae.user (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   name text UNIQUE,
   email text UNIQUE,
   -- is this still used?
@@ -18,7 +18,7 @@ CREATE INDEX ON ae.user USING btree (name);
 DROP TABLE IF EXISTS ae.organization CASCADE;
 
 CREATE TABLE ae.organization (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   name text UNIQUE NOT NULL,
   links text[] DEFAULT NULL,
   contact uuid NOT NULL REFERENCES ae.user (id) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -34,7 +34,7 @@ CREATE INDEX ON ae.organization USING btree (contact);
 DROP TABLE IF EXISTS ae.tree_category CASCADE;
 
 CREATE TABLE ae.tree_category (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   name text UNIQUE DEFAULT NULL,
   sort integer
 );
@@ -63,7 +63,7 @@ DROP TABLE IF EXISTS ae.taxonomy CASCADE;
 
 CREATE TABLE ae.taxonomy (
   -- gets existing guids
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   type taxonomy_type DEFAULT NULL,
   tree_category uuid DEFAULT NULL REFERENCES ae.tree_category (id) ON DELETE SET NULL ON UPDATE CASCADE,
   name text UNIQUE DEFAULT NULL,
@@ -98,7 +98,7 @@ CREATE INDEX ON ae.taxonomy USING btree (tree_category);
 DROP TABLE IF EXISTS ae.object CASCADE;
 
 CREATE TABLE ae.object (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   taxonomy_id uuid NOT NULL REFERENCES ae.taxonomy (id) ON DELETE CASCADE ON UPDATE CASCADE,
   -- need to temporarily turn off this reference because it is violated during import
   parent_id uuid DEFAULT NULL,
@@ -143,7 +143,7 @@ CREATE INDEX ON ae.synonym USING btree (object_id_synonym);
 DROP TABLE IF EXISTS ae.property_collection CASCADE;
 
 CREATE TABLE ae.property_collection (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   -- later add UNIQUE
   name text DEFAULT NULL, -- is unique
   tree_category uuid DEFAULT '33744e59-1942-4341-8b2d-088d4ac96434' REFERENCES ae.tree_category (id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -174,7 +174,7 @@ CREATE INDEX ON ae.property_collection USING btree (tree_category);
 DROP TABLE IF EXISTS ae.property_collection_object CASCADE;
 
 CREATE TABLE ae.property_collection_object (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   object_id uuid REFERENCES ae.object (id) ON DELETE CASCADE ON UPDATE CASCADE,
   property_collection_id uuid REFERENCES ae.property_collection (id) ON DELETE CASCADE ON UPDATE CASCADE,
   property_collection_of_origin uuid DEFAULT NULL REFERENCES ae.property_collection (id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -209,7 +209,7 @@ CREATE INDEX ON ae.property_collection_object USING gin (properties);
 DROP TABLE IF EXISTS ae.relation CASCADE;
 
 CREATE TABLE ae.relation (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   property_collection_id uuid NOT NULL REFERENCES ae.property_collection (id) ON DELETE CASCADE ON UPDATE CASCADE,
   object_id uuid NOT NULL REFERENCES ae.object (id) ON DELETE CASCADE ON UPDATE CASCADE,
   object_id_relation uuid NOT NULL REFERENCES ae.object (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -245,7 +245,7 @@ CREATE INDEX ON ae.role USING btree (name);
 DROP TABLE IF EXISTS ae.organization_user;
 
 CREATE TABLE ae.organization_user (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v1mc (),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid (),
   organization_id uuid REFERENCES ae.organization (id) ON DELETE CASCADE ON UPDATE CASCADE,
   user_id uuid REFERENCES ae.user (id) ON DELETE CASCADE ON UPDATE CASCADE,
   role text REFERENCES ae.role (name) ON DELETE CASCADE ON UPDATE CASCADE,
