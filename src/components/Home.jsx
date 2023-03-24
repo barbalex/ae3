@@ -5,8 +5,8 @@ import styled from '@emotion/styled'
 
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
 import ProgressiveImg from './shared/ProgressiveImg'
-import image from '../images/home.jpg'
-import placeholderSrc from '../images/home_small.jpg'
+import image from '../images/home.webp'
+import placeholderSrc from '../images/home_small.webp'
 
 const OuterContainer = styled.div`
   height: 100%;
