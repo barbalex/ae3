@@ -59,7 +59,7 @@ CREATE OR REPLACE FUNCTION ae.remove_bad_chars(var text)
   RETURNS text
   AS $$
 BEGIN
-  RETURN trim(replace(replace(replace(replace(replace(replace(replace(LOWER(var), ' ', '_'), '(', ''), ')', ''), '-', ''), '↵', ''), ':', '_'), '/', ''));
+  RETURN trim(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(LOWER(var), ' ', '_'), '(', ''), ')', ''), '-', ''), '↵', ''), ':', '_'), '/', ''), 'trockenwiesen_und_weiden_von_nationaler_bedeutung', 'tww_ch'), 'trockenwiesen_und_weiden', 'tww'), 'feuchtgebietskartierungen', 'fg_kart'), 'feuchtgebietskartierung', 'fg_kart'), 'trockenstandorte', 'ts'), 'zusatzeinheiten', 'erg'), 'von_nationaler_bedeutung', 'ch'), 'drummlinlandschaft', 'drummlin_ls'));
 END;
 $$
 LANGUAGE plpgsql
@@ -71,7 +71,7 @@ IMMUTABLE STRICT;
 -- need count of all, even when limited. Thus returning ae.export_data
 DROP FUNCTION ae.export_all;
 
-DROP FUNCTION ae.export_all(taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field);
+DROP FUNCTION IF EXISTS ae.export_all(taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field);
 
 CREATE OR REPLACE FUNCTION ae.export_all(typ text, taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field)
   RETURNS ae.export_data
@@ -314,9 +314,12 @@ BEGIN
     IF sort_field IS NOT NULL THEN
       CASE sort_field.tname
       WHEN 'property_collection_object' THEN
-        tablename := 'pco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := ae.remove_bad_chars(substring(sort_field.pcname FROM 1 FOR 20) || '__' || sort_field.pname);
+        tablename := 'pco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := substring(ae.remove_bad_chars(sort_field.pcname)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(sort_field.pname);
       WHEN 'relation' THEN
-        tablename := 'rco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := ae.remove_bad_chars(substring(sort_field.pcname FROM 1 FOR 20) || '__' || substring(sort_field.relationtype FROM 1 FOR 20) || '__' || sort_field.pname);
+        tablename := 'rco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := substring(ae.remove_bad_chars(sort_field.pcname)
+          FROM 1 FOR 20) || '__' || substring(ae.remove_bad_chars(sort_field.relationtype)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(sort_field.pname);
       WHEN 'object' THEN
         tablename := 'object'; IF cardinality(taxonomies) > 1 THEN
             fieldname := 'taxonomie__' || ae.remove_bad_chars(sort_field.pname);
@@ -356,15 +359,16 @@ BEGIN
           fieldname := ae.remove_bad_chars(taxonomies[1] || '__' || taxfield.pname);
         END IF;
         -- TODO: Error fetching data: $Spalte »ch_bafu_2001__trockenwiesen_und_weiden_von_nationaler_bedeutung« von Relation »_tmp« existiert bereits
-        EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
         EXECUTE format('UPDATE _tmp SET %1$s = (SELECT properties ->> %2$L FROM ae.object WHERE id = _tmp.id)', fieldname, taxfield.pname);
       END LOOP;
     END IF;
     -- add property fields as extra columns and insert values
     IF cardinality(pco_properties) > 0 THEN
       FOREACH pcoproperty IN ARRAY pco_properties LOOP
-        fieldname := ae.remove_bad_chars(substring(pcoproperty.pcname FROM 1 FOR 20) || '__' || pcoproperty.pname);
-        EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
+        fieldname := substring(ae.remove_bad_chars(pcoproperty.pcname)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(pcoproperty.pname);
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
         -- join for synonyms if used
         IF use_synonyms = TRUE THEN
           sql2 := format('
@@ -407,9 +411,11 @@ BEGIN
           -- skip this column
           CONTINUE;
         ELSE
-          fieldname := ae.remove_bad_chars(substring(rcoproperty.pcname FROM 1 FOR 20) || '__' || substring(rcoproperty.relationtype FROM 1 FOR 20) || '__' || rcoproperty.pname);
+          fieldname := substring(ae.remove_bad_chars(rcoproperty.pcname)
+            FROM 1 FOR 20) || '__' || substring(ae.remove_bad_chars(rcoproperty.relationtype)
+            FROM 1 FOR 20) || '__' || ae.remove_bad_chars(rcoproperty.pname);
         END IF;
-        EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
         -- join for synonyms if used
         IF use_synonyms = TRUE THEN
           IF rcoproperty.pname = 'Beziehungspartner' AND cardinality(rco_properties_beziehungspartner_of_this_pc_bp) = 0 THEN
