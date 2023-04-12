@@ -55,7 +55,7 @@ CREATE TYPE sort_field AS (
   direction text -- ASC or DESC
 );
 
-CREATE OR REPLACE FUNCTION ae.remove_bad_chars (var text)
+CREATE OR REPLACE FUNCTION ae.remove_bad_chars(var text)
   RETURNS text
   AS $$
 BEGIN
@@ -71,7 +71,9 @@ IMMUTABLE STRICT;
 -- need count of all, even when limited. Thus returning ae.export_data
 DROP FUNCTION ae.export_all;
 
-CREATE OR REPLACE FUNCTION ae.export_all (taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field)
+DROP FUNCTION ae.export_all(taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field);
+
+CREATE OR REPLACE FUNCTION ae.export_all(typ text, taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field)
   RETURNS ae.export_data
   AS $$
 DECLARE
@@ -87,21 +89,21 @@ DECLARE
   pcofilter pco_filter;
   rcofilter rco_filter;
   pc_of_pco_filters text;
-  pcs_of_pco_filters text[] := (
+  pcs_of_pco_filters text[] :=(
     SELECT
       ARRAY ( SELECT DISTINCT
           _row.pcname
         FROM
-          unnest(pco_filters) AS _row (comparator,
+          unnest(pco_filters) AS _row(comparator,
             pname,
             pcname,
             value)));
-  pcs_of_rco_filters text[] := (
+  pcs_of_rco_filters text[] :=(
     SELECT
       ARRAY ( SELECT DISTINCT
           _row.pcname
         FROM
-          unnest(rco_filters) AS _row (comparator,
+          unnest(rco_filters) AS _row(comparator,
             pname,
             pcname,
             value)));
@@ -129,13 +131,13 @@ DECLARE
   return_data_json jsonb;
   orderby_sql_in_insert text;
   orderby_sql_in_select text;
-  rco_properties_non_beziehungspartner rco_property[] := (
+  rco_properties_non_beziehungspartner rco_property[] :=(
     SELECT
       ARRAY (
         SELECT
           _row
         FROM
-          unnest(rco_properties) AS _row (pname,
+          unnest(rco_properties) AS _row(pname,
             pcname,
             relationtype)
         WHERE
@@ -145,11 +147,11 @@ BEGIN
   -- RAISE EXCEPTION 'rco_properties_non_beziehungspartner: %, rco_properties: %:', rco_properties_non_beziehungspartner, rco_properties;
   -- create table
   DROP TABLE IF EXISTS _tmp;
-  CREATE TEMPORARY TABLE _tmp (
+  CREATE TEMPORARY TABLE _tmp(
     id uuid PRIMARY KEY
   );
   DROP TABLE IF EXISTS _tmp_count;
-  CREATE TEMPORARY TABLE _tmp_count (
+  CREATE TEMPORARY TABLE _tmp_count(
     id uuid PRIMARY KEY
   );
   -- insert object_ids
@@ -164,7 +166,7 @@ BEGIN
     -- join to filter by pcos
     IF cardinality(pcs_of_pco_filters) > 0 THEN
       FOREACH pc_of_pco_filters IN ARRAY pcs_of_pco_filters LOOP
-        name := ae.remove_bad_chars (pc_of_pco_filters);
+        name := ae.remove_bad_chars(pc_of_pco_filters);
         pc_name := 'pc_' || name;
         pco_name := 'pco_' || name;
         pcoo_name := 'pcoo_' || name;
@@ -190,7 +192,7 @@ BEGIN
       WHEN 'property_collection_object' THEN
         -- only join if not already joined due to filtering
         IF cardinality(pcs_of_pco_filters) = 0 THEN
-            name := ae.remove_bad_chars (sort_field.pcname); pc_name := 'pc_' || name; pco_name := 'pco_' || name; pcoo_name := 'pcoo_' || name; IF use_synonyms = TRUE THEN
+            name := ae.remove_bad_chars(sort_field.pcname); pc_name := 'pc_' || name; pco_name := 'pco_' || name; pcoo_name := 'pcoo_' || name; IF use_synonyms = TRUE THEN
                 sql := format(' LEFT JOIN ae.pco_of_object %3$s ON %3$s.object_id = object.id
                           INNER JOIN ae.property_collection_object %1$s ON %1$s.id = %3$s.pco_id
                           INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id', pco_name, pc_name, pcoo_name); rows_sql := rows_sql || sql;
@@ -202,7 +204,7 @@ BEGIN
       WHEN 'relation' THEN
         -- only join if not already joined due to filtering
         IF cardinality(pcs_of_rco_filters) = 0 THEN
-          name := ae.remove_bad_chars (sort_field.pcname);
+          name := ae.remove_bad_chars(sort_field.pcname);
           pc_name2 := 'rpc_' || name;
           rco_name := 'rco_' || name;
           IF use_synonyms = TRUE THEN
@@ -225,7 +227,7 @@ BEGIN
     -- join to filter by rcos
     IF cardinality(pcs_of_rco_filters) > 0 THEN
       FOREACH pc_of_rco_filters IN ARRAY pcs_of_rco_filters LOOP
-        name := ae.remove_bad_chars (pc_of_rco_filters);
+        name := ae.remove_bad_chars(pc_of_rco_filters);
         pc_name2 := 'rpc_' || name;
         rco_name := 'rco_' || name;
         IF use_synonyms = TRUE THEN
@@ -248,10 +250,12 @@ BEGIN
     sql := ' WHERE tax.name = ANY ($1)';
     rows_sql := rows_sql || sql;
     count_sql := count_sql || sql;
-    -- include only objects with Taxonomie ID (exclude objects added for hierarchy)
-    sql := format(' AND object.properties->>%L is not null', 'Taxonomie ID');
-    rows_sql := rows_sql || sql;
-    count_sql := count_sql || sql;
+    IF typ = 'arten' THEN
+      -- include only objects with Taxonomie ID (exclude objects added for hierarchy)
+      sql := format(' AND object.properties->>%L is not null', 'Taxonomie ID');
+      rows_sql := rows_sql || sql;
+      count_sql := count_sql || sql;
+    END IF;
     IF cardinality(tax_filters) > 0 THEN
       FOREACH taxfilter IN ARRAY tax_filters LOOP
         IF taxfilter.comparator IN ('ILIKE', 'LIKE') THEN
@@ -268,7 +272,7 @@ BEGIN
     -- add where clauses for pco_filters
     IF cardinality(pco_filters) > 0 THEN
       FOREACH pcofilter IN ARRAY pco_filters LOOP
-        pco_name2 := 'pco_' || ae.remove_bad_chars (pcofilter.pcname);
+        pco_name2 := 'pco_' || ae.remove_bad_chars(pcofilter.pcname);
         IF pcofilter.comparator IN ('ILIKE', 'LIKE') THEN
           sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', pco_name2, pcofilter.pname, pcofilter.comparator, '%' || pcofilter.value || '%');
           rows_sql := rows_sql || sql;
@@ -283,7 +287,7 @@ BEGIN
     -- add where clauses for rco_filters
     IF cardinality(rco_filters) > 0 THEN
       FOREACH rcofilter IN ARRAY rco_filters LOOP
-        rco_name2 := 'rco_' || ae.remove_bad_chars (rcofilter.pcname);
+        rco_name2 := 'rco_' || ae.remove_bad_chars(rcofilter.pcname);
         IF rcofilter.comparator IN ('ILIKE', 'LIKE') THEN
           sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', rco_name2, rcofilter.pname, rcofilter.comparator, '%' || rcofilter.value || '%');
           rows_sql := rows_sql || sql;
@@ -310,14 +314,14 @@ BEGIN
     IF sort_field IS NOT NULL THEN
       CASE sort_field.tname
       WHEN 'property_collection_object' THEN
-        tablename := 'pco_' || ae.remove_bad_chars (sort_field.pcname); fieldname := ae.remove_bad_chars (substring(sort_field.pcname FROM 1 FOR 20) || '__' || sort_field.pname);
+        tablename := 'pco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := ae.remove_bad_chars(substring(sort_field.pcname FROM 1 FOR 20) || '__' || sort_field.pname);
       WHEN 'relation' THEN
-        tablename := 'rco_' || ae.remove_bad_chars (sort_field.pcname); fieldname := ae.remove_bad_chars (substring(sort_field.pcname FROM 1 FOR 20) || '__' || substring(sort_field.relationtype FROM 1 FOR 20) || '__' || sort_field.pname);
+        tablename := 'rco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := ae.remove_bad_chars(substring(sort_field.pcname FROM 1 FOR 20) || '__' || substring(sort_field.relationtype FROM 1 FOR 20) || '__' || sort_field.pname);
       WHEN 'object' THEN
         tablename := 'object'; IF cardinality(taxonomies) > 1 THEN
-            fieldname := 'taxonomie__' || ae.remove_bad_chars (sort_field.pname);
+            fieldname := 'taxonomie__' || ae.remove_bad_chars(sort_field.pname);
           ELSE
-            fieldname := ae.remove_bad_chars (sort_field.pcname || '__' || sort_field.pname);
+            fieldname := ae.remove_bad_chars(sort_field.pcname || '__' || sort_field.pname);
           END IF;
       END CASE;
       -- deal with fieldname length max 64
@@ -333,7 +337,7 @@ BEGIN
     rows_sql := rows_sql || sql;
     count_sql := count_sql || sql;
     -- create _tmp with all object_ids
-    --RAISE EXCEPTION 'rows_sql: %:', rows_sql;
+    -- RAISE EXCEPTION 'rows_sql: %:', rows_sql;
     EXECUTE rows_sql
     USING taxonomies, object_ids;
     EXECUTE count_sql
@@ -347,10 +351,11 @@ BEGIN
         -- several fieldnames exist in many taxonomies, so need not add taxonmy-name if multiple taxonomies are used
         -- if only one taxonomy is used, do add taxonomy-name
         IF cardinality(taxonomies) > 1 THEN
-          fieldname := 'taxonomie__' || ae.remove_bad_chars (taxfield.pname);
+          fieldname := 'taxonomie__' || ae.remove_bad_chars(taxfield.pname);
         ELSE
-          fieldname := ae.remove_bad_chars (taxonomies[1] || '__' || taxfield.pname);
+          fieldname := ae.remove_bad_chars(taxonomies[1] || '__' || taxfield.pname);
         END IF;
+        -- TODO: Error fetching data: $Spalte »ch_bafu_2001__trockenwiesen_und_weiden_von_nationaler_bedeutung« von Relation »_tmp« existiert bereits
         EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
         EXECUTE format('UPDATE _tmp SET %1$s = (SELECT properties ->> %2$L FROM ae.object WHERE id = _tmp.id)', fieldname, taxfield.pname);
       END LOOP;
@@ -358,7 +363,7 @@ BEGIN
     -- add property fields as extra columns and insert values
     IF cardinality(pco_properties) > 0 THEN
       FOREACH pcoproperty IN ARRAY pco_properties LOOP
-        fieldname := ae.remove_bad_chars (substring(pcoproperty.pcname FROM 1 FOR 20) || '__' || pcoproperty.pname);
+        fieldname := ae.remove_bad_chars(substring(pcoproperty.pcname FROM 1 FOR 20) || '__' || pcoproperty.pname);
         EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
         -- join for synonyms if used
         IF use_synonyms = TRUE THEN
@@ -384,13 +389,13 @@ BEGIN
     -- add rco-property fields and insert values
     IF cardinality(rco_properties) > 0 THEN
       FOREACH rcoproperty IN ARRAY rco_properties LOOP
-        rco_properties_beziehungspartner_of_this_pc_bp := (
+        rco_properties_beziehungspartner_of_this_pc_bp :=(
           SELECT
             ARRAY (
               SELECT
                 _row
               FROM
-                unnest(rco_properties) AS _row (pname,
+                unnest(rco_properties) AS _row(pname,
                   pcname,
                   relationtype)
               WHERE
@@ -402,7 +407,7 @@ BEGIN
           -- skip this column
           CONTINUE;
         ELSE
-          fieldname := ae.remove_bad_chars (substring(rcoproperty.pcname FROM 1 FOR 20) || '__' || substring(rcoproperty.relationtype FROM 1 FOR 20) || '__' || rcoproperty.pname);
+          fieldname := ae.remove_bad_chars(substring(rcoproperty.pcname FROM 1 FOR 20) || '__' || substring(rcoproperty.relationtype FROM 1 FOR 20) || '__' || rcoproperty.pname);
         END IF;
         EXECUTE format('ALTER TABLE _tmp ADD COLUMN %I text', fieldname);
         -- join for synonyms if used
@@ -472,7 +477,7 @@ BEGIN
     END IF;
     -- RAISE EXCEPTION 'taxonomies: %, tax_fields: %, tax_filters: %, pco_filters: %, pcs_of_pco_filters: %, pco_properties: %, use_synonyms: %, count: %, object_ids: %, rows_sql: %, fieldname: %, taxfield_sql2: %', taxonomies, tax_fields, tax_filters, pco_filters, pcs_of_pco_filters, pco_properties, use_synonyms, count, object_ids, rows_sql, fieldname, taxfield_sql2;
     --RAISE EXCEPTION 'rows_sql: %:', rows_sql;
-    return_data.id := gen_random_uuid ()::uuid;
+    return_data.id := gen_random_uuid()::uuid;
     return_data.count = row_count;
     -- need to sort again here
     IF orderby_sql_in_select IS NOT NULL THEN
@@ -496,7 +501,7 @@ END
 $$
 LANGUAGE plpgsql;
 
-ALTER FUNCTION ae.export_all (taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field) OWNER TO postgres;
+ALTER FUNCTION ae.export_all(typ text, taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field) OWNER TO postgres;
 
 -- test from grqphiql:
 -- mutation exportDataMutation($taxonomies: [String]!, $taxFields: [TaxFieldInput]!, $taxFilters: [TaxFilterInput]!, $pcoFilters: [PcoFilterInput]!, $pcsOfPcoFilters: [String]!, $pcsOfRcoFilters: [String]!, $pcoProperties: [PcoPropertyInput]!, $rcoFilters: [RcoFilterInput]!, $rcoProperties: [RcoPropertyInput]!, $useSynonyms: Boolean!, $count: Int!, $objectIds: [UUID]!) {

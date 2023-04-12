@@ -51,6 +51,7 @@ const StyledSnackbar = styled(Snackbar)`
 `
 const exportMutation = gql`
   mutation exportDataMutation(
+    $typ: String!
     $taxonomies: [String]!
     $taxFields: [TaxFieldInput]!
     $taxFilters: [TaxFilterInput]!
@@ -65,6 +66,7 @@ const exportMutation = gql`
   ) {
     exportAll(
       input: {
+        typ: $typ
         taxonomies: $taxonomies
         taxFields: $taxFields
         taxFilters: $taxFilters
@@ -102,6 +104,7 @@ const Preview = () => {
   const store = useContext(storeContext)
   const {
     withSynonymData,
+    type,
     pcoFilters: pcoFiltersPassed,
     rcoFilters: rcoFiltersPassed,
     taxFilters: taxFiltersPassed,
@@ -194,6 +197,8 @@ const Preview = () => {
     [onGridSort],
   )
 
+  console.log('Preview, type:', type)
+
   const {
     isLoading: exportLoading,
     error: exportError,
@@ -201,6 +206,7 @@ const Preview = () => {
   } = useQuery({
     queryKey: [
       'exportQuery',
+      type,
       taxonomies,
       taxFields,
       taxFilters,
@@ -219,6 +225,7 @@ const Preview = () => {
       const data = await client.mutate({
         mutation: exportMutation,
         variables: {
+          typ: type.toLowerCase(),
           taxonomies,
           taxFields,
           taxFilters,
@@ -265,6 +272,7 @@ const Preview = () => {
     const data = await client.mutate({
       mutation: exportMutation,
       variables: {
+        typ: type.toLowerCase(),
         taxonomies,
         taxFields,
         taxFilters,
@@ -296,6 +304,7 @@ const Preview = () => {
     taxFields,
     taxFilters,
     taxonomies,
+    type,
     withSynonymData,
   ])
   const onClickCsv = useCallback(async () => {
