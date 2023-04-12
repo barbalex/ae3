@@ -197,8 +197,6 @@ const Preview = () => {
     [onGridSort],
   )
 
-  console.log('Preview, type:', type)
-
   const {
     isLoading: exportLoading,
     error: exportError,
