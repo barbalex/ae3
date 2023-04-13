@@ -51,7 +51,6 @@
     "simplebar-react": "3.2.3",
     "typography": "0.16.21",
     "use-debounce": "9.0.4",
-    "use-resize-observer": "9.1.0",
     "xlsx": "0.18.5"
   },
   "devDependencies": {
