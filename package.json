@@ -46,10 +46,8 @@
     "react-router": "6.10.0",
     "react-router-dom": "6.10.0",
     "react-select": "5.7.2",
-    "react-typography": "0.16.23",
     "react-virtualized-auto-sizer": "1.0.14",
     "simplebar-react": "3.2.3",
-    "typography": "0.16.21",
     "use-debounce": "9.0.4",
     "xlsx": "0.18.5"
   },
