@@ -85,7 +85,7 @@ function collect(props) {
   return props
 }
 
-const Row = ({ data, userId }) => {
+const Row = ({ data }) => {
   const queryClient = useQueryClient()
   const client = useApolloClient()
 
@@ -148,13 +148,12 @@ const Row = ({ data, userId }) => {
         client,
         // TODO: check this behaviour
         treeRefetch: () => {},
-        userId,
         store,
         navigate,
         queryClient,
       })
     },
-    [client, userId, store, navigate, queryClient],
+    [client, store, navigate, queryClient],
   )
 
   //console.log('Row, data:', data)

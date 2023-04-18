@@ -1,3 +1,4 @@
+import { gql } from '@apollo/client'
 import createUserMutation from '../../Benutzer/createUserMutation'
 import deleteUserMutation from '../../Benutzer/deleteUserMutation'
 import createObjectMutation from '../../Objekt/createObjectMutation'
@@ -13,13 +14,11 @@ const onClickContextMenu = async ({
   target,
   client,
   treeRefetch,
-  // TODO: better to fetch userId here instead of passing it to ALL tree rows?
-  userId,
   store,
   navigate,
   queryClient,
 }) => {
-  const {scrollIntoView} = store
+  const { scrollIntoView } = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
@@ -50,7 +49,7 @@ const onClickContextMenu = async ({
         const newUserId = newUser?.data?.createUser?.user?.id
         if (newUserId) {
           navigate(`/Benutzer/${newUserId}`)
-          setTimeout(()=>scrollIntoView())
+          setTimeout(() => scrollIntoView())
         }
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
@@ -59,6 +58,19 @@ const onClickContextMenu = async ({
           queryKey: [`treeUsers`],
         })
       }
+      // get userId
+      const { data: userData } = await client.query({
+        query: gql`
+          query treeRowUserQuery($name: String!) {
+            userByName(name: $name) {
+              id
+            }
+          }
+        `,
+        variables: { name: store.login.username },
+      })
+      const userId = userData?.userByName?.id
+      console.log('onClickContextMenu', { userData, userId })
       if (table === 'object') {
         let newObjectData
         if (url.length === 2) {
@@ -76,7 +88,7 @@ const onClickContextMenu = async ({
         }
         const newId = newObjectData?.data?.createObject?.object?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(()=>scrollIntoView())
+        setTimeout(() => scrollIntoView())
         // if not editing, set editing true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -98,7 +110,7 @@ const onClickContextMenu = async ({
         const newId =
           newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(()=>scrollIntoView())
+        setTimeout(() => scrollIntoView())
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -113,7 +125,7 @@ const onClickContextMenu = async ({
           newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
           null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(()=>scrollIntoView())
+        setTimeout(() => scrollIntoView())
         // if not editing, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingPCs(true)
@@ -141,7 +153,7 @@ const onClickContextMenu = async ({
           console.log(error)
         }
         navigate('/Benutzer')
-        setTimeout(()=>scrollIntoView())
+        setTimeout(() => scrollIntoView())
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
@@ -166,7 +178,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(()=>scrollIntoView())
+          setTimeout(() => scrollIntoView())
         }
       }
       if (table === 'taxonomy') {
@@ -186,7 +198,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(()=>scrollIntoView())
+          setTimeout(() => scrollIntoView())
         }
       }
       if (table === 'pc') {
@@ -206,7 +218,7 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(()=>scrollIntoView())
+          setTimeout(() => scrollIntoView())
         }
       }
       treeRefetch()
