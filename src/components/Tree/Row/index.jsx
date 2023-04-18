@@ -146,7 +146,7 @@ const Row = ({ data }) => {
         data,
         target,
         client,
-        // TODO: check this behaviour
+        // TODO: check this behavior
         treeRefetch: () => {},
         store,
         navigate,
