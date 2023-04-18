@@ -4,6 +4,7 @@ import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 import onBlurDo from './onBlur'
@@ -31,6 +32,7 @@ const Property = ({
 }) => {
   const client = useApolloClient()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [value, setValue] = useState(pC[field] || '')
   const [error, setError] = useState(null)
@@ -46,9 +48,11 @@ const Property = ({
         pC,
         value: event.target.value,
         prevValue: pC[field],
-        setError,navigate
+        setError,
+        navigate,
+        queryClient,
       }),
-    [client, field, navigate, pC],
+    [client, field, navigate, pC, queryClient],
   )
 
   return (
