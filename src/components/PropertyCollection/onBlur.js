@@ -10,7 +10,6 @@ const onBlur = async ({
   queryClient,
 }) => {
   //setError(null)
-  console.log('onBlur', { field, value, prevValue, pC })
   if (value !== prevValue) {
     const variables = {
       oldId: pC.id,
@@ -24,7 +23,6 @@ const onBlur = async ({
       importedBy: field === 'importedBy' ? value : pC.importedBy,
       termsOfUse: field === 'termsOfUse' ? value : pC.termsOfUse,
     }
-    console.log('onBlur, variables:', variables)
     try {
       // TODO
       // if id is updated, use different mutation

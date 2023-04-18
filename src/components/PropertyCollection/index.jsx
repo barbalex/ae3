@@ -13,7 +13,7 @@ import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router-dom'
@@ -108,6 +108,7 @@ const pcQuery = gql`
 const PropertyCollection = () => {
   const { pcId } = useParams()
   const client = useApolloClient()
+  const queryClient = useQueryClient()
   const store = useContext(storeContext)
   const { editingPCs, setEditingPCs, login } = store
 
@@ -186,8 +187,9 @@ const PropertyCollection = () => {
         pC,
         value: isChecked,
         prevValue: pC.combining,
+        queryClient,
       }),
-    [client, pC],
+    [client, pC, queryClient],
   )
   const onChangeOrganization = useCallback(
     (event) =>
@@ -197,8 +199,9 @@ const PropertyCollection = () => {
         pC,
         value: event.target.value,
         prevValue: pC.organizationId,
+        queryClient,
       }),
-    [client, pC],
+    [client, pC, queryClient],
   )
   const onChangeImportedBy = useCallback(
     (event) =>
@@ -208,8 +211,9 @@ const PropertyCollection = () => {
         pC,
         value: event.target.value,
         prevValue: pC.importedBy,
+        queryClient,
       }),
-    [client, pC],
+    [client, pC, queryClient],
   )
 
   if (pcLoading || allUsersLoading) {
