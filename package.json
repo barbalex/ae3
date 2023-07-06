@@ -2,7 +2,7 @@
   "name": "arteigenschaften",
   "description": "Eigenschaften von Flora, Fauna, Moosen und Lebensräumen: Sichten, exportieren, importieren",
   "private": true,
-  "version": "3.0.29",
+  "version": "3.0.30",
   "author": {
     "name": "Alexander Gabriel",
     "email": "alex@gabriel-software.ch",
@@ -69,6 +69,5 @@
   "dependencyComments": {
     "none": "so far now",
     "prettier": "2.8.8: do not update to 3.0.0 due to https://github.com/prettier/prettier-vscode/issues/3007"
-
   }
 }
