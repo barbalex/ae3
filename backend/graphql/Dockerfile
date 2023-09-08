@@ -1,4 +1,5 @@
 FROM node:lts-alpine
+
 ENV NODE_ENV production
 
 RUN npm install -g postgraphile
@@ -8,8 +9,9 @@ RUN npm install -g postgraphile-upsert-plugin
 
 COPY --chown=node:node .postgraphilerc.js .postgraphilerc.js
 
-EXPOSE 5000
-
+# do not move this above installation or that will fail
 USER node
+
+EXPOSE 5000
 
 ENTRYPOINT ["postgraphile", "-n", "0.0.0.0"]
