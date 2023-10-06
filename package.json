@@ -64,10 +64,9 @@
     "vercel": "32.4.1",
     "vite": "4.4.11",
     "vite-plugin-pwa": "0.16.5",
-    "vite-plugin-svgr": "3.2.0"
+    "vite-plugin-svgr": "4.1.0"
   },
   "dependencyComments": {
-    "none": "so far now",
-    "vite-plugin-svgr": "3.2.0: do not update to 4.0.0, breaks"
+    "none": "so far now"
   }
 }
