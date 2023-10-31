@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 import loginDbMutation from './loginDbMutation'
 
@@ -19,7 +19,7 @@ const fetchLogin = async ({
   passwordInput,
   navigate,
 }) => {
-  const {  login } = store
+  const { login } = store
   const { setLogin } = login
   // when bluring fields need to pass event value
   // on the other hand when clicking on Anmelden button,
@@ -86,7 +86,7 @@ const fetchLogin = async ({
       changeName('')
       changePass('')
       changeLoginSuccessfull(false)
-        navigate('/')
+      navigate('/')
     }, 2000)
   }
 }
