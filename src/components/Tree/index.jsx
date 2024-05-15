@@ -1,6 +1,5 @@
 import React, { useMemo, useContext } from 'react'
 import styled from '@emotion/styled'
-import Snackbar from '@mui/material/Snackbar'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
