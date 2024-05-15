@@ -25,7 +25,7 @@ const StyledNode = styled.div`
   display: grid;
   grid-template-areas: 'spacer toggle content';
   grid-template-columns: ${(props) =>
-    `${Number(props['data-level']) * 23 - 23}px 23px 1fr`};
+    `${Number(props['data-level']) * rowHeight - rowHeight}px ${rowHeight}px 1fr`};
   grid-template-rows: ${rowHeight}px;
   align-items: center;
   box-sizing: border-box;
@@ -33,8 +33,8 @@ const StyledNode = styled.div`
   white-space: nowrap;
   // ellipsis for overflow
   // TODO: not working
-  /* overflow: hidden;
-  text-overflow: ellipsis; */
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: none;
   cursor: pointer;
   // do not layout offscreen content while allowing search
