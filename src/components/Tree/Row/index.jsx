@@ -20,20 +20,21 @@ import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath'
 import onClickContextMenuDo from './onClickContextMenu'
 import storeContext from '../../../storeContext'
 
-const singleRowHeight = 23
+const rowHeight = 23
 const StyledNode = styled.div`
-  padding-left: ${(props) => `${Number(props['data-level']) * 17 - 17}px`};
-  height: ${singleRowHeight}px;
-  max-height: ${singleRowHeight}px;
+  display: grid;
+  grid-template-areas: 'spacer toggle content';
+  grid-template-columns: ${(props) =>
+    `${Number(props['data-level']) * rowHeight - rowHeight}px ${rowHeight}px 1fr`};
+  grid-template-rows: ${rowHeight}px;
+  align-items: center;
   box-sizing: border-box;
   margin: 0;
-  display: flex;
-  flex-direction: row;
   white-space: nowrap;
   // ellipsis for overflow
   // TODO: not working
-  /* overflow: hidden;
-  text-overflow: ellipsis; */
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: none;
   cursor: pointer;
   // do not layout offscreen content while allowing search
@@ -42,54 +43,56 @@ const StyledNode = styled.div`
   // see: https://stackoverflow.com/a/76597041/712005
   // using contain on parent also
   content-visibility: auto;
-  contain-intrinsic-size: auto 23px;
+  contain-intrinsic-size: auto ${rowHeight}px;
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
   &:hover {
     color: #f57c00 !important;
   }
 `
+const Spacer = styled.div`
+  grid-area: spacer;
+`
+const Toggle = styled.div`
+  grid-area: toggle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: ${rowHeight}px;
+`
 const SymbolIcon = styled(Icon)`
-  margin-top: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '-5px !important'
-      : '-2px !important'};
-  padding-left: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '2px' : '2px'};
   font-size: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '26px !important'
-      : '22px !important'};
+      : '23px !important'};
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
-  width: 26px;
-  max-width: 26px;
   &:hover {
     color: #f57c00 !important;
   }
 `
 const SymbolSpan = styled.span`
-  padding-right: 8px !important;
-  padding-left: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '8px' : '9px'};
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
-  margin-top: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '-9px' : '-9px'};
   font-size: 28px !important;
+  // somehow this is needed to align vertically
+  margin-top: -3px;
+`
+const Content = styled.div`
+  grid-area: content;
+  line-height: ${rowHeight}px;
+  display: flex;
+  column-gap: 5px;
 `
 const TextSpan = styled.span`
-  margin-left: 0;
   font-size: 16px !important;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
 `
 const InfoSpan = styled.span`
-  margin-left: 5px;
   font-size: 12px !important;
-  line-height: 23px;
 `
 
 function collect(props) {
@@ -187,34 +190,39 @@ const Row = ({ data }) => {
         // need this id to scroll elements into view
         id={data.id}
       >
-        {useSymbolIcon && (
-          <SymbolIcon
-            id="symbol"
-            data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-            className="material-icons"
-          >
-            {symbol === 'Loading' && <LoadingIcon />}
-            {symbol === 'ExpandMore' && (
-              <ExpandMoreIcon onClick={onClickExpandMore} />
-            )}
-            {symbol === 'ChevronRight' && <ChevronRightIcon />}
-            {symbol === 'MoreHoriz' && <MoreHorizIcon />}
-          </SymbolIcon>
-        )}
-        {useSymbolSpan && (
-          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-            {'-'}
-          </SymbolSpan>
-        )}
-        {useLoadingSpan && (
-          <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-            {' '}
-          </SymbolSpan>
-        )}
-        <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-          {data.label}
-        </TextSpan>
-        {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
+        <Spacer />
+        <Toggle>
+          {useSymbolIcon && (
+            <SymbolIcon
+              id="symbol"
+              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+              className="material-icons"
+            >
+              {symbol === 'Loading' && <LoadingIcon />}
+              {symbol === 'ExpandMore' && (
+                <ExpandMoreIcon onClick={onClickExpandMore} />
+              )}
+              {symbol === 'ChevronRight' && <ChevronRightIcon />}
+              {symbol === 'MoreHoriz' && <MoreHorizIcon />}
+            </SymbolIcon>
+          )}
+          {useSymbolSpan && (
+            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+              {'-'}
+            </SymbolSpan>
+          )}
+          {useLoadingSpan && (
+            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+              {' '}
+            </SymbolSpan>
+          )}
+        </Toggle>
+        <Content>
+          <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            {data.label}
+          </TextSpan>
+          {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
+        </Content>
       </StyledNode>
     </ContextMenuTrigger>
   )
