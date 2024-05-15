@@ -157,6 +157,7 @@ const TreeComponent = () => {
             height: `calc(100vh - ${constants.appBarHeight}px - 39px)`,
             flex: '1 1 auto',
             overflowY: 'auto',
+            contain: 'paint layout style',
           }}
         >
           <Root />

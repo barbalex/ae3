@@ -30,8 +30,19 @@ const StyledNode = styled.div`
   display: flex;
   flex-direction: row;
   white-space: nowrap;
+  // ellipsis for overflow
+  // TODO: not working
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
   user-select: none;
   cursor: pointer;
+  // do not layout offscreen content while allowing search
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility
+  // UUPS: this prevents horizontal scrolling!
+  // see: https://stackoverflow.com/a/76597041/712005
+  // using contain on parent also
+  content-visibility: auto;
+  contain-intrinsic-size: auto 23px;
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
   &:hover {
