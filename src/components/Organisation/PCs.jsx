@@ -8,7 +8,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import appBaseUrl from '../../modules/appBaseUrl'
 import storeContext from '../../storeContext'
 import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

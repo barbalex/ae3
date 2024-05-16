@@ -7,7 +7,7 @@ import { gql, useApolloClient } from '@apollo/client'
 
 import Taxonomies from './Taxonomies'
 import storeContext from '../../../../../../storeContext'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 
 const exportTypes = ['Arten', 'Lebensräume']
 const exportTypeTAXToReadable = {

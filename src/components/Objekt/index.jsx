@@ -13,7 +13,7 @@ import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromN
 import objectDataQuery from './objectDataQuery'
 import storeContext from '../../storeContext'
 import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;

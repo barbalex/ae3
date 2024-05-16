@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 
 import Properties from './Properties'
 import storeContext from '../../../../../../storeContext'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 
 const ErrorContainer = styled.div`
   padding: 5px;

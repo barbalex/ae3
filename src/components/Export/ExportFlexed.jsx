@@ -3,7 +3,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 
 import ChooseColumn from './ChooseColumn'
 import PreviewColumn from './PreviewColumn'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const ExportFlexed = () => (
   <ReflexContainer orientation="vertical">

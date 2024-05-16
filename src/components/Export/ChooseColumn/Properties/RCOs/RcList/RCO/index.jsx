@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import AllChooser from './AllChooser'
 import Properties from './Properties'
 import storeContext from '../../../../../../../storeContext'
-import ErrorBoundary from '../../../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../../../shared/Spinner.jsx'
 
 const PropertiesContainer = styled.div`

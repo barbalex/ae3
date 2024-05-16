@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
 import Tree from '../Tree'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const DataElement = styled(ReflexElement)`
   overflow-x: hidden !important;

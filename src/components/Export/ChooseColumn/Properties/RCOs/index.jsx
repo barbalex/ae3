@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 
 import RcList from './RcList'
 import storeContext from '../../../../../storeContext'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   margin: 10px 0;

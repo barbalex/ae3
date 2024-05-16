@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import HowTo from './HowTo'
 import ExportTypes from './ExportTypes'
 import storeContext from '../../../../storeContext'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   padding: 0 5px;

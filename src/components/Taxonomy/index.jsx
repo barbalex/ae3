@@ -14,7 +14,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import PropertyReadOnly from '../shared/PropertyReadOnly'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import PropertyArten from './PropertyArten'
 import PropertyLr from './PropertyLr'
 import onBlurArten from './onBlurArten'

@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 
 import AllChooser from './Taxonomy/AllChooser'
 import Properties from './Properties'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const StyledCard = styled(Card)`
   margin: 0;

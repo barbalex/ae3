@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 
 import updateObjectMutation from '../../updateObjectMutation'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   margin: 12px 8px 12px 0;

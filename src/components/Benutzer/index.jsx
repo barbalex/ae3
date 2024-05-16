@@ -26,7 +26,7 @@ import updateUserMutation from './updateUserMutation'
 import updateUserMutationWithPass from './updateUserMutationWithPass'
 import storeContext from '../../storeContext'
 import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div``
 const LEContainer = styled.div`

@@ -14,7 +14,7 @@ import Taxonomies from './Taxonomies'
 import Properties from './Properties'
 import Filter from './Filter'
 import storeContext from '../../../storeContext'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const StyledSnackbar = styled(Snackbar)`
   div {

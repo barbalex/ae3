@@ -12,7 +12,7 @@ import Taxonomies from './Taxonomies'
 import PCOs from './PCOs'
 import RCOs from './RCOs'
 import storeContext from '../../../../storeContext'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   padding: 0 5px;

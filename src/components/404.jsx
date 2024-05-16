@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
 import Layout from './Layout'
-import ErrorBoundary from './shared/ErrorBoundary'
+import ErrorBoundary from './shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;
