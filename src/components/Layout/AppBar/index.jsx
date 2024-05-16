@@ -13,7 +13,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 import getActiveObjectIdFromNodeArray from '../../../modules/getActiveObjectIdFromNodeArray.js'
 import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
-import MoreMenu from './MoreMenu'
+import MoreMenu from './MoreMenu.jsx'
 
 /**
  * For unknown reason appbar does not follow display flex when
@@ -151,8 +151,8 @@ const AppBarComponent = () => {
       ? username
       : getInitials(username)
     : wide
-    ? 'Login'
-    : 'n.a.'
+      ? 'Login'
+      : 'n.a.'
   const loginTitle = username ? 'abmelden' : 'anmelden'
   const objektName = data?.objectById?.name
   const pCName = data?.propertyCollectionById?.name
@@ -174,12 +174,12 @@ const AppBarComponent = () => {
     const name = pCName
       ? pCName
       : objektName
-      ? `${taxName}: ${objektName}`
-      : taxName
-      ? taxName
-      : url0
-      ? url0
-      : ''
+        ? `${taxName}: ${objektName}`
+        : taxName
+          ? taxName
+          : url0
+            ? url0
+            : ''
     const title = `arteigenschaften.ch${name ? ': ' : ''}${name}`
     typeof window !== 'undefined' &&
       navigator.share({

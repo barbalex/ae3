@@ -17,8 +17,8 @@ import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 
-import fetchLoginModule from './fetchLogin'
-import idbContext from '../../idbContext'
+import fetchLoginModule from './fetchLogin.js'
+import idbContext from '../../idbContext.js'
 import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
@@ -72,7 +72,7 @@ const Login = () => {
         store,
         nameInput,
         passwordInput,
-        navigate
+        navigate,
       }),
     [client, name, pass, idb, store],
   )

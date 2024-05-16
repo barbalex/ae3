@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode'
 
-import loginDbMutation from './loginDbMutation'
+import loginDbMutation from './loginDbMutation.js'
 
 const fetchLogin = async ({
   client,
