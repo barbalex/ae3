@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
-import appBaseUrl from '../../modules/appBaseUrl'
+import appBaseUrl from '../../modules/appBaseUrl.js'
 import ErrorBoundary from './ErrorBoundary'
 
 const Container = styled.div`

@@ -7,7 +7,7 @@ import {
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
 
-import appBaseUrl from '../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../modules/appBaseUrl.js'
 
 const StyledUl = styled.ul`
   ul {

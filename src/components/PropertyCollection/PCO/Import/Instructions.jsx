@@ -7,7 +7,7 @@ import {
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
 
-import appBaseUrl from '../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../modules/appBaseUrl.js'
 
 const StyledH3 = styled.h3`
   margin-left: 8px;

@@ -8,8 +8,8 @@ const isLocalhost = hostnameWithoutWww === 'localhost'
 const hostname = isLocalhost
   ? 'localhost'
   : typeof window !== 'undefined'
-  ? window.location.hostname
-  : ''
+    ? window.location.hostname
+    : ''
 const appHost = isLocalhost
   ? `http://localhost:${window.location.port}/`
   : `https://${hostname}/`
