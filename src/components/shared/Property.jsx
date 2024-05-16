@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import omit from 'lodash/omit'
 import { useApolloClient } from '@apollo/client'
 
-import updatePropertyMutation from './updatePropertyMutation'
+import updatePropertyMutation from './updatePropertyMutation.js'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 const Container = styled.div`
@@ -61,16 +61,13 @@ const Property = ({ id, properties: propertiesPrevious, field: key }) => {
     },
     [propertiesPrevious, key, client, id],
   )
-  const onDelete = useCallback(
-    async (event) => {
-      const properties = omit(propertiesPrevious, key)
-      await client.mutate({
-        mutation: updatePropertyMutation,
-        variables: { properties: JSON.stringify(properties), id },
-      })
-    },
-    [propertiesPrevious, key, client, id],
-  )
+  const onDelete = useCallback(async () => {
+    const properties = omit(propertiesPrevious, key)
+    await client.mutate({
+      mutation: updatePropertyMutation,
+      variables: { properties: JSON.stringify(properties), id },
+    })
+  }, [propertiesPrevious, key, client, id])
 
   return (
     <ErrorBoundary>

@@ -10,8 +10,8 @@ import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import PropertyList from './PropertyList'
-import NewProperty from '../../../../shared/NewProperty'
+import PropertyList from './PropertyList.jsx'
+import NewProperty from '../../../../shared/NewProperty.jsx'
 import storeContext from '../../../../../storeContext.js'
 
 const PropertiesTitleContainer = styled.div`

@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 
-import updatePropertyMutation from './updatePropertyMutation'
+import updatePropertyMutation from './updatePropertyMutation.js'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 const Container = styled.div`

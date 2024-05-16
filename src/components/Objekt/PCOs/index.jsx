@@ -1,7 +1,7 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 
-import PCO from './PCO'
+import PCO from './PCO/index.jsx'
 
 const PCOs = ({ pCOs, relations, stacked }) =>
   sortBy(

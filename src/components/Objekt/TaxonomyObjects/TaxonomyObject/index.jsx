@@ -28,7 +28,7 @@ import { useNavigate } from 'react-router-dom'
 
 import PropertyReadOnly from '../../../shared/PropertyReadOnly.jsx'
 import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked.jsx'
-import TaxonomyDescription from '../../../shared/TaxonomyDescription'
+import TaxonomyDescription from '../../../shared/TaxonomyDescription.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import Property from './Property'
