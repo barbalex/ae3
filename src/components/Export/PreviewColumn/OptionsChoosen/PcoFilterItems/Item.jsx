@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import booleanToJaNein from '../../../../../modules/booleanToJaNein'
+import booleanToJaNein from '../../../../../modules/booleanToJaNein.js'
 import storeContext from '../../../../../storeContext.js'
 
 const FilterValueSpan = styled.span`
