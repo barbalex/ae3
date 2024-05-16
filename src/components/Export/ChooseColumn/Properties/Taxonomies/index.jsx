@@ -11,8 +11,8 @@ import sumBy from 'lodash/sumBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import TaxonomiesList from './TaxonomiesList'
-import JointTaxonomy from './JointTaxonomy'
+import TaxonomiesList from './TaxonomiesList.jsx'
+import JointTaxonomy from './JointTaxonomy.jsx'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 

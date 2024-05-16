@@ -40,7 +40,7 @@ const HowToFilter = () => {
   return (
     <StyledCard>
       <StyledCardActions disableSpacing onClick={onClickAction}>
-        <CardActionTitle>So geht's</CardActionTitle>
+        <CardActionTitle>So geht&apos;s</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
           aria-expanded={expanded}
@@ -63,8 +63,8 @@ const HowToFilter = () => {
               Filter-Kriterien...
             </li>
             <li>
-              ...und wählen Sie danach unter "3. Eigenschaften wählen", welche
-              Eigenschaften exportiert werden sollen
+              ...und wählen Sie danach unter &quot;3. Eigenschaften
+              wählen&quot;, welche Eigenschaften exportiert werden sollen
             </li>
           </ul>
         </StyledCardContent>

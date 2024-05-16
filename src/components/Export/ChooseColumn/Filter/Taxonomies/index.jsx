@@ -12,8 +12,8 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import Taxonomy from './Taxonomy'
-import JointTaxonomy from './JointTaxonomy'
+import Taxonomy from './Taxonomy.jsx'
+import JointTaxonomy from './JointTaxonomy.jsx'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 

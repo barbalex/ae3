@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Chooser from './Taxonomy/Chooser'
+import Chooser from './Taxonomy/Chooser.jsx'
 
 const TaxProperties = ({ properties }) =>
   properties.map((p) => (

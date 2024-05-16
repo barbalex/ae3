@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ExportType from './ExportType'
+import ExportType from './ExportType/index.jsx'
 
 const exportTypes = ['Arten', 'Lebensräume']
 

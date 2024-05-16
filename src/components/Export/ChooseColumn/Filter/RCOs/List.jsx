@@ -5,7 +5,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import RCO from './RCO'
+import RCO from './RCO/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'

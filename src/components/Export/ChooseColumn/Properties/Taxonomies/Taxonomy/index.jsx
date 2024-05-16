@@ -11,8 +11,8 @@ import groupBy from 'lodash/groupBy'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import AllChooser from './AllChooser'
-import Properties from '../Properties'
+import AllChooser from './AllChooser.jsx'
+import Properties from '../Properties.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 

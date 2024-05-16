@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Comparator from './Comparator'
-import Value from './Value'
+import Comparator from './Comparator.jsx'
+import Value from './Value.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import getConstants from '../../../../../../modules/constants.js'
 const constants = getConstants()

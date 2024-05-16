@@ -40,7 +40,7 @@ const HowToTaxonomies = () => {
   return (
     <StyledCard>
       <StyledCardActions disableSpacing onClick={onClickActions}>
-        <CardActionTitle>So geht's</CardActionTitle>
+        <CardActionTitle>So geht&apos;s</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
           aria-expanded={expanded}

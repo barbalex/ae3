@@ -9,7 +9,7 @@ import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import RcList from './RcList'
+import RcList from './RcList/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 

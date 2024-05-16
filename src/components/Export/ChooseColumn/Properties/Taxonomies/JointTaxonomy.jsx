@@ -8,8 +8,8 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import AllChooser from './Taxonomy/AllChooser'
-import Properties from './Properties'
+import AllChooser from './Taxonomy/AllChooser.jsx'
+import Properties from './Properties.jsx'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const StyledCard = styled(Card)`

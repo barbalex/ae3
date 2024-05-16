@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
-import List from './List'
+import List from './List.jsx'
 
 const Container = styled.div`
   margin: 10px 0;

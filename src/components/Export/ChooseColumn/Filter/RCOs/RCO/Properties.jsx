@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Property from './Property'
+import Property from './Property/index.jsx'
 
 const RcoCard = ({ properties }) =>
   properties.map((p) => (

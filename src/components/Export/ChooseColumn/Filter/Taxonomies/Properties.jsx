@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TaxField from './TaxField'
+import TaxField from './TaxField/index.jsx'
 
 const TaxProperties = ({ properties }) =>
   properties.map((p) => (

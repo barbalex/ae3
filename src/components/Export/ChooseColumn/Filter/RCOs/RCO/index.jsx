@@ -11,7 +11,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import Properties from './Properties'
+import Properties from './Properties.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 
@@ -101,9 +101,6 @@ const RCO = ({ pc }) => {
     return `${x.propertyCollectionName}: ${x.relationType}`
   })
 
-
-
-
   if (error) {
     return (
       <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
@@ -112,7 +109,7 @@ const RCO = ({ pc }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard >
+      <StyledCard>
         <StyledCardActions disableSpacing onClick={onClickActions}>
           <CardActionTitle>
             {pc}
@@ -134,9 +131,7 @@ const RCO = ({ pc }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            <Properties
-              properties={rcoPropertiesByPropertyCollection[pc]}
-            />
+            <Properties properties={rcoPropertiesByPropertyCollection[pc]} />
           </PropertiesContainer>
         </Collapse>
       </StyledCard>

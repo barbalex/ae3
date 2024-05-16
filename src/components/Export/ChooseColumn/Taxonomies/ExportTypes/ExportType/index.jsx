@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 import { gql, useApolloClient } from '@apollo/client'
 
-import Taxonomies from './Taxonomies'
+import Taxonomies from './Taxonomies.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 

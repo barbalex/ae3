@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Taxonomy from './Taxonomy'
+import Taxonomy from './Taxonomy/index.jsx'
 
 const Taxonomies = ({ taxonomies, initiallyExpanded }) =>
-  taxonomies.map(tax => (
+  taxonomies.map((tax) => (
     <Taxonomy key={tax} tax={tax} initiallyExpanded={initiallyExpanded} />
   ))
 

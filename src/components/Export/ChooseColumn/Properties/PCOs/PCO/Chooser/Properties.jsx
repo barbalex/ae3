@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Chooser from './Chooser'
+import Chooser from './Chooser.jsx'
 
 const PCO = ({ properties, pcName }) =>
   properties.map((p) => (

@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import HowTo from './HowTo'
-import Taxonomies from './Taxonomies'
-import PCOs from './PCOs'
-import RCOs from './RCOs'
+import HowTo from './HowTo.jsx'
+import Taxonomies from './Taxonomies/index.jsx'
+import PCOs from './PCOs/index.jsx'
+import RCOs from './RCOs/index.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

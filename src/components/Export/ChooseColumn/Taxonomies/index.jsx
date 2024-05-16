@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 
-import HowTo from './HowTo'
-import ExportTypes from './ExportTypes'
+import HowTo from './HowTo.jsx'
+import ExportTypes from './ExportTypes/index.jsx'
 import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
