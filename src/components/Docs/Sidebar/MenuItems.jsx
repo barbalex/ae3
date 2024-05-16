@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import MenuItem from './MenuItem'
+import MenuItem from './MenuItem.jsx'
 import storeContext from '../../../storeContext.js'
 
 // dont know why but divider is too thick,

@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar/index.jsx'
 import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
