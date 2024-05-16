@@ -8,7 +8,7 @@ import omit from 'lodash/omit'
 import { useApolloClient } from '@apollo/client'
 
 import updatePropertyMutation from './updatePropertyMutation'
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary.jsx'
 
 const Container = styled.div`
   margin: 12px 10px 12px 2px;
