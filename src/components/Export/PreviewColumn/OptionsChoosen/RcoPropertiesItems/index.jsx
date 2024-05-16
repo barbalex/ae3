@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Item from './Item'
+import Item from './Item.jsx'
 
 const ExportRcoPropertiesListItems = ({ rcoProperties }) =>
-  rcoProperties.map(p => (
+  rcoProperties.map((p) => (
     <Item key={`${p.pcname}|${p.relationtype}|${p.pname}`} properties={p} />
   ))
 

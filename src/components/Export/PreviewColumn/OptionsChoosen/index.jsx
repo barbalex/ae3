@@ -4,12 +4,12 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import TaxFilterItems from './TaxFilterItems'
-import PcoFilterItems from './PcoFilterItems'
-import RcoFilterItems from './RcoFilterItems'
-import TaxPropertiesItems from './TaxPropertiesItems'
-import PcoPropertiesItems from './PcoPropertiesItems'
-import RcoPropertiesItems from './RcoPropertiesItems'
+import TaxFilterItems from './TaxFilterItems/index.jsx'
+import PcoFilterItems from './PcoFilterItems/index.jsx'
+import RcoFilterItems from './RcoFilterItems/index.jsx'
+import TaxPropertiesItems from './TaxPropertiesItems/index.jsx'
+import PcoPropertiesItems from './PcoPropertiesItems/index.jsx'
+import RcoPropertiesItems from './RcoPropertiesItems/index.jsx'
 import storeContext from '../../../../storeContext.js'
 
 const Container = styled.div`
