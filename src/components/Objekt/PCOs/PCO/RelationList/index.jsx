@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Relation from './Relation'
+import Relation from './Relation/index.jsx'
 
 const RelationList = ({ relations }) =>
   relations.map((relation, index) => (

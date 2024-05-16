@@ -27,7 +27,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 
 import PropertyReadOnly from '../../../shared/PropertyReadOnly.jsx'
-import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked'
+import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked.jsx'
 import TaxonomyDescription from '../../../shared/TaxonomyDescription'
 import Spinner from '../../../shared/Spinner.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'

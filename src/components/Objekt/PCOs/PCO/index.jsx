@@ -12,10 +12,10 @@ import {
 import sortBy from 'lodash/sortBy'
 import styled from '@emotion/styled'
 
-import PCDescription from '../../../shared/PCDescription'
+import PCDescription from '../../../shared/PCDescription.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import RelationList from './RelationList'
-import PropertyList from './PropertyList'
+import RelationList from './RelationList/index.jsx'
+import PropertyList from './PropertyList.jsx'
 
 const Container = styled.div`
   margin: 10px 0;

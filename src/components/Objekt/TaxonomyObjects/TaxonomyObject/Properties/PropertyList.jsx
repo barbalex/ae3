@@ -2,7 +2,7 @@ import React from 'react'
 import sortBy from 'lodash/sortBy'
 
 import PropertyReadOnly from '../../../../shared/PropertyReadOnly.jsx'
-import PropertyReadOnlyStacked from '../../../../shared/PropertyReadOnlyStacked'
+import PropertyReadOnlyStacked from '../../../../shared/PropertyReadOnlyStacked.jsx'
 import Property from '../../../../shared/Property'
 
 const PropertyList = ({ propertiesArray, properties, editing, stacked, id }) =>
