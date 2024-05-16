@@ -26,7 +26,7 @@ import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 
-import PropertyReadOnly from '../../../shared/PropertyReadOnly'
+import PropertyReadOnly from '../../../shared/PropertyReadOnly.jsx'
 import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked'
 import TaxonomyDescription from '../../../shared/TaxonomyDescription'
 import Spinner from '../../../shared/Spinner.jsx'

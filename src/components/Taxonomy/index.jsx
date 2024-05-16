@@ -13,7 +13,7 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import PropertyReadOnly from '../shared/PropertyReadOnly'
+import PropertyReadOnly from '../shared/PropertyReadOnly.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import PropertyArten from './PropertyArten'
 import PropertyLr from './PropertyLr'
