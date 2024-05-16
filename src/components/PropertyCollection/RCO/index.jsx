@@ -9,13 +9,13 @@ import { observer } from 'mobx-react-lite'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import ImportRco from './Import'
+import ImportRco from './Import/index.jsx'
 import booleanToJaNein from '../../../modules/booleanToJaNein.js'
-import deleteRcoOfPcMutation from './deleteRcoOfPcMutation'
+import deleteRcoOfPcMutation from './deleteRcoOfPcMutation.js'
 import storeContext from '../../../storeContext.js'
 import Spinner from '../../shared/Spinner.jsx'
 import DataTable from '../../shared/DataTable.jsx'
-import CountInput from '../../Export/PreviewColumn/CountInput'
+import CountInput from '../../Export/PreviewColumn/CountInput.jsx'
 import exists from '../../../modules/exists.js'
 
 const Container = styled.div`

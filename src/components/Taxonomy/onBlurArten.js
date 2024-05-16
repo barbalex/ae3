@@ -1,4 +1,4 @@
-import updateTaxonomyMutationArten from './updateTaxonomyMutationArten'
+import updateTaxonomyMutationArten from './updateTaxonomyMutationArten.js'
 
 const onBlurArten = ({
   client,

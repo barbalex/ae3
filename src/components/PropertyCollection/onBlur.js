@@ -1,4 +1,4 @@
-import updatePCMutation from './updatePCMutation'
+import updatePCMutation from './updatePCMutation.js'
 
 const onBlur = async ({
   client,

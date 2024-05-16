@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
 
-import onBlurLr from './onBlurLr'
+import onBlurLr from './onBlurLr.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

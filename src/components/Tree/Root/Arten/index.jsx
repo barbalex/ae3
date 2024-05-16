@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
-import Row from '../../Row'
-import Tax from '../LR/Tax'
+import Row from '../../Row/index.jsx'
+import Tax from '../LR/Tax.jsx'
 
 const ArtenNode = ({ isLoading, count }) => {
   const { pathname } = useLocation()

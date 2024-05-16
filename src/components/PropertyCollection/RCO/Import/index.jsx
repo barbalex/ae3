@@ -22,11 +22,11 @@ import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import upsertRCOMutation from './upsertRCOMutation'
+import upsertRCOMutation from './upsertRCOMutation.js'
 import storeContext from '../../../../storeContext.js'
 import DataTable from '../../../shared/DataTable.jsx'
-import CountInput from '../../../Export/PreviewColumn/CountInput'
-import Instructions from './Instructions'
+import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
+import Instructions from './Instructions.jsx'
 
 const Container = styled.div`
   height: 100%;

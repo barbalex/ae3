@@ -1,4 +1,4 @@
-import updateTaxonomyMutationLr from './updateTaxonomyMutationLr'
+import updateTaxonomyMutationLr from './updateTaxonomyMutationLr.js'
 
 const onBlurLr = ({ client, field, taxonomy, value, prevValue }) => {
   if (value !== prevValue) {

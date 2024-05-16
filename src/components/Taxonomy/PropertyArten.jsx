@@ -6,8 +6,7 @@ import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
 
-import updateTaxonomyMutationArten from './updateTaxonomyMutationArten'
-import onBlurArten from './onBlurArten'
+import onBlurArten from './onBlurArten.js'
 
 const Container = styled.div`
   margin: 5px 0;
