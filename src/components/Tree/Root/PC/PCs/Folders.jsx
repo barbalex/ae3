@@ -1,4 +1,4 @@
-import Row from '../../../Row'
+import Row from '../../../Row/index.jsx'
 
 const PcFolders = ({ pc, pcoCount, relCount }) => {
   const dataPc = {

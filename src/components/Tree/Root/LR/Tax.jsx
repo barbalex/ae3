@@ -2,9 +2,9 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-import Row from '../../Row'
-import LoadingRow from '../../LoadingRow'
-import TopLevelObject from './TopLevelObject'
+import Row from '../../Row/index.jsx'
+import LoadingRow from '../../LoadingRow.jsx'
+import TopLevelObject from './TopLevelObject.jsx'
 
 const Tax = ({ type = 'Lebensräume' }) => {
   const client = useApolloClient()

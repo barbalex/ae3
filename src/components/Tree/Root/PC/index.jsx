@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
-import Row from '../../Row'
-import PCs from './PCs'
+import Row from '../../Row/index.jsx'
+import PCs from './PCs/index.jsx'
 
 const PcNode = ({ isLoading, count }) => {
   const { pathname } = useLocation()

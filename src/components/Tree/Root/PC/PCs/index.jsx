@@ -2,9 +2,9 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import Row from '../../../Row'
-import LoadingRow from '../../../LoadingRow'
-import Folders from './Folders'
+import Row from '../../../Row/index.jsx'
+import LoadingRow from '../../../LoadingRow.jsx'
+import Folders from './Folders.jsx'
 
 const PCs = () => {
   const { pcId } = useParams()

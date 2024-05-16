@@ -2,13 +2,13 @@ import { useContext } from 'react'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
-import Arten from './Arten'
-import LR from './LR'
-import PC from './PC'
-import Users from './Users'
-import Organizations from './Organizations'
+import Arten from './Arten/index.jsx'
+import LR from './LR/index.jsx'
+import PC from './PC/index.jsx'
+import Users from './Users/index.jsx'
+import Organizations from './Organizations/index.jsx'
 import storeContext from '../../../storeContext.js'
-import LoadingRow from '../LoadingRow'
+import LoadingRow from '../LoadingRow.jsx'
 
 const Root = () => {
   const client = useApolloClient()

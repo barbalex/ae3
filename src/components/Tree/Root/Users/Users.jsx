@@ -1,8 +1,8 @@
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
-import Row from '../../Row'
-import LoadingRow from '../../LoadingRow'
+import Row from '../../Row/index.jsx'
+import LoadingRow from '../../LoadingRow.jsx'
 
 const Users = () => {
   const client = useApolloClient()

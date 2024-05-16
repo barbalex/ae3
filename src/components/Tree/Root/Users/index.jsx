@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
-import Row from '../../Row'
-import Users from './Users'
+import Row from '../../Row/index.jsx'
+import Users from './Users.jsx'
 
 const UsersFolder = ({ count, isLoading }) => {
   const { pathname } = useLocation()

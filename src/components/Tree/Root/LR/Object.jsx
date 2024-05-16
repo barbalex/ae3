@@ -2,8 +2,8 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation } from 'react-router-dom'
 
-import Row from '../../Row'
-import LoadingRow from '../../LoadingRow'
+import Row from '../../Row/index.jsx'
+import LoadingRow from '../../LoadingRow.jsx'
 
 const Object = ({ parentData }) => {
   const client = useApolloClient()

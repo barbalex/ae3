@@ -16,8 +16,8 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { ContextMenuTrigger } from 'react-contextmenu'
-import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath'
-import onClickContextMenuDo from './onClickContextMenu'
+import isUrlInActiveNodePath from '../../../modules/isUrlInActiveNodePath.js'
+import onClickContextMenuDo from './onClickContextMenu.js'
 import storeContext from '../../../storeContext.js'
 
 const rowHeight = 23

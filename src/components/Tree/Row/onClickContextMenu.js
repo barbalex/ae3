@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
-import createUserMutation from '../../Benutzer/createUserMutation'
-import deleteUserMutation from '../../Benutzer/deleteUserMutation'
-import createObjectMutation from '../../Objekt/createObjectMutation'
-import createRootObjectMutation from '../../Objekt/createRootObjectMutation'
-import deleteObjectMutation from '../../Objekt/deleteObjectMutation'
-import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation'
-import createPCMutation from '../../PropertyCollection/createPCMutation'
-import deletePCMutation from '../../PropertyCollection/deletePCMutation'
-import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation'
+import createUserMutation from '../../Benutzer/createUserMutation.js'
+import deleteUserMutation from '../../Benutzer/deleteUserMutation.js'
+import createObjectMutation from '../../Objekt/createObjectMutation.js'
+import createRootObjectMutation from '../../Objekt/createRootObjectMutation.js'
+import deleteObjectMutation from '../../Objekt/deleteObjectMutation.js'
+import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
+import createPCMutation from '../../PropertyCollection/createPCMutation.js'
+import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
+import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
 
 const onClickContextMenu = async ({
   data,
