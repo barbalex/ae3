@@ -1,9 +1,9 @@
 import React from 'react'
 
-import OrgUser from './OrgUser'
+import OrgUser from './OrgUser.jsx'
 
 const OrgUsersList = ({ orgUsers }) =>
-  orgUsers.map(orgUser => (
+  orgUsers.map((orgUser) => (
     <OrgUser orgUser={orgUser} key={`${orgUser.id}/${orgUser.role}`} />
   ))
 

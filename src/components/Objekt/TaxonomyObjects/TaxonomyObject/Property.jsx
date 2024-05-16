@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 
-import updateObjectMutation from '../../updateObjectMutation'
+import updateObjectMutation from '../../updateObjectMutation.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

@@ -14,8 +14,8 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import updateOrgUserMutation from './updateOrgUserMutation'
-import deleteOrgUserMutation from './deleteOrgUserMutation'
+import updateOrgUserMutation from './updateOrgUserMutation.js'
+import deleteOrgUserMutation from './deleteOrgUserMutation.js'
 import storeContext from '../../../../storeContext.js'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 

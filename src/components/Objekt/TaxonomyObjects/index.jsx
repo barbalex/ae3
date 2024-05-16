@@ -1,7 +1,7 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 
-import TaxonomyObject from './TaxonomyObject'
+import TaxonomyObject from './TaxonomyObject/index.jsx'
 
 const Objekt = ({ objects, stacked = false }) =>
   sortBy(objects, (tO) => tO?.taxonomyByTaxonomyId?.name ?? '(Name fehlt)').map(
