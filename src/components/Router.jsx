@@ -6,27 +6,27 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
-const Layout = lazy(() => import('./Layout'))
-const Home = lazy(() => import('./Home'))
-const Benutzer = lazy(() => import('./Benutzer'))
-const Organisation = lazy(() => import('./Organisation'))
-const Login = lazy(() => import('./Login'))
-const FourOhFour = lazy(() => import('./404'))
-const Docs = lazy(() => import('./Docs'))
-const BrowserDoc = lazy(() => import('./Docs/docs/Browser'))
-const MeldenDoc = lazy(() => import('./Docs/docs/Melden'))
-const NeueArtDoc = lazy(() => import('./Docs/docs/NeueArt'))
-const ProjektbeschreibungDoc = lazy(() =>
-  import('./Docs/docs/Projektbeschreibung'),
+const Layout = lazy(() => import('./Layout/index.jsx'))
+const Home = lazy(() => import('./Home.jsx'))
+const Benutzer = lazy(() => import('./Benutzer/index.jsx'))
+const Organisation = lazy(() => import('./Organisation/index.jsx'))
+const Login = lazy(() => import('./Login/index.jsx'))
+const FourOhFour = lazy(() => import('./404.jsx'))
+const Docs = lazy(() => import('./Docs/index.jsx'))
+const BrowserDoc = lazy(() => import('./Docs/docs/Browser.jsx'))
+const MeldenDoc = lazy(() => import('./Docs/docs/Melden.jsx'))
+const NeueArtDoc = lazy(() => import('./Docs/docs/NeueArt.jsx'))
+const ProjektbeschreibungDoc = lazy(
+  () => import('./Docs/docs/Projektbeschreibung.jsx'),
 )
-const SchnittstellenDoc = lazy(() => import('./Docs/docs/Schnittstellen'))
-const Taxonomy = lazy(() => import('./Taxonomy'))
-const Objekt = lazy(() => import('./Objekt'))
-const PropertyCollection = lazy(() => import('./PropertyCollection'))
-const PCO = lazy(() => import('./PropertyCollection/PCO'))
-const RCO = lazy(() => import('./PropertyCollection/RCO'))
-const Export = lazy(() => import('./Export'))
-const Data = lazy(() => import('./Data'))
+const SchnittstellenDoc = lazy(() => import('./Docs/docs/Schnittstellen.jsx'))
+const Taxonomy = lazy(() => import('./Taxonomy/index.jsx'))
+const Objekt = lazy(() => import('./Objekt/index.jsx'))
+const PropertyCollection = lazy(() => import('./PropertyCollection/index.jsx'))
+const PCO = lazy(() => import('./PropertyCollection/PCO/index.jsx'))
+const RCO = lazy(() => import('./PropertyCollection/RCO/index.jsx'))
+const Export = lazy(() => import('./Export/index.jsx'))
+const Data = lazy(() => import('./Data/index.jsx'))
 
 // Use react-router with outlets
 // render routes in outlet inside Data
