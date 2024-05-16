@@ -16,7 +16,7 @@ import CmPCFolder from './contextmenu/PCFolder'
 import CmPC from './contextmenu/PC'
 import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import getConstants from '../../modules/constants'
+import getConstants from '../../modules/constants.js'
 import Root from './Root'
 import IntoViewScroller from './IntoViewScroller'
 

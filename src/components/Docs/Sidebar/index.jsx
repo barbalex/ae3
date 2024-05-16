@@ -5,9 +5,9 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import storeContext from '../../../storeContext.js'
-import MenuItems from './MenuItems'
-import Filter from './Filter'
-import getConstants from '../../../modules/constants'
+import MenuItems from './MenuItems.jsx'
+import Filter from './Filter.jsx'
+import getConstants from '../../../modules/constants.js'
 
 const constants = getConstants()
 

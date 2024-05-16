@@ -21,7 +21,7 @@ import onBlurArten from './onBlurArten'
 import onBlurLr from './onBlurLr'
 import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
-import constants from '../../modules/constants'
+import constants from '../../modules/constants.js'
 
 const Container = styled.div`
   padding: 10px;

@@ -12,7 +12,7 @@ import getUrlForObject from '../../../modules/getUrlForObject'
 import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions'
-import getConstants from '../../../modules/constants'
+import getConstants from '../../../modules/constants.js'
 
 const constants = getConstants()
 

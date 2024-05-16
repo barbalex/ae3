@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext.js'
-import getConstants from '../../../../../../../modules/constants'
+import getConstants from '../../../../../../../modules/constants.js'
 const constants = getConstants()
 
 const Container = styled.div`
