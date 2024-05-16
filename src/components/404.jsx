@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
-import Layout from './Layout'
 import ErrorBoundary from './shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
@@ -16,7 +15,10 @@ const TextContainer = styled.div`
   display: flex;
   justify-content: center;
   font-weight: 700 !important;
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
 `
 const PageTitle = styled(Typography)`
@@ -30,7 +32,10 @@ const Text = styled(Typography)`
   font-weight: 700 !important;
 `
 const StyledButton = styled(Button)`
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
     -2px 2px 3px white;
   border-color: white !important;
   margin-top: 10px !important;

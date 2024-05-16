@@ -4,7 +4,7 @@ import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
-import ProgressiveImg from './shared/ProgressiveImg'
+import ProgressiveImg from './shared/ProgressiveImg.tsx'
 import image from '../images/home.webp'
 import placeholderSrc from '../images/home_small.webp'
 
@@ -77,15 +77,6 @@ const DokuLink = styled(Link)`
     text-decoration: underline;
   }
 `
-
-const bgImageStyle = {
-  position: 'absolute',
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-  zIndex: -1,
-}
 
 const Home = () => (
   <OuterContainer>
