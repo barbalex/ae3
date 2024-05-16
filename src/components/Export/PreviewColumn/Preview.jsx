@@ -10,7 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import CountInput from './CountInput.jsx'
-import DataTable from '../../shared/DataTable'
+import DataTable from '../../shared/DataTable.jsx'
 
 const Container = styled.div`
   padding-top: 5px;
