@@ -55,7 +55,7 @@ const CardContainer = styled.div`
 `
 const Card = styled(MaterialCard)`
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.55) !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
   font-weight: 700;
   ul {
     margin-bottom: 0;
@@ -69,6 +69,7 @@ const Card = styled(MaterialCard)`
 `
 const CardTitle = styled.h3`
   font-weight: 700;
+  margin: 0 0 12px 0;
 `
 const DokuLink = styled(Link)`
   text-decoration: none;
@@ -85,11 +86,12 @@ const Home = () => (
       <CardContainer>
         <Card>
           <CardTitle>Informationen zu:</CardTitle>
-          <CardTitle>Arten, Lebensräumen und ihren Taxonomien</CardTitle>
+          Arten, Lebensräumen und ihren Taxonomien
         </Card>
         <Card>
-          <CardTitle>...nachschlagen</CardTitle>Eigenschaften finden. Auch von
-          Synonymen aus anderen Taxonomien
+          <CardTitle>...nachschlagen</CardTitle>Eigenschaften finden.
+          <br />
+          Auch von Synonymen aus anderen Taxonomien
         </Card>
         <Card>
           <CardTitle>...exportieren</CardTitle>Eigenschaften wählen, Arten
