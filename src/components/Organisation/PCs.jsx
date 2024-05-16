@@ -7,7 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import appBaseUrl from '../../modules/appBaseUrl'
 import storeContext from '../../storeContext'
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`

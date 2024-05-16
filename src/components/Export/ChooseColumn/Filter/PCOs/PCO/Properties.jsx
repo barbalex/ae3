@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import Property from './Property'
 import storeContext from '../../../../../../storeContext'
-import Spinner from '../../../../../shared/Spinner'
+import Spinner from '../../../../../shared/Spinner.jsx'
 
 const SpinnerContainer = styled.div`
   padding-top: 15px;

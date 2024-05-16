@@ -11,7 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import createOrgUserMutation from './createOrgUserMutation'
 import OrgUsersList from './OrgUsersList'
 import storeContext from '../../../storeContext'
-import Spinner from '../../shared/Spinner'
+import Spinner from '../../shared/Spinner.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`

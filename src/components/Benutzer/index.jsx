@@ -19,13 +19,13 @@ import { useParams } from 'react-router-dom'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import query from './query'
-import Roles from './Roles'
-import PCs from './PCs'
-import TCs from './TCs'
+import Roles from './Roles.jsx'
+import PCs from './PCs.jsx'
+import TCs from './TCs.jsx'
 import updateUserMutation from './updateUserMutation'
 import updateUserMutationWithPass from './updateUserMutationWithPass'
 import storeContext from '../../storeContext'
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div``

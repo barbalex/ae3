@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import storeContext from '../../../../../../../storeContext'
 import AllChooser from './AllChooser'
 import Properties from './Properties'
-import Spinner from '../../../../../../shared/Spinner'
+import Spinner from '../../../../../../shared/Spinner.jsx'
 
 const PropertiesContainer = styled.div`
   display: flex;

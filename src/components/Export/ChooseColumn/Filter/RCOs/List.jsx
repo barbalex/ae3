@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import RCO from './RCO'
 import storeContext from '../../../../../storeContext'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import Spinner from '../../../../shared/Spinner'
+import Spinner from '../../../../shared/Spinner.jsx'
 
 const ErrorContainer = styled.div`
   padding: 5px;

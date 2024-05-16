@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 
 import PropertyReadOnly from '../shared/PropertyReadOnly'
 import UserReadOnly from '../shared/UserReadOnly'
-import Spinner from '../shared/Spinner'
+import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import OrgUsers from './OrgUsers'
 import TCs from './TCs'

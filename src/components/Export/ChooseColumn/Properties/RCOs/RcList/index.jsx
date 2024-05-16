@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import RCO from './RCO'
 import storeContext from '../../../../../../storeContext'
-import Spinner from '../../../../../shared/Spinner'
+import Spinner from '../../../../../shared/Spinner.jsx'
 
 const SpinnerContainer = styled.div`
   padding-top: 15px;

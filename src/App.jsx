@@ -21,7 +21,7 @@ import { Provider as IdbProvider } from './idbContext'
 import { Provider as MobxProvider } from './storeContext'
 import Store from './store'
 import Router from './components/Router'
-import Spinner from './components/shared/Spinner'
+import Spinner from './components/shared/Spinner.jsx'
 const Stacker = lazy(() => import('./components/Stacker'))
 
 const App = () => {
