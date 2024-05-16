@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 
-import App from './App'
+import App from './App.jsx'
 
 // https://vite-plugin-pwa.netlify.app/guide/prompt-for-update.html#runtime
 registerSW({ immediate: true })

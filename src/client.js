@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode'
 
 import './index.css'
 import 'react-reflex/styles.css'
-import graphQlUri from './modules/graphQlUri'
+import graphQlUri from './modules/graphQlUri.js'
 
 const client = ({ idb, store }) => {
   /**

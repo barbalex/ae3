@@ -1,11 +1,17 @@
 import { types } from 'mobx-state-tree'
 
-import TaxProperty, { defaultValue as defaultTaxProperty } from './TaxProperty'
-import PcoProperty, { defaultValue as defaultPcoProperty } from './PcoProperty'
-import RcoProperty, { defaultValue as defaultRcoProperty } from './RcoProperty'
-import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter'
-import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter'
-import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter'
+import TaxProperty, {
+  defaultValue as defaultTaxProperty,
+} from './TaxProperty.js'
+import PcoProperty, {
+  defaultValue as defaultPcoProperty,
+} from './PcoProperty.js'
+import RcoProperty, {
+  defaultValue as defaultRcoProperty,
+} from './RcoProperty.js'
+import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter.js'
+import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
+import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
 import getConstants from '../../modules/constants.js'
 const constants = getConstants()
 

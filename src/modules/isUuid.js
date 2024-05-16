@@ -1,6 +1,6 @@
 import isUuid from 'is-uuid'
 
-import invalidUuids from './invalidUuids'
+import invalidUuids from './invalidUuids.js'
 
 /**
  * There exist two invalid uuids in arteigenschaften.ch!
