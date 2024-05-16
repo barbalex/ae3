@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import storeContext from '../storeContext'
+import storeContext from '../storeContext.js'
 import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
 
 const ActiveNodeArraySetter = () => {

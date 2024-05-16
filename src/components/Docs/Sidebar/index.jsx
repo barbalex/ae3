@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
 import getConstants from '../../../modules/constants'

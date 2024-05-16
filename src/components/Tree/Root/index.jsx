@@ -7,7 +7,7 @@ import LR from './LR'
 import PC from './PC'
 import Users from './Users'
 import Organizations from './Organizations'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import LoadingRow from '../LoadingRow'
 
 const Root = () => {

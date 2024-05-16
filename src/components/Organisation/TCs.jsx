@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import appBaseUrl from '../../modules/appBaseUrl.js'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 

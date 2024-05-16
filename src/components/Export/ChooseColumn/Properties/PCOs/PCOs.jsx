@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import PCO from './PCO'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import Spinner from '../../../../shared/Spinner.jsx'
 
 const SpinnerContainer = styled.div`

@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import RCO from './RCO'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import Spinner from '../../../../shared/Spinner.jsx'
 

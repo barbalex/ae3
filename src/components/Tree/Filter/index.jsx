@@ -9,7 +9,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router-dom'
 
 import getUrlForObject from '../../../modules/getUrlForObject'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions'
 import getConstants from '../../../modules/constants'

@@ -9,7 +9,7 @@ import { Outlet } from 'react-router-dom'
 
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import Sidebar from './Sidebar'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

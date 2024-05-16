@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 
 import fetchLoginModule from './fetchLogin'
 import idbContext from '../../idbContext'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

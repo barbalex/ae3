@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Properties from './Properties'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const StyledCard = styled(Card)`

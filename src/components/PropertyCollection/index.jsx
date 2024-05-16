@@ -22,7 +22,7 @@ import Property from './Property'
 import onBlur from './onBlur'
 import PropertyReadOnly from '../shared/PropertyReadOnly'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   padding: 10px;

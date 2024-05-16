@@ -19,7 +19,7 @@ import PropertyArten from './PropertyArten'
 import PropertyLr from './PropertyLr'
 import onBlurArten from './onBlurArten'
 import onBlurLr from './onBlurLr'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import constants from '../../modules/constants'
 

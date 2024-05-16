@@ -6,7 +6,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import Comparator from './Comparator'
 import Value from './Value'
 import Checkbox from './Checkbox'
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 import getConstants from '../../../../../../../modules/constants'
 const constants = getConstants()
 

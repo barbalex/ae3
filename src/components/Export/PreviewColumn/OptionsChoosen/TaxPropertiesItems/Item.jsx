@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 
 const ResetSpan = styled.span`
   margin-left: 8px;

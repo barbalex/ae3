@@ -3,14 +3,14 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
-import Tree from '../Tree'
+import Tree from '../Tree/index.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const DataElement = styled(ReflexElement)`
   overflow-x: hidden !important;
 `
 
-const DataFlexed = () => ( 
+const DataFlexed = () => (
   <ErrorBoundary>
     <ReflexContainer orientation="vertical">
       <ReflexElement flex={0.35} className="tree-reflex-element">

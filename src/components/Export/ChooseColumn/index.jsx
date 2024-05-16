@@ -13,7 +13,7 @@ import SimpleBar from 'simplebar-react'
 import Taxonomies from './Taxonomies'
 import Properties from './Properties'
 import Filter from './Filter'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const StyledSnackbar = styled(Snackbar)`

@@ -11,7 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 
 import getActiveObjectIdFromNodeArray from '../../../modules/getActiveObjectIdFromNodeArray'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../storeContext.js'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 import MoreMenu from './MoreMenu'
 

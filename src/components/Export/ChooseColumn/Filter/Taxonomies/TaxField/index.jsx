@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import Comparator from './Comparator'
 import Value from './Value'
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 import getConstants from '../../../../../../modules/constants'
 const constants = getConstants()
 

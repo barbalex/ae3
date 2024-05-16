@@ -11,7 +11,7 @@ import TaxonomyObject from './TaxonomyObjects/TaxonomyObject'
 import PCOs from './PCOs'
 import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromNodeArray'
 import objectDataQuery from './objectDataQuery'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 

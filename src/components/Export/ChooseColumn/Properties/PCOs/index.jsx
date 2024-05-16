@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import PCOs from './PCOs'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

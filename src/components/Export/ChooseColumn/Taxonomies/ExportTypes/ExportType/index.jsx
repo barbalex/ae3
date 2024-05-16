@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { gql, useApolloClient } from '@apollo/client'
 
 import Taxonomies from './Taxonomies'
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
 
 const exportTypes = ['Arten', 'Lebensräume']

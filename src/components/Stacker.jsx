@@ -2,7 +2,7 @@ import { useEffect, useCallback, useContext } from 'react'
 import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../storeContext'
+import storeContext from '../storeContext.js'
 
 const Stacker = () => {
   const store = useContext(storeContext)

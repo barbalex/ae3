@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import ComparatorSelect from '../../../ComparatorSelect'
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;

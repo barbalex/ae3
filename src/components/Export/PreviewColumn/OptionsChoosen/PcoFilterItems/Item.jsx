@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import booleanToJaNein from '../../../../../modules/booleanToJaNein'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 
 const FilterValueSpan = styled.span`
   background-color: #dadada;

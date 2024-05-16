@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 
 import PropertyList from './PropertyList'
 import NewProperty from '../../../../shared/NewProperty'
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../../storeContext.js'
 
 const PropertiesTitleContainer = styled.div`
   display: flex;

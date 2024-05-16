@@ -24,7 +24,7 @@ import PCs from './PCs.jsx'
 import TCs from './TCs.jsx'
 import updateUserMutation from './updateUserMutation'
 import updateUserMutationWithPass from './updateUserMutationWithPass'
-import storeContext from '../../storeContext'
+import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 

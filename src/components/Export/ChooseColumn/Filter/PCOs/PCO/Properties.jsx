@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import Property from './Property'
-import storeContext from '../../../../../../storeContext'
+import storeContext from '../../../../../../storeContext.js'
 import Spinner from '../../../../../shared/Spinner.jsx'
 
 const SpinnerContainer = styled.div`

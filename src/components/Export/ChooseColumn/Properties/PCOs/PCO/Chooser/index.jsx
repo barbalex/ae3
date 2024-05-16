@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../../../../../storeContext'
+import storeContext from '../../../../../../../storeContext.js'
 import AllChooser from './AllChooser'
 import Properties from './Properties'
 import Spinner from '../../../../../../shared/Spinner.jsx'
