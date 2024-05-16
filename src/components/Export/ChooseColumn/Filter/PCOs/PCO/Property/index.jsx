@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import Comparator from './Comparator'
-import Value from './Value'
-import Checkbox from './Checkbox'
+import Comparator from './Comparator.jsx'
+import Value from './Value.jsx'
+import Checkbox from './Checkbox.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 import getConstants from '../../../../../../../modules/constants.js'
 const constants = getConstants()
