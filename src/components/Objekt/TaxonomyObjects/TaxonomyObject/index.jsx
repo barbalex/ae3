@@ -31,10 +31,10 @@ import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked.jsx
 import TaxonomyDescription from '../../../shared/TaxonomyDescription.jsx'
 import Spinner from '../../../shared/Spinner.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import Property from './Property'
-import LinkMenu from './LinkMenu'
-import Properties from './Properties'
-import getUrlForObject from '../../../../modules/getUrlForObject'
+import Property from './Property.jsx'
+import LinkMenu from './LinkMenu.jsx'
+import Properties from './Properties/index.jsx'
+import getUrlForObject from '../../../../modules/getUrlForObject.js'
 import storeContext from '../../../../storeContext.js'
 
 const LoadingContainer = styled.div`

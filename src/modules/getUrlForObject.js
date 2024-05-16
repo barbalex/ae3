@@ -6,7 +6,7 @@ const getUrlForObject = (tO) => {
   if (type) url.push(type)
   const taxonomyId = tO?.taxonomyByTaxonomyId?.id
   if (taxonomyId) url.push(taxonomyId)
-  let tOIdsArray = []
+  const tOIdsArray = []
   const level4Id = tO?.id
   if (level4Id) tOIdsArray.unshift(level4Id)
   const level5Id = tO?.objectByParentId?.id
