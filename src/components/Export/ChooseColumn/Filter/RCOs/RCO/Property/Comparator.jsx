@@ -22,28 +22,8 @@ const StyledFormControl = styled(FormControl)`
     padding-left: 8px;
   }
 `
-const styles = () => ({
-  // container: {
-  //   display: 'flex',
-  //   flexWrap: 'wrap',
-  // },
-  // formControl: {
-  //   margin: theme.spacing(1),
-  //   minWidth: 120,
-  // },
-  // selectEmpty: {
-  //   marginTop: theme.spacing(2),
-  // },
-})
 
-const RcoComparator = ({
-  pcname,
-  relationtype,
-  pname,
-  value,
-  comparator,
-  classes,
-}) => {
+const RcoComparator = ({ pcname, relationtype, pname, value, comparator }) => {
   const store = useContext(storeContext)
   const { setRcoFilters } = store.export
 

@@ -4,7 +4,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import Property from './Property'
+import Property from './Property/index.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import Spinner from '../../../../../shared/Spinner.jsx'
 
