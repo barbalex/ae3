@@ -1,8 +1,8 @@
 import React from 'react'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 
-import ChooseColumn from './ChooseColumn'
-import PreviewColumn from './PreviewColumn'
+import ChooseColumn from './ChooseColumn/index.jsx'
+import PreviewColumn from './PreviewColumn/index.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 
 const ExportFlexed = () => (
