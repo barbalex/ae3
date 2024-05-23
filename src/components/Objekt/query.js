@@ -257,6 +257,7 @@ export default gql`
           }
         ]
       }
+      orderBy: NAME_ASC
     ) {
       totalCount
       nodes {

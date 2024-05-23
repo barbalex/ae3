@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import uniqBy from 'lodash/uniqBy'
+import sortBy from 'lodash/sortBy'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -8,7 +9,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import TaxonomyObjects from './TaxonomyObjects/index.jsx'
 import TaxonomyObject from './TaxonomyObjects/TaxonomyObject/index.jsx'
-import PCs from './PCs/index.jsx'
+import PC from './PC/index.jsx'
 import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromNodeArray.js'
 import query from './query.js'
 import storeContext from '../../storeContext.js'
@@ -121,7 +122,9 @@ const Objekt = ({ stacked = false }) => {
               })`}</TitleSpan>
             </Title>
           )}
-          <PCs pcIds={pcs} stacked={stacked} />
+          {pcs.map((pc) => (
+            <PC key={pc.id} pcId={pc.id} objId={objekt.id} stacked={stacked} />
+          ))}
           {propertyCollectionObjectsOfSynonyms.length > 0 && (
             <Title>
               Eigenschaften von Synonymen
@@ -134,7 +137,7 @@ const Objekt = ({ stacked = false }) => {
               </TitleSpan>
             </Title>
           )}
-          <PCs pcIds={propertyCollectionObjectsOfSynonyms} stacked={stacked} />
+          <PC pcIds={propertyCollectionObjectsOfSynonyms} stacked={stacked} />
         </SimpleBar>
       </Container>
     </ErrorBoundary>

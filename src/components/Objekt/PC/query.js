@@ -1,8 +1,18 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query ObjectQuery($objectId: UUID!) {
-    objectById(id: $objectId) {
+  query ObjectQuery($objId: UUID!, $pcId: UUID!) {
+    propertyCollectionById(id: $pcId) {
+      id
+      name
+      description
+      links
+      combining
+      lastUpdated
+      termsOfUse
+      importedBy
+    }
+    objectById(id: $objId) {
       id
       taxonomyId
       parentId
