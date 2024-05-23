@@ -12,8 +12,8 @@ import {
 import sortBy from 'lodash/sortBy'
 import styled from '@emotion/styled'
 
-import PCDescription from '../../../shared/PCDescription.jsx'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import PCDescription from '../../../../shared/PCDescription.jsx'
+import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
 import RelationList from './RelationList/index.jsx'
 import PropertyList from './PropertyList.jsx'
 
@@ -52,14 +52,15 @@ const CardText = styled.div`
   column-width: 500px;
 `
 
-const PCO = ({ pCO, relations, stacked }) => {
+const PCO = ({ pC, relations, stacked }) => {
   const [expanded, setExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
 
-  const pC = pCO?.propertyCollectionByPropertyCollectionId ?? {}
+  console.log('hello PCO', { pC, relations, stacked })
+
   const pcname = pC?.name ?? '(Name fehlt)'
   // never pass null to object.entries!!!
-  const properties = JSON.parse(pCO.properties) || {}
+  const properties = JSON.parse(pC.properties) || {}
 
   let propertiesArray = Object.entries(properties)
   propertiesArray = propertiesArray.filter(

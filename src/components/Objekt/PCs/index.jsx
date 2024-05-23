@@ -1,19 +1,20 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import uniqBy from 'lodash/uniqBy'
+import groupBy from 'lodash/groupBy'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
 
-import TaxonomyObjects from './TaxonomyObjects/index.jsx'
-import TaxonomyObject from './TaxonomyObjects/TaxonomyObject/index.jsx'
-import PCs from './PCs/index.jsx'
-import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromNodeArray.js'
-import objectDataQuery from './objectDataQuery.js'
-import storeContext from '../../storeContext.js'
-import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import TaxonomyObjects from '../TaxonomyObjects/index.jsx'
+import TaxonomyObject from '../TaxonomyObjects/TaxonomyObject/index.jsx'
+import PCOs from './PCOs/index.jsx'
+import getActiveObjectIdFromNodeArray from '../../../modules/getActiveObjectIdFromNodeArray.js'
+import query from './query.js'
+import storeContext from '../../../storeContext.js'
+import Spinner from '../../shared/Spinner.jsx'
+import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -38,7 +39,7 @@ const SynonymTitle = styled(Title)`
   margin-bottom: 5px;
 `
 
-const Objekt = ({ stacked = false }) => {
+const PC = ({ pcIds, stacked = false }) => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
@@ -47,26 +48,52 @@ const Objekt = ({ stacked = false }) => {
     data: objectData,
     loading: objectLoading,
     error: objectError,
-  } = useQuery(objectDataQuery, {
+  } = useQuery(query, {
     variables: {
-      objectId,
+      pcIds,
     },
   })
 
   const objekt = objectData?.objectById
   if (!objekt) return <div />
 
-  const pcs = objectData?.pcs?.nodes ?? []
-
   const propertyCollectionObjects =
     objekt?.propertyCollectionObjectsByObjectId?.nodes ?? []
   const relations = objekt?.relationsByObjectId?.nodes ?? []
+  const propertyCollectionIdsOfPropertyCollectionObjects = [
+    ...new Set(
+      propertyCollectionObjects.map((pco) => pco.propertyCollectionId),
+    ),
+  ]
+  const propertyCollectionsOfPCOsUngrouped = propertyCollectionObjects.map(
+    (pco) => pco.propertyCollectionByPropertyCollectionId,
+  )
   const propertyCollectionIdsOfRelations = [
     ...new Set(relations.map((r) => r.propertyCollectionId)),
   ]
-  const pcsIds = pcs.map((c) => c.id)
+  const propertyCollectionsOfRelationsUngrouped = relations.map(
+    (r) => r.propertyCollectionByPropertyCollectionId,
+  )
+  const propertyCollections = Object.values(
+    groupBy(
+      [
+        ...propertyCollectionsOfPCOsUngrouped,
+        ...propertyCollectionsOfRelationsUngrouped,
+      ],
+      'id',
+    ),
+  ).map((pc) => pc[0])
+  const propertyCollectionIds = [
+    ...new Set([
+      ...propertyCollectionIdsOfPropertyCollectionObjects,
+      ...propertyCollectionIdsOfRelations,
+    ]),
+  ]
   const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
   const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
+  // const propertyCollectionIds = propertyCollectionObjects.map(
+  //   (pco) => pco.propertyCollectionId,
+  // )
   let propertyCollectionObjectsOfSynonyms = []
   synonymObjects.forEach((synonym) => {
     propertyCollectionObjectsOfSynonyms = [
@@ -80,7 +107,7 @@ const Objekt = ({ stacked = false }) => {
   )
   propertyCollectionObjectsOfSynonyms =
     propertyCollectionObjectsOfSynonyms.filter(
-      (pco) => !pcsIds.includes(pco.propertyCollectionId),
+      (pco) => !propertyCollectionIds.includes(pco.propertyCollectionId),
     )
 
   if (objectLoading) return <Spinner />
@@ -93,9 +120,12 @@ const Objekt = ({ stacked = false }) => {
     synonymObjects,
     propertyCollectionObjects,
     relations,
-    propertyCollectionIds: pcsIds,
+    propertyCollectionIds,
+    propertyCollectionIdsOfPropertyCollectionObjects,
     propertyCollectionIdsOfRelations,
-    pcs,
+    propertyCollectionsOfPCOsUngrouped,
+    propertyCollectionsOfRelationsUngrouped,
+    propertyCollections,
   })
 
   return (
@@ -113,15 +143,20 @@ const Objekt = ({ stacked = false }) => {
             </SynonymTitle>
           )}
           <TaxonomyObjects objects={synonymObjects} stacked={stacked} />
-          {pcs.length > 0 && (
+          {propertyCollections.length > 0 && (
             <Title>
               Eigenschaften
-              <TitleSpan>{` (${pcs.length} ${
-                pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+              <TitleSpan>{` (${propertyCollections.length} ${
+                propertyCollections.length > 1 ? 'Sammlungen' : 'Sammlung'
               })`}</TitleSpan>
             </Title>
           )}
-          <PCs pcIds={pcs} stacked={stacked} />
+          <PCOs
+            pCOs={propertyCollectionObjects}
+            pCs={propertyCollections}
+            relations={relations}
+            stacked={stacked}
+          />
           {propertyCollectionObjectsOfSynonyms.length > 0 && (
             <Title>
               Eigenschaften von Synonymen
@@ -134,11 +169,15 @@ const Objekt = ({ stacked = false }) => {
               </TitleSpan>
             </Title>
           )}
-          <PCs pcIds={propertyCollectionObjectsOfSynonyms} stacked={stacked} />
+          <PCOs
+            pCOs={propertyCollectionObjectsOfSynonyms}
+            relations={relations}
+            stacked={stacked}
+          />
         </SimpleBar>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(Objekt)
+export default observer(PC)
