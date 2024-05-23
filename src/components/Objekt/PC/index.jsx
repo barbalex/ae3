@@ -88,10 +88,10 @@ const PC = ({ pcId, objId, stacked = false }) => {
     return <Container2>{`Fehler: ${error.message}`}</Container2>
   }
 
-  console.log('hello Objekt', {
-    objekt,
-    pc,
-  })
+  // console.log('hello Objekt', {
+  //   objekt,
+  //   pc,
+  // })
 
   return (
     <ErrorBoundary>

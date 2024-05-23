@@ -243,16 +243,12 @@ export default gql`
         or: [
           {
             relationsByPropertyCollectionId: {
-              some: {
-                objectId: { equalTo: "0c84e5ee-e597-4f00-a56f-4da86b2ef2fd" }
-              }
+              some: { objectId: { equalTo: $objectId } }
             }
           }
           {
             propertyCollectionObjectsByPropertyCollectionId: {
-              some: {
-                objectId: { equalTo: "0c84e5ee-e597-4f00-a56f-4da86b2ef2fd" }
-              }
+              some: { objectId: { equalTo: $objectId } }
             }
           }
         ]

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from '@emotion/styled'
 import uniqBy from 'lodash/uniqBy'
-import sortBy from 'lodash/sortBy'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -12,6 +11,7 @@ import TaxonomyObject from './TaxonomyObjects/TaxonomyObject/index.jsx'
 import PC from './PC/index.jsx'
 import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromNodeArray.js'
 import query from './query.js'
+import querySynonyms from './querySynonyms.js'
 import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
@@ -53,20 +53,25 @@ const Objekt = ({ stacked = false }) => {
       objectId,
     },
   })
-
   const objekt = objectData?.objectById
+  const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
+  const synonymIds = synonyms.map((s) => s.objectByObjectIdSynonym.id)
+  const {
+    data: synonymData,
+    loading: synonymLoading,
+    error: synonymError,
+  } = useQuery(querySynonyms, {
+    variables: {
+      objectIds: synonymIds,
+    },
+  })
+
   if (!objekt) return <div />
 
   const pcs = objectData?.pcs?.nodes ?? []
+  const synonymPcs = synonymData?.pcs?.nodes ?? []
 
-  const propertyCollectionObjects =
-    objekt?.propertyCollectionObjectsByObjectId?.nodes ?? []
-  const relations = objekt?.relationsByObjectId?.nodes ?? []
-  const propertyCollectionIdsOfRelations = [
-    ...new Set(relations.map((r) => r.propertyCollectionId)),
-  ]
   const pcsIds = pcs.map((c) => c.id)
-  const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
   const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
   let propertyCollectionObjectsOfSynonyms = []
   synonymObjects.forEach((synonym) => {
@@ -91,12 +96,18 @@ const Objekt = ({ stacked = false }) => {
 
   console.log('hello Objekt', {
     objekt,
-    synonymObjects,
-    propertyCollectionObjects,
-    relations,
-    propertyCollectionIds: pcsIds,
-    propertyCollectionIdsOfRelations,
+    // synonymObjects,
+    // propertyCollectionObjects,
+    // relations,
+    // pcsIds,
+    // propertyCollectionIdsOfRelations,
     pcs,
+    synonymPcs,
+    synonymData,
+    synonyms,
+    synonymIds,
+    synonymLoading,
+    synonymError,
   })
 
   return (
