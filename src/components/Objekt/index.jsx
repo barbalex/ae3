@@ -55,6 +55,7 @@ const Objekt = ({ stacked = false }) => {
 
   const objekt = objectData?.objectById
   if (!objekt) return <div />
+
   const propertyCollectionObjects =
     objekt?.propertyCollectionObjectsByObjectId?.nodes ?? []
   const relations = objekt?.relationsByObjectId?.nodes ?? []
@@ -83,6 +84,13 @@ const Objekt = ({ stacked = false }) => {
   if (objectError) {
     return <Container2>{`Fehler: ${objectError.message}`}</Container2>
   }
+
+  console.log('hello Objekt', {
+    objekt,
+    synonymObjects,
+    propertyCollectionObjects,
+    relations,
+  })
 
   return (
     <ErrorBoundary>
