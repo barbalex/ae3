@@ -56,11 +56,7 @@ const Objekt = ({ stacked = false }) => {
   const objekt = objectData?.objectById
   const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
   const synonymIds = synonyms.map((s) => s.objectByObjectIdSynonym.id)
-  const {
-    data: synonymData,
-    loading: synonymLoading,
-    error: synonymError,
-  } = useQuery(querySynonyms, {
+  const { data: synonymData } = useQuery(querySynonyms, {
     variables: {
       objectIds: synonymIds,
     },
@@ -103,11 +99,8 @@ const Objekt = ({ stacked = false }) => {
     // propertyCollectionIdsOfRelations,
     pcs,
     synonymPcs,
-    synonymData,
     synonyms,
     synonymIds,
-    synonymLoading,
-    synonymError,
   })
 
   return (
