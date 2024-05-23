@@ -10,7 +10,7 @@ import TaxonomyObjects from './TaxonomyObjects/index.jsx'
 import TaxonomyObject from './TaxonomyObjects/TaxonomyObject/index.jsx'
 import PCs from './PCs/index.jsx'
 import getActiveObjectIdFromNodeArray from '../../modules/getActiveObjectIdFromNodeArray.js'
-import objectDataQuery from './objectDataQuery.js'
+import query from './query.js'
 import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
@@ -47,7 +47,7 @@ const Objekt = ({ stacked = false }) => {
     data: objectData,
     loading: objectLoading,
     error: objectError,
-  } = useQuery(objectDataQuery, {
+  } = useQuery(query, {
     variables: {
       objectId,
     },
