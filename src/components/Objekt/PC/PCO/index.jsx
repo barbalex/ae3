@@ -123,7 +123,9 @@ export const PcPresentation = memo(({ pC, stacked }) => {
             </CardActionsButtons>
           </StyledCardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            {pCDescriptionExpanded && <PCDescription pC={pC} />}
+            <Collapse in={pCDescriptionExpanded} timeout="auto" unmountOnExit>
+              <PCDescription pC={pC} />
+            </Collapse>
             <CardText>
               <PropertyList
                 propertiesArray={propertiesArray}
