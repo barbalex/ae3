@@ -2,7 +2,7 @@ import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { PropertyList } from './PropertyList.jsx'
 
 const Container = styled.div`

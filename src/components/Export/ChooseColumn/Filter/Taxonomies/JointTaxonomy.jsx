@@ -8,7 +8,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 
 import Properties from './Properties.jsx'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const StyledCard = styled(Card)`
   margin: 0;

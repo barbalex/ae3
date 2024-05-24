@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import CountInput from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 

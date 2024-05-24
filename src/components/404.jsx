@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 
-import ErrorBoundary from './shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;

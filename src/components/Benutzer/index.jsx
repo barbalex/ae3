@@ -18,15 +18,15 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router-dom'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
-import query from './query'
+import query from './query.js'
 import Roles from './Roles.jsx'
 import PCs from './PCs.jsx'
 import TCs from './TCs.jsx'
-import updateUserMutation from './updateUserMutation'
-import updateUserMutationWithPass from './updateUserMutationWithPass'
+import updateUserMutation from './updateUserMutation.js'
+import updateUserMutationWithPass from './updateUserMutationWithPass.js'
 import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div``
 const LEContainer = styled.div`

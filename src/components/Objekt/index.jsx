@@ -14,7 +14,7 @@ import query from './query.js'
 import querySynonyms from './querySynonyms.js'
 import storeContext from '../../storeContext.js'
 import Spinner from '../shared/Spinner.jsx'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   height: 100%;

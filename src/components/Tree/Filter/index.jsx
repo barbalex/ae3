@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 import getUrlForObject from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions.js'
 import getConstants from '../../../modules/constants.js'
 

@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import fetchLoginModule from './fetchLogin.js'
 import idbContext from '../../idbContext.js'
 import storeContext from '../../storeContext.js'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   padding: 10px;

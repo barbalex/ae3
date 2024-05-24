@@ -5,7 +5,7 @@ import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
 
 import onBlurLr from './onBlurLr.js'
-import ErrorBoundary from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   margin: 5px 0;

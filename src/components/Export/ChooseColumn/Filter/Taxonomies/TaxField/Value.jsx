@@ -4,7 +4,7 @@ import Highlighter from 'react-highlight-words'
 import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import readableType from '../../../../../../modules/readableType.js'
 import storeContext from '../../../../../../storeContext.js'

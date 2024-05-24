@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
@@ -65,7 +65,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-const MyErrorBoundary = ({ children }) => {
+export const ErrorBoundary = ({ children }) => {
   const idb = useContext(idbContext)
   const store = useContext(storeContext)
 
@@ -84,10 +84,10 @@ const MyErrorBoundary = ({ children }) => {
   }, [idb.users, store])
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onReset={onReset}>
+    <ErrorBoundaryComponent FallbackComponent={ErrorFallback} onReset={onReset}>
       {children}
-    </ErrorBoundary>
+    </ErrorBoundaryComponent>
   )
 }
 
-export default MyErrorBoundary
+export default ErrorBoundary

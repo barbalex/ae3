@@ -12,7 +12,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom'
 
 import getActiveObjectIdFromNodeArray from '../../../modules/getActiveObjectIdFromNodeArray.js'
 import storeContext from '../../../storeContext.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import MoreMenu from './MoreMenu.jsx'
 
 /**

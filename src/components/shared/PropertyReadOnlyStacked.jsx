@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import Linkify from 'react-linkify'
 import styled from '@emotion/styled'
 
-import ErrorBoundary from './ErrorBoundary.jsx'
+import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 const linkifyProperties = {
   target: '_blank',

@@ -17,7 +17,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import updateOrgUserMutation from './updateOrgUserMutation.js'
 import deleteOrgUserMutation from './deleteOrgUserMutation.js'
 import storeContext from '../../../../storeContext.js'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const OrgUserDiv = styled.div`
   display: flex;

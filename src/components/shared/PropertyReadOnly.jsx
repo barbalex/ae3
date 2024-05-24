@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
-import ErrorBoundary from './ErrorBoundary.jsx'
+import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

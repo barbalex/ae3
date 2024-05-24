@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite'
 import Taxonomy from './Taxonomy.jsx'
 import JointTaxonomy from './JointTaxonomy.jsx'
 import storeContext from '../../../../../storeContext.js'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   margin: 10px 0;

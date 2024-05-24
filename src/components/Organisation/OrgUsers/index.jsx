@@ -12,7 +12,7 @@ import createOrgUserMutation from './createOrgUserMutation.js'
 import OrgUsersList from './OrgUsersList/index.jsx'
 import storeContext from '../../../storeContext.js'
 import Spinner from '../../shared/Spinner.jsx'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   display: flex;

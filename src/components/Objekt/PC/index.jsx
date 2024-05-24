@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { PcPresentation } from './PCO/index.jsx'
 import query from './query.js'
-import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container2 = styled.div`
   padding: 10px;

@@ -6,7 +6,7 @@ import HowTo from './HowTo.jsx'
 import Taxonomies from './Taxonomies/index.jsx'
 import PCOs from './PCOs/index.jsx'
 import RCOs from './RCOs/index.jsx'
-import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
   padding: 0 5px;
