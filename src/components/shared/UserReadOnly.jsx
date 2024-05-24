@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -39,7 +39,7 @@ const linkifyProperties = {
   },
 }
 
-const UserReadOnly = ({ label, user }) => {
+export const UserReadOnly = memo(({ label, user }) => {
   if (!user) return null
 
   const name = user ? user.name || '' : ''
@@ -61,6 +61,4 @@ const UserReadOnly = ({ label, user }) => {
       </Linkify>
     </ErrorBoundary>
   )
-}
-
-export default UserReadOnly
+})

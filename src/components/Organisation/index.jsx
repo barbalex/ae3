@@ -7,7 +7,7 @@ import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router-dom'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
-import UserReadOnly from '../shared/UserReadOnly.jsx'
+import { UserReadOnly } from '../shared/UserReadOnly.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import OrgUsers from './OrgUsers/index.jsx'
