@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -25,7 +25,7 @@ const linkifyProperties = {
   },
 }
 
-const TaxonomyDescription = ({ taxonomy }) => {
+export const TaxonomyDescription = memo(({ taxonomy }) => {
   const organizationName = taxonomy?.organizationByOrganizationId?.name
 
   return (
@@ -54,6 +54,4 @@ const TaxonomyDescription = ({ taxonomy }) => {
       </Linkify>
     </ErrorBoundary>
   )
-}
-
-export default TaxonomyDescription
+})
