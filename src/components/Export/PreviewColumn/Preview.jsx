@@ -288,9 +288,7 @@ const Preview = () => {
     const rows = data?.data?.exportAll?.exportDatum?.exportData
       ? JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
       : []
-    const { default: exportXlsx } = await import(
-      '../../../modules/exportXlsx.js'
-    )
+    const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({ rows, onSetMessage })
   }, [
     client,

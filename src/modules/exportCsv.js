@@ -10,5 +10,3 @@ export const exportCsv = (jsonData) => {
     `arteigenschaften_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}.csv`,
   )
 }
-
-export default exportCsv

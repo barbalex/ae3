@@ -322,9 +322,7 @@ const RCO = () => {
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
     const { data } = await fetchAllData()
-    const { default: exportXlsx } = await import(
-      '../../../modules/exportXlsx.js'
-    )
+    const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({
       rows: data,
       onSetMessage: console.log,

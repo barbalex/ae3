@@ -7,8 +7,8 @@ import format from 'date-fns/format'
  * once firefox has implemented worker modules too: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
  */
 
-const exportXlsx = async ({ rows, onSetMessage }) => {
-  const { default: getXlsxBuffer } = await import('./getXlsxBuffer')
+export const exportXlsx = async ({ rows, onSetMessage }) => {
+  const { default: getXlsxBuffer } = await import('./getXlsxBuffer.js')
   let buffer
   try {
     buffer = await getXlsxBuffer(rows)
@@ -23,5 +23,3 @@ const exportXlsx = async ({ rows, onSetMessage }) => {
     `arteigenschaften_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}.xlsx`,
   )
 }
-
-export default exportXlsx
