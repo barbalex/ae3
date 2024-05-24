@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -23,7 +23,7 @@ const linkifyProperties = {
   },
 }
 
-const PCDescription = ({ pC }) => {
+export const PCDescription = memo(({ pC }) => {
   const userImportedByName = pC?.userByImportedBy?.name
   const userImportedByEmail = pC?.userByImportedBy?.email
   const organizationName = pC?.organizationByOrganizationId?.name
@@ -71,6 +71,4 @@ const PCDescription = ({ pC }) => {
       </Linkify>
     </ErrorBoundary>
   )
-}
-
-export default PCDescription
+})
