@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router-dom'
 
-import getUrlForObject from '../../../modules/getUrlForObject.js'
+import  { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions.js'

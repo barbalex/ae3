@@ -1,4 +1,4 @@
-const getUrlForObject = (tO) => {
+export const getUrlForObject = (tO) => {
   let url = []
   const type = (tO?.taxonomyByTaxonomyId?.type ?? '')
     .replace('ART', 'Arten')
@@ -33,5 +33,3 @@ const getUrlForObject = (tO) => {
   }
   return url
 }
-
-export default getUrlForObject

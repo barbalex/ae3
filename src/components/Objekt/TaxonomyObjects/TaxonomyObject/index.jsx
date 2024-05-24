@@ -34,7 +34,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import Property from './Property.jsx'
 import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
-import getUrlForObject from '../../../../modules/getUrlForObject.js'
+import  { getUrlForObject } from '../../../../modules/getUrlForObject.js'
 import storeContext from '../../../../storeContext.js'
 
 const LoadingContainer = styled.div`
