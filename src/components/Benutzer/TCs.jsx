@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import appBaseUrl from '../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
 const Container = styled.div`
   display: flex;

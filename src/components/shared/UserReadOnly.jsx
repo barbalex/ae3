@@ -2,7 +2,7 @@ import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
-import appBaseUrl from '../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 const Container = styled.div`

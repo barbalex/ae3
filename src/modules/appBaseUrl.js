@@ -10,8 +10,8 @@ const hostname = isLocalhost
   : typeof window !== 'undefined'
     ? window.location.hostname
     : ''
-const appHost = isLocalhost
+export const appBaseUrl = isLocalhost
   ? `http://localhost:${window.location.port}/`
   : `https://${hostname}/`
 
-export default appHost
+export default appBaseUrl
