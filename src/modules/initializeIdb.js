@@ -1,6 +1,6 @@
 import { Dexie } from 'dexie'
 
-const initializeIdb = () => {
+export const initializeIdb = () => {
   if (typeof window === 'undefined') return {}
   // create table to save user login in
   // this helps in that user can open new tab and remain logged in!
@@ -12,5 +12,3 @@ const initializeIdb = () => {
   })
   return idb
 }
-
-export default initializeIdb
