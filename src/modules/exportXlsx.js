@@ -8,7 +8,7 @@ import format from 'date-fns/format'
  */
 
 export const exportXlsx = async ({ rows, onSetMessage }) => {
-  const { default: getXlsxBuffer } = await import('./getXlsxBuffer.js')
+  const { getXlsxBuffer } = await import('./getXlsxBuffer.js')
   let buffer
   try {
     buffer = await getXlsxBuffer(rows)
