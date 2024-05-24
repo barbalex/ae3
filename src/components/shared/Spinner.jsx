@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -13,11 +13,11 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 
-const SpinnerComponent = ({ message = 'lade Daten' }) => (
+export const Spinner = memo(({ message = 'lade Daten' }) => (
   <SpinnerContainer>
     <CircularProgress />
     <SpinnerText>{message}</SpinnerText>
   </SpinnerContainer>
-)
+))
 
-export default SpinnerComponent
+export default Spinner

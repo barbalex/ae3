@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import TextField from '@mui/material/TextField'
 import Linkify from 'react-linkify'
 import styled from '@emotion/styled'
@@ -22,7 +22,7 @@ const Container = styled.div`
   }
 `
 
-export const PropertyReadOnlyStacked = ({ label, value }) => {
+export const PropertyReadOnlyStacked = memo(({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -46,4 +46,4 @@ export const PropertyReadOnlyStacked = ({ label, value }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})

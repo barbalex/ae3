@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -33,7 +33,7 @@ const linkifyProperties = {
   },
 }
 
-export const PropertyReadOnly = ({ label, value }) => {
+export const PropertyReadOnly = memo(({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -48,4 +48,4 @@ export const PropertyReadOnly = ({ label, value }) => {
       </Linkify>
     </ErrorBoundary>
   )
-}
+})

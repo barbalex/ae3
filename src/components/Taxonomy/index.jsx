@@ -20,7 +20,7 @@ import PropertyLr from './PropertyLr.jsx'
 import onBlurArten from './onBlurArten.js'
 import onBlurLr from './onBlurLr.js'
 import storeContext from '../../storeContext.js'
-import Spinner from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.jsx'
 import constants from '../../modules/constants.js'
 
 const Container = styled.div`

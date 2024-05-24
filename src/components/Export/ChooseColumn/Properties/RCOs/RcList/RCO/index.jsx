@@ -13,7 +13,7 @@ import AllChooser from './AllChooser.jsx'
 import Properties from './Properties.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
-import Spinner from '../../../../../../shared/Spinner.jsx'
+import { Spinner } from '../../../../../../shared/Spinner.jsx'
 
 const PropertiesContainer = styled.div`
   display: flex;
