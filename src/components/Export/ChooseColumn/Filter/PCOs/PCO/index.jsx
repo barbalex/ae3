@@ -67,7 +67,7 @@ const PcoCard = ({ pc, count }) => {
         </StyledCardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <PropertiesContainer>
-            {expanded && <Properties pc={pc} />}
+            <Properties pc={pc} />
           </PropertiesContainer>
         </Collapse>
       </StyledCard>
