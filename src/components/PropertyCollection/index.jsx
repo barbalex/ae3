@@ -19,7 +19,7 @@ import { useParams } from 'react-router-dom'
 
 import Property from './Property.jsx'
 import onBlur from './onBlur.js'
-import PropertyReadOnly from '../shared/PropertyReadOnly.jsx'
+import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import ErrorBoundary from '../shared/ErrorBoundary.jsx'
 import storeContext from '../../storeContext.js'
 

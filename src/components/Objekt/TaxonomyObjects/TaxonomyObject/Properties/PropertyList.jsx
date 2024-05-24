@@ -1,7 +1,7 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 
-import PropertyReadOnly from '../../../../shared/PropertyReadOnly.jsx'
+import { PropertyReadOnly } from '../../../../shared/PropertyReadOnly.jsx'
 import PropertyReadOnlyStacked from '../../../../shared/PropertyReadOnlyStacked.jsx'
 import Property from '../../../../shared/Property.jsx'
 

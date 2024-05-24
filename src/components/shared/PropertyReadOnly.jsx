@@ -33,7 +33,7 @@ const linkifyProperties = {
   },
 }
 
-const PropertyReadOnly = ({ label, value }) => {
+export const PropertyReadOnly = ({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -49,5 +49,3 @@ const PropertyReadOnly = ({ label, value }) => {
     </ErrorBoundary>
   )
 }
-
-export default PropertyReadOnly

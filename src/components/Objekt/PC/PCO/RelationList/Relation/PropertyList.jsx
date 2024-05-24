@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import sortBy from 'lodash/sortBy'
 
-import PropertyReadOnly from '../../../../../shared/PropertyReadOnly.jsx'
+import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
 
 export const PropertyList = memo(({ properties }) =>
   sortBy(Object.entries(properties), (e) => e[0])

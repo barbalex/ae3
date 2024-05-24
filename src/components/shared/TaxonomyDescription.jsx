@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
-import PropertyReadOnly from './PropertyReadOnly.jsx'
+import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import ErrorBoundary from './ErrorBoundary.jsx'
 
 const Container = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PropertyReadOnly from '../../../shared/PropertyReadOnly.jsx'
+import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import PropertyReadOnlyStacked from '../../../shared/PropertyReadOnlyStacked.jsx'
 
 export const PropertyList = ({ propertiesArray, stacked }) =>
