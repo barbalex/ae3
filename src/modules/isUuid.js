@@ -1,6 +1,6 @@
-import isUuid from 'is-uuid'
+import isUuidLib from 'is-uuid'
 
-import  { invalidUuids } from './invalidUuids.js'
+import { invalidUuids } from './invalidUuids.js'
 
 /**
  * There exist two invalid uuids in arteigenschaften.ch!
@@ -8,7 +8,5 @@ import  { invalidUuids } from './invalidUuids.js'
  * reason for invalidity is explained here: https://github.com/afram/is-uuid/issues/4#issuecomment-521610801
  */
 
-const isUuidModule = (val) =>
-  isUuid.anyNonNil(val) || invalidUuids.includes(val)
-
-export default isUuidModule
+export const isUuid = (val) =>
+  isUuidLib.anyNonNil(val) || invalidUuids.includes(val)

@@ -23,7 +23,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertPCOMutation from './upsertPCOMutation.js'
 import storeContext from '../../../../storeContext.js'
-import isUuid from '../../../../modules/isUuid.js'
+import  { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
 import Instructions from './Instructions.jsx'
