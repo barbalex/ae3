@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router-dom'
 
 import  { getUrlForObject } from '../modules/getUrlForObject.js'
-import getUrlParamByName from '../modules/getUrlParamByName.js'
+import  { getUrlParamByName } from '../modules/getUrlParamByName.js'
 import storeContext from '../storeContext.js'
 
 const objectQuery = gql`
