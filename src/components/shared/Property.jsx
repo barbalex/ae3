@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import omit from 'lodash/omit'
 import { useApolloClient } from '@apollo/client'
 
-import updatePropertyMutation from './updatePropertyMutation.js'
+import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 const Container = styled.div`

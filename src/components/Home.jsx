@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
 
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
-import ProgressiveImg from './shared/ProgressiveImg.tsx'
+import { ProgressiveImg } from './shared/ProgressiveImg.tsx'
 import image from '../images/home.webp'
 import placeholderSrc from '../images/home_small.webp'
 
@@ -79,7 +79,7 @@ const DokuLink = styled(Link)`
   }
 `
 
-const Home = () => (
+const Home = memo(() => (
   <OuterContainer>
     <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
     <ScrollContainer>
@@ -114,6 +114,6 @@ const Home = () => (
       </CardContainer>
     </ScrollContainer>
   </OuterContainer>
-)
+))
 
 export default Home

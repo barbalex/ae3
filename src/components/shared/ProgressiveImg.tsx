@@ -11,7 +11,7 @@ const Img = styled.img`
   ${(props) => props.loaded && 'transition: filter 0.5s linear;'}
 `
 
-const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
+export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
 
   useEffect(() => {
