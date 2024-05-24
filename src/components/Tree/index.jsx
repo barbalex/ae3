@@ -16,11 +16,9 @@ import CmPCFolder from './contextmenu/PCFolder.jsx'
 import CmPC from './contextmenu/PC.jsx'
 import storeContext from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import getConstants from '../../modules/constants.js'
+import { constants } from '../../modules/constants.js'
 import Root from './Root/index.jsx'
 import IntoViewScroller from './IntoViewScroller.jsx'
-
-const constants = getConstants()
 
 const ErrorContainer = styled.div`
   padding: 24px;

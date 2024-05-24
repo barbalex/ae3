@@ -12,8 +12,7 @@ import RcoProperty, {
 import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter.js'
 import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
 import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
-import getConstants from '../../modules/constants.js'
-const constants = getConstants()
+import { constants } from '../../modules/constants.js'
 
 export default types
   .model('Export', {

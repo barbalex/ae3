@@ -1,8 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 import { orange, green, red } from '@mui/material/colors'
 
-import getConstants from './modules/constants.js'
-const constants = getConstants()
+import { constants } from './modules/constants.js'
 
 // All the following keys are optional.
 // We try our best to provide a great default value.

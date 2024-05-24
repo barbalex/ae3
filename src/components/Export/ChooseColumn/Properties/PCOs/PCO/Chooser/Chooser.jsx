@@ -5,8 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../../../storeContext.js'
-import getConstants from '../../../../../../../modules/constants.js'
-const constants = getConstants()
+import { constants } from '../../../../../../../modules/constants.js'
 
 const Container = styled.div`
   width: 100%;

@@ -7,9 +7,7 @@ import SimpleBar from 'simplebar-react'
 import storeContext from '../../../storeContext.js'
 import MenuItems from './MenuItems.jsx'
 import Filter from './Filter.jsx'
-import getConstants from '../../../modules/constants.js'
-
-const constants = getConstants()
+import { constants } from '../../../modules/constants.js'
 
 const Menu = styled.div`
   width: ${(props) =>

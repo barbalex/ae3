@@ -7,8 +7,7 @@ import Comparator from './Comparator.jsx'
 import Value from './Value.jsx'
 import Checkbox from './Checkbox.jsx'
 import storeContext from '../../../../../../../storeContext.js'
-import getConstants from '../../../../../../../modules/constants.js'
-const constants = getConstants()
+import { constants } from '../../../../../../../modules/constants.js'
 
 const Container = styled.div`
   display: flex;

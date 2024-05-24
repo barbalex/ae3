@@ -1,4 +1,4 @@
-const constants = () => ({
+export const constants = {
   appBarHeight: 64,
   columnWidth: 600,
   export: { properties: { columnWidth: 400 }, maxFields: 100 },
@@ -7,6 +7,4 @@ const constants = () => ({
     width: 420,
     minimalWindowWidth: 1000,
   },
-})
-
-export default constants
+}

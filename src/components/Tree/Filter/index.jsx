@@ -12,9 +12,7 @@ import getUrlForObject from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions.js'
-import getConstants from '../../../modules/constants.js'
-
-const constants = getConstants()
+import { constants } from '../../../modules/constants.js'
 
 const Container = styled.div`
   flex: 0 1 auto;
