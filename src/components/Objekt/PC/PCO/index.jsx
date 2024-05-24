@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -14,8 +14,8 @@ import styled from '@emotion/styled'
 
 import PCDescription from '../../../shared/PCDescription.jsx'
 import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
-import RelationList from './RelationList/index.jsx'
-import PropertyList from './PropertyList.jsx'
+import { RelationList } from './RelationList/index.jsx'
+import { PropertyList } from './PropertyList.jsx'
 
 const Container = styled.div`
   margin: 10px 0;
@@ -52,13 +52,12 @@ const CardText = styled.div`
   column-width: 500px;
 `
 
-const PC = ({ pC, stacked }) => {
+export const PcPresentation = memo(({ pC, stacked }) => {
   const [expanded, setExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
 
   const pCO = pC?.propertyCollectionObjectsByPropertyCollectionId?.nodes?.[0]
   const relations = pC?.relationsByPropertyCollectionId?.nodes ?? []
-
 
   const pcname = pC?.name ?? '(Name fehlt)'
   // never pass null to JSON.parse
@@ -138,6 +137,4 @@ const PC = ({ pC, stacked }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default PC
+})

@@ -1,9 +1,9 @@
-import React from 'react'
+import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import PropertyReadOnly from '../../../../../shared/PropertyReadOnly.jsx'
 import ErrorBoundary from '../../../../../shared/ErrorBoundary.jsx'
-import PropertyList from './PropertyList.jsx'
+import { PropertyList } from './PropertyList.jsx'
 
 const Container = styled.div`
   border-bottom: ${(props) =>
@@ -18,7 +18,7 @@ const Container = styled.div`
   }
 `
 
-const Relation = ({ relation, intermediateRelation }) => {
+export const Relation = memo(({ relation, intermediateRelation }) => {
   // never pass null to Object.entries!!!
   const properties = JSON.parse(relation.properties) || {}
   const taxType = (
@@ -46,6 +46,4 @@ const Relation = ({ relation, intermediateRelation }) => {
       </ErrorBoundary>
     </Container>
   )
-}
-
-export default Relation
+})

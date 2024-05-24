@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Relation from './Relation/index.jsx'
+import { Relation } from './Relation/index.jsx'
 
-const RelationList = ({ relations }) =>
+export const RelationList = ({ relations }) =>
   relations.map((relation, index) => (
     <Relation
       key={relation.id}
@@ -10,5 +10,3 @@ const RelationList = ({ relations }) =>
       intermediateRelation={index < relations.length - 1}
     />
   ))
-
-export default RelationList
