@@ -122,7 +122,13 @@ const Objekt = ({ stacked = false }) => {
             </Title>
           )}
           {pcs.map((pc) => (
-            <PC key={pc.id} pcId={pc.id} objId={objekt.id} stacked={stacked} />
+            <PC
+              key={pc.id}
+              pcId={pc.id}
+              objId={objekt.id}
+              stacked={stacked}
+              isSynonym={false}
+            />
           ))}
           {synonymPcs.length > 0 && (
             <Title>
@@ -135,7 +141,13 @@ const Objekt = ({ stacked = false }) => {
             </Title>
           )}
           {synonymPcs.map((pc) => (
-            <PC key={pc.id} pcId={pc.id} objId={objekt.id} stacked={stacked} />
+            <PC
+              key={pc.id}
+              pcId={pc.id}
+              objId={objekt.id}
+              stacked={stacked}
+              isSynonym={true}
+            />
           ))}
         </SimpleBar>
       </Container>

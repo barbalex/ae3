@@ -16,7 +16,7 @@ const Container2 = styled.div`
   padding: 10px;
 `
 
-const PC = ({ pcId, objId, stacked = false }) => {
+const PC = ({ pcId, objId, isSynonym, stacked = false }) => {
   const { data, loading, error } = useQuery(query, {
     variables: {
       pcId,
@@ -36,7 +36,7 @@ const PC = ({ pcId, objId, stacked = false }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <PCOs pC={pC} stacked={stacked} />
+        <PCOs pC={pC} isSynonym={isSynonym} stacked={stacked} />
       </Container>
     </ErrorBoundary>
   )
