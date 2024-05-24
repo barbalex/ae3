@@ -13,5 +13,3 @@ const hostname = isLocalhost
 export const appBaseUrl = isLocalhost
   ? `http://localhost:${window.location.port}/`
   : `https://${hostname}/`
-
-export default appBaseUrl

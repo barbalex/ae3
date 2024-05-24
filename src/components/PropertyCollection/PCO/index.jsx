@@ -11,7 +11,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
 import ImportPco from './Import/index.jsx'
-import booleanToJaNein from '../../../modules/booleanToJaNein.js'
+import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'
 import deletePcoOfPcMutation from './deletePcoOfPcMutation.js'
 import storeContext from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
