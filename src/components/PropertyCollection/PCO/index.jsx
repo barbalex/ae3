@@ -320,7 +320,9 @@ const PCO = () => {
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
     const { data } = await fetchAllData()
-    const { default: exportXlsx } = await import('../../../modules/exportXlsx')
+    const { default: exportXlsx } = await import(
+      '../../../modules/exportXlsx.js'
+    )
     exportXlsx({
       rows: data,
       onSetMessage: console.log,
@@ -330,7 +332,7 @@ const PCO = () => {
   const onClickCsv = useCallback(async () => {
     setCsvExportLoading(true)
     const { data } = await fetchAllData()
-    const { default: exportCsv } = await import('../../../modules/exportCsv')
+    const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(data)
     setCsvExportLoading(false)
   }, [fetchAllData])

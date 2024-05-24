@@ -288,7 +288,9 @@ const Preview = () => {
     const rows = data?.data?.exportAll?.exportDatum?.exportData
       ? JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
       : []
-    const { default: exportXlsx } = await import('../../../modules/exportXlsx.js')
+    const { default: exportXlsx } = await import(
+      '../../../modules/exportXlsx.js'
+    )
     exportXlsx({ rows, onSetMessage })
   }, [
     client,
@@ -306,7 +308,7 @@ const Preview = () => {
     withSynonymData,
   ])
   const onClickCsv = useCallback(async () => {
-    const { default: exportCsv } = await import('../../../modules/exportCsv.js')
+    const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(rows)
   }, [rows])
 
