@@ -90,13 +90,12 @@ const Objekt = ({ stacked = false }) => {
     return <Container2>{`Fehler: ${objectError.message}`}</Container2>
   }
 
-  console.log('hello Objekt', {
-    objekt,
-    pcs,
-    synonymPcs,
-    synonyms,
-    // synonymIds,
-  })
+  // console.log('hello Objekt', {
+  //   objekt,
+  //   pcs,
+  //   synonymPcs,
+  //   synonyms,
+  // })
 
   return (
     <ErrorBoundary>

@@ -24,7 +24,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertRCOMutation from './upsertRCOMutation.js'
 import storeContext from '../../../../storeContext.js'
-import DataTable from '../../../shared/DataTable.jsx'
+import { DataTable } from '../../../shared/DataTable.jsx'
 import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
 import Instructions from './Instructions.jsx'
 

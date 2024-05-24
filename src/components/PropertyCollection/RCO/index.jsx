@@ -14,7 +14,7 @@ import booleanToJaNein from '../../../modules/booleanToJaNein.js'
 import deleteRcoOfPcMutation from './deleteRcoOfPcMutation.js'
 import storeContext from '../../../storeContext.js'
 import Spinner from '../../shared/Spinner.jsx'
-import DataTable from '../../shared/DataTable.jsx'
+import { DataTable } from '../../shared/DataTable.jsx'
 import CountInput from '../../Export/PreviewColumn/CountInput.jsx'
 import exists from '../../../modules/exists.js'
 
