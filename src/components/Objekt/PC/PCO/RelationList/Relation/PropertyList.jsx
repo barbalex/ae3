@@ -1,7 +1,7 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 
-import PropertyReadOnly from '../../../../../../shared/PropertyReadOnly.jsx'
+import PropertyReadOnly from '../../../../../shared/PropertyReadOnly.jsx'
 
 const Relation = ({ properties }) =>
   sortBy(Object.entries(properties), (e) => e[0])

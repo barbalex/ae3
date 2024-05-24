@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import PCOs from './PCOs/index.jsx'
+import PCOs from './PCO/index.jsx'
 import query from './query.js'
 import Spinner from '../../shared/Spinner.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'

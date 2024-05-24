@@ -12,8 +12,8 @@ import {
 import sortBy from 'lodash/sortBy'
 import styled from '@emotion/styled'
 
-import PCDescription from '../../../../shared/PCDescription.jsx'
-import ErrorBoundary from '../../../../shared/ErrorBoundary.jsx'
+import PCDescription from '../../../shared/PCDescription.jsx'
+import ErrorBoundary from '../../../shared/ErrorBoundary.jsx'
 import RelationList from './RelationList/index.jsx'
 import PropertyList from './PropertyList.jsx'
 
