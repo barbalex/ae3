@@ -95,7 +95,7 @@ const Objekt = ({ stacked = false }) => {
     pcs,
     synonymPcs,
     synonyms,
-    synonymIds,
+    // synonymIds,
   })
 
   return (

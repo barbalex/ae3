@@ -20,44 +20,9 @@ export default gql`
         name
         email
       }
-    }
-    objectById(id: $objId) {
-      id
-      taxonomyId
-      parentId
-      name
-      properties
-      idOld
-      propertyCollectionObjectsByObjectId {
-        totalCount
-        nodes {
-          id
-          objectId
-          propertyCollectionId
-          propertyCollectionOfOrigin
-          properties
-          propertyCollectionByPropertyCollectionId {
-            id
-            name
-            description
-            links
-            combining
-            lastUpdated
-            termsOfUse
-            importedBy
-            organizationByOrganizationId {
-              id
-              name
-            }
-            userByImportedBy {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-      relationsByObjectId {
+      relationsByPropertyCollectionId(
+        filter: { objectId: { equalTo: $objId } }
+      ) {
         totalCount
         nodes {
           id
@@ -66,25 +31,6 @@ export default gql`
           objectIdRelation
           relationType
           properties
-          propertyCollectionByPropertyCollectionId {
-            id
-            name
-            description
-            links
-            combining
-            lastUpdated
-            termsOfUse
-            importedBy
-            organizationByOrganizationId {
-              id
-              name
-            }
-            userByImportedBy {
-              id
-              name
-              email
-            }
-          }
           objectByObjectIdRelation {
             id
             name
@@ -92,33 +38,6 @@ export default gql`
               id
               name
               type
-            }
-          }
-        }
-      }
-      objectByParentId {
-        id
-        objectByParentId {
-          id
-          objectByParentId {
-            id
-            objectByParentId {
-              id
-              objectByParentId {
-                id
-                objectByParentId {
-                  id
-                  objectByParentId {
-                    id
-                    objectByParentId {
-                      id
-                      objectByParentId {
-                        id
-                      }
-                    }
-                  }
-                }
-              }
             }
           }
         }

@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import uniqBy from 'lodash/uniqBy'
-import groupBy from 'lodash/groupBy'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
@@ -26,83 +24,24 @@ const PC = ({ pcId, objId, stacked = false }) => {
     },
   })
 
-  const objekt = data?.objectById
-  const pc = data?.propertyCollectionById
-  console.log('hello PC', { pc, objekt, pcId, objId })
-  if (!objekt) return <div />
-
-  const propertyCollectionObjects =
-    objekt?.propertyCollectionObjectsByObjectId?.nodes ?? []
-  const relations = objekt?.relationsByObjectId?.nodes ?? []
-  const propertyCollectionIdsOfPropertyCollectionObjects = [
-    ...new Set(
-      propertyCollectionObjects.map((pco) => pco.propertyCollectionId),
-    ),
-  ]
-  const propertyCollectionsOfPCOsUngrouped = propertyCollectionObjects.map(
-    (pco) => pco.propertyCollectionByPropertyCollectionId,
-  )
-  const propertyCollectionIdsOfRelations = [
-    ...new Set(relations.map((r) => r.propertyCollectionId)),
-  ]
-  const propertyCollectionsOfRelationsUngrouped = relations.map(
-    (r) => r.propertyCollectionByPropertyCollectionId,
-  )
-  const propertyCollections = Object.values(
-    groupBy(
-      [
-        ...propertyCollectionsOfPCOsUngrouped,
-        ...propertyCollectionsOfRelationsUngrouped,
-      ],
-      'id',
-    ),
-  ).map((pc) => pc[0])
-  const propertyCollectionIds = [
-    ...new Set([
-      ...propertyCollectionIdsOfPropertyCollectionObjects,
-      ...propertyCollectionIdsOfRelations,
-    ]),
-  ]
-  const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
-  const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
-  // const propertyCollectionIds = propertyCollectionObjects.map(
-  //   (pco) => pco.propertyCollectionId,
-  // )
-  let propertyCollectionObjectsOfSynonyms = []
-  synonymObjects.forEach((synonym) => {
-    propertyCollectionObjectsOfSynonyms = [
-      ...propertyCollectionObjectsOfSynonyms,
-      ...(synonym?.propertyCollectionObjectsByObjectId?.nodes ?? []),
-    ]
-  })
-  propertyCollectionObjectsOfSynonyms = uniqBy(
-    propertyCollectionObjectsOfSynonyms,
-    (pco) => pco.propertyCollectionId,
-  )
-  propertyCollectionObjectsOfSynonyms =
-    propertyCollectionObjectsOfSynonyms.filter(
-      (pco) => !propertyCollectionIds.includes(pco.propertyCollectionId),
-    )
+  const pC = data?.propertyCollectionById
+  const relations = pC?.relationsByPropertyCollectionId?.nodes ?? []
+  console.log('hello PC', { pc: pC, pcId, objId })
+  if (!pC) return <div />
 
   if (loading) return <Spinner />
   if (error) {
     return <Container2>{`Fehler: ${error.message}`}</Container2>
   }
 
-  // console.log('hello Objekt', {
-  //   objekt,
-  //   pc,
-  // })
+  console.log('hello Objekt', {
+    pC,
+  })
 
   return (
     <ErrorBoundary>
       <Container>
-        <PCOs
-          pCOs={propertyCollectionObjects}
-          pCs={propertyCollections}
-          relations={relations}
-          stacked={stacked}
-        />
+        <PCOs pC={pC} relations={relations} stacked={stacked} />
       </Container>
     </ErrorBoundary>
   )
