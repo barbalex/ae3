@@ -16,7 +16,7 @@ import storeContext from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 import CountInput from '../../Export/PreviewColumn/CountInput.jsx'
-import exists from '../../../modules/exists.js'
+import { exists } from '../../../modules/exists.js'
 
 const Container = styled.div`
   height: 100%;

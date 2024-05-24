@@ -16,7 +16,7 @@ import deletePcoOfPcMutation from './deletePcoOfPcMutation.js'
 import storeContext from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
-import exists from '../../../modules/exists.js'
+import { exists } from '../../../modules/exists.js'
 import CountInput from '../../Export/PreviewColumn/CountInput.jsx'
 
 const Container = styled.div`
