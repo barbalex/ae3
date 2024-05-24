@@ -51,37 +51,6 @@ export default gql`
           }
         }
       }
-      propertyCollectionObjectsByPropertyCollectionOfOrigin(
-        filter: { objectId: { equalTo: $objId } }
-      ) {
-        totalCount
-        nodes {
-          id
-          objectId
-          propertyCollectionId
-          propertyCollectionOfOrigin
-          properties
-          propertyCollectionByPropertyCollectionId {
-            id
-            name
-            description
-            links
-            combining
-            lastUpdated
-            termsOfUse
-            importedBy
-            organizationByOrganizationId {
-              id
-              name
-            }
-            userByImportedBy {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
       relationsByPropertyCollectionId(
         filter: { objectId: { equalTo: $objId } }
       ) {
@@ -102,19 +71,6 @@ export default gql`
               type
             }
           }
-        }
-      }
-      relationsByPropertyCollectionOfOrigin(
-        filter: { objectId: { equalTo: $objId } }
-      ) {
-        totalCount
-        nodes {
-          id
-          propertyCollectionId
-          objectId
-          objectIdRelation
-          relationType
-          properties
         }
       }
     }

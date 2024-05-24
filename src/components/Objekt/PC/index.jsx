@@ -12,7 +12,7 @@ const Container2 = styled.div`
   padding: 10px;
 `
 
-const PC = ({ pcId, objId, isSynonym, stacked = false }) => {
+const PC = ({ pcId, objId, stacked = false }) => {
   const { data, loading, error } = useQuery(query, {
     variables: {
       pcId,
@@ -21,7 +21,7 @@ const PC = ({ pcId, objId, isSynonym, stacked = false }) => {
   })
 
   const pC = data?.propertyCollectionById
-  // console.log('hello PC', { pC, pcId, objId })
+  console.log('hello PC', { pC, pcId, objId, error })
   if (!pC) return <div />
 
   if (loading) return <Spinner />
@@ -31,7 +31,7 @@ const PC = ({ pcId, objId, isSynonym, stacked = false }) => {
 
   return (
     <ErrorBoundary>
-      <PCOs pC={pC} isSynonym={isSynonym} stacked={stacked} />
+      <PCOs pC={pC} stacked={stacked} />
     </ErrorBoundary>
   )
 }

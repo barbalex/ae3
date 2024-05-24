@@ -144,9 +144,8 @@ const Objekt = ({ stacked = false }) => {
             <PC
               key={pc.id}
               pcId={pc.id}
-              objId={objekt.id}
+              objId={objekt?.synonymsByObjectId?.nodes?.[0]?.objectIdSynonym}
               stacked={stacked}
-              isSynonym={true}
             />
           ))}
         </SimpleBar>
