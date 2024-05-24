@@ -20,6 +20,37 @@ export default gql`
         name
         email
       }
+      propertyCollectionObjectsByPropertyCollectionId(
+        filter: { objectId: { equalTo: $objId } }
+      ) {
+        totalCount
+        nodes {
+          id
+          objectId
+          propertyCollectionId
+          propertyCollectionOfOrigin
+          properties
+          propertyCollectionByPropertyCollectionId {
+            id
+            name
+            description
+            links
+            combining
+            lastUpdated
+            termsOfUse
+            importedBy
+            organizationByOrganizationId {
+              id
+              name
+            }
+            userByImportedBy {
+              id
+              name
+              email
+            }
+          }
+        }
+      }
       relationsByPropertyCollectionId(
         filter: { objectId: { equalTo: $objId } }
       ) {

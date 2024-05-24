@@ -25,8 +25,7 @@ const PC = ({ pcId, objId, stacked = false }) => {
   })
 
   const pC = data?.propertyCollectionById
-  const relations = pC?.relationsByPropertyCollectionId?.nodes ?? []
-  console.log('hello PC', { pc: pC, pcId, objId })
+  console.log('hello PC', { pC, pcId, objId })
   if (!pC) return <div />
 
   if (loading) return <Spinner />
@@ -34,14 +33,10 @@ const PC = ({ pcId, objId, stacked = false }) => {
     return <Container2>{`Fehler: ${error.message}`}</Container2>
   }
 
-  console.log('hello Objekt', {
-    pC,
-  })
-
   return (
     <ErrorBoundary>
       <Container>
-        <PCOs pC={pC} relations={relations} stacked={stacked} />
+        <PCOs pC={pC} stacked={stacked} />
       </Container>
     </ErrorBoundary>
   )

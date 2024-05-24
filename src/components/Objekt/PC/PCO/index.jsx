@@ -52,15 +52,19 @@ const CardText = styled.div`
   column-width: 500px;
 `
 
-const PCO = ({ pC, relations, stacked }) => {
+const PCO = ({ pC, stacked }) => {
   const [expanded, setExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
 
-  console.log('hello PCO', { pC, relations, stacked })
+  
+  const pCO = pC?.propertyCollectionObjectsByPropertyCollectionId?.nodes?.[0]
+  const relations = pC?.relationsByPropertyCollectionId?.nodes ?? []
 
-  const pcname = pC?.name ?? '(Name fehlt)'
+  console.log('hello PCO', { pC: pCO, relations, stacked })
+
+  const pcname = pCO?.name ?? '(Name fehlt)'
   // never pass null to object.entries!!!
-  const properties = JSON.parse(pC.properties) || {}
+  const properties = JSON.parse(pCO.properties) || {}
 
   let propertiesArray = Object.entries(properties)
   propertiesArray = propertiesArray.filter(
@@ -119,7 +123,7 @@ const PCO = ({ pC, relations, stacked }) => {
             </CardActionsButtons>
           </StyledCardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            {pCDescriptionExpanded && <PCDescription pC={pC} />}
+            {pCDescriptionExpanded && <PCDescription pC={pCO} />}
             <CardText>
               <PropertyList
                 propertiesArray={propertiesArray}
