@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
@@ -15,7 +15,7 @@ const FieldContainer = styled.div`
   display: flex;
 `
 
-const Property = ({ id, properties: propertiesPrevious }) => {
+export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
   const client = useApolloClient()
 
   const [label, setLabel] = useState('')
@@ -82,6 +82,4 @@ const Property = ({ id, properties: propertiesPrevious }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default Property
+})
