@@ -1,4 +1,4 @@
-const getActiveNodeArrayFromPathname = () => {
+export const getActiveNodeArrayFromPathname = () => {
   let pathName =
     typeof window !== 'undefined'
       ? window.location.pathname.replace('/', '')
@@ -25,5 +25,3 @@ const getActiveNodeArrayFromPathname = () => {
 
   return pathElements
 }
-
-export default getActiveNodeArrayFromPathname

@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import Export, { defaultValue as defaultExport } from './Export/index.js'
 import TreeFilter, { defaultValue as defaultTreeFilter } from './TreeFilter.js'
 import Login, { defaultValue as defaultLogin } from './Login.js'
-import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname.js'
+import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
 
 const store = () =>
   types
