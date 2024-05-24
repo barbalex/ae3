@@ -59,12 +59,13 @@ const PCO = ({ pC, stacked }) => {
   const pCO = pC?.propertyCollectionObjectsByPropertyCollectionId?.nodes?.[0]
   const relations = pC?.relationsByPropertyCollectionId?.nodes ?? []
 
-  console.log('hello PCO', { pC, pCO, relations })
+  // console.log('hello PCO', { pC, pCO, relations })
 
   const pcname = pC?.name ?? '(Name fehlt)'
-  // never pass null to object.entries!!!
+  // never pass null to JSON.parse
   const properties = pCO?.properties ? JSON.parse(pCO.properties) : {}
 
+  // never pass null to object.entries
   let propertiesArray = Object.entries(properties)
   propertiesArray = propertiesArray.filter(
     (o) => o[1] || o[1] === 0 || o[1] === false,

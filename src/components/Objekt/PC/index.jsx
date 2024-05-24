@@ -25,7 +25,7 @@ const PC = ({ pcId, objId, stacked = false }) => {
   })
 
   const pC = data?.propertyCollectionById
-  console.log('hello PC', { pC, pcId, objId })
+  // console.log('hello PC', { pC, pcId, objId })
   if (!pC) return <div />
 
   if (loading) return <Spinner />
