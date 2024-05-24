@@ -92,11 +92,6 @@ const Objekt = ({ stacked = false }) => {
 
   console.log('hello Objekt', {
     objekt,
-    // synonymObjects,
-    // propertyCollectionObjects,
-    // relations,
-    // pcsIds,
-    // propertyCollectionIdsOfRelations,
     pcs,
     synonymPcs,
     synonyms,
@@ -129,19 +124,19 @@ const Objekt = ({ stacked = false }) => {
           {pcs.map((pc) => (
             <PC key={pc.id} pcId={pc.id} objId={objekt.id} stacked={stacked} />
           ))}
-          {propertyCollectionObjectsOfSynonyms.length > 0 && (
+          {synonymPcs.length > 0 && (
             <Title>
               Eigenschaften von Synonymen
               <TitleSpan>
-                {` (${propertyCollectionObjectsOfSynonyms.length} ${
-                  propertyCollectionObjectsOfSynonyms.length > 1
-                    ? 'Sammlungen'
-                    : 'Sammlung'
+                {` (${synonymPcs.length} ${
+                  synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
                 })`}
               </TitleSpan>
             </Title>
           )}
-          <PC pcIds={propertyCollectionObjectsOfSynonyms} stacked={stacked} />
+          {synonymPcs.map((pc) => (
+            <PC key={pc.id} pcId={pc.id} objId={objekt.id} stacked={stacked} />
+          ))}
         </SimpleBar>
       </Container>
     </ErrorBoundary>

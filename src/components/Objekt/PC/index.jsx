@@ -28,6 +28,7 @@ const PC = ({ pcId, objId, stacked = false }) => {
 
   const objekt = data?.objectById
   const pc = data?.propertyCollectionById
+  console.log('hello PC', { pc, objekt, pcId, objId })
   if (!objekt) return <div />
 
   const propertyCollectionObjects =
