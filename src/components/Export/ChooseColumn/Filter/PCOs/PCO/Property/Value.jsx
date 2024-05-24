@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import readableType from '../../../../../../../modules/readableType.js'
+import  { readableType } from '../../../../../../../modules/readableType.js'
 import storeContext from '../../../../../../../storeContext.js'
 
 const Container = styled.div`
