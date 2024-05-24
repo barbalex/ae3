@@ -11,6 +11,17 @@ const Container = styled.div`
   font-size: 0.9em;
   padding: 13px 16px;
   background-color: #ffe0b2;
+  // animation: createBox 0.45s;
+  // @keyframes createBox {
+  //   from {
+  //     // transform: scale(0);
+  //     height: 0;
+  //   }
+  //   to {
+  //     // transform: scale(1);
+  //     height: auto;
+  //   }
+  // }
 `
 const linkifyProperties = {
   target: '_blank',
