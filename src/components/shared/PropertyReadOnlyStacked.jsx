@@ -22,7 +22,7 @@ const Container = styled.div`
   }
 `
 
-const PropertyReadOnly = ({ label, value }) => {
+export const PropertyReadOnlyStacked = ({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -48,4 +48,4 @@ const PropertyReadOnly = ({ label, value }) => {
   )
 }
 
-export default PropertyReadOnly
+export default PropertyReadOnlyStacked
