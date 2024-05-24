@@ -2,7 +2,7 @@ import { Parser } from '@json2csv/plainjs'
 import fileDownload from 'js-file-download'
 import format from 'date-fns/format'
 
-const exportCsv = (jsonData) => {
+export const exportCsv = (jsonData) => {
   const parse = (data, opts) => new Parser(opts).parse(data)
   const csvData = parse(jsonData)
   fileDownload(
