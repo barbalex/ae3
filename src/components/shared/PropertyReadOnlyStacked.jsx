@@ -47,5 +47,3 @@ export const PropertyReadOnlyStacked = ({ label, value }) => {
     </ErrorBoundary>
   )
 }
-
-export default PropertyReadOnlyStacked

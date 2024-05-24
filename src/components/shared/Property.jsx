@@ -26,7 +26,11 @@ const DeleteButton = styled(IconButton)`
   }
 `
 
-const Property = ({ id, properties: propertiesPrevious, field: key }) => {
+export const Property = ({
+  id,
+  properties: propertiesPrevious,
+  field: key,
+}) => {
   const client = useApolloClient()
   const [value, setValue] = useState(propertiesPrevious[key] || '')
 
@@ -98,5 +102,3 @@ const Property = ({ id, properties: propertiesPrevious, field: key }) => {
     </ErrorBoundary>
   )
 }
-
-export default Property
