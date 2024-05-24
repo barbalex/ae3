@@ -8,10 +8,6 @@ import query from './query.js'
 import Spinner from '../../shared/Spinner.jsx'
 import ErrorBoundary from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  overflow: hidden;
-`
 const Container2 = styled.div`
   padding: 10px;
 `
@@ -35,9 +31,7 @@ const PC = ({ pcId, objId, isSynonym, stacked = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <PCOs pC={pC} isSynonym={isSynonym} stacked={stacked} />
-      </Container>
+      <PCOs pC={pC} isSynonym={isSynonym} stacked={stacked} />
     </ErrorBoundary>
   )
 }
