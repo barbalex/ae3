@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { PropertyList } from './PropertyList.jsx'
+import { getUrlForObject } from '../../../../../../modules/getUrlForObject.js'
 
 const Container = styled.div`
   border-bottom: ${(props) =>
@@ -35,6 +36,7 @@ export const Relation = memo(({ relation, intermediateRelation }) => {
             relation?.objectByObjectIdRelation?.taxonomyByTaxonomyId?.name ?? ''
           }: ${relation?.objectByObjectIdRelation?.name ?? '(kein Name)'}`}
           label={taxType}
+          url={`/${getUrlForObject(relation.objectByObjectIdRelation).join('/')}`}
         />
         {relation.relationType && (
           <PropertyReadOnly

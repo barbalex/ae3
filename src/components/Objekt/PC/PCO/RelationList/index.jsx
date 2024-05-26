@@ -15,6 +15,7 @@ export const RelationList = ({ relations }) => {
   const relationsTitleText =
     relations.length > 1 ? 'Beziehungen:' : 'Beziehung:'
   const relationsTitle = `${relations.length} ${relationsTitleText}`
+  console.log('RelationList, relations:', relations)
 
   return (
     <>

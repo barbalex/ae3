@@ -79,7 +79,7 @@ export const PcPresentation = memo(({ pC, stacked }) => {
     [pCDescriptionExpanded],
   )
 
-  console.log('PcPresentation, relations:', relations)
+  // console.log('PcPresentation, relations:', relations)
 
   return (
     <ErrorBoundary>
@@ -121,9 +121,7 @@ export const PcPresentation = memo(({ pC, stacked }) => {
                 propertiesArray={propertiesArray}
                 stacked={stacked}
               />
-              {relations && relations.length > 0 && (
-                <RelationList relations={relations} />
-              )}
+              {relations?.length > 0 && <RelationList relations={relations} />}
             </CardText>
           </Collapse>
         </StyledCard>

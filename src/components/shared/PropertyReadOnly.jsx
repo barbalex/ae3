@@ -33,7 +33,7 @@ const linkifyProperties = {
   },
 }
 
-export const PropertyReadOnly = memo(({ label, value }) => {
+export const PropertyReadOnly = memo(({ label, value, url }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -43,7 +43,7 @@ export const PropertyReadOnly = memo(({ label, value }) => {
       <Linkify properties={linkifyProperties}>
         <Container className="property">
           <Label>{`${label}:`}</Label>
-          <Value>{val}</Value>
+          <Value>{url ? <a href={url}>{val}</a> : val}</Value>
         </Container>
       </Linkify>
     </ErrorBoundary>
