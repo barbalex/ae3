@@ -70,6 +70,33 @@ export default gql`
               name
               type
             }
+            objectByParentId {
+              id
+              objectByParentId {
+                id
+                objectByParentId {
+                  id
+                  objectByParentId {
+                    id
+                    objectByParentId {
+                      id
+                      objectByParentId {
+                        id
+                        objectByParentId {
+                          id
+                          objectByParentId {
+                            id
+                            objectByParentId {
+                              id
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
