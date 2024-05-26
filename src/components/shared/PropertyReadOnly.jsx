@@ -33,6 +33,8 @@ const linkifyProperties = {
   },
 }
 
+// when relations are passed in, a url is passed in too
+// this enables linking to the related object
 export const PropertyReadOnly = memo(({ label, value, url }) => {
   let val = value
   if (val === true) val = 'ja'
