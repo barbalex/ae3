@@ -253,13 +253,10 @@ const ImportRco = ({ setImport }) => {
       (checkState.idsExist
         ? checkState.idsAreUnique && checkState.idsAreUuids
         : true) &&
-      // turned off because of inexplicable problem
-      // somehow graphql could exceed some limit
-      // which made this value block importing
-      // although this value was true ?????!!!!
-      /*(objectIdsExist
-      ? objectIdsAreUuid && (objectIdsAreReal || objectIdsAreRealNotTested)
-      : false) &&*/
+      (checkState.objectIdsExist
+        ? checkState.objectIdsAreUuid &&
+          (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
+        : false) &&
       (checkState.objectRelationIdsExist
         ? checkState.objectRelationIdsAreUuid &&
           (objectRelationIdsAreReal ||
@@ -276,22 +273,7 @@ const ImportRco = ({ setImport }) => {
       checkState.propertyValuesDontContainApostroph &&
       checkState.propertyValuesDontContainBackslash,
     [
-      checkState.existsNoDataWithoutKey,
-      checkState.existsPropertyKey,
-      checkState.idsAreUnique,
-      checkState.idsAreUuids,
-      checkState.idsExist,
-      checkState.objectRelationIdsAreRealNotTested,
-      checkState.objectRelationIdsAreUuid,
-      checkState.objectRelationIdsExist,
-      checkState.pCOfOriginIdsAreRealNotTested,
-      checkState.pCOfOriginIdsAreUuid,
-      checkState.pCOfOriginIdsExist,
-      checkState.propertyKeysDontContainApostroph,
-      checkState.propertyKeysDontContainBackslash,
-      checkState.propertyValuesDontContainApostroph,
-      checkState.propertyValuesDontContainBackslash,
-      checkState.relationTypeExist,
+      Object.values(checkState),
       importData.length,
       objectRelationIdsAreReal,
       pCOfOriginIdsAreReal,
@@ -331,6 +313,12 @@ const ImportRco = ({ setImport }) => {
             .map((d) => omit(d, ['__rowNum__']))
           // test the data
           setImportData(data)
+          let importDataFields = []
+          data.forEach((d) => {
+            importDataFields = union([...importDataFields, ...Object.keys(d)])
+          })
+          const objectIdFieldExistsAndIsCorrectlySpelled =
+            importDataFields.includes('objectId')
           checkState.existsNoDataWithoutKey =
             data.filter((d) => !!d.__EMPTY).length === 0
           const ids = data.map((d) => d.id).filter((d) => d !== undefined)
@@ -345,9 +333,8 @@ const ImportRco = ({ setImport }) => {
           const _objectIds = data
             .map((d) => d.objectId)
             .filter((d) => d !== undefined)
-          const _objectIdsExist = _objectIds.length === data.length
-          checkState.objectIdsExist = _objectIdsExist
-          checkState.objectIdsAreUuid = _objectIdsExist
+          checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
+          checkState.objectIdsAreUuid = objectIdFieldExistsAndIsCorrectlySpelled
             ? !_objectIds.map((d) => isUuid.anyNonNil(d)).includes(false)
             : undefined
           setObjectIds(_objectIds)
@@ -355,21 +342,26 @@ const ImportRco = ({ setImport }) => {
           const _objectRelationIds = data
             .map((d) => d.objectIdRelation)
             .filter((d) => d !== undefined)
-          const _objectRelationIdsExist =
-            _objectRelationIds.length === data.length
-          checkState.objectRelationIdsExist = _objectRelationIdsExist
-          checkState.objectRelationIdsAreUuid = _objectRelationIdsExist
-            ? !_objectRelationIds
-                .map((d) => isUuid.anyNonNil(d))
-                .includes(false)
-            : undefined
+          const objectRelationIdFieldExistsAndIsCorrectlySpelled =
+            importDataFields.includes('objectIdRelation')
+          checkState.objectRelationIdsExist =
+            objectRelationIdFieldExistsAndIsCorrectlySpelled
+          checkState.objectRelationIdsAreUuid =
+            objectRelationIdFieldExistsAndIsCorrectlySpelled
+              ? !_objectRelationIds
+                  .map((d) => isUuid.anyNonNil(d))
+                  .includes(false)
+              : undefined
           setObjectRelationIds(_objectRelationIds)
 
           const _relationTypes = data
             .map((d) => d.relationType)
             .filter((d) => d !== undefined)
-          const _relationTypesExist = _relationTypes.length === data.length
-          checkState.relationTypeExist = _relationTypesExist
+          const relationTypeFieldExistsAndIsCorrectlySpelled =
+            importDataFields.includes('objectIdRelation')
+          checkState.relationTypeExist =
+            relationTypeFieldExistsAndIsCorrectlySpelled &&
+            _relationTypes.length === data.length
 
           const _pCOfOriginIds = data
             .map((d) => d.propertyCollectionOfOrigin)

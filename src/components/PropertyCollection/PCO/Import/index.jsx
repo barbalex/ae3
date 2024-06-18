@@ -23,7 +23,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import upsertPCOMutation from './upsertPCOMutation.js'
 import storeContext from '../../../../storeContext.js'
-import  { isUuid } from '../../../../modules/isUuid.js'
+import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
 import Instructions from './Instructions.jsx'
@@ -154,7 +154,11 @@ const ImportPco = ({ setImport }) => {
     setSortDirection(direction.toLowerCase())
   }, [])
 
-  const { isLoading, error, data } = useQuery({
+  const {
+    isLoading,
+    error,
+    data: rawData,
+  } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
     queryFn: () =>
       client.query({
@@ -170,6 +174,7 @@ const ImportPco = ({ setImport }) => {
         fetchPolicy: 'no-cache',
       }),
   })
+  const data = rawData?.data
 
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
@@ -207,6 +212,13 @@ const ImportPco = ({ setImport }) => {
         : undefined,
     [isLoading, pCOfOriginIds.length, pCOfOriginsCheckData.length],
   )
+  const importDataFields = useMemo(() => {
+    let fields = []
+    importData.forEach((d) => {
+      fields = union([...fields, ...Object.keys(d)])
+    })
+    return fields
+  }, [importData])
   const showImportButton = useMemo(
     () =>
       importData.length > 0 &&
@@ -214,13 +226,10 @@ const ImportPco = ({ setImport }) => {
       (checkState.idsExist
         ? checkState.idsAreUnique && checkState.idsAreUuids
         : true) &&
-      // turned off because of inexplicable problem
-      // somehow graphql could exceed some limit
-      // which made this value block importing
-      // although this value was true ?????!!!!
-      /*(objectIdsExist
-      ? objectIdsAreUuid && (objectIdsAreReal || objectIdsAreRealNotTested)
-      : false) &&*/
+      (checkState.objectIdsExist
+        ? checkState.objectIdsAreUuid &&
+          (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
+        : false) &&
       (checkState.pCOfOriginIdsExist
         ? checkState.pCOfOriginIdsAreUuid &&
           (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
@@ -230,31 +239,9 @@ const ImportPco = ({ setImport }) => {
       checkState.propertyKeysDontContainBackslash &&
       checkState.propertyValuesDontContainApostroph &&
       checkState.propertyValuesDontContainBackslash,
-    [
-      checkState.existsNoDataWithoutKey,
-      checkState.existsPropertyKey,
-      checkState.idsAreUnique,
-      checkState.idsAreUuids,
-      checkState.idsExist,
-      checkState.pCOfOriginIdsAreRealNotTested,
-      checkState.pCOfOriginIdsAreUuid,
-      checkState.pCOfOriginIdsExist,
-      checkState.propertyKeysDontContainApostroph,
-      checkState.propertyKeysDontContainBackslash,
-      checkState.propertyValuesDontContainApostroph,
-      checkState.propertyValuesDontContainBackslash,
-      importData.length,
-      pCOfOriginIdsAreReal,
-    ],
+    [Object.values(checkState), importData.length, objectIdsAreReal],
   )
   const showPreview = importData.length > 0
-  const importDataFields = useMemo(() => {
-    let fields = []
-    importData.forEach((d) => {
-      fields = union([...fields, ...Object.keys(d)])
-    })
-    return fields
-  }, [importData])
   const propertyFields = useMemo(
     () =>
       importDataFields.filter(
@@ -280,6 +267,12 @@ const ImportPco = ({ setImport }) => {
           .map((d) => omit(d, ['__rowNum__']))
         // test the data
         setImportData(data)
+        let importDataFields = []
+        data.forEach((d) => {
+          importDataFields = union([...importDataFields, ...Object.keys(d)])
+        })
+        const objectIdFieldExistsAndIsCorrectlySpelled =
+          importDataFields.includes('objectId')
         checkState.existsNoDataWithoutKey =
           data.filter((d) => !!d.__EMPTY).length === 0
         const ids = data.map((d) => d.id).filter((d) => d !== undefined)
@@ -295,10 +288,9 @@ const ImportPco = ({ setImport }) => {
           .map((d) => d.objectId)
           .filter((d) => d !== undefined)
 
-        const _objectIdsExist = _objectIds.length === data.length
-        checkState.objectIdsExist = _objectIdsExist
+        checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
         const _objectsIdsAreNotUuid = data.filter((d) => !isUuid(d.objectId))
-        checkState.objectIdsAreUuid = _objectIdsExist
+        checkState.objectIdsAreUuid = objectIdFieldExistsAndIsCorrectlySpelled
           ? _objectsIdsAreNotUuid.length === 0
           : undefined
         setObjectIds(_objectIds)
@@ -398,8 +390,6 @@ const ImportPco = ({ setImport }) => {
       queryKey: [`pcoPreviewQuery`],
     })
   }, [setImport, importData, pCId, client, incrementImported, queryClient])
-
-  // console.log('ImportPco', { importData, importDataFields })
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
