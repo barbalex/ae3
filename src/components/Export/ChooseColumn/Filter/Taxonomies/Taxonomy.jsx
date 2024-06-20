@@ -92,9 +92,17 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
   const taxProperties =
     data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
+  // eliminate null values
+  const taxPropertiesWithoutNullValues = taxProperties.filter(
+    (p) => p.jsontype !== 'Null',
+  )
+
   const [expanded, setExpanded] = useState(initiallyExpanded)
 
-  const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
+  const taxPropertiesByTaxonomy = groupBy(
+    taxPropertiesWithoutNullValues,
+    'taxonomyName',
+  )
 
   if (error) {
     return (
