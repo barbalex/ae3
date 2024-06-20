@@ -56,12 +56,11 @@ const propsByTaxQuery = gql`
     $queryExportTaxonomies: Boolean!
     $exportTaxonomies: [String]
   ) {
-    taxPropertiesByTaxonomiesFunction(taxonomyNames: $exportTaxonomies)
+    taxPropertiesOnlyByTaxonomiesFunction(taxonomyNames: $exportTaxonomies)
       @include(if: $queryExportTaxonomies) {
       nodes {
         taxonomyName
         propertyName
-        jsontype
         count
       }
     }
@@ -86,10 +85,20 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
 
   const taxProperties =
-    propsByTaxData?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+    propsByTaxData?.taxPropertiesOnlyByTaxonomiesFunction?.nodes ?? []
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
+  console.log('Taxonomy', {
+    tax,
+    taxProperties,
+    taxPropertiesByTaxonomy,
+    propsByTaxData,
+    propsByTaxError,
+  })
+
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
+
+  if (propsByTaxData === undefined) return 'Lade Daten...'
 
   const properties = taxPropertiesByTaxonomy[tax]
 
