@@ -302,7 +302,7 @@ STABLE;
 
 ALTER FUNCTION ae.object_object(taxonomy_object ae.object, taxonomy_id UUID) OWNER TO postgres;
 
-DROP TABLE IF EXISTS ae.pco_properties_by_taxonomy CASCADE;
+DROP TYPE IF EXISTS ae.pco_properties_by_taxonomy CASCADE;
 
 CREATE TYPE ae.pco_properties_by_taxonomy AS (
   property_collection_name text,
@@ -317,7 +317,7 @@ CREATE TYPE ae.pco_properties_by_taxonomy AS (
 --INNER JOIN ae.property_collection ON ae.property_collection_object.property_collection_id = ae.property_collection.id
 --WHERE ae.property_collection.name = 'ZH Artwert (2000)'
 --ORDER BY value
-DROP TABLE IF EXISTS ae.prop_value CASCADE;
+DROP TYPE IF EXISTS ae.prop_value CASCADE;
 
 CREATE TYPE ae.prop_value AS (
   value text
@@ -382,7 +382,7 @@ STABLE;
 
 ALTER FUNCTION ae.property_collection_by_property_name(property_name text) OWNER TO postgres;
 
-DROP TABLE IF EXISTS ae.rco_count_by_taxonomy_relation_type CASCADE;
+DROP TYPE IF EXISTS ae.rco_count_by_taxonomy_relation_type CASCADE;
 
 CREATE TYPE ae.rco_count_by_taxonomy_relation_type AS (
   property_collection_name text,
@@ -412,7 +412,7 @@ STABLE;
 
 ALTER FUNCTION ae.rco_count_by_taxonomy_relation_type_function() OWNER TO postgres;
 
-DROP TABLE IF EXISTS ae.rco_properties_by_taxonomy CASCADE;
+DROP TYPE IF EXISTS ae.rco_properties_by_taxonomy CASCADE;
 
 CREATE TYPE ae.rco_properties_by_taxonomy AS (
   property_collection_name text,
@@ -580,7 +580,7 @@ STABLE;
 
 ALTER FUNCTION ae.rco_properties_by_taxonomies_function(taxonomy_names text[]) OWNER TO postgres;
 
-DROP TABLE IF EXISTS ae.tax_properties_only_by_taxonomy CASCADE;
+DROP TYPE IF EXISTS ae.tax_properties_only_by_taxonomy CASCADE;
 
 CREATE TYPE ae.tax_properties_only_by_taxonomy AS (
   taxonomy_name text,
@@ -659,7 +659,7 @@ $$
 LANGUAGE sql
 STABLE;
 
-DROP TABLE IF EXISTS ae.tax_properties_by_taxonomy CASCADE;
+DROP TYPE IF EXISTS ae.tax_properties_by_taxonomy CASCADE;
 
 CREATE TYPE ae.tax_properties_by_taxonomy AS (
   taxonomy_name text,
