@@ -89,14 +89,6 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
     propsByTaxData?.taxPropertiesOnlyByTaxonomiesFunction?.nodes ?? []
   const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
 
-  console.log('Taxonomy', {
-    tax,
-    taxProperties,
-    taxPropertiesByTaxonomy,
-    propsByTaxData,
-    propsByTaxError,
-  })
-
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
 
   if (propsByTaxData === undefined) return <Spinner />
