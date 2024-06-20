@@ -15,6 +15,7 @@ import AllChooser from './AllChooser.jsx'
 import Properties from '../Properties.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
+import { Spinner } from '../../../../../shared/Spinner.jsx'
 
 const StyledCard = styled(Card)`
   margin: 0;
@@ -98,7 +99,7 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
 
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
 
-  if (propsByTaxData === undefined) return 'Lade Daten...'
+  if (propsByTaxData === undefined) return <Spinner />
 
   const properties = taxPropertiesByTaxonomy[tax]
 
