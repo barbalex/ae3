@@ -30,6 +30,7 @@ FROM
   ae.relation;
 
 -- 164'229 rows
+-- 2024.06.20: 164'229 rows
 --
 -- 3. insert data from synonyms of objects listed in rcos, on conflict do nothing
 INSERT INTO ae.rco_of_object (object_id, rco_id) (
@@ -50,5 +51,6 @@ ON CONFLICT
   DO NOTHING;
 
 -- 108'692 rows
+-- 2024.06.20: 108'692 rows
 --
 --

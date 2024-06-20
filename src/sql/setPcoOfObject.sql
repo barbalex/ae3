@@ -3,15 +3,15 @@
 -- 2. if no own pco exists but for a synonym: pco of synonym is listed (no priorisation if multiple exist)
 -- 3. no pco > no row?
 -- This would have to be updated after every update of pcos, synonyms (and objects?)
-CREATE TABLE ae.pco_of_object (
-  object_id uuid NOT NULL REFERENCES ae.object (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  pco_id uuid NOT NULL REFERENCES ae.property_collection_object (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE ae.pco_of_object(
+  object_id uuid NOT NULL REFERENCES ae.object(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  pco_id uuid NOT NULL REFERENCES ae.property_collection_object(id) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (object_id, pco_id)
 );
 
-CREATE INDEX ON ae.pco_of_object USING btree (object_id);
+CREATE INDEX ON ae.pco_of_object USING btree(object_id);
 
-CREATE INDEX ON ae.pco_of_object USING btree (pco_id);
+CREATE INDEX ON ae.pco_of_object USING btree(pco_id);
 
 -- The plan:
 -- 1. truncate pco_of_object
@@ -22,17 +22,20 @@ CREATE INDEX ON ae.pco_of_object USING btree (pco_id);
 TRUNCATE TABLE ae.pco_of_object;
 
 -- 2. insert data from pcos
-INSERT INTO ae.pco_of_object (object_id, pco_id)
-SELECT
-  object_id,
-  id
-FROM
-  ae.property_collection_object;
+INSERT INTO ae.pco_of_object(object_id, pco_id)(
+  SELECT
+    object_id,
+    id
+  FROM
+    ae.property_collection_object)
+ON CONFLICT
+  DO NOTHING;
 
 -- 97'064 rows
+-- 2024.06.20: 100'618 rows
 --
 -- 3. insert data from synonyms of objects listed in pcos, on conflict do nothing
-INSERT INTO ae.pco_of_object (object_id, pco_id) (
+INSERT INTO ae.pco_of_object(object_id, pco_id)(
   SELECT
     synonym.object_id_synonym,
     pco.id
@@ -50,5 +53,6 @@ ON CONFLICT
   DO NOTHING;
 
 -- 91'137 rows
+-- 2024.06.20: 95'592 rows
 --
 --
