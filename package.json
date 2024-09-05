@@ -20,7 +20,7 @@
     "@emotion/styled": "11.13.0",
     "@fontsource/roboto": "5.0.14",
     "@json2csv/plainjs": "7.0.6",
-    "@mui/material": "5.16.7",
+    "@mui/material": "6.0.2",
     "@tanstack/react-query": "5.54.1",
     "autosuggest-highlight": "3.3.4",
     "date-fns": "3.6.0",

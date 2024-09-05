@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import MenuItem from './MenuItem.jsx'
 import storeContext from '../../../storeContext.js'
 
-// dont know why but divider is too thick,
+// don't know why but divider is too thick,
 // thicker than ListItemButton divider
 const StyledDivider = styled(Divider)`
   height: unset !important;
@@ -30,7 +30,7 @@ const nodes = [
   {
     slug: 'fehler-melden',
     date: '2019-09-29',
-    title: 'Fehler, Ideen, Vorschläge melden',
+    title: 'Fehler, Ideen, Vorschläge',
     sort1: 3,
   },
   {
@@ -57,7 +57,10 @@ const MenuItems = () => {
     <List component="nav">
       <StyledDivider />
       {nodesFiltered.map((node) => (
-        <MenuItem node={node} key={node.slug} />
+        <MenuItem
+          node={node}
+          key={node.slug}
+        />
       ))}
     </List>
   )
