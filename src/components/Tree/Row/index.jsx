@@ -15,8 +15,8 @@ import { useNavigate } from 'react-router-dom'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { ContextMenuTrigger } from 'react-contextmenu'
-import  { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
+import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
+import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
 import onClickContextMenuDo from './onClickContextMenu.js'
 import storeContext from '../../../storeContext.js'
 
@@ -62,9 +62,9 @@ const Toggle = styled.div`
 `
 const SymbolIcon = styled(Icon)`
   font-size: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '26px !important'
-      : '23px !important'};
+    props['data-nodeisinactivenodepath'] ? '26px !important' : (
+      '23px !important'
+    )};
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   color: ${(props) =>
