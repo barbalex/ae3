@@ -94,14 +94,16 @@ const RouterComponent = () => {
               />
             </Route>
           </Route>
-          <Route
-            path="/Benutzer/*"
-            element={<Home />}
-          />
-          <Route
-            path="/Benutzer/:userId"
-            element={<Benutzer />}
-          />
+          <Route path="Benutzer">
+            <Route
+              index
+              element={<Home />}
+            />
+            <Route
+              path=":userId"
+              element={<Benutzer />}
+            />
+          </Route>
           <Route
             path="/Organisationen/*"
             element={<Home />}
