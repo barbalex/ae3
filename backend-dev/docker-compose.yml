@@ -1,5 +1,27 @@
-name: ae
+# name: ae
 services:
+  db:
+    # specify container name to make it easier to run commands
+    container_name: ae_db
+    restart: always
+    image: db
+    # ensure enough shared memory - docker only allows 64mb
+    # https://stackoverflow.com/a/56754077/712005
+    shm_size: 1g
+    build:
+      context: ./db
+    env_file:
+      - ./.env
+    networks:
+      - network
+    expose:
+      - '5432'
+    ports:
+      # make the Postgres database accessible from outside the Docker container on port 5432
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - sik_data:/sik_data
   graphql:
     container_name: ae_graphql
     restart: unless-stopped
@@ -38,5 +60,8 @@ services:
         '--retry-on-init-fail',
         '--enhance-graphiql',
       ]
+volumes:
+  db_data:
+  sik_data:
 networks:
   network:
