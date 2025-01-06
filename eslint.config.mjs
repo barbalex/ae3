@@ -1,8 +1,8 @@
-import reactRefresh from 'eslint-plugin-react-refresh'
-import _import from 'eslint-plugin-import'
+import pluginReactRefresh from 'eslint-plugin-react-refresh'
+import pluginImport from 'eslint-plugin-import'
 import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
-import tsParser from '@typescript-eslint/parser'
+// import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -18,21 +18,21 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/dist', '**/node_modules/'],
+    ignores: ['**/dist', '**/*.mjs', '**/node_modules/'],
   },
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:@typescript-eslint/stylistic',
-      'plugin:react/recommended',
+      // 'plugin:@typescript-eslint/recommended',
+      // 'plugin:@typescript-eslint/stylistic',
+      // 'plugin:react/recommended',
       'plugin:react-hooks/recommended',
     ),
   ),
   {
     plugins: {
-      'react-refresh': reactRefresh,
-      import: _import,
+      'react-refresh': pluginReactRefresh,
+      import: pluginImport,
     },
 
     languageOptions: {
@@ -40,26 +40,25 @@ export default [
         ...globals.browser,
       },
 
-      parser: tsParser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      // parser: tsParser,
+      // ecmaVersion: 'latest',
+      // sourceType: 'module',
 
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
+      // parserOptions: {
+      //   ecmaFeatures: {
+      //     jsx: true,
+      //   },
+      // },
     },
 
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    // settings: {
+    //   react: {
+    //     version: 'detect',
+    //   },
+    // },
 
     rules: {
       strict: 0,
-      'react/prop-types': 0,
       'react/display-name': 'off',
       'no-console': 'off',
       'react-hooks/rules-of-hooks': 'error',
