@@ -166,6 +166,12 @@ const RouterComponent = () => {
         />
       </Route>,
     ),
+    {
+      future: {
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      },
+    },
   )
 
   return <RouterProvider router={router} />
