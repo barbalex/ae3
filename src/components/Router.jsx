@@ -44,12 +44,12 @@ const RouterComponent = () => {
           />
           <Route path="Arten">
             <Route
-              path="*"
+              index
               element={<Home />}
             />
             <Route path=":taxId">
               <Route
-                path="*"
+                index
                 element={<Taxonomy />}
               />
               <Route
@@ -58,34 +58,42 @@ const RouterComponent = () => {
               />
             </Route>
           </Route>
-          <Route
-            path="/Lebensräume/*"
-            element={<Home />}
-          />
-          <Route
-            path="/Lebensräume/:taxId/*"
-            element={<Taxonomy />}
-          />
-          <Route
-            path="/Lebensräume/:taxId/:objId/*"
-            element={<Objekt />}
-          />
-          <Route
-            path="/Eigenschaften-Sammlungen/*"
-            element={<Home />}
-          />
-          <Route
-            path="/Eigenschaften-Sammlungen/:pcId/*"
-            element={<PropertyCollection />}
-          />
-          <Route
-            path="/Eigenschaften-Sammlungen/:pcId/Eigenschaften"
-            element={<PCO />}
-          />
-          <Route
-            path="/Eigenschaften-Sammlungen/:pcId/Beziehungen"
-            element={<RCO />}
-          />
+          <Route path="Lebensräume">
+            <Route
+              index
+              element={<Home />}
+            />
+            <Route path=":taxId">
+              <Route
+                index
+                element={<Taxonomy />}
+              />
+              <Route
+                path=":objId/*"
+                element={<Objekt />}
+              />
+            </Route>
+          </Route>
+          <Route path="Eigenschaften-Sammlungen">
+            <Route
+              index
+              element={<Home />}
+            />
+            <Route path=":pcId">
+              <Route
+                index
+                element={<PropertyCollection />}
+              />
+              <Route
+                path="Eigenschaften"
+                element={<PCO />}
+              />
+              <Route
+                path="Beziehungen"
+                element={<RCO />}
+              />
+            </Route>
+          </Route>
           <Route
             path="/Benutzer/*"
             element={<Home />}
