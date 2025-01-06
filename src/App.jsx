@@ -13,8 +13,8 @@ import theme from './theme.js'
 import './index.css'
 import 'react-reflex/styles.css'
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
-import  { initializeIdb } from './modules/initializeIdb.js'
-import  { setLoginFromIdb } from './modules/setLoginFromIdb.js'
+import { initializeIdb } from './modules/initializeIdb.js'
+import { setLoginFromIdb } from './modules/setLoginFromIdb.js'
 import { detectIE } from './modules/detectIE.js'
 import client from './client.js'
 import { Provider as IdbProvider } from './idbContext.js'
@@ -24,7 +24,7 @@ import Router from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
 const Stacker = lazy(() => import('./components/Stacker.jsx'))
 
-const App = () => {
+export const App = () => {
   const idb = initializeIdb()
 
   const [store, setStore] = useState()
@@ -84,5 +84,3 @@ const App = () => {
     </IdbProvider>
   )
 }
-
-export default App
