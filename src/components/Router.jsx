@@ -34,15 +34,46 @@ const RouterComponent = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
-        <Route path="/" element={<Data />}>
-          <Route index element={<Home />} />
-          <Route path="/Arten/*" element={<Home />} />
-          <Route path="/Arten/:taxId/*" element={<Taxonomy />} />
-          <Route path="/Arten/:taxId/:objId/*" element={<Objekt />} />
-          <Route path="/Lebensräume/*" element={<Home />} />
-          <Route path="/Lebensräume/:taxId/*" element={<Taxonomy />} />
-          <Route path="/Lebensräume/:taxId/:objId/*" element={<Objekt />} />
-          <Route path="/Eigenschaften-Sammlungen/*" element={<Home />} />
+        <Route
+          path="/"
+          element={<Data />}
+        >
+          <Route
+            index
+            element={<Home />}
+          />
+          <Route path="Arten">
+            <Route
+              path="*"
+              element={<Home />}
+            />
+            <Route path=":taxId">
+              <Route
+                path="*"
+                element={<Taxonomy />}
+              />
+              <Route
+                path=":objId/*"
+                element={<Objekt />}
+              />
+            </Route>
+          </Route>
+          <Route
+            path="/Lebensräume/*"
+            element={<Home />}
+          />
+          <Route
+            path="/Lebensräume/:taxId/*"
+            element={<Taxonomy />}
+          />
+          <Route
+            path="/Lebensräume/:taxId/:objId/*"
+            element={<Objekt />}
+          />
+          <Route
+            path="/Eigenschaften-Sammlungen/*"
+            element={<Home />}
+          />
           <Route
             path="/Eigenschaften-Sammlungen/:pcId/*"
             element={<PropertyCollection />}
@@ -55,27 +86,72 @@ const RouterComponent = () => {
             path="/Eigenschaften-Sammlungen/:pcId/Beziehungen"
             element={<RCO />}
           />
-          <Route path="/Benutzer/*" element={<Home />} />
-          <Route path="/Benutzer/:userId" element={<Benutzer />} />
-          <Route path="/Organisationen/*" element={<Home />} />
-          <Route path="/Organisationen/:orgId" element={<Organisation />} />
-          <Route path="*" element={<FourOhFour />} />
+          <Route
+            path="/Benutzer/*"
+            element={<Home />}
+          />
+          <Route
+            path="/Benutzer/:userId"
+            element={<Benutzer />}
+          />
+          <Route
+            path="/Organisationen/*"
+            element={<Home />}
+          />
+          <Route
+            path="/Organisationen/:orgId"
+            element={<Organisation />}
+          />
+          <Route
+            path="*"
+            element={<FourOhFour />}
+          />
         </Route>
-        <Route path="/Export/*" element={<Export />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Dokumentation/*" element={<Docs />}>
-          <Route index element={null} />
-          <Route path="technische-voraussetzungen" element={<BrowserDoc />} />
-          <Route path="fehler-melden" element={<MeldenDoc />} />
-          <Route path="neue-art-erfassen" element={<NeueArtDoc />} />
+        <Route
+          path="/Export/*"
+          element={<Export />}
+        />
+        <Route
+          path="/Login"
+          element={<Login />}
+        />
+        <Route
+          path="/Dokumentation/*"
+          element={<Docs />}
+        >
+          <Route
+            index
+            element={null}
+          />
+          <Route
+            path="technische-voraussetzungen"
+            element={<BrowserDoc />}
+          />
+          <Route
+            path="fehler-melden"
+            element={<MeldenDoc />}
+          />
+          <Route
+            path="neue-art-erfassen"
+            element={<NeueArtDoc />}
+          />
           <Route
             path="projektbeschreibung"
             element={<ProjektbeschreibungDoc />}
           />
-          <Route path="schnittstellen" element={<SchnittstellenDoc />} />
-          <Route path="*" element={<FourOhFour />} />
+          <Route
+            path="schnittstellen"
+            element={<SchnittstellenDoc />}
+          />
+          <Route
+            path="*"
+            element={<FourOhFour />}
+          />
         </Route>
-        <Route path="*" element={<FourOhFour />} />
+        <Route
+          path="*"
+          element={<FourOhFour />}
+        />
       </Route>,
     ),
   )
