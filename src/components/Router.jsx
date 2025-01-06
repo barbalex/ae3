@@ -120,15 +120,15 @@ const RouterComponent = () => {
           />
         </Route>
         <Route
-          path="/Export/*"
+          path="Export/*"
           element={<Export />}
         />
         <Route
-          path="/Login"
+          path="Login"
           element={<Login />}
         />
         <Route
-          path="/Dokumentation/*"
+          path="Dokumentation"
           element={<Docs />}
         >
           <Route
