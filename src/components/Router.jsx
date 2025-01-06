@@ -104,14 +104,16 @@ const RouterComponent = () => {
               element={<Benutzer />}
             />
           </Route>
-          <Route
-            path="/Organisationen/*"
-            element={<Home />}
-          />
-          <Route
-            path="/Organisationen/:orgId"
-            element={<Organisation />}
-          />
+          <Route path="Organisationen">
+            <Route
+              index
+              element={<Home />}
+            />
+            <Route
+              path=":orgId"
+              element={<Organisation />}
+            />
+          </Route>
           <Route
             path="*"
             element={<FourOhFour />}
