@@ -1,6 +1,6 @@
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'

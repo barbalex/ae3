@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router'
 
 import { getActiveObjectIdFromNodeArray } from '../../../modules/getActiveObjectIdFromNodeArray.js'
 import storeContext from '../../../storeContext.js'

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import storeContext from '../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'

@@ -15,7 +15,7 @@ import format from 'date-fns/format'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import Property from './Property.jsx'
 import onBlur from './onBlur.js'

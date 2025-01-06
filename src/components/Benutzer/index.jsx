@@ -15,7 +15,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import query from './query.js'

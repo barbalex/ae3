@@ -3,8 +3,8 @@ import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider,
-} from 'react-router-dom'
+} from 'react-router'
+import { RouterProvider } from 'react-router/dom'
 
 const Layout = lazy(() => import('./Layout/index.jsx'))
 const Home = lazy(() => import('./Home.jsx'))

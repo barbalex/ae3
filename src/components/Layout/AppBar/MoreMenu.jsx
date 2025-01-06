@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import { MdMoreVert as MoreVertIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import relations from '../../../modules/relations.png'
 

@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { UserReadOnly } from '../shared/UserReadOnly.jsx'

@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import onBlurDo from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'

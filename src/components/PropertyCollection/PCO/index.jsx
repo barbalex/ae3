@@ -8,7 +8,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import ImportPco from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'

@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import ImportRco from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'

@@ -6,7 +6,7 @@ import Select from 'react-select/async'
 import { useQuery, gql, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import  { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'

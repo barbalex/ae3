@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client'
 import isUuid from 'is-uuid'
 import { observer } from 'mobx-react-lite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import  { getUrlForObject } from '../modules/getUrlForObject.js'
 import  { getUrlParamByName } from '../modules/getUrlParamByName.js'

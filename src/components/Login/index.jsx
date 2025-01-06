@@ -15,7 +15,7 @@ import {
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import fetchLoginModule from './fetchLogin.js'
 import idbContext from '../../idbContext.js'

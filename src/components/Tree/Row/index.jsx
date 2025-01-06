@@ -11,7 +11,7 @@ import Icon from '@mui/material/Icon'
 import isEqual from 'lodash/isEqual'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
 

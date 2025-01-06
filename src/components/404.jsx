@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import Typography from '@mui/material/Typography'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
@@ -49,12 +49,18 @@ const FourOFour = () => {
     <ErrorBoundary>
       <Container>
         <TextContainer>
-          <PageTitle align="center" variant="h6">
+          <PageTitle
+            align="center"
+            variant="h6"
+          >
             Oh je
           </PageTitle>
         </TextContainer>
         <TextContainer>
-          <Text align="center" variant="h6">
+          <Text
+            align="center"
+            variant="h6"
+          >
             Diese Seite ist nicht verfügbar.
           </Text>
         </TextContainer>
