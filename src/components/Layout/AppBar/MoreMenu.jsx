@@ -26,7 +26,7 @@ const StyledButton = styled(Button)`
 `
 const Version = styled.div`
   padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.5);
   user-select: none;
 `
 // const TwoLineMenuItem = styled(MenuItem)`
