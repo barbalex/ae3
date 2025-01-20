@@ -67,7 +67,7 @@ const StyledUl = styled.ul`
   }
 `
 
-const ImportPcoInstructions = ({
+export const PcoInstructions = ({
   idsExist,
   objectIdsAreReal,
   pCOfOriginIdsAreReal,
@@ -527,5 +527,3 @@ const ImportPcoInstructions = ({
     </HowToImportContainer>
   </>
 )
-
-export default ImportPcoInstructions

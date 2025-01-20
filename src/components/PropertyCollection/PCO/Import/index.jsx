@@ -26,7 +26,7 @@ import storeContext from '../../../../storeContext.js'
 import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
-import Instructions from './Instructions.jsx'
+import { PcoInstructions } from './Instructions.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -136,9 +136,9 @@ const ImportPco = ({ setImport }) => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const pCId =
-    activeNodeArray.length > 0
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
+    activeNodeArray.length > 0 ?
+      activeNodeArray[1]
+    : '99999999-9999-9999-9999-999999999999'
 
   const [objectIds, setObjectIds] = useState([])
   const [pCOfOriginIds, setPCOfOriginIds] = useState([])
@@ -167,9 +167,9 @@ const ImportPco = ({ setImport }) => {
           getObjectIds: objectIds.length > 0,
           getPCOfOriginIds: pCOfOriginIds.length > 0,
           pCOfOriginIds:
-            pCOfOriginIds.length > 0
-              ? pCOfOriginIds
-              : ['99999999-9999-9999-9999-999999999999'],
+            pCOfOriginIds.length > 0 ?
+              pCOfOriginIds
+            : ['99999999-9999-9999-9999-999999999999'],
         },
         fetchPolicy: 'no-cache',
       }),
@@ -199,17 +199,17 @@ const ImportPco = ({ setImport }) => {
 
   const objectIdsAreReal = useMemo(
     () =>
-      !isLoading && objectIds.length > 0
-        ? objectIdsUnreal.length === 0
-        : undefined,
+      !isLoading && objectIds.length > 0 ?
+        objectIdsUnreal.length === 0
+      : undefined,
     [isLoading, objectIds.length, objectIdsUnreal.length],
   )
   const pCOfOriginsCheckData = data?.allPropertyCollections?.nodes ?? []
   const pCOfOriginIdsAreReal = useMemo(
     () =>
-      !isLoading && pCOfOriginIds.length > 0
-        ? pCOfOriginIds.length === pCOfOriginsCheckData.length
-        : undefined,
+      !isLoading && pCOfOriginIds.length > 0 ?
+        pCOfOriginIds.length === pCOfOriginsCheckData.length
+      : undefined,
     [isLoading, pCOfOriginIds.length, pCOfOriginsCheckData.length],
   )
   const importDataFields = useMemo(() => {
@@ -223,17 +223,17 @@ const ImportPco = ({ setImport }) => {
     () =>
       importData.length > 0 &&
       checkState.existsNoDataWithoutKey &&
-      (checkState.idsExist
-        ? checkState.idsAreUnique && checkState.idsAreUuids
-        : true) &&
-      (checkState.objectIdsExist
-        ? checkState.objectIdsAreUuid &&
-          (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
-        : false) &&
-      (checkState.pCOfOriginIdsExist
-        ? checkState.pCOfOriginIdsAreUuid &&
-          (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
-        : true) &&
+      (checkState.idsExist ?
+        checkState.idsAreUnique && checkState.idsAreUuids
+      : true) &&
+      (checkState.objectIdsExist ?
+        checkState.objectIdsAreUuid &&
+        (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
+      : false) &&
+      (checkState.pCOfOriginIdsExist ?
+        checkState.pCOfOriginIdsAreUuid &&
+        (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
+      : true) &&
       checkState.existsPropertyKey &&
       checkState.propertyKeysDontContainApostroph &&
       checkState.propertyKeysDontContainBackslash &&
@@ -278,20 +278,19 @@ const ImportPco = ({ setImport }) => {
         const ids = data.map((d) => d.id).filter((d) => d !== undefined)
         const _idsExist = ids.length > 0
         checkState.idsExist = _idsExist
-        checkState.idsAreUuid = _idsExist
-          ? !ids.map((d) => isUuid(d)).includes(false)
-          : undefined
-        checkState.idsAreUnique = _idsExist
-          ? ids.length === uniq(ids).length
-          : undefined
+        checkState.idsAreUuid =
+          _idsExist ? !ids.map((d) => isUuid(d)).includes(false) : undefined
+        checkState.idsAreUnique =
+          _idsExist ? ids.length === uniq(ids).length : undefined
         const _objectIds = data
           .map((d) => d.objectId)
           .filter((d) => d !== undefined)
 
         checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
         const _objectsIdsAreNotUuid = data.filter((d) => !isUuid(d.objectId))
-        checkState.objectIdsAreUuid = objectIdFieldExistsAndIsCorrectlySpelled
-          ? _objectsIdsAreNotUuid.length === 0
+        checkState.objectIdsAreUuid =
+          objectIdFieldExistsAndIsCorrectlySpelled ?
+            _objectsIdsAreNotUuid.length === 0
           : undefined
         setObjectIds(_objectIds)
 
@@ -300,8 +299,9 @@ const ImportPco = ({ setImport }) => {
           .filter((d) => d !== undefined)
         const _pCOfOriginIdsExist = _pCOfOriginIds.length > 0
         checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
-        checkState.pCOfOriginIdsAreUuid = _pCOfOriginIdsExist
-          ? !_pCOfOriginIds.map((d) => isUuid(d)).includes(false)
+        checkState.pCOfOriginIdsAreUuid =
+          _pCOfOriginIdsExist ?
+            !_pCOfOriginIds.map((d) => isUuid(d)).includes(false)
           : undefined
         setPCOfOriginIds(_pCOfOriginIds)
 
@@ -310,14 +310,16 @@ const ImportPco = ({ setImport }) => {
         )
         const _existsPropertyKey = propertyKeys.length > 0
         checkState.existsPropertyKey = _existsPropertyKey
-        checkState.propertyKeysDontContainApostroph = _existsPropertyKey
-          ? !some(propertyKeys, (k) => {
+        checkState.propertyKeysDontContainApostroph =
+          _existsPropertyKey ?
+            !some(propertyKeys, (k) => {
               if (!k || !k.includes) return false
               return k.includes('"')
             })
           : undefined
-        checkState.propertyKeysDontContainBackslash = _existsPropertyKey
-          ? !some(propertyKeys, (k) => {
+        checkState.propertyKeysDontContainBackslash =
+          _existsPropertyKey ?
+            !some(propertyKeys, (k) => {
               if (!k || !k.includes) return false
               return k.includes('\\')
             })
@@ -394,7 +396,7 @@ const ImportPco = ({ setImport }) => {
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
       <Container>
-        <Instructions
+        <PcoInstructions
           {...checkState}
           objectIdsAreReal={objectIdsAreReal}
           pCOfOriginIdsAreReal={pCOfOriginIdsAreReal}
@@ -473,7 +475,10 @@ const ImportPco = ({ setImport }) => {
               )} Feld${propertyFields.length === 1 ? '' : 'er'}${
                 importData.length > 0 ? ':' : ''
               }, Erste `}
-              <CountInput count={count} setCount={setCount} />
+              <CountInput
+                count={count}
+                setCount={setCount}
+              />
               {' :'}
             </TotalDiv>
             <DataTable
@@ -486,7 +491,10 @@ const ImportPco = ({ setImport }) => {
             />
           </>
         )}
-        <StyledSnackbar open={isLoading} message="lade Daten..." />
+        <StyledSnackbar
+          open={isLoading}
+          message="lade Daten..."
+        />
       </Container>
     </SimpleBar>
   )

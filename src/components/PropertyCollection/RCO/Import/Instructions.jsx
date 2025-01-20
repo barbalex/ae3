@@ -68,7 +68,7 @@ const StyledP = styled.p`
   margin-bottom: 5px;
 `
 
-const ImportRcoInstructions = ({
+export const RcoInstructions = ({
   existsNoDataWithoutKey,
   idsExist,
   idsAreUuids,
@@ -646,5 +646,3 @@ const ImportRcoInstructions = ({
     </HowToImportContainer>
   </>
 )
-
-export default ImportRcoInstructions
