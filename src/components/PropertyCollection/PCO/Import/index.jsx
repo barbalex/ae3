@@ -212,12 +212,6 @@ const ImportPco = ({ setImport }) => {
       : undefined,
     [isLoading, pCOfOriginIds.length, pCOfOriginsCheckData.length],
   )
-  console.log('ImportPco', {
-    pCOfOriginIdsAreReal,
-    isLoading,
-    pCOfOriginIds,
-    pCOfOriginsCheckData,
-  })
   const importDataFields = useMemo(() => {
     let fields = []
     importData.forEach((d) => {
