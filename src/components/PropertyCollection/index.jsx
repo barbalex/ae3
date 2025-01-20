@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useMemo } from 'react'
+import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
@@ -14,10 +15,10 @@ import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import Property from './Property.jsx'
+import { DateField } from '../shared/Date.jsx'
 import onBlur from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -214,6 +215,18 @@ const PropertyCollection = () => {
       }),
     [client, pC, queryClient],
   )
+  const onChangeLastUpdated = useCallback(
+    (event) =>
+      onBlur({
+        client,
+        field: 'lastUpdated',
+        pC,
+        value: event.target.value,
+        prevValue: pC.lastUpdated,
+        queryClient,
+      }),
+    [client, pC, queryClient],
+  )
 
   if (pcLoading || allUsersLoading) {
     return <Container>Lade Daten...</Container>
@@ -252,8 +265,16 @@ const PropertyCollection = () => {
         )}
         {!editingPCs && (
           <>
-            <PropertyReadOnly key="id" value={pC.id} label="id" />
-            <PropertyReadOnly key="name" value={pC.name} label="Name" />
+            <PropertyReadOnly
+              key="id"
+              value={pC.id}
+              label="id"
+            />
+            <PropertyReadOnly
+              key="name"
+              value={pC.name}
+              label="Name"
+            />
             <PropertyReadOnly
               key="description"
               value={pC.description}
@@ -262,12 +283,12 @@ const PropertyCollection = () => {
             <PropertyReadOnly
               key="combining"
               value={
-                pC.combining !== undefined
-                  ? pC.combining
-                      .toString()
-                      .replace('true', 'ja')
-                      .replace('false', 'nein')
-                  : ''
+                pC.combining !== undefined ?
+                  pC.combining
+                    .toString()
+                    .replace('true', 'ja')
+                    .replace('false', 'nein')
+                : ''
               }
               label="zusammenfassend"
             />
@@ -420,12 +441,12 @@ const PropertyCollection = () => {
                 </span>
               </FormHelperText>
             </StyledFormControl>
-            <Property
+            <DateField
               key={`${pC.id}/lastUpdated`}
+              name="lastUpdated"
               label="Zuletzt aktualisiert"
-              field="lastUpdated"
-              pC={pC}
-              disabled={true}
+              value={pC.lastUpdated}
+              saveToDb={onChangeLastUpdated}
               helperText="Wann wurden die Eigenschaften dieser Sammlung zuletzt aktualisiert?"
             />
             <Property
@@ -457,7 +478,10 @@ const PropertyCollection = () => {
                 input={<Input id="organizationIdArten" />}
               >
                 {orgsUserIsPCWriter.map((o) => (
-                  <MenuItem key={o.id} value={o.id}>
+                  <MenuItem
+                    key={o.id}
+                    value={o.id}
+                  >
                     {o.name}
                   </MenuItem>
                 ))}
@@ -472,7 +496,10 @@ const PropertyCollection = () => {
                 input={<Input id="importedByArten" />}
               >
                 {allUsers.map((u) => (
-                  <MenuItem key={u.id} value={u.id}>
+                  <MenuItem
+                    key={u.id}
+                    value={u.id}
+                  >
                     {u.name}
                   </MenuItem>
                 ))}
