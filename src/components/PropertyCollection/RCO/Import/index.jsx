@@ -367,13 +367,16 @@ const ImportRco = ({ setImport }) => {
           const _pCOfOriginIds = data
             .map((d) => d.propertyCollectionOfOrigin)
             .filter((d) => d !== undefined)
-          const _pCOfOriginIdsExist = _pCOfOriginIds.length > 0
+          const uniquePCOfOriginIds = [...new Set(_pCOfOriginIds)]
+          const _pCOfOriginIdsExist = uniquePCOfOriginIds.length > 0
           checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
           checkState.pCOfOriginIdsAreUuid =
             _pCOfOriginIdsExist ?
-              !_pCOfOriginIds.map((d) => isUuid.anyNonNil(d)).includes(false)
+              !uniquePCOfOriginIds
+                .map((d) => isUuid.anyNonNil(d))
+                .includes(false)
             : undefined
-          setPCOfOriginIds(_pCOfOriginIds)
+          setPCOfOriginIds(uniquePCOfOriginIds)
 
           const propertyKeys = union(
             flatten(data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))),

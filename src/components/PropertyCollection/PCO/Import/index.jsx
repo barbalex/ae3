@@ -212,6 +212,12 @@ const ImportPco = ({ setImport }) => {
       : undefined,
     [isLoading, pCOfOriginIds.length, pCOfOriginsCheckData.length],
   )
+  console.log('ImportPco', {
+    pCOfOriginIdsAreReal,
+    isLoading,
+    pCOfOriginIds,
+    pCOfOriginsCheckData,
+  })
   const importDataFields = useMemo(() => {
     let fields = []
     importData.forEach((d) => {
@@ -297,13 +303,14 @@ const ImportPco = ({ setImport }) => {
         const _pCOfOriginIds = data
           .map((d) => d.propertyCollectionOfOrigin)
           .filter((d) => d !== undefined)
-        const _pCOfOriginIdsExist = _pCOfOriginIds.length > 0
+        const uniquePCOfOriginIds = [...new Set(_pCOfOriginIds)]
+        const _pCOfOriginIdsExist = uniquePCOfOriginIds.length > 0
         checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
         checkState.pCOfOriginIdsAreUuid =
           _pCOfOriginIdsExist ?
-            !_pCOfOriginIds.map((d) => isUuid(d)).includes(false)
+            !uniquePCOfOriginIds.map((d) => isUuid(d)).includes(false)
           : undefined
-        setPCOfOriginIds(_pCOfOriginIds)
+        setPCOfOriginIds(uniquePCOfOriginIds)
 
         const propertyKeys = union(
           flatten(data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))),
