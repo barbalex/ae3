@@ -34,11 +34,7 @@ const Version = styled.div`
 // `
 
 const ITEM_HEIGHT = 48
-const paperProps = {
-  style: {
-    maxHeight: ITEM_HEIGHT * 7,
-  },
-}
+const paperProps = { style: { maxHeight: ITEM_HEIGHT * 7 } }
 
 const MoreMenu = () => {
   const navigate = useNavigate()
@@ -127,7 +123,7 @@ const MoreMenu = () => {
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <Version>Version: 3.1.12 vom 20.1.2025</Version>
+        <Version>Version: 3.1.13 vom 24.2.2025</Version>
       </Menu>
     </div>
   )
