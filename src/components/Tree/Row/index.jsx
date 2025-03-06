@@ -31,6 +31,8 @@ const StyledNode = styled.div`
   box-sizing: border-box;
   margin: 0;
   white-space: nowrap;
+  content-visibility: auto;
+  contain-intrinsic-size: auto ${rowHeight}px;
   // ellipsis for overflow
   // TODO: not working
   overflow: hidden;
