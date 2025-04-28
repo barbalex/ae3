@@ -70,7 +70,7 @@
     "prettier": "3.5.3",
     "vercel": "41.6.2",
     "vite": "6.3.3",
-    "vite-plugin-pwa": "0.21.2",
+    "vite-plugin-pwa": "1.0.0",
     "vite-plugin-svgr": "4.3.0"
   },
   "dependencyComments": {
