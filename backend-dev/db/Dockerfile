@@ -1,6 +1,6 @@
 # see: https://hub.docker.com/_/postgres
 # DANGER: artdaten.ch runs on postgres:12.8, arteigenschaften.ch on 14.0
-FROM postgres:17.2
+FROM postgres:17.4
 #FROM postgres:14.0
 # TODO: upgrade to 15-3.3?
 

@@ -1,6 +1,6 @@
 FROM node:slim
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN npm install -g postgraphile
 RUN npm install -g postgraphile-plugin-connection-filter
