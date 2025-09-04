@@ -69,7 +69,6 @@ function _inherits(subClass, superClass) {
     : (subClass.__proto__ = superClass)
 }
 
-import React from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 

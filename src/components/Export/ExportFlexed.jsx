@@ -1,4 +1,3 @@
-import React from 'react'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 
 import ChooseColumn from './ChooseColumn/index.jsx'

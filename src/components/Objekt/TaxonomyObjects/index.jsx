@@ -1,4 +1,3 @@
-import React from 'react'
 import sortBy from 'lodash/sortBy'
 
 import TaxonomyObject from './TaxonomyObject/index.jsx'

@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
