@@ -174,7 +174,7 @@ export const rcoPreviewQuery = gql`
   }
 `
 
-const RCO = () => {
+export const RCO = observer(() => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
   const { pcId } = useParams()
@@ -440,6 +440,4 @@ const RCO = () => {
       {showImportRco && <ImportRco setImport={setImport} />}
     </Container>
   )
-}
-
-export default observer(RCO)
+})

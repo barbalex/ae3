@@ -32,9 +32,15 @@ const PropertyCollection = lazy(async () => ({
 const PCO = lazy(async () => ({
   default: (await import('./PropertyCollection/PCO/index.jsx')).PCO,
 }))
-const RCO = lazy(() => import('./PropertyCollection/RCO/index.jsx'))
-const Export = lazy(() => import('./Export/index.jsx'))
-const Data = lazy(() => import('./Data/index.jsx'))
+const RCO = lazy(async () => ({
+  default: (await import('./PropertyCollection/RCO/index.jsx')).RCO,
+}))
+const Export = lazy(async () => ({
+  default: (await import('./Export/index.jsx')).Export,
+}))
+const Data = lazy(async () => ({
+  default: (await import('./Data/index.jsx')).Data,
+}))
 
 // Use react-router with outlets
 // render routes in outlet inside Data
