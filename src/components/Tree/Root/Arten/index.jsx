@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router'
 
 import Row from '../../Row/index.jsx'
-import Tax from '../LR/Tax.jsx'
+import { Tax } from '../LR/Tax.jsx'
 
-const ArtenNode = ({ isLoading, count }) => {
+export const Arten = ({ isLoading, count }) => {
   const { pathname } = useLocation()
   const isOpen = pathname.startsWith('/Arten')
 
@@ -23,5 +23,3 @@ const ArtenNode = ({ isLoading, count }) => {
     </>
   )
 }
-
-export default ArtenNode

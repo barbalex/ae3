@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 
-import Tree from '../Tree/index.jsx'
+import { Tree } from '../Tree/index.jsx'
 import storeContext from '../../storeContext.js'
 
 const StyledPaper = styled(Paper)`
@@ -17,7 +17,7 @@ const Content = styled.div`
   height: ${(props) => props['data-height']}px;
 `
 
-const DataStacked = () => {
+export const DataStacked = observer(() => {
   const store = useContext(storeContext)
   const { windowHeight, treeRefetchCounter } = store
 
@@ -46,6 +46,5 @@ const DataStacked = () => {
       </Content>
     </>
   )
-}
+})
 
-export default observer(DataStacked)

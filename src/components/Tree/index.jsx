@@ -17,7 +17,7 @@ import CmPC from './contextmenu/PC.jsx'
 import storeContext from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
-import Root from './Root/index.jsx'
+import { Root } from './Root/index.jsx'
 import IntoViewScroller from './IntoViewScroller.jsx'
 
 const ErrorContainer = styled.div`
@@ -114,7 +114,7 @@ const Container = styled.div`
   }
 `
 
-const TreeComponent = () => {
+export const Tree = observer(() => {
   const store = useContext(storeContext)
   const { treeRefetchCounter } = store
 
@@ -178,6 +178,4 @@ const TreeComponent = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(TreeComponent)
+})

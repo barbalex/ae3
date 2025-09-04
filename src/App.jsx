@@ -16,13 +16,15 @@ import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFrom
 import { initializeIdb } from './modules/initializeIdb.js'
 import { setLoginFromIdb } from './modules/setLoginFromIdb.js'
 import { detectIE } from './modules/detectIE.js'
-import client from './client.js'
+import { client } from './client.js'
 import { Provider as IdbProvider } from './idbContext.js'
 import { Provider as MobxProvider } from './storeContext.js'
 import Store from './store/index.js'
-import Router from './components/Router.jsx'
+import { Router } from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
-const Stacker = lazy(() => import('./components/Stacker.jsx'))
+const Stacker = lazy(async () => ({
+  default: (await import('./components/Stacker.jsx')).Stacker,
+}))
 
 export const App = () => {
   const idb = initializeIdb()

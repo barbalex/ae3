@@ -5,7 +5,7 @@ import { useLocation } from 'react-router'
 import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
 
-const Object = ({ parentData }) => {
+export const Object = ({ parentData }) => {
   const apolloClient = useApolloClient()
   const { pathname } = useLocation()
 
@@ -65,5 +65,3 @@ const Object = ({ parentData }) => {
 
   return nodes
 }
-
-export default Object

@@ -30,7 +30,7 @@ const Data = lazy(() => import('./Data/index.jsx'))
 
 // Use react-router with outlets
 // render routes in outlet inside Data
-const RouterComponent = () => {
+export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
@@ -176,5 +176,3 @@ const RouterComponent = () => {
 
   return <RouterProvider router={router} />
 }
-
-export default RouterComponent

@@ -1,8 +1,9 @@
 import { useContext } from 'react'
 import { gql, useApolloClient } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
+import { observer } from 'mobx-react-lite'
 
-import Arten from './Arten/index.jsx'
+import { Arten } from './Arten/index.jsx'
 import LR from './LR/index.jsx'
 import PC from './PC/index.jsx'
 import Users from './Users/index.jsx'
@@ -10,7 +11,7 @@ import Organizations from './Organizations/index.jsx'
 import storeContext from '../../../storeContext.js'
 import LoadingRow from '../LoadingRow.jsx'
 
-const Root = () => {
+export const Root = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { treeRefetchCounter } = store
@@ -89,6 +90,4 @@ const Root = () => {
       )}
     </>
   )
-}
-
-export default Root
+})

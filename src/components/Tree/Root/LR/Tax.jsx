@@ -4,9 +4,9 @@ import { useParams } from 'react-router'
 
 import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
-import TopLevelObject from './TopLevelObject.jsx'
+import { TopLevelObject } from './TopLevelObject.jsx'
 
-const Tax = ({ type = 'Lebensräume' }) => {
+export const Tax = ({ type = 'Lebensräume' }) => {
   const apolloClient = useApolloClient()
   const { taxId } = useParams()
 
@@ -65,5 +65,3 @@ const Tax = ({ type = 'Lebensräume' }) => {
 
   return nodes
 }
-
-export default Tax

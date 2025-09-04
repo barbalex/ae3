@@ -4,9 +4,9 @@ import { useParams, useLocation } from 'react-router'
 
 import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
-import Object from './Object.jsx'
+import { Object } from './Object.jsx'
 
-const TopLevelObject = ({ type = 'Lebensräume' }) => {
+export const TopLevelObject = ({ type = 'Lebensräume' }) => {
   const apolloClient = useApolloClient()
   const { taxId } = useParams()
   const { pathname } = useLocation()

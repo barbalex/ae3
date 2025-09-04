@@ -5,9 +5,9 @@ import { jwtDecode } from 'jwt-decode'
 
 import './index.css'
 import 'react-reflex/styles.css'
-import  { graphQlUri } from './modules/graphQlUri.js'
+import { graphQlUri } from './modules/graphQlUri.js'
 
-const client = ({ idb, store }) => {
+export const client = ({ idb, store }) => {
   /**
    * On the next line Firefox 45.3.0 errors out with:
    * Unhandled Rejection (OpenFailedError): UnknownError The operation failed
@@ -63,5 +63,3 @@ const client = ({ idb, store }) => {
   })
   return client
 }
-
-export default client

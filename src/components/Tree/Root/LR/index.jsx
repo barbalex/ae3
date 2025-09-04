@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router'
 
 import Row from '../../Row/index.jsx'
-import Tax from './Tax.jsx'
+import { Tax } from './Tax.jsx'
 
 const LrNode = ({ isLoading, count }) => {
   const { pathname } = useLocation()

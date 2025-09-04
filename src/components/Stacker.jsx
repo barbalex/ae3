@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../storeContext.js'
 
-const Stacker = () => {
+export const Stacker = observer(() => {
   const store = useContext(storeContext)
   const { setWindowWidth, setWindowHeight, setStacked } = store
 
@@ -36,6 +36,4 @@ const Stacker = () => {
   }, [updateStacked])
 
   return null
-}
-
-export default observer(Stacker)
+})
