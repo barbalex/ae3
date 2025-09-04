@@ -1,3 +1,5 @@
+import { createElement } from 'react'
+
 var _createClass = (function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
@@ -344,7 +346,7 @@ var ContextMenu = (function (_AbstractMenu) {
           _defineProperty({}, cssClasses.menuVisible, isVisible),
         )
 
-        return React.createElement(
+        return createElement(
           'nav',
           {
             role: 'menu',

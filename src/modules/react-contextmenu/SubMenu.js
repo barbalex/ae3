@@ -1,3 +1,5 @@
+import { createElement } from 'react'
+
 var _extends =
   Object.assign ||
   function (target) {
@@ -385,19 +387,15 @@ var SubMenu = (function (_AbstractMenu) {
           className: cx(cssClasses.menu, this.props.className ?? ''),
         }
 
-        return React.createElement(
+        return createElement(
           'nav',
           _extends({}, menuProps, {
             role: 'menuitem',
             tabIndex: '-1',
             'aria-haspopup': 'true',
           }),
-          React.createElement(
-            'div',
-            _extends({}, attributes, menuItemProps),
-            title,
-          ),
-          React.createElement(
+          createElement('div', _extends({}, attributes, menuItemProps), title),
+          createElement(
             'nav',
             _extends({}, subMenuProps, { role: 'menu', tabIndex: '-1' }),
             this.renderChildren(children),
