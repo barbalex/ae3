@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useMemo } from 'react'
+import { useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import forOwn from 'lodash/forOwn'
 import union from 'lodash/union'

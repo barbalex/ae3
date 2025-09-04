@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react'
+import { useMemo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'

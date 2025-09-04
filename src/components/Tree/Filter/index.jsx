@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useContext, useMemo } from 'react'
+import { useEffect, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'

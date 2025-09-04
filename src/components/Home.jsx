@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'

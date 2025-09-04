@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import { gql, useApolloClient } from '@apollo/client'

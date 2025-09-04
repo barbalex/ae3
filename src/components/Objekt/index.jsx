@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import uniqBy from 'lodash/uniqBy'
 import { useQuery } from '@apollo/client'

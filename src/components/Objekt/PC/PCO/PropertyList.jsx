@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'

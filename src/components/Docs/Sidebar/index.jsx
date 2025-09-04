@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'

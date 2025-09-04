@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 

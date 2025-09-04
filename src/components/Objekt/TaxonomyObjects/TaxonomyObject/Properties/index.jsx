@@ -6,7 +6,7 @@
  * if user klicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 

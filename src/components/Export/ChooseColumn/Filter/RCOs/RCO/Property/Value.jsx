@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useRef } from 'react'
+import { useState, useCallback, useContext, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import styled from '@emotion/styled'
