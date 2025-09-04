@@ -1,4 +1,4 @@
-import React from 'react'
+import { Children, isValidElement, cloneElement } from 'react'
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -157,7 +157,7 @@ var _initialiseProps = function _initialiseProps() {
 
       if ([MenuItem, _this2.getSubMenuType()].indexOf(child.type) < 0) {
         // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
-        React.Children.forEach(child.props.children, childCollector)
+        Children.forEach(child.props.children, childCollector)
       } else if (!child.props.divider) {
         if (child.props.disabled) {
           ++disabledChildrenCount
@@ -168,7 +168,7 @@ var _initialiseProps = function _initialiseProps() {
       }
     }
 
-    React.Children.forEach(_this2.props.children, childCollector)
+    Children.forEach(_this2.props.children, childCollector)
     if (disabledChildrenCount === children.length) {
       // All menu items are disabled, so none can be selected, don't do anything
       return
@@ -219,13 +219,13 @@ var _initialiseProps = function _initialiseProps() {
   }
 
   this.renderChildren = function (children) {
-    return React.Children.map(children, function (child) {
+    return Children.map(children, function (child) {
       var props = {}
-      if (!React.isValidElement(child)) return child
+      if (!isValidElement(child)) return child
       if ([MenuItem, _this2.getSubMenuType()].indexOf(child.type) < 0) {
         // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
         props.children = _this2.renderChildren(child.props.children)
-        return React.cloneElement(child, props)
+        return cloneElement(child, props)
       }
       props.onMouseLeave = _this2.onChildMouseLeave.bind(_this2)
       if (child.type === _this2.getSubMenuType()) {
@@ -241,13 +241,13 @@ var _initialiseProps = function _initialiseProps() {
         props.ref = function (ref) {
           _this2.seletedItemRef = ref
         }
-        return React.cloneElement(child, props)
+        return cloneElement(child, props)
       }
       // onMouseMove is only needed for non selected items
       props.onMouseMove = function () {
         return _this2.onChildMouseMove(child)
       }
-      return React.cloneElement(child, props)
+      return cloneElement(child, props)
     })
   }
 }
