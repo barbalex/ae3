@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Chooser from './Chooser.jsx'
 
 const RcoProperties = ({ properties, relationtype }) =>

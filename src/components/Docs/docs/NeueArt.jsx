@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { DokuDate } from '../index.jsx'
 
 const NeueArtDoc = () => (

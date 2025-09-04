@@ -1,5 +1,3 @@
-import React from 'react'
-
 import TaxField from './TaxField/index.jsx'
 
 const TaxProperties = ({ properties }) =>

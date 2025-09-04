@@ -1,5 +1,3 @@
-import React from 'react'
-
 import OrgUser from './OrgUser.jsx'
 
 const OrgUsersList = ({ orgUsers }) =>
