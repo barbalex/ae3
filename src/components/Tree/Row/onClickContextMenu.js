@@ -9,6 +9,11 @@ import createPCMutation from '../../PropertyCollection/createPCMutation.js'
 import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
 import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
 
+const taxonomyTypeConverter = {
+  Arten: 'ART',
+  Lebensraeume: 'LEBENSRAUM',
+}
+
 const onClickContextMenu = async ({
   data,
   target,
@@ -70,7 +75,6 @@ const onClickContextMenu = async ({
         variables: { name: store.login.username },
       })
       const userId = userData?.userByName?.id
-      console.log('onClickContextMenu', { userData, userId })
       if (table === 'object') {
         let newObjectData
         if (url.length === 2) {
@@ -95,14 +99,11 @@ const onClickContextMenu = async ({
         }
       }
       if (table === 'taxonomy') {
-        const typeConverter = {
-          Arten: 'ART',
-          Lebensräume: 'LEBENSRAUM',
-        }
+        const type = taxonomyTypeConverter[id] ?? 'Art'
         const newTaxonomyData = await client.mutate({
           mutation: createTaxonomyMutation,
           variables: {
-            type: typeConverter[id],
+            type: taxonomyTypeConverter[id],
             importedBy: userId,
             lastUpdated: new Date(),
           },
