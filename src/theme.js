@@ -5,7 +5,7 @@ import { constants } from './modules/constants.js'
 
 // All the following keys are optional.
 // We try our best to provide a great default value.
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     contrastThreshold: 3,
     tonalOffset: 0.2,
@@ -22,5 +22,3 @@ const theme = createTheme({
     height: constants.appBarHeight,
   },
 })
-
-export default theme
