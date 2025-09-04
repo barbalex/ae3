@@ -105,7 +105,7 @@ const taxQuery = gql`
   }
 `
 
-const Taxonomy = () => {
+export const Taxonomy = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { editingTaxonomies, setEditingTaxonomies, login } = store
@@ -526,6 +526,4 @@ const Taxonomy = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Taxonomy)
+})

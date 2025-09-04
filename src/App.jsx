@@ -19,7 +19,7 @@ import { detectIE } from './modules/detectIE.js'
 import { client } from './client.js'
 import { Provider as IdbProvider } from './idbContext.js'
 import { Provider as MobxProvider } from './storeContext.js'
-import Store from './store/index.js'
+import { store as Store } from './store/index.js'
 import { Router } from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
 const Stacker = lazy(async () => ({

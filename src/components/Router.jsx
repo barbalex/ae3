@@ -20,7 +20,9 @@ const ProjektbeschreibungDoc = lazy(
   () => import('./Docs/docs/Projektbeschreibung.jsx'),
 )
 const SchnittstellenDoc = lazy(() => import('./Docs/docs/Schnittstellen.jsx'))
-const Taxonomy = lazy(() => import('./Taxonomy/index.jsx'))
+const Taxonomy = lazy(async () => ({
+  default: (await import('./Taxonomy/index.jsx')).Taxonomy,
+}))
 const Objekt = lazy(() => import('./Objekt/index.jsx'))
 const PropertyCollection = lazy(() => import('./PropertyCollection/index.jsx'))
 const PCO = lazy(() => import('./PropertyCollection/PCO/index.jsx'))

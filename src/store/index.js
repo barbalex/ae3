@@ -6,7 +6,7 @@ import TreeFilter, { defaultValue as defaultTreeFilter } from './TreeFilter.js'
 import Login, { defaultValue as defaultLogin } from './Login.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
 
-const store = () =>
+export const store = () =>
   types
     .model({
       export: types.optional(Export, defaultExport),
@@ -68,5 +68,3 @@ const store = () =>
         return self.windowWidth <= 700
       },
     }))
-
-export default store
