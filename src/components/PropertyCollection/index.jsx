@@ -105,7 +105,7 @@ const pcQuery = gql`
   }
 `
 
-const PropertyCollection = () => {
+export const PropertyCollection = observer(() => {
   const { pcId } = useParams()
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
@@ -539,6 +539,4 @@ const PropertyCollection = () => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(PropertyCollection)
+})

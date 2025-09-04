@@ -39,7 +39,7 @@ const SynonymTitle = styled(Title)`
   margin-bottom: 5px;
 `
 
-const Objekt = ({ stacked = false }) => {
+export const Objekt = observer(({ stacked = false }) => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
@@ -102,7 +102,10 @@ const Objekt = ({ stacked = false }) => {
       <Container>
         <SimpleBar style={{ maxHeight: '100%' }}>
           <FirstTitle>Taxonomie</FirstTitle>
-          <TaxonomyObject objekt={objekt} stacked={stacked} />
+          <TaxonomyObject
+            objekt={objekt}
+            stacked={stacked}
+          />
           {synonymObjects.length > 0 && (
             <SynonymTitle>
               {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
@@ -111,7 +114,10 @@ const Objekt = ({ stacked = false }) => {
               </TitleSpan>
             </SynonymTitle>
           )}
-          <TaxonomyObjects objects={synonymObjects} stacked={stacked} />
+          <TaxonomyObjects
+            objects={synonymObjects}
+            stacked={stacked}
+          />
           {pcs.length > 0 && (
             <Title>
               Eigenschaften
@@ -151,6 +157,4 @@ const Objekt = ({ stacked = false }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(Objekt)
+})

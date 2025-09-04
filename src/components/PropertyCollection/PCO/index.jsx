@@ -178,7 +178,7 @@ export const pcoPreviewQuery = gql`
   }
 `
 
-const PCO = () => {
+export const PCO = observer(() => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
   const { pcId } = useParams()
@@ -437,6 +437,4 @@ const PCO = () => {
       {showImportPco && <ImportPco setImport={setImport} />}
     </Container>
   )
-}
-
-export default observer(PCO)
+})

@@ -23,9 +23,15 @@ const SchnittstellenDoc = lazy(() => import('./Docs/docs/Schnittstellen.jsx'))
 const Taxonomy = lazy(async () => ({
   default: (await import('./Taxonomy/index.jsx')).Taxonomy,
 }))
-const Objekt = lazy(() => import('./Objekt/index.jsx'))
-const PropertyCollection = lazy(() => import('./PropertyCollection/index.jsx'))
-const PCO = lazy(() => import('./PropertyCollection/PCO/index.jsx'))
+const Objekt = lazy(async () => ({
+  default: (await import('./Objekt/index.jsx')).Objekt,
+}))
+const PropertyCollection = lazy(async () => ({
+  default: (await import('./PropertyCollection/index.jsx')).PropertyCollection,
+}))
+const PCO = lazy(async () => ({
+  default: (await import('./PropertyCollection/PCO/index.jsx')).PCO,
+}))
 const RCO = lazy(() => import('./PropertyCollection/RCO/index.jsx'))
 const Export = lazy(() => import('./Export/index.jsx'))
 const Data = lazy(() => import('./Data/index.jsx'))
