@@ -36,7 +36,11 @@ const CardEditButton = styled(IconButton)`
   }
 `
 const StyledFormControl = styled(FormControl)`
-  margin: 10px 0 5px 0 !important;
+  margin: 5px 0 5px 0 !important;
+  display: block;
+  > div {
+    width: 100%;
+  }
 `
 
 const allUsersQuery = gql`
@@ -244,9 +248,17 @@ const Taxonomy = () => {
         )}
         {!editing && (
           <>
-            <PropertyReadOnly key="id" value={tax.id} label="ID" />
+            <PropertyReadOnly
+              key="id"
+              value={tax.id}
+              label="ID"
+            />
             {!!tax.name && (
-              <PropertyReadOnly key="name" value={tax.name} label="Name" />
+              <PropertyReadOnly
+                key="name"
+                value={tax.name}
+                label="Name"
+              />
             )}
             {!!tax.description && (
               <PropertyReadOnly
@@ -341,22 +353,37 @@ const Taxonomy = () => {
               field="description"
               taxonomy={tax}
             />
-            <StyledFormControl variant="standard">
+            <StyledFormControl
+              variant="standard"
+              fullWidth
+            >
               <InputLabel htmlFor="importedByArten">Importiert von</InputLabel>
               <Select
                 key={`${tax.id}/importedBy`}
                 value={tax.importedBy}
                 onChange={onChangeImportedByArten}
-                input={<Input id="importedByArten" />}
+                input={
+                  <Input
+                    id="importedByArten"
+                    fullWidth
+                  />
+                }
+                fullWidth
               >
                 {allUsers.map((u) => (
-                  <MenuItem key={u.id} value={u.id}>
+                  <MenuItem
+                    key={u.id}
+                    value={u.id}
+                  >
                     {u.name}
                   </MenuItem>
                 ))}
               </Select>
             </StyledFormControl>
-            <StyledFormControl variant="standard">
+            <StyledFormControl
+              variant="standard"
+              fullWidth
+            >
               <InputLabel htmlFor="organizationIdArten">
                 Zuständige Organisation
               </InputLabel>
@@ -364,10 +391,18 @@ const Taxonomy = () => {
                 key={`${tax.id}/organizationId`}
                 value={tax.organizationId || ''}
                 onChange={onChangeOrganizationArten}
-                input={<Input id="organizationIdArten" />}
+                input={
+                  <Input
+                    id="organizationIdArten"
+                    fullWidth
+                  />
+                }
               >
                 {orgsUserIsTaxWriter.map((o) => (
-                  <MenuItem key={o.id} value={o.id}>
+                  <MenuItem
+                    key={o.id}
+                    value={o.id}
+                  >
                     {o.name}
                   </MenuItem>
                 ))}
@@ -418,7 +453,10 @@ const Taxonomy = () => {
                 input={<Input id="importedByLr" />}
               >
                 {allUsers.map((u) => (
-                  <MenuItem key={u.id} value={u.id}>
+                  <MenuItem
+                    key={u.id}
+                    value={u.id}
+                  >
                     {u.name}
                   </MenuItem>
                 ))}
@@ -435,7 +473,10 @@ const Taxonomy = () => {
                 input={<Input id="organizationIdLr" />}
               >
                 {orgsUserIsTaxWriter.map((o) => (
-                  <MenuItem key={o.id} value={o.id}>
+                  <MenuItem
+                    key={o.id}
+                    value={o.id}
+                  >
                     {o.name}
                   </MenuItem>
                 ))}
