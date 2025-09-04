@@ -8,6 +8,7 @@ const onBlurArten = ({
   prevValue,
   setFieldError = () => {},
   refetch = () => {},
+  refetchTree = () => {},
 }) => {
   if (value !== prevValue) {
     const variables = {
@@ -53,6 +54,7 @@ const onBlurArten = ({
     }
     setFieldError(undefined)
     refetch()
+    refetchTree()
   }
 }
 

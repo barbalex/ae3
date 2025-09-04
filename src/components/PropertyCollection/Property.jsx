@@ -30,7 +30,7 @@ const Property = ({
   type = 'text',
   disabled,
 }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -43,7 +43,7 @@ const Property = ({
   const onBlur = useCallback(
     (event) =>
       onBlurDo({
-        client,
+        client: apolloClient,
         field,
         pC,
         value: event.target.value,
@@ -52,20 +52,23 @@ const Property = ({
         navigate,
         queryClient,
       }),
-    [client, field, navigate, pC, queryClient],
+    [apolloClient, field, navigate, pC, queryClient],
   )
 
   return (
     <ErrorBoundary>
       <Container>
-        <StyledFormControl error={!!error} variant="standard">
+        <StyledFormControl
+          error={!!error}
+          variant="standard"
+        >
           <StyledTextField
             autoFocus={label === 'Name' && !value}
             label={label}
             value={
-              field === 'lastUpdated' && value
-                ? format(new Date(value), 'dd.MM.yyyy')
-                : value
+              field === 'lastUpdated' && value ?
+                format(new Date(value), 'dd.MM.yyyy')
+              : value
             }
             onChange={onChange}
             onBlur={onBlur}
@@ -77,7 +80,12 @@ const Property = ({
             spellCheck="false"
             disabled={!!disabled}
             type={type}
-            helperText={error ? error : helperText ? helperText : ''}
+            helperText={
+              error ? error
+              : helperText ?
+                helperText
+              : ''
+            }
             error={!!error}
             variant="standard"
           />

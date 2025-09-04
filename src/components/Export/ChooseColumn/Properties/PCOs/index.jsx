@@ -61,7 +61,7 @@ const query = gql`
 `
 
 const PcoList = ({ pcoExpanded, onTogglePco }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -69,7 +69,7 @@ const PcoList = ({ pcoExpanded, onTogglePco }) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcosList', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           exportTaxonomies,
@@ -87,7 +87,10 @@ const PcoList = ({ pcoExpanded, onTogglePco }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onTogglePco}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onTogglePco}
+          >
             <CardActionTitle>
               Eigenschaftensammlungen
               <Count>{`(${isLoading ? '...' : pcCount} Sammlungen, ${
@@ -104,7 +107,11 @@ const PcoList = ({ pcoExpanded, onTogglePco }) => {
               </Icon>
             </CardActionIconButton>
           </StyledCardActions>
-          <Collapse in={pcoExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={pcoExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
             <PCOs />
           </Collapse>
         </StyledCard>

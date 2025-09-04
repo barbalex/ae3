@@ -19,7 +19,7 @@ const Content = styled.div`
 
 const DataStacked = () => {
   const store = useContext(storeContext)
-  const { windowHeight } = store
+  const { windowHeight, treeRefetchCounter } = store
 
   const [tab, setTab] = useState(0)
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -34,11 +34,14 @@ const DataStacked = () => {
           indicatorColor="primary"
         >
           <Tab label="Navigation" />
-          <Tab label="Formular" disabled={false} />
+          <Tab
+            label="Formular"
+            disabled={false}
+          />
         </Tabs>
       </StyledPaper>
       <Content data-height={windowHeight - 103}>
-        {tab === 0 && <Tree />}
+        {tab === 0 && <Tree treeRefetchCounter />}
         {tab === 1 && <Outlet />}
       </Content>
     </>

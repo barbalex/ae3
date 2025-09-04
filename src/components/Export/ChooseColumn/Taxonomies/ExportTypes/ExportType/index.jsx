@@ -26,7 +26,7 @@ const TypeLabel = styled(FormControlLabel)`
 `
 
 const ExportTypes = ({ type }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
     type: exportType,
@@ -51,7 +51,7 @@ const ExportTypes = ({ type }) => {
           }
         }
       `
-      const { data } = client.query({ query: taxonomiesQuery })
+      const { data } = apolloClient.query({ query: taxonomiesQuery })
       const taxonomies = data?.allTaxonomies?.nodes
       if (isChecked) {
         setExportType(name)
@@ -81,7 +81,7 @@ const ExportTypes = ({ type }) => {
         setTaxonomies(remainingTaxonomies)
       }
     },
-    [type, client, setExportType, exportTaxonomies, setTaxonomies],
+    [type, apolloClient, setExportType, exportTaxonomies, setTaxonomies],
   )
 
   return (

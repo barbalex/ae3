@@ -103,7 +103,7 @@ function collect(props) {
 
 const Row = ({ data }) => {
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -161,7 +161,7 @@ const Row = ({ data }) => {
         e,
         data,
         target,
-        client,
+        client: apolloClient,
         // TODO: check this behavior
         treeRefetch: () => {},
         store,
@@ -169,7 +169,7 @@ const Row = ({ data }) => {
         queryClient,
       })
     },
-    [client, store, navigate, queryClient],
+    [apolloClient, store, navigate, queryClient],
   )
 
   //console.log('Row, data:', data)

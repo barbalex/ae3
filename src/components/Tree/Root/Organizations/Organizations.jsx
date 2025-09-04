@@ -5,7 +5,7 @@ import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
 
 const Organizations = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeOrganizations'],
@@ -15,7 +15,7 @@ const Organizations = () => {
       // EVENT THOUGH component is not re-rendered
       // Seems that was a feature of tanstack-query:
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeOrganizationsQuery {
             allOrganizations(orderBy: NAME_ASC) {
@@ -47,7 +47,12 @@ const Organizations = () => {
       menuType: 'organization',
     }
 
-    nodes.push(<Row key={node.id} data={data} />)
+    nodes.push(
+      <Row
+        key={node.id}
+        data={data}
+      />,
+    )
   }
 
   return nodes

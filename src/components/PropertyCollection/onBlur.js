@@ -33,6 +33,9 @@ const onBlur = async ({
       queryClient.invalidateQueries({
         queryKey: ['pc'],
       })
+      queryClient.invalidateQueries({
+        queryKey: ['treeQuery'],
+      })
     } catch (error) {
       return console.log('error:', error.message) //setError(error.message)
     }

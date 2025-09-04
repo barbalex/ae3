@@ -23,7 +23,7 @@ const onClickContextMenu = async ({
   navigate,
   queryClient,
 }) => {
-  const { scrollIntoView } = store
+  const { scrollIntoView, refetchTree } = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
@@ -56,6 +56,9 @@ const onClickContextMenu = async ({
           navigate(`/Benutzer/${newUserId}`)
           setTimeout(() => scrollIntoView())
         }
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
@@ -90,6 +93,9 @@ const onClickContextMenu = async ({
             variables: { taxonomyId: url[1], parentId: id },
           })
         }
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         const newId = newObjectData?.data?.createObject?.object?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
         setTimeout(() => scrollIntoView())
@@ -108,6 +114,9 @@ const onClickContextMenu = async ({
             lastUpdated: new Date(),
           },
         })
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         const newId =
           newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
@@ -122,6 +131,9 @@ const onClickContextMenu = async ({
           mutation: createPCMutation,
           variables: { importedBy: userId, lastUpdated: new Date() },
         })
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         const newId =
           newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
           null
@@ -133,6 +145,7 @@ const onClickContextMenu = async ({
         }
       }
       treeRefetch()
+      refetchTree()
     },
     delete: async () => {
       if (table === 'user') {
@@ -156,6 +169,9 @@ const onClickContextMenu = async ({
         navigate('/Benutzer')
         setTimeout(() => scrollIntoView())
         queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
+        queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
         queryClient.invalidateQueries({
@@ -175,6 +191,9 @@ const onClickContextMenu = async ({
               __typename: 'Mutation',
             },
           },
+        })
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
         })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
@@ -196,6 +215,9 @@ const onClickContextMenu = async ({
             },
           },
         })
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
@@ -216,6 +238,9 @@ const onClickContextMenu = async ({
             },
           },
         })
+        queryClient.invalidateQueries({
+          queryKey: [`treeQuery`],
+        })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
@@ -223,6 +248,12 @@ const onClickContextMenu = async ({
         }
       }
       treeRefetch()
+      queryClient.invalidateQueries({
+        queryKey: [`treeQuery`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`TreeRoot`],
+      })
     },
   }
   if (Object.keys(actions).includes(action)) {

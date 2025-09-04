@@ -24,8 +24,12 @@ const store = () =>
       windowHeight: types.optional(types.number, 800),
       stacked: types.optional(types.boolean, false),
       scrollIntoViewCounter: types.optional(types.number, 0),
+      treeRefetchCounter: types.optional(types.number, 0),
     })
     .actions((self) => ({
+      refetchTree() {
+        self.treeRefetchCounter += 1
+      },
       scrollIntoView() {
         self.scrollIntoViewCounter += 1
       },

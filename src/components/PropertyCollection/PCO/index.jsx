@@ -180,7 +180,7 @@ export const pcoPreviewQuery = gql`
 
 const PCO = () => {
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const { pcId } = useParams()
 
   const store = useContext(storeContext)
@@ -199,7 +199,7 @@ const PCO = () => {
   } = useQuery({
     queryKey: ['pcoPreviewQuery', pcId, count],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: pcoPreviewQuery,
         variables: {
           pCId: pcId,
@@ -281,7 +281,7 @@ const PCO = () => {
       ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount
 
   const fetchAllData = useCallback(async () => {
-    const { data, loading, error } = await client.query({
+    const { data, loading, error } = await apolloClient.query({
       query: pcoQuery,
       variables: {
         pCId: pcId,
@@ -315,7 +315,7 @@ const PCO = () => {
     })
     const pCO = doOrderBy(pCOUnsorted, orderBy, sortDirection)
     return { data: pCO, loading, error }
-  }, [client, pcId, propKeys, sortDirection, orderBy])
+  }, [apolloClient, pcId, propKeys, sortDirection, orderBy])
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
@@ -337,11 +337,14 @@ const PCO = () => {
 
   const onClickDelete = useCallback(async () => {
     setDeleteLoading(true)
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: deletePcoOfPcMutation,
       variables: { pcId: pcId },
     })
     setDeleteLoading(false)
+    queryClient.invalidateQueries({
+      queryKey: ['treeQuery'],
+    })
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
@@ -351,7 +354,7 @@ const PCO = () => {
     queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],
     })
-  }, [client, pcId, queryClient])
+  }, [apolloClient, pcId, queryClient])
 
   const onClickImport = useCallback(() => {
     setImport(true)
@@ -373,7 +376,10 @@ const PCO = () => {
           )} Datensätze, ${propKeys.length.toLocaleString('de-CH')} Feld${
             propKeys.length === 1 ? '' : 'er'
           }${pCO.length > 0 ? ':' : ''}, Erste `}
-          <CountInput count={count} setCount={setCount} />
+          <CountInput
+            count={count}
+            setCount={setCount}
+          />
           {' :'}
         </TotalDiv>
       )}

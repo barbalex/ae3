@@ -37,7 +37,7 @@ const StyledSnackbar = styled(Snackbar)`
 `
 
 const Login = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const idb = useContext(idbContext)
   const store = useContext(storeContext)
   const { login } = store
@@ -58,7 +58,7 @@ const Login = () => {
   const fetchLogin = useCallback(
     (namePassed, passPassed, navigate) =>
       fetchLoginModule({
-        client,
+        client: apolloClient,
         changeNameErrorText,
         changePassErrorText,
         name,
@@ -74,7 +74,7 @@ const Login = () => {
         passwordInput,
         navigate,
       }),
-    [client, name, pass, idb, store],
+    [apolloClient, name, pass, idb, store],
   )
   const onLogout = useCallback(() => {
     idb.users.clear()
@@ -129,7 +129,11 @@ const Login = () => {
     <ErrorBoundary>
       <Container>
         {!token && (
-          <FormControl fullWidth error={!!nameErrorText} variant="standard">
+          <FormControl
+            fullWidth
+            error={!!nameErrorText}
+            variant="standard"
+          >
             <TextField
               inputRef={nameInput}
               label="Name"
@@ -147,7 +151,11 @@ const Login = () => {
           </FormControl>
         )}
         {!token && (
-          <FormControl fullWidth error={!!passErrorText} variant="standard">
+          <FormControl
+            fullWidth
+            error={!!passErrorText}
+            variant="standard"
+          >
             <InputLabel htmlFor="password">Passwort</InputLabel>
             <Input
               id="adornment-password"
@@ -168,7 +176,9 @@ const Login = () => {
                     title={showPass ? 'verstecken' : 'anzeigen'}
                     size="large"
                   >
-                    {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    {showPass ?
+                      <VisibilityOffIcon />
+                    : <VisibilityIcon />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -180,7 +190,10 @@ const Login = () => {
         )}
         {!token && <StyledButton color="inherit">anmelden</StyledButton>}
         {!!token && (
-          <StyledButton onClick={onLogout} color="inherit">
+          <StyledButton
+            onClick={onLogout}
+            color="inherit"
+          >
             abmelden
           </StyledButton>
         )}

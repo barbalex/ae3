@@ -32,7 +32,7 @@ const query = gql`
 `
 
 const Properties = ({ pc }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -40,7 +40,7 @@ const Properties = ({ pc }) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportFilterPcos', exportTaxonomies, pc],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           exportTaxonomies,

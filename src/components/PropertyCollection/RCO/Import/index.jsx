@@ -143,7 +143,7 @@ const initialCheckState = {
 
 const ImportRco = ({ setImport }) => {
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -174,7 +174,7 @@ const ImportRco = ({ setImport }) => {
       pCOfOriginIds.length,
     ],
     queryFn: async () => {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: importRcoQuery,
         variables: {
           getObjectIds: objectIds.length > 0,
@@ -449,7 +449,7 @@ const ImportRco = ({ setImport }) => {
         ),
       }
       posts.push(
-        client
+        apolloClient
           .mutate({ mutation: upsertRCOMutation, variables })
           .then(() => incrementImported()),
       )
@@ -466,7 +466,14 @@ const ImportRco = ({ setImport }) => {
     })
     setImport(false)
     setImporting(false)
-  }, [client, importData, incrementImported, pCId, queryClient, setImport])
+  }, [
+    apolloClient,
+    importData,
+    incrementImported,
+    pCId,
+    queryClient,
+    setImport,
+  ])
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

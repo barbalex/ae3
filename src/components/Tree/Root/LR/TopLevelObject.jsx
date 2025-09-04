@@ -7,14 +7,14 @@ import LoadingRow from '../../LoadingRow.jsx'
 import Object from './Object.jsx'
 
 const TopLevelObject = ({ type = 'Lebensräume' }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const { taxId } = useParams()
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeTopLevelObjects', taxId],
     queryFn: () => {
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeTopLevelObjectsQuery($taxId: UUID!) {
             allObjects(

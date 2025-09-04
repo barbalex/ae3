@@ -28,7 +28,7 @@ const query = gql`
 `
 
 const PcosCardList = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -36,7 +36,7 @@ const PcosCardList = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['filterPcosList', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           exportTaxonomies,
@@ -63,7 +63,11 @@ const PcosCardList = () => {
   return (
     <ErrorBoundary>
       {nodes.map(({ name, count }) => (
-        <PCO key={name} pc={name} count={count} />
+        <PCO
+          key={name}
+          pc={name}
+          count={count}
+        />
       ))}
     </ErrorBoundary>
   )

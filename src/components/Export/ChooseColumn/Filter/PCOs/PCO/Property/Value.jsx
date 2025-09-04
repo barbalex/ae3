@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
-import  { readableType } from '../../../../../../../modules/readableType.js'
+import { readableType } from '../../../../../../../modules/readableType.js'
 import storeContext from '../../../../../../../storeContext.js'
 
 const Container = styled.div`
@@ -98,7 +98,7 @@ const IntegrationAutosuggest = ({
   comparator,
   value: propsValue,
 }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { addFilterFields, setPcoFilter, addPcoProperty } = store.export
 
@@ -116,7 +116,7 @@ const IntegrationAutosuggest = ({
   const loadOptions = useCallback(
     async (val) => {
       if (!focusCount) return []
-      const { data, error } = await client.query({
+      const { data, error } = await apolloClient.query({
         query: pcoFieldPropQuery,
         variables: {
           tableName: 'property_collection_object',
@@ -135,7 +135,7 @@ const IntegrationAutosuggest = ({
       setError(error)
       return returnData
     },
-    [client, focusCount, pcname, pname],
+    [apolloClient, focusCount, pcname, pname],
   )
 
   const setFilter = useCallback(

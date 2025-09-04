@@ -62,13 +62,13 @@ const orgUsersQuery = gql`
 `
 
 const OrgUsers = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const id =
-    activeNodeArray.length > 1
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
+    activeNodeArray.length > 1 ?
+      activeNodeArray[1]
+    : '99999999-9999-9999-9999-999999999999'
   const {
     data: orgUsersData,
     loading: orgUsersLoading,
@@ -93,7 +93,7 @@ const OrgUsers = () => {
     orgUsersData?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
 
   const onClickNew = useCallback(async () => {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: createOrgUserMutation,
       variables: {
         organizationId,
@@ -104,7 +104,7 @@ const OrgUsers = () => {
        */
     })
     orgUsersData.refetch()
-  }, [client, orgUsersData, organizationId])
+  }, [apolloClient, orgUsersData, organizationId])
 
   if (orgUsersLoading) {
     return <Spinner />

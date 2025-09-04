@@ -16,7 +16,7 @@ const FieldContainer = styled.div`
 `
 
 export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
@@ -35,7 +35,7 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
           ...propertiesPrevious,
           ...{ [label]: value },
         }
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: updatePropertyMutation,
           variables: { properties: JSON.stringify(properties), id },
         })
@@ -43,7 +43,7 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
         setValue('')
       }
     },
-    [label, propertiesPrevious, client, id],
+    [label, propertiesPrevious, apolloClient, id],
   )
 
   return (

@@ -70,7 +70,7 @@ const propsByTaxQuery = gql`
 `
 
 const RCO = ({ pc }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -78,7 +78,7 @@ const RCO = ({ pc }) => {
   const { data, error } = useQuery({
     queryKey: ['exportChooseColumnFilterRcosRco', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: propsByTaxQuery,
         variables: {
           exportTaxonomies,
@@ -110,13 +110,16 @@ const RCO = ({ pc }) => {
   return (
     <ErrorBoundary>
       <StyledCard>
-        <StyledCardActions disableSpacing onClick={onClickActions}>
+        <StyledCardActions
+          disableSpacing
+          onClick={onClickActions}
+        >
           <CardActionTitle>
             {pc}
             <Count>{`(${rcoPropertiesByPropertyCollection?.[pc]?.length} ${
-              rcoPropertiesByPropertyCollection?.[pc]?.length === 1
-                ? 'Feld'
-                : 'Felder'
+              rcoPropertiesByPropertyCollection?.[pc]?.length === 1 ?
+                'Feld'
+              : 'Felder'
             })`}</Count>
           </CardActionTitle>
           <CardActionIconButton
@@ -129,7 +132,11 @@ const RCO = ({ pc }) => {
             </Icon>
           </CardActionIconButton>
         </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <PropertiesContainer>
             <Properties properties={rcoPropertiesByPropertyCollection[pc]} />
           </PropertiesContainer>

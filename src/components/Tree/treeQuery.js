@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  query TreeDataQuery($username: String!) {
+  query TreeQuery($username: String!) {
     userByName(name: $username) {
       id
       organizationUsersByUserId {

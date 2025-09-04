@@ -11,7 +11,7 @@ import storeContext from '../../../storeContext.js'
 import LoadingRow from '../LoadingRow.jsx'
 
 const Root = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const hasToken = !!store.login.token
 
@@ -23,7 +23,7 @@ const Root = () => {
       // EVENT THOUGH component is not re-rendered
       // Seems that was a feature of tanstack-query:
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeRootQuery($hasToken: Boolean!) {
             arten: allTaxonomies(filter: { type: { equalTo: ART } }) {
@@ -57,8 +57,14 @@ const Root = () => {
 
   return (
     <>
-      <Arten isLoading={isLoading} count={data?.data?.arten?.totalCount} />
-      <LR isLoading={isLoading} count={data?.data?.lebensraeume?.totalCount} />
+      <Arten
+        isLoading={isLoading}
+        count={data?.data?.arten?.totalCount}
+      />
+      <LR
+        isLoading={isLoading}
+        count={data?.data?.lebensraeume?.totalCount}
+      />
       <PC
         isLoading={isLoading}
         count={data?.data?.allPropertyCollections?.totalCount}

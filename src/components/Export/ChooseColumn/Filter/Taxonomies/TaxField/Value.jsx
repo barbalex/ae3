@@ -6,7 +6,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-import  { readableType } from '../../../../../../modules/readableType.js'
+import { readableType } from '../../../../../../modules/readableType.js'
 import storeContext from '../../../../../../storeContext.js'
 
 const Container = styled.div`
@@ -99,7 +99,7 @@ const IntegrationAutosuggest = ({
   comparator,
   value: propsValue,
 }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { addFilterFields, addTaxProperty, setTaxFilters } = store.export
 
@@ -117,7 +117,7 @@ const IntegrationAutosuggest = ({
   const loadOptions = useCallback(
     async (val) => {
       if (!focusCount) return []
-      const { data, error } = await client.query({
+      const { data, error } = await apolloClient.query({
         query: taxFieldPropQuery,
         variables: {
           tableName: 'object',
@@ -136,7 +136,7 @@ const IntegrationAutosuggest = ({
       setError(error)
       return returnData
     },
-    [client, focusCount, pname, taxname],
+    [apolloClient, focusCount, pname, taxname],
   )
 
   const setFilter = useCallback(

@@ -63,7 +63,7 @@ const propsByTaxQuery = gql`
 `
 
 const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -71,7 +71,7 @@ const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
   const { data, error, loading } = useQuery({
     queryKey: ['exportChooseColumnFilterTaxonomiesCard', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: propsByTaxQuery,
         variables: {
           exportTaxonomies,
@@ -113,7 +113,10 @@ const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onToggleTaxonomies}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onToggleTaxonomies}
+          >
             <CardActionTitle>
               Taxonomien
               <Count>{`(${loading ? '...' : taxCount} ${
@@ -132,7 +135,11 @@ const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
               </Icon>
             </CardActionIconButton>
           </StyledCardActions>
-          <Collapse in={taxonomiesExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={taxonomiesExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
             {jointTaxProperties.length > 0 && (
               <JointTaxonomy jointTaxProperties={jointTaxProperties} />
             )}

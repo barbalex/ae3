@@ -47,7 +47,7 @@ const User = () => {
   const { userId } = useParams()
 
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const { login } = store
@@ -59,7 +59,7 @@ const User = () => {
   } = useQuery({
     queryKey: ['user', userId],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           id: userId,
@@ -97,8 +97,9 @@ const User = () => {
   const onChangePassNew = useCallback((e) => setPassNew(e.target.value), [])
 
   const onSave = useCallback(async () => {
-    const variables = passNew
-      ? {
+    const variables =
+      passNew ?
+        {
           username: name,
           email,
           id,
@@ -111,10 +112,9 @@ const User = () => {
         }
     const mutation = passNew ? updateUserMutationWithPass : updateUserMutation
     try {
-      await client.mutate({
+      await apolloClient.mutate({
         mutation,
         variables,
-        refetchQueries: ['TreeDataQuery'],
       })
     } catch (error) {
       const messages = error.graphQLErrors.map((x) => x.message).toString()
@@ -127,6 +127,9 @@ const User = () => {
     }
     // refetch to update
     queryClient.invalidateQueries({
+      queryKey: ['treeQuery'],
+    })
+    queryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     queryClient.invalidateQueries({
@@ -138,7 +141,7 @@ const User = () => {
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')
-  }, [passNew, name, email, id, queryClient, client])
+  }, [passNew, name, email, id, queryClient, apolloClient])
 
   if (dataLoading) {
     return <Spinner />
@@ -196,7 +199,10 @@ const User = () => {
             </FormHelperText>
           </FormControl>
           {userIsLoggedIn && (
-            <FormControl fullWidth variant="standard">
+            <FormControl
+              fullWidth
+              variant="standard"
+            >
               <TextField
                 name="passNew"
                 label="Passwort ändern"
@@ -209,7 +215,11 @@ const User = () => {
               />
             </FormControl>
           )}
-          <SaveButton onClick={onSave} disabled={!saveEnabled} color="inherit">
+          <SaveButton
+            onClick={onSave}
+            disabled={!saveEnabled}
+            color="inherit"
+          >
             Änderungen speichern
           </SaveButton>
         </OrgContainer>

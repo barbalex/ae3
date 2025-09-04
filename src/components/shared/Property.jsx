@@ -28,7 +28,7 @@ const DeleteButton = styled(IconButton)`
 
 export const Property = memo(
   ({ id, properties: propertiesPrevious, field: key }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
 
     const onChange = useCallback((event) => {
@@ -43,7 +43,7 @@ export const Property = memo(
             ...propertiesPrevious,
             ...{ [key]: value },
           }
-          client.mutate({
+          apolloClient.mutate({
             mutation: updatePropertyMutation,
             variables: { properties: JSON.stringify(properties), id },
             optimisticResponse: {
@@ -60,15 +60,15 @@ export const Property = memo(
           })
         }
       },
-      [propertiesPrevious, key, client, id],
+      [propertiesPrevious, key, apolloClient, id],
     )
     const onDelete = useCallback(async () => {
       const properties = omit(propertiesPrevious, key)
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updatePropertyMutation,
         variables: { properties: JSON.stringify(properties), id },
       })
-    }, [propertiesPrevious, key, client, id])
+    }, [propertiesPrevious, key, apolloClient, id])
 
     return (
       <ErrorBoundary>

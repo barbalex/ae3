@@ -64,7 +64,7 @@ const query = gql`
 `
 
 const RcosCard = ({ rcoExpanded, onToggleRco }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -72,7 +72,7 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnFilterRcos', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           exportTaxonomies,
@@ -94,14 +94,19 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onToggleRco}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onToggleRco}
+          >
             <CardActionTitle>
               Beziehungssammlungen
               {
                 <Count>{`(${
                   isLoading ? '...' : pcCount
                 } Sammlungen, ${propertyCount} ${
-                  isLoading ? '...' : propertyCount === 1 ? 'Feld' : 'Felder'
+                  isLoading ? '...'
+                  : propertyCount === 1 ? 'Feld'
+                  : 'Felder'
                 })`}</Count>
               }
             </CardActionTitle>
@@ -115,7 +120,11 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
               </Icon>
             </CardActionIconButton>
           </StyledCardActions>
-          <Collapse in={rcoExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={rcoExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
             <List />
           </Collapse>
         </StyledCard>

@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router'
 
-import  { getUrlForObject } from '../../../modules/getUrlForObject.js'
+import { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import buildOptions from './buildOptions.js'
@@ -87,7 +87,7 @@ const objectUrlQuery = gql`
 
 const TreeFilter = () => {
   // TODO: use local state instead of mobx for label, id
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { treeFilter, scrollIntoView } = store
   const { setTreeFilter } = treeFilter
@@ -165,7 +165,7 @@ const TreeFilter = () => {
   ])
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
-    buildOptions({ client, treeFilter, cb, val })
+    buildOptions({ client: apolloClient, treeFilter, cb, val })
   }, 600)
   const loadOptions = useCallback(
     (val, cb) => {

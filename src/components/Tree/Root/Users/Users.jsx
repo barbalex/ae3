@@ -5,12 +5,12 @@ import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
 
 const Users = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeUsers'],
     queryFn: () => {
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeUsersQuery {
             allUsers(orderBy: NAME_ASC) {
@@ -42,7 +42,12 @@ const Users = () => {
       menuType: 'CmBenutzer',
     }
 
-    nodes.push(<Row key={node.id} data={data} />)
+    nodes.push(
+      <Row
+        key={node.id}
+        data={data}
+      />,
+    )
   }
 
   return nodes

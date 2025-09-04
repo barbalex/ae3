@@ -6,13 +6,13 @@ import Row from '../../Row/index.jsx'
 import LoadingRow from '../../LoadingRow.jsx'
 
 const Object = ({ parentData }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeObject', parentData.id],
     queryFn: () => {
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeObjectQuery($parentId: UUID!) {
             objectById(id: $parentId) {

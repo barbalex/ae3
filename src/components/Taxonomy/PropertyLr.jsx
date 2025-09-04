@@ -12,20 +12,20 @@ const Container = styled.div`
 `
 
 const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const [value, setValue] = useState(taxonomy[field] || '')
 
   const onChange = useCallback((event) => setValue(event.target.value), [])
   const onBlur = useCallback(
     (event) =>
       onBlurLr({
-        client,
+        client: apolloClient,
         field,
         taxonomy,
         value: event.target.value,
         prevValue: taxonomy[field],
       }),
-    [field, taxonomy, client],
+    [field, taxonomy, apolloClient],
   )
 
   return (
@@ -35,9 +35,9 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
           autoFocus={label === 'Name' && !value}
           label={label}
           value={
-            field === 'lastUpdated' && value
-              ? format(new Date(value), 'dd.MM.yyyy')
-              : value
+            field === 'lastUpdated' && value ?
+              format(new Date(value), 'dd.MM.yyyy')
+            : value
           }
           onChange={onChange}
           onBlur={onBlur}

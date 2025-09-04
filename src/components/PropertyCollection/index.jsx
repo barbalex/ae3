@@ -107,7 +107,7 @@ const pcQuery = gql`
 
 const PropertyCollection = () => {
   const { pcId } = useParams()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
   const { editingPCs, setEditingPCs, login } = store
@@ -119,7 +119,7 @@ const PropertyCollection = () => {
   } = useQuery({
     queryKey: ['allUsersForPc'],
     queryFn: () =>
-      client.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
+      apolloClient.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
   })
   const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
 
@@ -130,7 +130,7 @@ const PropertyCollection = () => {
   } = useQuery({
     queryKey: ['pc', pcId],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: pcQuery,
         variables: { pcId },
         fetchPolicy: 'no-cache',
@@ -182,50 +182,50 @@ const PropertyCollection = () => {
   const onChangeCombining = useCallback(
     (event, isChecked) =>
       onBlur({
-        client,
+        client: apolloClient,
         field: 'combining',
         pC,
         value: isChecked,
         prevValue: pC.combining,
         queryClient,
       }),
-    [client, pC, queryClient],
+    [apolloClient, pC, queryClient],
   )
   const onChangeOrganization = useCallback(
     (event) =>
       onBlur({
-        client,
+        client: apolloClient,
         field: 'organizationId',
         pC,
         value: event.target.value,
         prevValue: pC.organizationId,
         queryClient,
       }),
-    [client, pC, queryClient],
+    [apolloClient, pC, queryClient],
   )
   const onChangeImportedBy = useCallback(
     (event) =>
       onBlur({
-        client,
+        client: apolloClient,
         field: 'importedBy',
         pC,
         value: event.target.value,
         prevValue: pC.importedBy,
         queryClient,
       }),
-    [client, pC, queryClient],
+    [apolloClient, pC, queryClient],
   )
   const onChangeLastUpdated = useCallback(
     (event) =>
       onBlur({
-        client,
+        client: apolloClient,
         field: 'lastUpdated',
         pC,
         value: event.target.value,
         prevValue: pC.lastUpdated,
         queryClient,
       }),
-    [client, pC, queryClient],
+    [apolloClient, pC, queryClient],
   )
 
   if (pcLoading || allUsersLoading) {

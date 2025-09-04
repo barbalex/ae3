@@ -106,7 +106,7 @@ const taxQuery = gql`
 `
 
 const Taxonomy = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const { editingTaxonomies, setEditingTaxonomies, login } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -165,48 +165,48 @@ const Taxonomy = () => {
   const onChangeImportedByArten = useCallback(
     (event) =>
       onBlurArten({
-        client,
+        client: apolloClient,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
         refetch: refetchTaxData,
       }),
-    [client, refetchTaxData, tax],
+    [apolloClient, refetchTaxData, tax],
   )
   const onChangeOrganizationArten = useCallback(
     (event) =>
       onBlurArten({
-        client,
+        client: apolloClient,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.organizationId,
         refetch: refetchTaxData,
       }),
-    [client, refetchTaxData, tax],
+    [apolloClient, refetchTaxData, tax],
   )
   const onChangeImportedByLr = useCallback(
     (event) =>
       onBlurLr({
-        client,
+        client: apolloClient,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
       }),
-    [client, tax],
+    [apolloClient, tax],
   )
   const onChangeOrganizationLr = useCallback(
     (event) =>
       onBlurLr({
-        client,
+        client: apolloClient,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.organizationId,
       }),
-    [client, tax],
+    [apolloClient, tax],
   )
 
   if (taxLoading || allUsersLoading) {

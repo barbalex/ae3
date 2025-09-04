@@ -131,7 +131,7 @@ const initialCheckState = {
 
 const ImportPco = ({ setImport }) => {
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -161,7 +161,7 @@ const ImportPco = ({ setImport }) => {
   } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: importPcoQuery,
         variables: {
           getObjectIds: objectIds.length > 0,
@@ -372,7 +372,7 @@ const ImportPco = ({ setImport }) => {
       }
 
       posts.push(
-        client
+        apolloClient
           .mutate({
             mutation: upsertPCOMutation,
             variables,
@@ -392,7 +392,14 @@ const ImportPco = ({ setImport }) => {
     queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],
     })
-  }, [setImport, importData, pCId, client, incrementImported, queryClient])
+  }, [
+    setImport,
+    importData,
+    pCId,
+    apolloClient,
+    incrementImported,
+    queryClient,
+  ])
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>

@@ -7,13 +7,13 @@ import LoadingRow from '../../LoadingRow.jsx'
 import TopLevelObject from './TopLevelObject.jsx'
 
 const Tax = ({ type = 'Lebensräume' }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const { taxId } = useParams()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treeTaxonomies', type],
     queryFn: () => {
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treeTaxonomiesQuery {
             allTaxonomies(

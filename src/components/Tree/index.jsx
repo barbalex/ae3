@@ -117,12 +117,12 @@ const Container = styled.div`
 const TreeComponent = () => {
   const store = useContext(storeContext)
 
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { error, data } = useQuery({
     queryKey: ['treeQuery', store.login.username],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: treeQuery,
         variables: { username: store.login.username ?? '' },
         // seems that react-query cache is not working
@@ -130,6 +130,8 @@ const TreeComponent = () => {
         fetchPolicy: 'no-cache',
       }),
   })
+
+  console.log('TreeComponent render, data:', data)
 
   const userIsTaxWriter = useMemo(() => {
     const userRoles = (

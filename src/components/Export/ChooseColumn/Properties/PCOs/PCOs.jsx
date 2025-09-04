@@ -24,7 +24,7 @@ const query = gql`
 `
 
 const PCOs = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -32,7 +32,7 @@ const PCOs = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcos', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query,
         variables: {
           exportTaxonomies,
@@ -53,7 +53,11 @@ const PCOs = () => {
   }
 
   return nodes.map(({ name, count }) => (
-    <PCO key={name} pcName={name} count={count} />
+    <PCO
+      key={name}
+      pcName={name}
+      count={count}
+    />
   ))
 }
 

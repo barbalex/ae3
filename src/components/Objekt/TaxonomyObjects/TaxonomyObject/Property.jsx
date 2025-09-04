@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import updateObjectMutation from '../../updateObjectMutation.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -11,7 +12,8 @@ const Container = styled.div`
 `
 
 const Property = ({ field, label, objekt, disabled }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
   const [value, setValue] = useState(objekt[field] || '')
 
   const onChange = useCallback((event) => {
@@ -21,7 +23,7 @@ const Property = ({ field, label, objekt, disabled }) => {
     (event) => {
       const { value } = event.target
       if (value !== 'prevValue') {
-        client.mutate({
+        apolloClient.mutate({
           mutation: updateObjectMutation,
           variables: {
             name: value,
@@ -39,9 +41,12 @@ const Property = ({ field, label, objekt, disabled }) => {
             __typename: 'Mutation',
           },
         })
+        queryClient.invalidateQueries({
+          queryKey: ['treeQuery'],
+        })
       }
     },
-    [client, objekt.id],
+    [apolloClient, objekt.id],
   )
 
   return (

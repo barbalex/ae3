@@ -176,7 +176,7 @@ export const rcoPreviewQuery = gql`
 
 const RCO = () => {
   const queryClient = useQueryClient()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const { pcId } = useParams()
 
   const store = useContext(storeContext)
@@ -191,7 +191,7 @@ const RCO = () => {
   } = useQuery({
     queryKey: ['rcoPreviewQuery', pcId, count],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: rcoPreviewQuery,
         variables: { pCId: pcId, count },
         fetchPolicy: 'no-cache',
@@ -283,7 +283,7 @@ const RCO = () => {
 
   // TODO: key in data table should bu unique, thus: objectId + objectIdRelation
   const fetchAllData = useCallback(async () => {
-    const { data, loading, error } = await client.query({
+    const { data, loading, error } = await apolloClient.query({
       query: rcoQuery,
       variables: {
         pCId: pcId,
@@ -317,7 +317,7 @@ const RCO = () => {
       return nP
     })
     return { data: doOrderBy(rCORaw, orderBy, sortDirection), loading, error }
-  }, [client, pcId, propKeys, sortDirection, orderBy])
+  }, [apolloClient, pcId, propKeys, sortDirection, orderBy])
 
   const onClickXlsx = useCallback(async () => {
     setXlsxExportLoading(true)
@@ -340,11 +340,14 @@ const RCO = () => {
 
   const onClickDelete = useCallback(async () => {
     setDeleteLoading(true)
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: deleteRcoOfPcMutation,
       variables: { pcId: pcId },
     })
     setDeleteLoading(false)
+    queryClient.invalidateQueries({
+      queryKey: ['treeQuery'],
+    })
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
@@ -354,7 +357,7 @@ const RCO = () => {
     queryClient.invalidateQueries({
       queryKey: [`rcoPreviewQuery`],
     })
-  }, [client, pcId, queryClient])
+  }, [apolloClient, pcId, queryClient])
   const onClickImport = useCallback(() => {
     setImport(true)
   }, [])
@@ -375,7 +378,10 @@ const RCO = () => {
           )} Datensätze, ${propKeys.length.toLocaleString('de-CH')} Feld${
             propKeys.length === 1 ? '' : 'er'
           }${rCO.length > 0 ? ':' : ''}, Erste `}
-          <CountInput count={count} setCount={setCount} />
+          <CountInput
+            count={count}
+            setCount={setCount}
+          />
           {' :'}
         </TotalDiv>
       )}

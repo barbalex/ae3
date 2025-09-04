@@ -36,7 +36,7 @@ const propsByTaxQuery = gql`
 `
 
 const RcosCardList = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -44,7 +44,7 @@ const RcosCardList = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnFilterRcoList', exportTaxonomies],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: propsByTaxQuery,
         variables: {
           exportTaxonomies,
@@ -81,7 +81,10 @@ const RcosCardList = () => {
   return (
     <ErrorBoundary>
       {Object.keys(rcoPropertiesByPropertyCollection).map((pc) => (
-        <RCO key={pc} pc={pc} />
+        <RCO
+          key={pc}
+          pc={pc}
+        />
       ))}
     </ErrorBoundary>
   )

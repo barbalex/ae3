@@ -100,7 +100,7 @@ const removeBadChars = (str) =>
     .replaceAll('↵', '')
 
 const Preview = () => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
     withSynonymData,
@@ -220,7 +220,7 @@ const Preview = () => {
     queryFn: async () => {
       if (taxonomies.length === 0) return []
 
-      const data = await client.mutate({
+      const data = await apolloClient.mutate({
         mutation: exportMutation,
         variables: {
           typ: type.toLowerCase(),
@@ -245,9 +245,9 @@ const Preview = () => {
   const rowCount = exportData?.data?.exportAll?.exportDatum?.count
   const rows = useMemo(
     () =>
-      exportData?.data?.exportAll?.exportDatum?.exportData
-        ? JSON.parse(exportData?.data?.exportAll?.exportDatum?.exportData)
-        : [],
+      exportData?.data?.exportAll?.exportDatum?.exportData ?
+        JSON.parse(exportData?.data?.exportAll?.exportDatum?.exportData)
+      : [],
     [exportData?.data?.exportAll?.exportDatum?.exportData],
   )
 
@@ -267,7 +267,7 @@ const Preview = () => {
   const onClickXlsx = useCallback(async () => {
     // 1. download the full rows
     // 2. rowsFromObjects
-    const data = await client.mutate({
+    const data = await apolloClient.mutate({
       mutation: exportMutation,
       variables: {
         typ: type.toLowerCase(),
@@ -285,13 +285,14 @@ const Preview = () => {
       },
       fetchPolicy: 'no-cache',
     })
-    const rows = data?.data?.exportAll?.exportDatum?.exportData
-      ? JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
+    const rows =
+      data?.data?.exportAll?.exportDatum?.exportData ?
+        JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
       : []
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({ rows, onSetMessage })
   }, [
-    client,
+    apolloClient,
     exportIds,
     onSetMessage,
     pcoFilters,
@@ -323,10 +324,16 @@ const Preview = () => {
       <Container>
         {rowCount > 0 && (
           <TopButtonsContainer>
-            <StyledButton onClick={onClickXlsx} color="inherit">
+            <StyledButton
+              onClick={onClickXlsx}
+              color="inherit"
+            >
               .xlsx herunterladen
             </StyledButton>
-            <StyledButton onClick={onClickCsv} color="inherit">
+            <StyledButton
+              onClick={onClickCsv}
+              color="inherit"
+            >
               .csv herunterladen
             </StyledButton>
           </TopButtonsContainer>
@@ -339,7 +346,10 @@ const Preview = () => {
               )} Datensätze, ${anzFelder.toLocaleString('de-CH')} ${
                 anzFelder === 1 ? 'Feld' : 'Felder'
               }. Erste `}
-              <CountInput count={count} setCount={setCount} />
+              <CountInput
+                count={count}
+                setCount={setCount}
+              />
               {' :'}
             </TotalDiv>
             <DataTable
@@ -359,16 +369,28 @@ const Preview = () => {
         )}
         {rowCount > 0 && (
           <ButtonsContainer>
-            <StyledButton onClick={onClickXlsx} color="inherit">
+            <StyledButton
+              onClick={onClickXlsx}
+              color="inherit"
+            >
               .xlsx herunterladen
             </StyledButton>
-            <StyledButton onClick={onClickCsv} color="inherit">
+            <StyledButton
+              onClick={onClickCsv}
+              color="inherit"
+            >
               .csv herunterladen
             </StyledButton>
           </ButtonsContainer>
         )}
-        <StyledSnackbar open={!!message} message={message} />
-        <StyledSnackbar open={exportLoading} message="Lade Daten..." />
+        <StyledSnackbar
+          open={!!message}
+          message={message}
+        />
+        <StyledSnackbar
+          open={exportLoading}
+          message="Lade Daten..."
+        />
       </Container>
     </ErrorBoundary>
   )

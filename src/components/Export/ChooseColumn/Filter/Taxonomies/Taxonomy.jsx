@@ -69,7 +69,7 @@ const propsByTaxQuery = gql`
 `
 
 const TaxonomyCard = ({ pc, initiallyExpanded }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -80,7 +80,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
       exportTaxonomies,
     ],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: propsByTaxQuery,
         variables: {
           exportTaxonomies,
@@ -133,7 +133,11 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
             </Icon>
           </CardActionIconButton>
         </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <PropertiesContainer>
             <Properties properties={taxPropertiesByTaxonomy?.[pc] ?? []} />
           </PropertiesContainer>

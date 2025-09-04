@@ -8,7 +8,7 @@ import Folders from './Folders.jsx'
 
 const PCs = () => {
   const { pcId } = useParams()
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['treePcs'],
@@ -18,7 +18,7 @@ const PCs = () => {
       // EVENT THOUGH component is not re-rendered
       // Seems that was a feature of tanstack-query:
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return client.query({
+      return apolloClient.query({
         query: gql`
           query treePcsQuery {
             allPropertyCollections(orderBy: NAME_ASC) {
@@ -65,7 +65,11 @@ const PCs = () => {
       <div key={node.id}>
         <Row data={data} />
         {isOpen && (
-          <Folders pc={node} pcoCount={pcoCount} relCount={relCount} />
+          <Folders
+            pc={node}
+            pcoCount={pcoCount}
+            relCount={relCount}
+          />
         )}
       </div>,
     )

@@ -91,7 +91,7 @@ const orgUsersQuery = gql`
 `
 
 const OrgUser = ({ orgUser }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const name = activeNodeArray.length > 1 ? activeNodeArray[1] : 'none'
@@ -139,7 +139,7 @@ const OrgUser = ({ orgUser }) => {
           role,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: updateOrgUserMutation,
             variables,
             optimisticResponse: {
@@ -165,7 +165,14 @@ const OrgUser = ({ orgUser }) => {
         setNameError(undefined)
       }
     },
-    [users, orgUser.nodeId, orgUser.organizationId, orgUser.id, role, client],
+    [
+      users,
+      orgUser.nodeId,
+      orgUser.organizationId,
+      orgUser.id,
+      role,
+      apolloClient,
+    ],
   )
   const [roleError, setRoleError] = useState()
   const onChangeRole = useCallback(
@@ -178,7 +185,7 @@ const OrgUser = ({ orgUser }) => {
         role: newRole,
       }
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: updateOrgUserMutation,
           variables,
           optimisticResponse: {
@@ -203,10 +210,10 @@ const OrgUser = ({ orgUser }) => {
       setRole(newRole)
       setRoleError(undefined)
     },
-    [client, orgUser.id, orgUser.nodeId, orgUser.organizationId, userId],
+    [apolloClient, orgUser.id, orgUser.nodeId, orgUser.organizationId, userId],
   )
   const onClickDelete = useCallback(async () => {
-    client.mutate({
+    apolloClient.mutate({
       mutation: deleteOrgUserMutation,
       variables: {
         id: orgUser.id,
@@ -242,7 +249,7 @@ const OrgUser = ({ orgUser }) => {
         })
       },
     })
-  }, [client, orgName, orgUser.id])
+  }, [apolloClient, orgName, orgUser.id])
 
   if (orgUsersLoading || allUsersLoading) {
     return null
@@ -265,7 +272,10 @@ const OrgUser = ({ orgUser }) => {
             input={<Input id="Benutzer" />}
           >
             {userNames.map((u) => (
-              <MenuItem key={u} value={u}>
+              <MenuItem
+                key={u}
+                value={u}
+              >
                 {u}
               </MenuItem>
             ))}
@@ -282,7 +292,10 @@ const OrgUser = ({ orgUser }) => {
             input={<Input id="Rolle" />}
           >
             {roles.map((u) => (
-              <MenuItem key={u} value={u}>
+              <MenuItem
+                key={u}
+                value={u}
+              >
                 {u}
               </MenuItem>
             ))}

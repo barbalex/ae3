@@ -5,6 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import onBlurArten from './onBlurArten.js'
 
@@ -19,23 +20,31 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
 
   const [value, setValue] = useState(taxonomy[field] || '')
   const onChange = useCallback((event) => setValue(event.target.value), [])
+
+  const refetchTree = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ['treeQuery'],
+    })
+  }, [queryClient])
 
   const [fieldError, setFieldError] = useState()
   const onBlur = useCallback(
     () =>
       onBlurArten({
-        client,
+        client: apolloClient,
         field,
         taxonomy,
         value,
         prevValue: taxonomy[field],
         setFieldError,
+        refetchTree,
       }),
-    [client, field, taxonomy, value],
+    [apolloClient, field, taxonomy, value],
   )
 
   return (
@@ -51,9 +60,9 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
           autoFocus={label === 'Name' && !value}
           label={label}
           value={
-            field === 'lastUpdated' && value
-              ? format(new Date(value), 'dd.MM.yyyy')
-              : value
+            field === 'lastUpdated' && value ?
+              format(new Date(value), 'dd.MM.yyyy')
+            : value
           }
           onChange={onChange}
           onBlur={onBlur}
