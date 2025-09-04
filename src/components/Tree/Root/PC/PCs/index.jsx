@@ -52,7 +52,7 @@ const PCs = () => {
     const relCount = node.relationsByPropertyCollectionId?.totalCount ?? 0
 
     const data = {
-      label: node.name,
+      label: node.name ?? node.id,
       id: node.id,
       url: ['Eigenschaften-Sammlungen', node.id],
       childrenCount: 2,

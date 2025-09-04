@@ -221,7 +221,7 @@ const Row = ({ data }) => {
         </Toggle>
         <Content>
           <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
-            {data.label}
+            {data.label ?? data.id}
           </TextSpan>
           {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
         </Content>

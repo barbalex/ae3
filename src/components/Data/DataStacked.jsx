@@ -41,7 +41,7 @@ const DataStacked = () => {
         </Tabs>
       </StyledPaper>
       <Content data-height={windowHeight - 103}>
-        {tab === 0 && <Tree treeRefetchCounter />}
+        {tab === 0 && <Tree treeRefetchCounter={treeRefetchCounter} />}
         {tab === 1 && <Outlet />}
       </Content>
     </>

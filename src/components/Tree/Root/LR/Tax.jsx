@@ -46,7 +46,7 @@ const Tax = ({ type = 'Lebensräume' }) => {
   for (const node of data?.data?.allTaxonomies?.nodes ?? []) {
     const count = node.objectsByTaxonomyId.totalCount
     const data = {
-      label: node.name,
+      label: node.name ?? node.id,
       id: node.id,
       url: [type, node.id],
       childrenCount: count,

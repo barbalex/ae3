@@ -116,6 +116,7 @@ const Container = styled.div`
 
 const TreeComponent = () => {
   const store = useContext(storeContext)
+  const { treeRefetchCounter } = store
 
   const apolloClient = useApolloClient()
 
@@ -160,7 +161,7 @@ const TreeComponent = () => {
             contain: 'paint layout style',
           }}
         >
-          <Root />
+          <Root treeRefetchCounter={treeRefetchCounter} />
         </SimpleBar>
         <IntoViewScroller />
         <CmBenutzerFolder />

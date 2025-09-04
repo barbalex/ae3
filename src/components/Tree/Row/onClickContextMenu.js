@@ -145,7 +145,10 @@ const onClickContextMenu = async ({
         }
       }
       treeRefetch()
-      refetchTree()
+      setTimeout(() => {
+        console.log('onClickContextMenu, will refetch tree')
+        refetchTree()
+      }, 2000)
     },
     delete: async () => {
       if (table === 'user') {

@@ -34,7 +34,7 @@ const Users = () => {
 
   for (const node of data?.data?.allUsers?.nodes ?? []) {
     const data = {
-      label: node.name,
+      label: node.name ?? node.id,
       id: node.id,
       url: ['Benutzer', node.id],
       childrenCount: 0,

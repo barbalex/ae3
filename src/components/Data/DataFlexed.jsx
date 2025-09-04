@@ -22,7 +22,7 @@ const DataFlexed = observer(() => {
           flex={0.35}
           className="tree-reflex-element"
         >
-          <Tree treeRefetchCounter />
+          <Tree treeRefetchCounter={treeRefetchCounter} />
         </ReflexElement>
         <ReflexSplitter key="treeSplitter" />
         <DataElement>

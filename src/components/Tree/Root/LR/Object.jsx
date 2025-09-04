@@ -46,7 +46,7 @@ const Object = ({ parentData }) => {
   for (const node of data?.data?.objectById?.objectsByParentId?.nodes ?? []) {
     const count = node?.objectsByParentId?.totalCount
     const nodeData = {
-      label: node.name,
+      label: node.name ?? node.id,
       id: node.id,
       url: [...parentData.url, node.id],
       childrenCount: count,

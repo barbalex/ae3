@@ -49,7 +49,7 @@ const TopLevelObject = ({ type = 'Lebensräume' }) => {
   for (const node of data?.data?.allObjects?.nodes ?? []) {
     const count = node.objectsByParentId.totalCount
     const data = {
-      label: node.name,
+      label: node.name ?? node.id,
       id: node.id,
       url: [type, taxId, node.id],
       childrenCount: count,
