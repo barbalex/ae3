@@ -162,8 +162,6 @@ const Row = ({ data }) => {
         data,
         target,
         client: apolloClient,
-        // TODO: check this behavior
-        treeRefetch: () => {},
         store,
         navigate,
         queryClient,
