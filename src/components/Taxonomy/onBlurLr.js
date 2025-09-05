@@ -1,6 +1,13 @@
 import updateTaxonomyMutationLr from './updateTaxonomyMutationLr.js'
 
-const onBlurLr = ({ client, field, taxonomy, value, prevValue }) => {
+export const onBlurLr = async ({
+  apolloClient,
+  queryClient,
+  field,
+  taxonomy,
+  value,
+  prevValue,
+}) => {
   if (value !== prevValue) {
     const lastUpdated = new Date()
     const variables = {
@@ -22,7 +29,7 @@ const onBlurLr = ({ client, field, taxonomy, value, prevValue }) => {
         field === 'habitatNrFnsMax' ? +value : taxonomy.habitatNrFnsMax,
       type: taxonomy.type,
     }
-    client.mutate({
+    await apolloClient.mutate({
       mutation: updateTaxonomyMutationLr,
       variables,
       optimisticResponse: {
@@ -53,7 +60,8 @@ const onBlurLr = ({ client, field, taxonomy, value, prevValue }) => {
         __typename: 'Mutation',
       },
     })
+    queryClient.invalidateQueries({
+      queryKey: ['tree'],
+    })
   }
 }
-
-export default onBlurLr

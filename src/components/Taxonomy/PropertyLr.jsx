@@ -3,8 +3,9 @@ import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
-import onBlurLr from './onBlurLr.js'
+import { onBlurLr } from './onBlurLr.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
@@ -13,13 +14,15 @@ const Container = styled.div`
 
 const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
   const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
   const [value, setValue] = useState(taxonomy[field] || '')
 
   const onChange = useCallback((event) => setValue(event.target.value), [])
   const onBlur = useCallback(
     (event) =>
       onBlurLr({
-        client: apolloClient,
+        apolloClient,
+        queryClient,
         field,
         taxonomy,
         value: event.target.value,

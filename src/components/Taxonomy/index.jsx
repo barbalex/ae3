@@ -19,7 +19,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Property } from './PropertyArten.jsx'
 import PropertyLr from './PropertyLr.jsx'
 import { onBlurArten } from './onBlurArten.js'
-import onBlurLr from './onBlurLr.js'
+import { onBlurLr } from './onBlurLr.js'
 import storeContext from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { constants } from '../../modules/constants.js'
@@ -123,7 +123,6 @@ export const Taxonomy = observer(() => {
     data: taxData,
     loading: taxLoading,
     error: taxError,
-    refetch: refetchTaxData,
   } = useQuery(taxQuery, {
     variables: {
       taxId,
@@ -167,44 +166,44 @@ export const Taxonomy = observer(() => {
   const onChangeImportedByArten = useCallback(
     (event) =>
       onBlurArten({
-        client: apolloClient,
+        apolloClient,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
-        refetch: refetchTaxData,
         queryClient,
       }),
-    [apolloClient, refetchTaxData, tax],
+    [apolloClient, tax, queryClient],
   )
   const onChangeOrganizationArten = useCallback(
     (event) =>
       onBlurArten({
-        client: apolloClient,
+        apolloClient,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.organizationId,
-        refetch: refetchTaxData,
         queryClient,
       }),
-    [apolloClient, refetchTaxData, tax],
+    [apolloClient, tax, queryClient],
   )
   const onChangeImportedByLr = useCallback(
     (event) =>
       onBlurLr({
-        client: apolloClient,
+        apolloClient,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
+        queryClient,
       }),
     [apolloClient, tax],
   )
   const onChangeOrganizationLr = useCallback(
     (event) =>
       onBlurLr({
-        client: apolloClient,
+        apolloClient,
+        queryClient,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,

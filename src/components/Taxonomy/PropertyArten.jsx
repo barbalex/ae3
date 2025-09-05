@@ -42,16 +42,16 @@ export const Property = ({
   const onBlur = useCallback(
     () =>
       onBlurArten({
-        client: apolloClient,
+        apolloClient,
         field,
         taxonomy,
         value,
         prevValue: taxonomy[field],
         setFieldError,
         refetchTree,
-        queryClient
+        queryClient,
       }),
-    [apolloClient, field, taxonomy, value],
+    [apolloClient, queryClient, field, taxonomy, value],
   )
 
   return (

@@ -1,15 +1,14 @@
 import updateTaxonomyMutationArten from './updateTaxonomyMutationArten.js'
 
 export const onBlurArten = async ({
-  client,
+  apolloClient,
+  queryClient,
   field,
   taxonomy,
   value,
   prevValue,
   setFieldError = () => {},
-  refetch = () => {},
   refetchTree = () => {},
-  queryClient,
 }) => {
   if (value !== prevValue) {
     const variables = {
@@ -25,7 +24,7 @@ export const onBlurArten = async ({
       type: taxonomy.type,
     }
     try {
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updateTaxonomyMutationArten,
         variables,
         optimisticResponse: {
@@ -54,7 +53,6 @@ export const onBlurArten = async ({
       return setFieldError(error)
     }
     setFieldError(undefined)
-    refetch()
     refetchTree()
     queryClient.invalidateQueries({
       queryKey: ['tree'],
