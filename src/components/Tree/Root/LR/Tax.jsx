@@ -11,7 +11,7 @@ export const Tax = ({ type = 'Lebensräume' }) => {
   const { taxId } = useParams()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['tree', 'treeTaxonomies', type],
+    queryKey: ['tree', 'lrTax', type],
     queryFn: () => {
       return apolloClient.query({
         query: gql`

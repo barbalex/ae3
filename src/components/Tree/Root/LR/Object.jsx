@@ -10,7 +10,7 @@ export const Object = ({ parentData }) => {
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['tree', 'treeObject', parentData.id],
+    queryKey: ['tree', 'lrObject', parentData.id],
     queryFn: () => {
       return apolloClient.query({
         query: gql`

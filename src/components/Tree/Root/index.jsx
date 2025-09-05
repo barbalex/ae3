@@ -18,7 +18,7 @@ export const Root = observer(() => {
   const hasToken = !!store.login.token
 
   const { data, isLoading } = useQuery({
-    queryKey: ['tree', 'treeRoot', hasToken],
+    queryKey: ['tree', 'root', hasToken],
     queryFn: () => {
       // This query is re-run under certain circumstances
       // when focus was out of app and comes back in

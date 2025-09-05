@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
@@ -15,47 +16,64 @@ const FieldContainer = styled.div`
   display: flex;
 `
 
-export const NewProperty = memo(
-  ({ id, properties: propertiesPrevious }) => {
-    const apolloClient = useApolloClient()
+export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
+  const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
 
-    const [label, setLabel] = useState('')
-    const [value, setValue] = useState('')
+  const [label, setLabel] = useState('')
+  const [value, setValue] = useState('')
 
-    const onChangeLabel = useCallback((event) => {
-      setLabel(event.target.value)
-    }, [])
-    const onChangeValue = useCallback((event) => {
-      setValue(event.target.value)
-    }, [])
-    const onBlurValue = useCallback(
-      async (event) => {
-        const { value } = event.target
-        if (value !== null && value !== undefined && !!label) {
-          const properties = {
-            ...propertiesPrevious,
-            ...{ [label]: value },
-          }
-          await apolloClient.mutate({
-            mutation: updatePropertyMutation,
-            variables: { properties: JSON.stringify(properties), id },
-          })
-          setLabel('')
-          setValue('')
+  const onChangeLabel = useCallback((event) => {
+    setLabel(event.target.value)
+  }, [])
+  const onChangeValue = useCallback((event) => {
+    setValue(event.target.value)
+  }, [])
+  const onBlurValue = useCallback(
+    async (event) => {
+      const { value } = event.target
+      if (value !== null && value !== undefined && !!label) {
+        const properties = {
+          ...propertiesPrevious,
+          ...{ [label]: value },
         }
-      },
-      [label, propertiesPrevious, apolloClient, id],
-    )
+        await apolloClient.mutate({
+          mutation: updatePropertyMutation,
+          variables: { properties: JSON.stringify(properties), id },
+        })
+        setLabel('')
+        setValue('')
+        queryClient.invalidateQueries({
+          queryKey: ['tree'],
+        })
+      }
+    },
+    [label, propertiesPrevious, apolloClient, id, queryClient],
+  )
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <InputLabel>Neues Feld:</InputLabel>
-          <FieldContainer>
+  return (
+    <ErrorBoundary>
+      <Container>
+        <InputLabel>Neues Feld:</InputLabel>
+        <FieldContainer>
+          <TextField
+            label="Feld-Name"
+            value={label}
+            onChange={onChangeLabel}
+            fullWidth
+            multiline
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            variant="standard"
+          />
+          {!!label && (
             <TextField
-              label="Feld-Name"
-              value={label}
-              onChange={onChangeLabel}
+              label="Feld-Wert"
+              value={value}
+              onChange={onChangeValue}
+              onBlur={onBlurValue}
               fullWidth
               multiline
               autoComplete="off"
@@ -64,24 +82,9 @@ export const NewProperty = memo(
               spellCheck="false"
               variant="standard"
             />
-            {!!label && (
-              <TextField
-                label="Feld-Wert"
-                value={value}
-                onChange={onChangeValue}
-                onBlur={onBlurValue}
-                fullWidth
-                multiline
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck="false"
-                variant="standard"
-              />
-            )}
-          </FieldContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  },
-)
+          )}
+        </FieldContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
