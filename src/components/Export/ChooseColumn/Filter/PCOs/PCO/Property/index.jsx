@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import Comparator from './Comparator.jsx'
-import Value from './Value.jsx'
-import Checkbox from './Checkbox.jsx'
+import { PcoComparator } from './Comparator.jsx'
+import { PcoValue } from './Value.jsx'
+import { PcoCheckbox } from './Checkbox.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 `
 
-const PcoProperty = ({ pcname, pname, jsontype }) => {
+export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { pcoFilters: pcoFiltersPassed } = store.export
   const pcoFilters = getSnapshot(pcoFiltersPassed)
@@ -41,14 +41,18 @@ const PcoProperty = ({ pcname, pname, jsontype }) => {
   if (jsontype === 'Boolean') {
     return (
       <Container>
-        <Checkbox pcname={pcname} pname={pname} value={value} />
+        <PcoCheckbox
+          pcname={pcname}
+          pname={pname}
+          value={value}
+        />
       </Container>
     )
   }
 
   return (
     <Container>
-      <Value
+      <PcoValue
         key={`${pcname}/${pname}/${jsontype}/${value}`}
         pcname={pcname}
         pname={pname}
@@ -57,7 +61,7 @@ const PcoProperty = ({ pcname, pname, jsontype }) => {
         jsontype={jsontype}
       />
       {value !== undefined && value !== null && value !== ' ' && (
-        <Comparator
+        <PcoComparator
           pcname={pcname}
           pname={pname}
           comparator={comparator}
@@ -66,6 +70,4 @@ const PcoProperty = ({ pcname, pname, jsontype }) => {
       )}
     </Container>
   )
-}
-
-export default observer(PcoProperty)
+})

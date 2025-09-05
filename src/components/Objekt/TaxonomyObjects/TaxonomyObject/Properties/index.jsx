@@ -10,7 +10,7 @@ import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import PropertyList from './PropertyList.jsx'
+import { PropertyList } from './PropertyList.jsx'
 import { NewProperty } from '../../../../shared/NewProperty.jsx'
 import storeContext from '../../../../../storeContext.js'
 
@@ -51,17 +51,15 @@ const Properties = ({ id, properties, stacked }) => {
     <>
       {propertiesArray.length > 0 && (
         <PropertiesTitleContainer>
-          {editingTaxonomies ? (
+          {editingTaxonomies ?
             <PropertiesTitleLabelEditing>
               Eigenschaften:
             </PropertiesTitleLabelEditing>
-          ) : stacked ? (
+          : stacked ?
             <PropertiesTitleLabelStacked>
               Eigenschaften:
             </PropertiesTitleLabelStacked>
-          ) : (
-            <PropertiesTitleLabel>Eigenschaften:</PropertiesTitleLabel>
-          )}
+          : <PropertiesTitleLabel>Eigenschaften:</PropertiesTitleLabel>}
           <PropertiesTitleValue />
         </PropertiesTitleContainer>
       )}

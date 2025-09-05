@@ -6,6 +6,7 @@ import { MdClear } from 'react-icons/md'
 import styled from '@emotion/styled'
 import omit from 'lodash/omit'
 import { useApolloClient } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
@@ -29,13 +30,14 @@ const DeleteButton = styled(IconButton)`
 export const Property = memo(
   ({ id, properties: propertiesPrevious, field: key }) => {
     const apolloClient = useApolloClient()
+    const queryClient = useQueryClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
 
     const onChange = useCallback((event) => {
       setValue(event.target.value)
     }, [])
     const onBlur = useCallback(
-      (event) => {
+      async (event) => {
         const { value } = event.target
         const prevValue = propertiesPrevious[key]
         if (value !== prevValue) {
@@ -58,6 +60,9 @@ export const Property = memo(
               __typename: 'Mutation',
             },
           })
+          queryClient.invalidateQueries({
+            queryKey: ['tree'],
+          })
         }
       },
       [propertiesPrevious, key, apolloClient, id],
@@ -67,6 +72,9 @@ export const Property = memo(
       await apolloClient.mutate({
         mutation: updatePropertyMutation,
         variables: { properties: JSON.stringify(properties), id },
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['tree'],
       })
     }, [propertiesPrevious, key, apolloClient, id])
 

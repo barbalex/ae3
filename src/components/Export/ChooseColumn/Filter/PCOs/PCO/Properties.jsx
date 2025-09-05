@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { gql, useApolloClient } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import Property from './Property/index.jsx'
+import { PcoProperty } from './Property/index.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
@@ -65,7 +65,7 @@ const Properties = ({ pc }) => {
   }
 
   return properties.map((p) => (
-    <Property
+    <PcoProperty
       key={`${p.property}${p.type}`}
       pcname={pc}
       pname={p.property}

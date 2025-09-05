@@ -23,6 +23,7 @@ import {
 } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
@@ -99,6 +100,7 @@ const organizationUsersQuery = gql`
 `
 
 const TaxonomyObject = ({ objekt, showLink, stacked }) => {
+  const queryClient = useQueryClient()
   const store = useContext(storeContext)
   const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
     store
@@ -187,7 +189,10 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onClickActions}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onClickActions}
+          >
             <CardActionTitle>{taxname}</CardActionTitle>
             <CardActionsButtons>
               <LinkMenu objekt={objekt} />
@@ -227,9 +232,9 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
                 aria-expanded={taxExpanded}
                 aria-label="über diese Taxonomie"
                 title={
-                  taxExpanded
-                    ? 'Taxonomie-Beschreibung schliessen'
-                    : 'Taxonomie-Beschreibung öffnen'
+                  taxExpanded ?
+                    'Taxonomie-Beschreibung schliessen'
+                  : 'Taxonomie-Beschreibung öffnen'
                 }
                 onClick={onClickToggleTaxDescription}
                 size="large"
@@ -251,12 +256,20 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
               </CardActionIconButton>
             </CardActionsButtons>
           </StyledCardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Collapse in={taxExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expanded}
+            timeout="auto"
+            unmountOnExit
+          >
+            <Collapse
+              in={taxExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
               <TaxonomyDescription taxonomy={taxonomy} />
             </Collapse>
             <StyledCardContent>
-              {editing ? (
+              {editing ?
                 <>
                   <Property
                     key={`${objekt.id}/id`}
@@ -272,7 +285,7 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
                     objekt={objekt}
                   />
                 </>
-              ) : stacked ? (
+              : stacked ?
                 <>
                   <PropertyReadOnlyStacked
                     key={`${objekt.id}/id`}
@@ -285,8 +298,7 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
                     label="Name"
                   />
                 </>
-              ) : (
-                <>
+              : <>
                   <PropertyReadOnly
                     key={`${objekt.id}/id`}
                     value={objekt.id}
@@ -298,7 +310,7 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
                     label="Name"
                   />
                 </>
-              )}
+              }
               <Properties
                 id={objekt.id}
                 properties={properties}

@@ -19,7 +19,7 @@ import { useParams } from 'react-router'
 
 import Property from './Property.jsx'
 import { DateField } from '../shared/Date.jsx'
-import onBlur from './onBlur.js'
+import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import storeContext from '../../storeContext.js'
@@ -181,7 +181,7 @@ export const PropertyCollection = observer(() => {
   )
   const onChangeCombining = useCallback(
     (event, isChecked) =>
-      onBlur({
+      onBlurDo({
         client: apolloClient,
         field: 'combining',
         pC,
@@ -193,7 +193,7 @@ export const PropertyCollection = observer(() => {
   )
   const onChangeOrganization = useCallback(
     (event) =>
-      onBlur({
+      onBlurDo({
         client: apolloClient,
         field: 'organizationId',
         pC,
@@ -205,7 +205,7 @@ export const PropertyCollection = observer(() => {
   )
   const onChangeImportedBy = useCallback(
     (event) =>
-      onBlur({
+      onBlurDo({
         client: apolloClient,
         field: 'importedBy',
         pC,
@@ -217,7 +217,7 @@ export const PropertyCollection = observer(() => {
   )
   const onChangeLastUpdated = useCallback(
     (event) =>
-      onBlur({
+      onBlurDo({
         client: apolloClient,
         field: 'lastUpdated',
         pC,

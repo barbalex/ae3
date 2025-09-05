@@ -1,6 +1,6 @@
 import updatePCMutation from './updatePCMutation.js'
 
-const onBlur = async ({
+export const onBlurDo = async ({
   client,
   field,
   pC,
@@ -45,10 +45,9 @@ const onBlur = async ({
     }
     if (field === 'name') {
       queryClient.invalidateQueries({
-        queryKey: ['treePcs'],
+        queryKey: ['tree'],
       })
     }
   }
 }
 
-export default onBlur

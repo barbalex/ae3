@@ -15,60 +15,47 @@ const FieldContainer = styled.div`
   display: flex;
 `
 
-export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
-  const apolloClient = useApolloClient()
+export const NewProperty = memo(
+  ({ id, properties: propertiesPrevious }) => {
+    const apolloClient = useApolloClient()
 
-  const [label, setLabel] = useState('')
-  const [value, setValue] = useState('')
+    const [label, setLabel] = useState('')
+    const [value, setValue] = useState('')
 
-  const onChangeLabel = useCallback((event) => {
-    setLabel(event.target.value)
-  }, [])
-  const onChangeValue = useCallback((event) => {
-    setValue(event.target.value)
-  }, [])
-  const onBlurValue = useCallback(
-    async (event) => {
-      const { value } = event.target
-      if (value !== null && value !== undefined && !!label) {
-        const properties = {
-          ...propertiesPrevious,
-          ...{ [label]: value },
+    const onChangeLabel = useCallback((event) => {
+      setLabel(event.target.value)
+    }, [])
+    const onChangeValue = useCallback((event) => {
+      setValue(event.target.value)
+    }, [])
+    const onBlurValue = useCallback(
+      async (event) => {
+        const { value } = event.target
+        if (value !== null && value !== undefined && !!label) {
+          const properties = {
+            ...propertiesPrevious,
+            ...{ [label]: value },
+          }
+          await apolloClient.mutate({
+            mutation: updatePropertyMutation,
+            variables: { properties: JSON.stringify(properties), id },
+          })
+          setLabel('')
+          setValue('')
         }
-        await apolloClient.mutate({
-          mutation: updatePropertyMutation,
-          variables: { properties: JSON.stringify(properties), id },
-        })
-        setLabel('')
-        setValue('')
-      }
-    },
-    [label, propertiesPrevious, apolloClient, id],
-  )
+      },
+      [label, propertiesPrevious, apolloClient, id],
+    )
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <InputLabel>Neues Feld:</InputLabel>
-        <FieldContainer>
-          <TextField
-            label="Feld-Name"
-            value={label}
-            onChange={onChangeLabel}
-            fullWidth
-            multiline
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            variant="standard"
-          />
-          {!!label && (
+    return (
+      <ErrorBoundary>
+        <Container>
+          <InputLabel>Neues Feld:</InputLabel>
+          <FieldContainer>
             <TextField
-              label="Feld-Wert"
-              value={value}
-              onChange={onChangeValue}
-              onBlur={onBlurValue}
+              label="Feld-Name"
+              value={label}
+              onChange={onChangeLabel}
               fullWidth
               multiline
               autoComplete="off"
@@ -77,9 +64,24 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
               spellCheck="false"
               variant="standard"
             />
-          )}
-        </FieldContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-})
+            {!!label && (
+              <TextField
+                label="Feld-Wert"
+                value={value}
+                onChange={onChangeValue}
+                onBlur={onBlurValue}
+                fullWidth
+                multiline
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                variant="standard"
+              />
+            )}
+          </FieldContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)

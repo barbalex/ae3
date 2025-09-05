@@ -32,7 +32,7 @@ const StyledRadio = styled(Radio)`
   height: 26px !important;
 `
 
-const PcoCheckbox = ({ pname, pcname, value }) => {
+export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
   const { addFilterFields, setPcoFilter, addPcoProperty } = store.export
 
@@ -55,7 +55,10 @@ const PcoCheckbox = ({ pname, pcname, value }) => {
 
   return (
     <Container>
-      <FormControl component="fieldset" variant="standard">
+      <FormControl
+        component="fieldset"
+        variant="standard"
+      >
         <StyledFormLabel component="legend">{pname}</StyledFormLabel>
         <RadioGroup
           aria-label={pname}
@@ -82,6 +85,4 @@ const PcoCheckbox = ({ pname, pcname, value }) => {
       </FormControl>
     </Container>
   )
-}
-
-export default observer(PcoCheckbox)
+})

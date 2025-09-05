@@ -23,25 +23,28 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const PcoComparator = ({ pcname, pname, value, comparator }) => {
-  const store = useContext(storeContext)
-  const { setPcoFilter } = store.export
+export const PcoComparator = observer(
+  ({ pcname, pname, value, comparator }) => {
+    const store = useContext(storeContext)
+    const { setPcoFilter } = store.export
 
-  const onChange = useCallback(
-    (event) => {
-      setPcoFilter({ pcname, pname, comparator: event.target.value, value })
-    },
-    [pcname, pname, setPcoFilter, value],
-  )
+    const onChange = useCallback(
+      (event) => {
+        setPcoFilter({ pcname, pname, comparator: event.target.value, value })
+      },
+      [pcname, pname, setPcoFilter, value],
+    )
 
-  return (
-    <Container>
-      <StyledFormControl variant="standard">
-        <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
-        <ComparatorSelect comparator={comparator} onChange={onChange} />
-      </StyledFormControl>
-    </Container>
-  )
-}
-
-export default observer(PcoComparator)
+    return (
+      <Container>
+        <StyledFormControl variant="standard">
+          <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
+          <ComparatorSelect
+            comparator={comparator}
+            onChange={onChange}
+          />
+        </StyledFormControl>
+      </Container>
+    )
+  },
+)

@@ -1,7 +1,11 @@
+import { useQueryClient } from '@tanstack/react-query'
+
 import Property from './Property/index.jsx'
 
-const RcoCard = ({ properties }) =>
-  properties.map((p) => (
+const RcoCard = ({ properties }) => {
+  const queryClient = useQueryClient()
+
+  return properties.map((p) => (
     <Property
       key={`${p.propertyName}|${p.relationType}|${p.jsontype}`}
       pcname={p.propertyCollectionName}
@@ -10,5 +14,6 @@ const RcoCard = ({ properties }) =>
       jsontype={p.jsontype}
     />
   ))
+}
 
 export default RcoCard
