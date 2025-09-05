@@ -23,7 +23,7 @@ const onClickContextMenu = async ({
   navigate,
   queryClient,
 }) => {
-  const { scrollIntoView, refetchTree } = store
+  const { scrollIntoView,  } = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
@@ -139,10 +139,6 @@ const onClickContextMenu = async ({
         }
       }
       treeRefetch()
-      setTimeout(() => {
-        console.log('onClickContextMenu, will refetch tree')
-        refetchTree()
-      }, 2000)
     },
     delete: async () => {
       if (table === 'user') {

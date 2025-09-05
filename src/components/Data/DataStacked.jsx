@@ -19,7 +19,7 @@ const Content = styled.div`
 
 export const DataStacked = observer(() => {
   const store = useContext(storeContext)
-  const { windowHeight, treeRefetchCounter } = store
+  const { windowHeight } = store
 
   const [tab, setTab] = useState(0)
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -41,10 +41,9 @@ export const DataStacked = observer(() => {
         </Tabs>
       </StyledPaper>
       <Content data-height={windowHeight - 103}>
-        {tab === 0 && <Tree treeRefetchCounter={treeRefetchCounter} />}
+        {tab === 0 && <Tree />}
         {tab === 1 && <Outlet />}
       </Content>
     </>
   )
 })
-

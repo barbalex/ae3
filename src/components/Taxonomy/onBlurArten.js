@@ -8,7 +8,6 @@ export const onBlurArten = async ({
   value,
   prevValue,
   setFieldError = () => {},
-  refetchTree = () => {},
 }) => {
   if (value !== prevValue) {
     const variables = {
@@ -53,7 +52,6 @@ export const onBlurArten = async ({
       return setFieldError(error)
     }
     setFieldError(undefined)
-    refetchTree()
     queryClient.invalidateQueries({
       queryKey: ['tree'],
     })

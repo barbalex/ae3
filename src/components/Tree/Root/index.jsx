@@ -14,7 +14,6 @@ import LoadingRow from '../LoadingRow.jsx'
 export const Root = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const { treeRefetchCounter } = store
   const hasToken = !!store.login.token
 
   const { data, isLoading } = useQuery({
@@ -62,29 +61,24 @@ export const Root = observer(() => {
       <Arten
         isLoading={isLoading}
         count={data?.data?.arten?.totalCount}
-        treeRefetchCounter={treeRefetchCounter}
       />
       <LR
         isLoading={isLoading}
         count={data?.data?.lebensraeume?.totalCount}
-        treeRefetchCounter={treeRefetchCounter}
       />
       <PC
         isLoading={isLoading}
         count={data?.data?.allPropertyCollections?.totalCount}
-        treeRefetchCounter={treeRefetchCounter}
       />
       {hasToken && (
         <>
           <Users
             isLoading={isLoading}
             count={data?.data?.allUsers?.totalCount}
-            treeRefetchCounter={treeRefetchCounter}
           />
           <Organizations
             isLoading={isLoading}
             count={data?.data?.allOrganizations?.totalCount}
-            treeRefetchCounter={treeRefetchCounter}
           />
         </>
       )}
