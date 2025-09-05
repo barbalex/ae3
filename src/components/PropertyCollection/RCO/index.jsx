@@ -346,7 +346,7 @@ export const RCO = observer(() => {
     })
     setDeleteLoading(false)
     queryClient.invalidateQueries({
-      queryKey: ['treeQuery'],
+      queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],

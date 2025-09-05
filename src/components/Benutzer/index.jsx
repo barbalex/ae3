@@ -127,7 +127,7 @@ const User = () => {
     }
     // refetch to update
     queryClient.invalidateQueries({
-      queryKey: ['treeQuery'],
+      queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
       queryKey: [`treeRoot`],

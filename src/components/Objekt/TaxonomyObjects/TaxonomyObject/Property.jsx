@@ -42,7 +42,7 @@ const Property = ({ field, label, objekt, disabled }) => {
           },
         })
         queryClient.invalidateQueries({
-          queryKey: ['treeQuery'],
+          queryKey: ['tree'],
         })
       }
     },

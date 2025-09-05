@@ -12,7 +12,7 @@ export const TopLevelObject = ({ type = 'Lebensräume' }) => {
   const { pathname } = useLocation()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeTopLevelObjects', taxId],
+    queryKey: ['tree', 'treeTopLevelObjects', taxId],
     queryFn: () => {
       return apolloClient.query({
         query: gql`

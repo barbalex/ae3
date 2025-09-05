@@ -28,7 +28,7 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
 
   const refetchTree = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ['treeQuery'],
+      queryKey: ['tree'],
     })
   }, [queryClient])
 

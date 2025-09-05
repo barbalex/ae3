@@ -57,13 +57,7 @@ const onClickContextMenu = async ({
           setTimeout(() => scrollIntoView())
         }
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`treeRoot`],
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`treeUsers`],
+          queryKey: [`tree`],
         })
       }
       // get userId
@@ -94,7 +88,7 @@ const onClickContextMenu = async ({
           })
         }
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         const newId = newObjectData?.data?.createObject?.object?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
@@ -115,7 +109,7 @@ const onClickContextMenu = async ({
           },
         })
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         const newId =
           newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
@@ -132,7 +126,7 @@ const onClickContextMenu = async ({
           variables: { importedBy: userId, lastUpdated: new Date() },
         })
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         const newId =
           newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
@@ -172,13 +166,7 @@ const onClickContextMenu = async ({
         navigate('/Benutzer')
         setTimeout(() => scrollIntoView())
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`treeRoot`],
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`treeUsers`],
+          queryKey: [`tree`],
         })
       }
       if (table === 'object') {
@@ -196,7 +184,7 @@ const onClickContextMenu = async ({
           },
         })
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
@@ -219,7 +207,7 @@ const onClickContextMenu = async ({
           },
         })
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
@@ -242,7 +230,7 @@ const onClickContextMenu = async ({
           },
         })
         queryClient.invalidateQueries({
-          queryKey: [`treeQuery`],
+          queryKey: [`tree`],
         })
         if (url.includes(id)) {
           url.length = url.indexOf(id)
@@ -252,10 +240,7 @@ const onClickContextMenu = async ({
       }
       treeRefetch()
       queryClient.invalidateQueries({
-        queryKey: [`treeQuery`],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [`TreeRoot`],
+        queryKey: [`tree`],
       })
     },
   }

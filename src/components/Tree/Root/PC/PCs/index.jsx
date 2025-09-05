@@ -11,7 +11,7 @@ const PCs = () => {
   const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treePcs'],
+    queryKey: ['tree', 'treePcs'],
     queryFn: () => {
       // This query is re-run under certain circumstances
       // when focus was out of app and comes back in

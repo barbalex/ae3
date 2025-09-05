@@ -121,7 +121,7 @@ export const Tree = observer(() => {
   const apolloClient = useApolloClient()
 
   const { error, data } = useQuery({
-    queryKey: ['treeQuery', store.login.username],
+    queryKey: ['tree', store.login.username],
     queryFn: () =>
       apolloClient.query({
         query: treeQuery,

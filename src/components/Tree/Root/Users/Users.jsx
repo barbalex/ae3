@@ -8,7 +8,7 @@ const Users = () => {
   const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['treeUsers'],
+    queryKey: ['tree', 'treeUsers'],
     queryFn: () => {
       return apolloClient.query({
         query: gql`
