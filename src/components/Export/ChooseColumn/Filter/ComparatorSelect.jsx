@@ -21,7 +21,7 @@ const Comment = styled.span`
   font-size: 0.7em;
 `
 
-const ComparatorSelect = ({ comparator, onChange }) => (
+export const ComparatorSelect = ({ comparator, onChange }) => (
   <StyledSelect
     value={comparator}
     onChange={onChange}
@@ -71,5 +71,3 @@ const ComparatorSelect = ({ comparator, onChange }) => (
     </MenuItem>
   </StyledSelect>
 )
-
-export default ComparatorSelect

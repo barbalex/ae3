@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import ComparatorSelect from '../../../ComparatorSelect.jsx'
+import { ComparatorSelect } from '../../../ComparatorSelect.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 
 const Container = styled.div`
@@ -43,7 +43,10 @@ const RcoComparator = ({ pcname, relationtype, pname, value, comparator }) => {
     <Container>
       <StyledFormControl variant="standard">
         <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
-        <ComparatorSelect comparator={comparator} onChange={onChange} />
+        <ComparatorSelect
+          comparator={comparator}
+          onChange={onChange}
+        />
       </StyledFormControl>
     </Container>
   )

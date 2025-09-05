@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import ComparatorSelect from '../../../ComparatorSelect.jsx'
+import { ComparatorSelect } from '../../../ComparatorSelect.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 
 const Container = styled.div`

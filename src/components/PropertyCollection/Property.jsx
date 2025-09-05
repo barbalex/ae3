@@ -43,14 +43,14 @@ const Property = ({
   const onBlur = useCallback(
     (event) =>
       onBlurDo({
-        client: apolloClient,
+        apolloClient,
+        queryClient,
         field,
         pC,
         value: event.target.value,
         prevValue: pC[field],
         setError,
         navigate,
-        queryClient,
       }),
     [apolloClient, field, navigate, pC, queryClient],
   )

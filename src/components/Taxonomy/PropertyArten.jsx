@@ -32,24 +32,17 @@ export const Property = ({
   const [value, setValue] = useState(taxonomy[field] || '')
   const onChange = useCallback((event) => setValue(event.target.value), [])
 
-  const refetchTree = useCallback(() => {
-    queryClient.invalidateQueries({
-      queryKey: ['tree'],
-    })
-  }, [queryClient])
-
   const [fieldError, setFieldError] = useState()
   const onBlur = useCallback(
     () =>
       onBlurArten({
         apolloClient,
+        queryClient,
         field,
         taxonomy,
         value,
         prevValue: taxonomy[field],
         setFieldError,
-        refetchTree,
-        queryClient,
       }),
     [apolloClient, queryClient, field, taxonomy, value],
   )

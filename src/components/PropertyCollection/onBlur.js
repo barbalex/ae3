@@ -1,13 +1,13 @@
 import updatePCMutation from './updatePCMutation.js'
 
 export const onBlurDo = async ({
-  client,
+  apolloClient,
+  queryClient,
   field,
   pC,
   value,
   prevValue,
   navigate,
-  queryClient,
 }) => {
   //setError(null)
   if (value !== prevValue) {
@@ -26,15 +26,12 @@ export const onBlurDo = async ({
     try {
       // TODO
       // if id is updated, use different mutation
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updatePCMutation,
         variables,
       })
       queryClient.invalidateQueries({
         queryKey: ['pc'],
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['tree'],
       })
     } catch (error) {
       return console.log('error:', error.message) //setError(error.message)
@@ -50,4 +47,3 @@ export const onBlurDo = async ({
     }
   }
 }
-
