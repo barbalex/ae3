@@ -131,8 +131,6 @@ export const Tree = observer(() => {
       }),
   })
 
-  console.log('TreeComponent render, data:', data)
-
   const userIsTaxWriter = useMemo(() => {
     const userRoles = (
       data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
