@@ -1,10 +1,15 @@
 import sortBy from 'lodash/sortBy'
 
-import TaxonomyObject from './TaxonomyObject/index.jsx'
+import { TaxonomyObject } from './TaxonomyObject/index.jsx'
 
-const Objekt = ({ objects, stacked = false }) =>
+export const TaxonomyObjects = ({ objects, stacked = false }) =>
   sortBy(objects, (tO) => tO?.taxonomyByTaxonomyId?.name ?? '(Name fehlt)').map(
-    (o) => <TaxonomyObject key={o.id} objekt={o} showLink stacked={stacked} />,
+    (o) => (
+      <TaxonomyObject
+        key={o.id}
+        objekt={o}
+        showLink
+        stacked={stacked}
+      />
+    ),
   )
-
-export default Objekt

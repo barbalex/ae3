@@ -8,6 +8,7 @@ export const onBlurDo = async ({
   value,
   prevValue,
   navigate,
+  scrollIntoView,
 }) => {
   //setError(null)
   if (value !== prevValue) {
@@ -41,9 +42,10 @@ export const onBlurDo = async ({
       navigate(`/Eigenschaften-Sammlungen/${value}`)
     }
     if (field === 'name') {
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['tree'],
       })
+      scrollIntoView()
     }
   }
 }

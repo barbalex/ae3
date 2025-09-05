@@ -3,6 +3,7 @@ import updateTaxonomyMutationArten from './updateTaxonomyMutationArten.js'
 export const onBlurArten = async ({
   apolloClient,
   queryClient,
+  scrollIntoView,
   field,
   taxonomy,
   value,
@@ -52,8 +53,9 @@ export const onBlurArten = async ({
       return setFieldError(error)
     }
     setFieldError(undefined)
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ['tree'],
     })
+    scrollIntoView()
   }
 }

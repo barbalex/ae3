@@ -18,7 +18,7 @@ import storeContext from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
 import { Root } from './Root/index.jsx'
-import IntoViewScroller from './IntoViewScroller.jsx'
+import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 const ErrorContainer = styled.div`
   padding: 24px;

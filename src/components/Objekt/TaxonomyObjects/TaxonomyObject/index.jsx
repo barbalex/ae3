@@ -32,7 +32,7 @@ import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked
 import { TaxonomyDescription } from '../../../shared/TaxonomyDescription.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import Property from './Property.jsx'
+import { Property } from './Property.jsx'
 import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
@@ -99,7 +99,7 @@ const organizationUsersQuery = gql`
   }
 `
 
-const TaxonomyObject = ({ objekt, showLink, stacked }) => {
+export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
   const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
@@ -322,6 +322,4 @@ const TaxonomyObject = ({ objekt, showLink, stacked }) => {
       </Container>
     </ErrorBoundary>
   )
-}
-
-export default observer(TaxonomyObject)
+})

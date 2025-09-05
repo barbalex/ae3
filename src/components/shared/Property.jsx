@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react'
+import { useState, useCallback, memo, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 12px 10px 12px 2px;
@@ -33,6 +34,9 @@ export const Property = memo(
     const queryClient = useQueryClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
 
+    const store = useContext(storeContext)
+    const { scrollIntoView } = store
+
     const onChange = useCallback((event) => {
       setValue(event.target.value)
     }, [])
@@ -45,7 +49,7 @@ export const Property = memo(
             ...propertiesPrevious,
             ...{ [key]: value },
           }
-          apolloClient.mutate({
+          await apolloClient.mutate({
             mutation: updatePropertyMutation,
             variables: { properties: JSON.stringify(properties), id },
             optimisticResponse: {
@@ -60,9 +64,10 @@ export const Property = memo(
               __typename: 'Mutation',
             },
           })
-          queryClient.invalidateQueries({
+          await queryClient.invalidateQueries({
             queryKey: ['tree'],
           })
+          scrollIntoView()
         }
       },
       [propertiesPrevious, key, apolloClient, id],

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -8,6 +8,7 @@ import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { onBlurArten } from './onBlurArten.js'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 5px 0;
@@ -29,6 +30,9 @@ export const Property = ({
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
 
+  const store = useContext(storeContext)
+  const { scrollIntoView } = store
+
   const [value, setValue] = useState(taxonomy[field] || '')
   const onChange = useCallback((event) => setValue(event.target.value), [])
 
@@ -38,6 +42,7 @@ export const Property = ({
       onBlurArten({
         apolloClient,
         queryClient,
+        scrollIntoView,
         field,
         taxonomy,
         value,

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 
 import { onBlurDo } from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 5px 0;
@@ -22,7 +23,7 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-const Property = ({
+export const Property = ({
   field,
   label,
   pC,
@@ -33,6 +34,9 @@ const Property = ({
   const apolloClient = useApolloClient()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+
+  const store = useContext(storeContext)
+  const { scrollIntoView } = store
 
   const [value, setValue] = useState(pC[field] || '')
   const [error, setError] = useState(null)
@@ -51,6 +55,7 @@ const Property = ({
         prevValue: pC[field],
         setError,
         navigate,
+        scrollIntoView,
       }),
     [apolloClient, field, navigate, pC, queryClient],
   )
@@ -94,5 +99,3 @@ const Property = ({
     </ErrorBoundary>
   )
 }
-
-export default Property

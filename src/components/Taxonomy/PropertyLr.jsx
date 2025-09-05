@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { onBlurLr } from './onBlurLr.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 5px 0;
@@ -17,12 +18,16 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
   const queryClient = useQueryClient()
   const [value, setValue] = useState(taxonomy[field] || '')
 
+  const store = useContext(storeContext)
+  const { scrollIntoView } = store
+
   const onChange = useCallback((event) => setValue(event.target.value), [])
   const onBlur = useCallback(
     (event) =>
       onBlurLr({
         apolloClient,
         queryClient,
+        scrollIntoView,
         field,
         taxonomy,
         value: event.target.value,

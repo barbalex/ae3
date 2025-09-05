@@ -18,12 +18,11 @@ const onClickContextMenu = async ({
   data,
   target,
   client,
-  treeRefetch,
   store,
   navigate,
   queryClient,
 }) => {
-  const { scrollIntoView,  } = store
+  const { scrollIntoView } = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
@@ -54,11 +53,7 @@ const onClickContextMenu = async ({
         const newUserId = newUser?.data?.createUser?.user?.id
         if (newUserId) {
           navigate(`/Benutzer/${newUserId}`)
-          setTimeout(() => scrollIntoView())
         }
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
       }
       // get userId
       const { data: userData } = await client.query({
@@ -87,12 +82,8 @@ const onClickContextMenu = async ({
             variables: { taxonomyId: url[1], parentId: id },
           })
         }
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
         const newId = newObjectData?.data?.createObject?.object?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(() => scrollIntoView())
         // if not editing, set editing true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -108,13 +99,9 @@ const onClickContextMenu = async ({
             lastUpdated: new Date(),
           },
         })
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
         const newId =
           newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(() => scrollIntoView())
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingTaxonomies(true)
@@ -125,20 +112,20 @@ const onClickContextMenu = async ({
           mutation: createPCMutation,
           variables: { importedBy: userId, lastUpdated: new Date() },
         })
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
         const newId =
           newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
           null
         navigate(`/${[...url, newId].join('/')}`)
-        setTimeout(() => scrollIntoView())
         // if not editing, set editingTaxonomies true
         if (!editingTaxonomies) {
           setEditingPCs(true)
         }
       }
-      treeRefetch()
+      queryClient.invalidateQueries({
+        queryKey: [`tree`],
+      })
+      console.log('will scroll into view')
+      setTimeout(() => scrollIntoView())
     },
     delete: async () => {
       if (table === 'user') {
@@ -160,7 +147,6 @@ const onClickContextMenu = async ({
           console.log(error)
         }
         navigate('/Benutzer')
-        setTimeout(() => scrollIntoView())
         queryClient.invalidateQueries({
           queryKey: [`tree`],
         })
@@ -185,7 +171,6 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(() => scrollIntoView())
         }
       }
       if (table === 'taxonomy') {
@@ -208,7 +193,6 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(() => scrollIntoView())
         }
       }
       if (table === 'pc') {
@@ -231,13 +215,12 @@ const onClickContextMenu = async ({
         if (url.includes(id)) {
           url.length = url.indexOf(id)
           navigate(`/${url.join('/')}`)
-          setTimeout(() => scrollIntoView())
         }
       }
-      treeRefetch()
       queryClient.invalidateQueries({
         queryKey: [`tree`],
       })
+      setTimeout(() => scrollIntoView())
     },
   }
   if (Object.keys(actions).includes(action)) {

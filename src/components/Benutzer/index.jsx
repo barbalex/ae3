@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react'
+import { useEffect, useState, useCallback, useContext, useMemo } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -50,7 +44,7 @@ const User = () => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
-  const { login } = store
+  const { login, scrollIntoView } = store
 
   const {
     data,
@@ -126,18 +120,13 @@ const User = () => {
       return console.log(error)
     }
     // refetch to update
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ['tree'],
     })
-    queryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`treeUsers`],
-    })
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: [`user`],
     })
+    scrollIntoView()
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')

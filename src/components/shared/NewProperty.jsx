@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react'
+import { useState, useCallback, memo, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
+import storeContext from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 20px 10px 12px 0;
@@ -19,6 +20,9 @@ const FieldContainer = styled.div`
 export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
+
+  const store = useContext(storeContext)
+  const { scrollIntoView } = store
 
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
@@ -43,9 +47,10 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
         })
         setLabel('')
         setValue('')
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ['tree'],
         })
+        scrollIntoView()
       }
     },
     [label, propertiesPrevious, apolloClient, id, queryClient],

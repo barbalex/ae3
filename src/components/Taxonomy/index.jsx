@@ -109,7 +109,8 @@ const taxQuery = gql`
 export const Taxonomy = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies, login } = store
+  const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
+    store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
@@ -167,11 +168,12 @@ export const Taxonomy = observer(() => {
     (event) =>
       onBlurArten({
         apolloClient,
+        queryClient,
+        scrollIntoView,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
-        queryClient,
       }),
     [apolloClient, tax, queryClient],
   )
@@ -179,11 +181,12 @@ export const Taxonomy = observer(() => {
     (event) =>
       onBlurArten({
         apolloClient,
+        queryClient,
+        scrollIntoView,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.organizationId,
-        queryClient,
       }),
     [apolloClient, tax, queryClient],
   )
@@ -191,11 +194,12 @@ export const Taxonomy = observer(() => {
     (event) =>
       onBlurLr({
         apolloClient,
+        queryClient,
+        scrollIntoView,
         field: 'importedBy',
         taxonomy: tax,
         value: event.target.value,
         prevValue: tax.importedBy,
-        queryClient,
       }),
     [apolloClient, tax],
   )
@@ -204,6 +208,7 @@ export const Taxonomy = observer(() => {
       onBlurLr({
         apolloClient,
         queryClient,
+        scrollIntoView,
         field: 'organizationId',
         taxonomy: tax,
         value: event.target.value,

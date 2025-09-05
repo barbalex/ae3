@@ -17,7 +17,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import Property from './Property.jsx'
+import { Property } from './Property.jsx'
 import { DateField } from '../shared/Date.jsx'
 import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
