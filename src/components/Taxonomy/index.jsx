@@ -10,14 +10,15 @@ import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import PropertyArten from './PropertyArten.jsx'
+import { Property } from './PropertyArten.jsx'
 import PropertyLr from './PropertyLr.jsx'
-import onBlurArten from './onBlurArten.js'
+import { onBlurArten } from './onBlurArten.js'
 import onBlurLr from './onBlurLr.js'
 import storeContext from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
@@ -111,6 +112,7 @@ export const Taxonomy = observer(() => {
   const { editingTaxonomies, setEditingTaxonomies, login } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
+  const queryClient = useQueryClient()
 
   const {
     data: allUsersData,
@@ -171,6 +173,7 @@ export const Taxonomy = observer(() => {
         value: event.target.value,
         prevValue: tax.importedBy,
         refetch: refetchTaxData,
+        queryClient,
       }),
     [apolloClient, refetchTaxData, tax],
   )
@@ -183,6 +186,7 @@ export const Taxonomy = observer(() => {
         value: event.target.value,
         prevValue: tax.organizationId,
         refetch: refetchTaxData,
+        queryClient,
       }),
     [apolloClient, refetchTaxData, tax],
   )
@@ -334,20 +338,20 @@ export const Taxonomy = observer(() => {
         )}
         {editingArten && (
           <>
-            <PropertyArten
+            <Property
               key={`${tax.id}/id`}
               label="ID"
               field="id"
               taxonomy={tax}
               disabled={true}
             />
-            <PropertyArten
+            <Property
               key={`${tax.id}/name`}
               label="Name"
               field="name"
               taxonomy={tax}
             />
-            <PropertyArten
+            <Property
               key={`${tax.id}/description`}
               label="Beschreibung"
               field="description"
@@ -408,14 +412,14 @@ export const Taxonomy = observer(() => {
                 ))}
               </Select>
             </StyledFormControl>
-            <PropertyArten
+            <Property
               key={`${tax.id}/lastUpdated`}
               label="Zuletzt aktualisiert"
               field="lastUpdated"
               taxonomy={tax}
               disabled={true}
             />
-            <PropertyArten
+            <Property
               key={`${tax.id}/termsOfUse`}
               label="Nutzungs-Bedingungen"
               field="termsOfUse"

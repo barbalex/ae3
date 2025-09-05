@@ -1,6 +1,6 @@
 import updateTaxonomyMutationArten from './updateTaxonomyMutationArten.js'
 
-const onBlurArten = ({
+export const onBlurArten = async ({
   client,
   field,
   taxonomy,
@@ -9,6 +9,7 @@ const onBlurArten = ({
   setFieldError = () => {},
   refetch = () => {},
   refetchTree = () => {},
+  queryClient,
 }) => {
   if (value !== prevValue) {
     const variables = {
@@ -24,7 +25,7 @@ const onBlurArten = ({
       type: taxonomy.type,
     }
     try {
-      client.mutate({
+      await client.mutate({
         mutation: updateTaxonomyMutationArten,
         variables,
         optimisticResponse: {
@@ -55,7 +56,8 @@ const onBlurArten = ({
     setFieldError(undefined)
     refetch()
     refetchTree()
+    queryClient.invalidateQueries({
+      queryKey: ['tree'],
+    })
   }
 }
-
-export default onBlurArten

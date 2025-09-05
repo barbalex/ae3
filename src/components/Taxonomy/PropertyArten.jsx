@@ -7,7 +7,7 @@ import format from 'date-fns/format'
 import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
-import onBlurArten from './onBlurArten.js'
+import { onBlurArten } from './onBlurArten.js'
 
 const Container = styled.div`
   margin: 5px 0;
@@ -19,7 +19,13 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
+export const Property = ({
+  taxonomy,
+  field,
+  label,
+  type = 'text',
+  disabled,
+}) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
 
@@ -43,6 +49,7 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
         prevValue: taxonomy[field],
         setFieldError,
         refetchTree,
+        queryClient
       }),
     [apolloClient, field, taxonomy, value],
   )
@@ -85,5 +92,3 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
     </Container>
   )
 }
-
-export default Property
