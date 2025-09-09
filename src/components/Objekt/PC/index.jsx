@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 
 import { PcPresentation } from './PCO/index.jsx'
 import query from './query.js'

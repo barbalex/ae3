@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -48,9 +49,9 @@ const PCs = () => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const id =
-    activeNodeArray.length > 1
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
+    activeNodeArray.length > 1 ?
+      activeNodeArray[1]
+    : '99999999-9999-9999-9999-999999999999'
 
   const {
     data: pcsData,

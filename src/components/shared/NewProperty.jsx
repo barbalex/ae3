@@ -2,7 +2,7 @@ import { useState, useCallback, memo, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'

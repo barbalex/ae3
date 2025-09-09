@@ -3,7 +3,9 @@ import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
-import { gql, useApolloClient } from '@apollo/client'
+import { gql } from '@apollo/client'
+
+import { useApolloClient } from '@apollo/client/react'
 
 import Taxonomies from './Taxonomies.jsx'
 import storeContext from '../../../../../../storeContext.js'

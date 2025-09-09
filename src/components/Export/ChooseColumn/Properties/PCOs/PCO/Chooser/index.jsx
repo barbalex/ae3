@@ -1,5 +1,6 @@
 import { useContext } from 'react'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -61,9 +62,17 @@ const ChooserRouter = ({ pcName, count }) => {
 
   return (
     <>
-      {count > 1 && <AllChooser properties={properties} pcName={pcName} />}
+      {count > 1 && (
+        <AllChooser
+          properties={properties}
+          pcName={pcName}
+        />
+      )}
       <PropertiesContainer>
-        <Properties properties={properties} pcName={pcName} />
+        <Properties
+          properties={properties}
+          pcName={pcName}
+        />
       </PropertiesContainer>
     </>
   )

@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import AllChooser from './AllChooser.jsx'
@@ -106,7 +107,10 @@ const RCO = ({ pcname, relationtype, count }) => {
   return (
     <ErrorBoundary>
       <StyledCard>
-        <StyledCardActions disableSpacing onClick={onClickActions}>
+        <StyledCardActions
+          disableSpacing
+          onClick={onClickActions}
+        >
           <CardActionTitle>
             {`${pcname}: ${relationtype}`}
             <Count>{`(${count ?? 0} ${
@@ -123,21 +127,30 @@ const RCO = ({ pcname, relationtype, count }) => {
             </Icon>
           </CardActionIconButton>
         </StyledCardActions>
-        <StyledCollapse in={expanded} timeout="auto" unmountOnExit>
-          {loading ? (
+        <StyledCollapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
+          {loading ?
             <SpinnerContainer>
               <Spinner message="" />
             </SpinnerContainer>
-          ) : (
-            <>
+          : <>
               {count > 1 && (
-                <AllChooser properties={nodes} relationtype={relationtype} />
+                <AllChooser
+                  properties={nodes}
+                  relationtype={relationtype}
+                />
               )}
               <PropertiesContainer>
-                <Properties properties={nodes} relationtype={relationtype} />
+                <Properties
+                  properties={nodes}
+                  relationtype={relationtype}
+                />
               </PropertiesContainer>
             </>
-          )}
+          }
         </StyledCollapse>
       </StyledCard>
     </ErrorBoundary>

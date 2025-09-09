@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import RcList from './RcList/index.jsx'
@@ -67,7 +68,10 @@ const RCOs = ({ rcoExpanded, onToggleRco }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onToggleRco}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onToggleRco}
+          >
             <CardActionTitle>
               Beziehungssammlungen
               <Count>{`(${loading ? '...' : pcCount} Sammlungen, ${
@@ -84,7 +88,11 @@ const RCOs = ({ rcoExpanded, onToggleRco }) => {
               </Icon>
             </CardActionIconButton>
           </StyledCardActions>
-          <Collapse in={rcoExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={rcoExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
             <RcList />
           </Collapse>
         </StyledCard>

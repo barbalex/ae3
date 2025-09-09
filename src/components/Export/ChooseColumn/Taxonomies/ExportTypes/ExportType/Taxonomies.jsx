@@ -4,7 +4,9 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import { observer } from 'mobx-react-lite'
-import { gql, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
+
+import { useQuery } from '@apollo/client/react'
 
 import storeContext from '../../../../../../storeContext.js'
 

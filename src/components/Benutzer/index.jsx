@@ -7,7 +7,8 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
+import { CombinedGraphQLErrors } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -105,12 +106,11 @@ const User = () => {
           id,
         }
     const mutation = passNew ? updateUserMutationWithPass : updateUserMutation
-    try {
-      await apolloClient.mutate({
-        mutation,
-        variables,
-      })
-    } catch (error) {
+    const { error } = await apolloClient.mutate({
+      mutation,
+      variables,
+    })
+    if (CombinedGraphQLErrors.is(error)) {
       const messages = error.graphQLErrors.map((x) => x.message).toString()
       const isProperEmailError = messages.includes('proper_email')
       if (isProperEmailError) {

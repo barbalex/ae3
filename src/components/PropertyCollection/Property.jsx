@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 

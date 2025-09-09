@@ -22,7 +22,8 @@ import {
   MdInfo as InfoIcon,
 } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'

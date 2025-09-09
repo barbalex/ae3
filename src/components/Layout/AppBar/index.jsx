@@ -5,7 +5,8 @@ import Icon from '@mui/material/Icon'
 import { MdShare as ShareIcon } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useLocation, useNavigate, Link } from 'react-router'
@@ -146,13 +147,12 @@ const AppBarComponent = () => {
 
   const url0 = activeNodeArray[0] && activeNodeArray[0].toLowerCase()
   const { username } = login
-  const loginLabel = username
-    ? wide
-      ? username
+  const loginLabel =
+    username ?
+      wide ? username
       : getInitials(username)
-    : wide
-      ? 'Login'
-      : 'n.a.'
+    : wide ? 'Login'
+    : 'n.a.'
   const loginTitle = username ? 'abmelden' : 'anmelden'
   const objektName = data?.objectById?.name
   const pCName = data?.propertyCollectionById?.name
@@ -171,15 +171,12 @@ const AppBarComponent = () => {
     navigate('/Login')
   }, [navigate])
   const onClickShare = useCallback(() => {
-    const name = pCName
-      ? pCName
-      : objektName
-        ? `${taxName}: ${objektName}`
-        : taxName
-          ? taxName
-          : url0
-            ? url0
-            : ''
+    const name =
+      pCName ? pCName
+      : objektName ? `${taxName}: ${objektName}`
+      : taxName ? taxName
+      : url0 ? url0
+      : ''
     const title = `arteigenschaften.ch${name ? ': ' : ''}${name}`
     typeof window !== 'undefined' &&
       navigator.share({
@@ -197,7 +194,7 @@ const AppBarComponent = () => {
         <StyledAppBar position="static">
           <div>
             <StyledToolbar>
-              {wide ? (
+              {wide ?
                 <TitleContainer>
                   <SiteTitle
                     variant="outlined"
@@ -208,9 +205,7 @@ const AppBarComponent = () => {
                     Arteigenschaften
                   </SiteTitle>
                 </TitleContainer>
-              ) : (
-                <div />
-              )}
+              : <div />}
               <Buttons>
                 <div>
                   <StyledButton
