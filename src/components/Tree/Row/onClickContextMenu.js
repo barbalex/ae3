@@ -124,7 +124,7 @@ const onClickContextMenu = async ({
       queryClient.invalidateQueries({
         queryKey: [`tree`],
       })
-      console.log('will scroll into view')
+      // console.log('will scroll into view')
       setTimeout(() => scrollIntoView())
     },
     delete: async () => {
