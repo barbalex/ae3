@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode'
+import { CombinedGraphQLErrors } from '@apollo/client'
 
 import loginDbMutation from './loginDbMutation.js'
 
@@ -38,19 +39,18 @@ const fetchLogin = async ({
     username: '',
     token: '',
   })
-  // now aquire new token
-  let result
-  try {
-    result = await client.mutate({
-      mutation: loginDbMutation,
-      variables: {
-        username: name,
-        pass,
-      },
-      fetchPolicy: 'no-cache',
-    })
-  } catch (error) {
-    const messages = error.graphQLErrors.map((x) => x.message)
+  // now acquire new token
+  const { data, error } = await client.mutate({
+    mutation: loginDbMutation,
+    variables: {
+      username: name,
+      pass,
+    },
+    fetchPolicy: 'no-cache',
+  })
+
+  if (CombinedGraphQLErrors.is(error)) {
+    const messages = error.errors.map((x) => x.message)
     const isNamePassError =
       messages.includes('invalid user or password') ||
       messages.includes('permission denied for relation user')
@@ -61,7 +61,7 @@ const fetchLogin = async ({
     }
     return console.log(error)
   }
-  const jwtToken = result?.data?.login?.jwtToken
+  const jwtToken = data?.login?.jwtToken
   if (jwtToken) {
     const tokenDecoded = jwtDecode(jwtToken)
     const { username } = tokenDecoded
