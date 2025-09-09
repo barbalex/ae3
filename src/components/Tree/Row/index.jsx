@@ -9,7 +9,7 @@ import {
 } from 'react-icons/md'
 import Icon from '@mui/material/Icon'
 import isEqual from 'lodash/isEqual'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 import { getSnapshot } from 'mobx-state-tree'

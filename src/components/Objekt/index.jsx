@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import styled from '@emotion/styled'
 import uniqBy from 'lodash/uniqBy'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'

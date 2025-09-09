@@ -1,5 +1,5 @@
 import { useEffect, useState, Suspense, lazy } from 'react'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from "@apollo/client/react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 

@@ -8,7 +8,8 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
 import sumBy from 'lodash/sumBy'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import TaxonomiesList from './TaxonomiesList.jsx'
@@ -102,7 +103,10 @@ const Properties = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onToggleTaxonomies}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onToggleTaxonomies}
+          >
             <CardActionTitle>
               Taxonomien
               {taxCount > 0 && (
@@ -123,7 +127,11 @@ const Properties = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
               </Icon>
             </CardActionIconButton>
           </StyledCardActions>
-          <Collapse in={taxonomiesExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={taxonomiesExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
             {jointTaxProperties.length > 0 && (
               <JointTaxonomy jointTaxProperties={jointTaxProperties} />
             )}

@@ -1,6 +1,13 @@
-import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  HttpLink,
+} from '@apollo/client'
+import { Defer20220824Handler } from '@apollo/client/incremental'
+import { LocalState } from '@apollo/client/local-state'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { setContext } from '@apollo/client/link/context'
+import { SetContextLink } from '@apollo/client/link/context'
 import { jwtDecode } from 'jwt-decode'
 
 import './index.css'
@@ -13,7 +20,7 @@ export const client = ({ idb, store }) => {
    * Unhandled Rejection (OpenFailedError): UnknownError The operation failed
    * for reasons unrelated to the database itself and not covered by any other error code
    */
-  const authLink = setContext(async () => {
+  const authLink = SetContextLink(async () => {
     const { token } = store.login
     if (token) {
       const tokenDecoded = jwtDecode(token)
@@ -60,6 +67,13 @@ export const client = ({ idb, store }) => {
   const client = new ApolloClient({
     link: ApolloLink.from([authLink, batchHttpLink]),
     cache: new InMemoryCache(),
+
+    /*
+    Inserted by Apollo Client 3->4 migration codemod.
+    If you are not using the `@defer` directive in your application,
+    you can safely remove this option.
+    */
+    incrementalHandler: new Defer20220824Handler(),
   })
   return client
 }

@@ -8,7 +8,8 @@ import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import AllChooser from './AllChooser.jsx'
@@ -98,7 +99,10 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
   return (
     <ErrorBoundary>
       <StyledCard>
-        <StyledCardActions disableSpacing onClick={onClickActions}>
+        <StyledCardActions
+          disableSpacing
+          onClick={onClickActions}
+        >
           <CardActionTitle>
             {tax}
             <Count>{`(${properties.length} ${
@@ -115,7 +119,11 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
             </CardActionIconButton>
           </CardActionTitle>
         </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <StyledCardContent>
             <>
               {properties.length > 1 && <AllChooser properties={properties} />}

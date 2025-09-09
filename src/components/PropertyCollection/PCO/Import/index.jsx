@@ -1,10 +1,4 @@
-import {
-  useState,
-  useReducer,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react'
+import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import omit from 'lodash/omit'
 import union from 'lodash/union'
@@ -15,7 +9,8 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
 import { read, utils } from 'xlsx'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'

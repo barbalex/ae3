@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import styled from '@emotion/styled'
 import groupBy from 'lodash/groupBy'
-import { gql, useApolloClient } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 

@@ -13,7 +13,7 @@ import {
   MdVisibilityOff as VisibilityOffIcon,
 } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 

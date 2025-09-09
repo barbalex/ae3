@@ -1,7 +1,7 @@
 import { useState, useCallback, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import updateObjectMutation from '../../updateObjectMutation.js'

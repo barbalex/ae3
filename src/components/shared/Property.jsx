@@ -5,7 +5,7 @@ import Icon from '@mui/material/Icon'
 import { MdClear } from 'react-icons/md'
 import styled from '@emotion/styled'
 import omit from 'lodash/omit'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'

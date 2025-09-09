@@ -3,7 +3,8 @@ import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
@@ -96,7 +97,11 @@ const Organization = () => {
     <ErrorBoundary>
       <Container>
         <OrgContainer>
-          <PropertyReadOnly key="name" value={org.name} label="Name" />
+          <PropertyReadOnly
+            key="name"
+            value={org.name}
+            label="Name"
+          />
           <PropertyReadOnly
             key="links"
             value={org.links ? org.links.join(', ') : ''}
