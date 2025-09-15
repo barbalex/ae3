@@ -8,7 +8,7 @@ import {
   MdHourglassEmpty as LoadingIcon,
 } from 'react-icons/md'
 import Icon from '@mui/material/Icon'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'

@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import Export, { defaultValue as defaultExport } from './Export/index.js'
 import TreeFilter, { defaultValue as defaultTreeFilter } from './TreeFilter.js'
