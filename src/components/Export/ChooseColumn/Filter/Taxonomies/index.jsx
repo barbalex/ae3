@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import sumBy from 'lodash/sumBy'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -84,25 +84,29 @@ const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
   const taxProperties =
     data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
-  const taxPropertiesByTaxonomy = groupBy(taxProperties, 'taxonomyName')
-  const taxPropertiesFields = groupBy(taxProperties, 'propertyName')
+  const taxPropertiesByTaxonomy = groupBy(taxProperties, (p) => p.taxonomyName)
+  const taxPropertiesFields = groupBy(taxProperties, (p) => p.propertyName)
   const taxCount = Object.keys(taxPropertiesByTaxonomy).length
   const taxFieldsCount = Object.keys(taxPropertiesFields).length
-  let jointTaxProperties = []
-  if (taxCount > 1) {
-    jointTaxProperties = Object.values(
-      groupBy(taxProperties, (t) => `${t.propertyName}/${t.jsontype}`),
-    )
-      .filter((v) => v.length === taxCount)
-      .map((t) => ({
-        count: sumBy(t, (x) => Number(x.count)),
-        jsontype: t[0].jsontype,
-        propertyName: t[0].propertyName,
-        taxonomies: t.map((x) => x.taxonomyName),
-        taxname: 'Taxonomie',
-      }))
-  }
   const initiallyExpanded = Object.keys(taxPropertiesByTaxonomy).length === 1
+
+  const jointTaxProperties = useMemo(() => {
+    let props = []
+    if (taxCount > 1) {
+      props = Object.values(
+        groupBy(taxProperties, (t) => `${t.propertyName}/${t.jsontype}`),
+      )
+        .filter((v) => v.length === taxCount)
+        .map((t) => ({
+          count: sumBy(t, (x) => Number(x.count)),
+          jsontype: t[0].jsontype,
+          propertyName: t[0].propertyName,
+          taxonomies: t.map((x) => x.taxonomyName),
+          taxname: 'Taxonomie',
+        }))
+    }
+    return props
+  }, [taxCount, taxProperties])
 
   if (error) {
     return (
