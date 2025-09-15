@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdAdd as AddIcon } from 'react-icons/md'

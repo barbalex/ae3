@@ -5,7 +5,7 @@ import keys from 'lodash/keys'
 import flatten from 'lodash/flatten'
 import uniq from 'lodash/uniq'
 import toPairs from 'lodash/toPairs'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import findIndex from 'lodash/findIndex'
 
 export const getXlsxBuffer = async (jsonArray) => {

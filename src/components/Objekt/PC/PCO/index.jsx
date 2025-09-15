@@ -9,7 +9,7 @@ import {
   MdInfo as InfoIcon,
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import styled from '@emotion/styled'
 
 import { PCDescription } from '../../../shared/PCDescription.jsx'
@@ -67,8 +67,9 @@ export const PcPresentation = memo(({ pC, stacked }) => {
   )
 
   const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
-  const iconTitle = pCDescriptionExpanded
-    ? 'Beschreibung der Eigenschaften-Sammlung schliessen'
+  const iconTitle =
+    pCDescriptionExpanded ?
+      'Beschreibung der Eigenschaften-Sammlung schliessen'
     : 'Beschreibung der Eigenschaften-Sammlung öffnen'
   const onClickIcon = useCallback(
     (event) => {
@@ -85,7 +86,10 @@ export const PcPresentation = memo(({ pC, stacked }) => {
     <ErrorBoundary>
       <Container>
         <StyledCard>
-          <StyledCardActions disableSpacing onClick={onClickActions}>
+          <StyledCardActions
+            disableSpacing
+            onClick={onClickActions}
+          >
             <CardActionTitle>{pcname}</CardActionTitle>
             <CardActionsButtons>
               <IconButton
@@ -112,8 +116,16 @@ export const PcPresentation = memo(({ pC, stacked }) => {
               </CardActionIconButton>
             </CardActionsButtons>
           </StyledCardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Collapse in={pCDescriptionExpanded} timeout="auto" unmountOnExit>
+          <Collapse
+            in={expanded}
+            timeout="auto"
+            unmountOnExit
+          >
+            <Collapse
+              in={pCDescriptionExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
               <PCDescription pC={pC} />
             </Collapse>
             <CardText>

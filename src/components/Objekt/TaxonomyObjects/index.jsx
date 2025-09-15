@@ -1,4 +1,4 @@
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 import { TaxonomyObject } from './TaxonomyObject/index.jsx'
 
