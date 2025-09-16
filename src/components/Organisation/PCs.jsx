@@ -65,7 +65,7 @@ const PCs = () => {
 
   const pcs = sortBy(
     pcsData?.organizationById?.propertyCollectionsByOrganizationId?.nodes ?? [],
-    'name',
+    ['name'],
   )
 
   if (pcsLoading) return <Spinner />

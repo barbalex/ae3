@@ -17,7 +17,7 @@ export const getXlsxBuffer = async (jsonArray) => {
     })
   })
   const values = jsonArray.map((object) =>
-    sortBy(toPairs(object), (p) => columns.findIndex((c) => c === p[0])).map(
+    sortBy(toPairs(object), [(p) => columns.findIndex((c) => c === p[0])]).map(
       (a) => a[1],
     ),
   )

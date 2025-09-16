@@ -61,7 +61,7 @@ export const PcPresentation = memo(({ pC, stacked }) => {
   propertiesArray = propertiesArray.filter(
     (o) => o[1] || o[1] === 0 || o[1] === false,
   )
-  propertiesArray = sortBy(propertiesArray, (e) => e[0]).filter(
+  propertiesArray = sortBy(propertiesArray, [(e) => e[0]]).filter(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ([key, value]) => value || value === 0 || value === false,
   )

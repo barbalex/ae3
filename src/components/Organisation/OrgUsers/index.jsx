@@ -86,13 +86,12 @@ const OrgUsers = () => {
   const orgUsers =
     orgUsersData?.organizationById?.organizationUsersByOrganizationId?.nodes ??
     []
-  const orgUserSorted = sortBy(
-    orgUsers,
+  const orgUserSorted = sortBy(orgUsers, [
     (orgUser) =>
       `${orgUser.userByUserId ? orgUser.userByUserId.name : 'zzzzz'}${
         orgUser.role ? orgUser.role : 'zzzzz'
       }`,
-  )
+  ])
   const organizationId =
     orgUsersData?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
 

@@ -17,7 +17,7 @@ export const PropertyList = ({
   return sortBy(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     propertiesArray.filter(([key, value]) => value || value === 0),
-    (e) => e[0],
+    [(e) => e[0]],
   ).map(([key, value]) =>
     editing ?
       <Property

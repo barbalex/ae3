@@ -65,7 +65,7 @@ const TCs = () => {
 
   const tcs = sortBy(
     tcsData?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
-    'name',
+    ['name'],
   )
 
   if (tcsLoading) return <Spinner />
