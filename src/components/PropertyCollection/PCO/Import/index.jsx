@@ -1,7 +1,6 @@
 import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { omit, union } from 'es-toolkit'
-import some from 'lodash/some'
+import { omit, union, some } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
