@@ -1,7 +1,7 @@
 import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import omit from 'lodash/omit'
-import union from 'lodash/union'
+import { union } from 'es-toolkit'
 import flatten from 'lodash/flatten'
 import some from 'lodash/some'
 import uniq from 'lodash/uniq'

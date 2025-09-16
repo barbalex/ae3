@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import union from 'lodash/union'
+import { union } from 'es-toolkit'
 import doOrderBy from 'lodash/orderBy'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
