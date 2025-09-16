@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
 

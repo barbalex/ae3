@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'

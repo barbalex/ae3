@@ -1,4 +1,4 @@
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PropertyReadOnly } from '../../../../shared/PropertyReadOnly.jsx'

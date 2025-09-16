@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useContext } from 'react'
-import debounce from 'lodash/debounce'
+import { debounce } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../storeContext.js'

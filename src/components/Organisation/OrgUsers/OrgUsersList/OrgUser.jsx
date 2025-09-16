@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
-import set from 'lodash/set'
+import { set } from 'es-toolkit/compat'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -91,7 +91,7 @@ const orgUsersQuery = gql`
   }
 `
 
-const OrgUser = ({ orgUser }) => {
+const OrgUser = ({ orgUser, orgUsersRefetch }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -214,7 +214,7 @@ const OrgUser = ({ orgUser }) => {
     [apolloClient, orgUser.id, orgUser.nodeId, orgUser.organizationId, userId],
   )
   const onClickDelete = useCallback(async () => {
-    apolloClient.mutate({
+    await apolloClient.mutate({
       mutation: deleteOrgUserMutation,
       variables: {
         id: orgUser.id,
@@ -250,6 +250,7 @@ const OrgUser = ({ orgUser }) => {
         })
       },
     })
+    orgUsersRefetch()
   }, [apolloClient, orgName, orgUser.id])
 
   if (orgUsersLoading || allUsersLoading) {

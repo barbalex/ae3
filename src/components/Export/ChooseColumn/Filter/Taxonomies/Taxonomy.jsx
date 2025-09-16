@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -102,7 +102,7 @@ const TaxonomyCard = ({ pc, initiallyExpanded }) => {
 
   const taxPropertiesByTaxonomy = groupBy(
     taxPropertiesWithoutNullTypes,
-    'taxonomyName',
+    (p) => p.taxonomyName,
   )
 
   if (error) {

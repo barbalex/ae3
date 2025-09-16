@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdAdd as AddIcon } from 'react-icons/md'
@@ -70,10 +70,13 @@ const OrgUsers = () => {
     activeNodeArray.length > 1 ?
       activeNodeArray[1]
     : '99999999-9999-9999-9999-999999999999'
+
+  // use tanstack-query to enable refetching from delete?
   const {
     data: orgUsersData,
     loading: orgUsersLoading,
     error: orgUsersError,
+    refetch: orgUsersRefetch,
   } = useQuery(orgUsersQuery, {
     variables: {
       id,
@@ -104,7 +107,7 @@ const OrgUsers = () => {
        * so just refetch
        */
     })
-    orgUsersData.refetch()
+    orgUsersRefetch()
   }, [apolloClient, orgUsersData, organizationId])
 
   if (orgUsersLoading) {
@@ -117,7 +120,10 @@ const OrgUsers = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <OrgUsersList orgUsers={orgUserSorted} />
+        <OrgUsersList
+          orgUsers={orgUserSorted}
+          orgUsersRefetch={orgUsersRefetch}
+        />
         <ButtonContainer>
           <AddNewButton
             title="Neuen Benutzer mit Rolle erstellen"

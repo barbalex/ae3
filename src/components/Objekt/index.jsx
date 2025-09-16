@@ -1,6 +1,6 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -62,28 +62,26 @@ export const Objekt = observer(({ stacked = false }) => {
     },
   })
 
-  if (!objekt) return <div />
-
   const pcs = objectData?.pcs?.nodes ?? []
   const synonymPcs = synonymData?.pcs?.nodes ?? []
 
   const pcsIds = pcs.map((c) => c.id)
   const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
-  let propertyCollectionObjectsOfSynonyms = []
-  synonymObjects.forEach((synonym) => {
-    propertyCollectionObjectsOfSynonyms = [
-      ...propertyCollectionObjectsOfSynonyms,
-      ...(synonym?.propertyCollectionObjectsByObjectId?.nodes ?? []),
-    ]
-  })
-  propertyCollectionObjectsOfSynonyms = uniqBy(
-    propertyCollectionObjectsOfSynonyms,
-    (pco) => pco.propertyCollectionId,
-  )
-  propertyCollectionObjectsOfSynonyms =
-    propertyCollectionObjectsOfSynonyms.filter(
-      (pco) => !pcsIds.includes(pco.propertyCollectionId),
-    )
+
+  const propertyCollectionObjectsOfSynonyms = useMemo(() => {
+    let pCOs = []
+    synonymObjects.forEach((synonym) => {
+      pCOs = [
+        ...pCOs,
+        ...(synonym?.propertyCollectionObjectsByObjectId?.nodes ?? []),
+      ]
+    })
+    pCOs = uniqBy(pCOs, (pco) => pco.propertyCollectionId)
+    pCOs = pCOs.filter((pco) => !pcsIds.includes(pco.propertyCollectionId))
+    return pCOs
+  }, [synonymObjects, pcsIds])
+
+  if (!objekt) return <div />
 
   if (objectLoading) return <Spinner />
   if (objectError) {

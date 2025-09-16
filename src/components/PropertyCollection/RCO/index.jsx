@@ -1,8 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import forOwn from 'lodash/forOwn'
-import union from 'lodash/union'
-import doOrderBy from 'lodash/orderBy'
+import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -226,7 +224,7 @@ export const RCO = observer(() => {
       nP['Art der Beziehung'] = p.relationType
       if (p.properties) {
         const props = JSON.parse(p.properties)
-        forOwn(props, (value, key) => {
+        Object.defineProperties(props).forEach(([key, value]) => {
           if (typeof value === 'boolean') {
             nP[key] = booleanToJaNein(value)
           } else {
@@ -301,7 +299,7 @@ export const RCO = observer(() => {
       nP['Art der Beziehung'] = p.relationType
       if (p.properties) {
         const props = JSON.parse(p.properties)
-        forOwn(props, (value, key) => {
+        Object.defineProperties(props).forEach(([key, value]) => {
           if (typeof value === 'boolean') {
             nP[key] = booleanToJaNein(value)
           } else {

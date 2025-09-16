@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 export const isUrlInActiveNodePath = (url, activeNodeArray) => {
   if (!url) return false

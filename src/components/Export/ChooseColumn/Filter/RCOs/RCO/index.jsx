@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback, useContext, useMemo } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -95,12 +95,16 @@ const RCO = ({ pc }) => {
   const rcoProperties =
     data?.data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
 
-  const rcoPropertiesByPropertyCollection = groupBy(rcoProperties, (x) => {
-    if (x.propertyCollectionName.includes(x.relationType)) {
-      return x.propertyCollectionName
-    }
-    return `${x.propertyCollectionName}: ${x.relationType}`
-  })
+  const rcoPropertiesByPropertyCollection = useMemo(
+    () =>
+      groupBy(rcoProperties, (x) => {
+        if (x.propertyCollectionName.includes(x.relationType)) {
+          return x.propertyCollectionName
+        }
+        return `${x.propertyCollectionName}: ${x.relationType}`
+      }),
+    [rcoProperties],
+  )
 
   if (error) {
     return (

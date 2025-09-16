@@ -1,6 +1,6 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -58,12 +58,16 @@ const RcosCardList = () => {
   const rcoProperties =
     data?.data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
 
-  const rcoPropertiesByPropertyCollection = groupBy(rcoProperties, (x) => {
-    if (x.propertyCollectionName.includes(x.relationType)) {
-      return x.propertyCollectionName
-    }
-    return `${x.propertyCollectionName}: ${x.relationType}`
-  })
+  const rcoPropertiesByPropertyCollection = useMemo(
+    () =>
+      groupBy(rcoProperties, (x) => {
+        if (x.propertyCollectionName.includes(x.relationType)) {
+          return x.propertyCollectionName
+        }
+        return `${x.propertyCollectionName}: ${x.relationType}`
+      }),
+    [rcoProperties],
+  )
 
   if (error) {
     return (
