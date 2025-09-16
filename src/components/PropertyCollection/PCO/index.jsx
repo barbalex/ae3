@@ -1,7 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { union } from 'es-toolkit'
-import { orderBy as doOrderBy } from 'es-toolkit'
+import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
