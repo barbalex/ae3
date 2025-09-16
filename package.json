@@ -33,7 +33,6 @@
     "is-uuid": "1.0.2",
     "js-file-download": "0.4.12",
     "jwt-decode": "4.0.0",
-    "lodash": "4.17.21",
     "luxon": "3.7.2",
     "mobx": "6.13.7",
     "mobx-react-lite": "4.1.0",

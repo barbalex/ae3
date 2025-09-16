@@ -1,9 +1,8 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-import toPairs from 'lodash/toPairs'
+import { toPairs } from 'es-toolkit/compat'
 import { sortBy } from 'es-toolkit'
-import findIndex from 'lodash/findIndex'
 
 export const getXlsxBuffer = async (jsonArray) => {
   const columns = [
@@ -18,7 +17,7 @@ export const getXlsxBuffer = async (jsonArray) => {
     })
   })
   const values = jsonArray.map((object) =>
-    sortBy(toPairs(object), (p) => findIndex(columns, (c) => c === p[0])).map(
+    sortBy(toPairs(object), (p) => columns.findIndex((c) => c === p[0])).map(
       (a) => a[1],
     ),
   )
