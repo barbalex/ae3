@@ -2,7 +2,6 @@ import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { omit } from 'es-toolkit'
 import { union } from 'es-toolkit'
-import flatten from 'lodash/flatten'
 import some from 'lodash/some'
 import uniq from 'lodash/uniq'
 import Button from '@mui/material/Button'
@@ -324,7 +323,7 @@ const ImportRco = ({ setImport }) => {
               !ids.map((d) => isUuid.anyNonNil(d)).includes(false)
             : undefined
           checkState.idsAreUnique =
-            _idsExist ? ids.length === uniq(ids).length : undefined
+            _idsExist ? ids.length === new Set(ids).size : undefined
           const _objectIds = data
             .map((d) => d.objectId)
             .filter((d) => d !== undefined)
@@ -374,7 +373,7 @@ const ImportRco = ({ setImport }) => {
           setPCOfOriginIds(uniquePCOfOriginIds)
 
           const propertyKeys = union(
-            flatten(data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))),
+            data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
           )
           const _existsPropertyKey = propertyKeys.length > 0
           checkState.existsPropertyKey = _existsPropertyKey
@@ -393,7 +392,7 @@ const ImportRco = ({ setImport }) => {
               })
             : undefined
           const propertyValues = union(
-            flatten(data.map((d) => Object.values(d))),
+            data.map((d) => Object.values(d))?.flat?.(),
           )
           checkState.propertyValuesDontContainApostroph = !some(
             propertyValues,

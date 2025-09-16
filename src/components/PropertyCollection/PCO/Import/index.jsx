@@ -1,10 +1,7 @@
 import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { omit } from 'es-toolkit'
-import { union } from 'es-toolkit'
-import flatten from 'lodash/flatten'
+import { omit, union } from 'es-toolkit'
 import some from 'lodash/some'
-import uniq from 'lodash/uniq'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
@@ -276,7 +273,7 @@ const ImportPco = ({ setImport }) => {
         checkState.idsAreUuid =
           _idsExist ? !ids.map((d) => isUuid(d)).includes(false) : undefined
         checkState.idsAreUnique =
-          _idsExist ? ids.length === uniq(ids).length : undefined
+          _idsExist ? ids.length === new Set(ids).size : undefined
         const _objectIds = data
           .map((d) => d.objectId)
           .filter((d) => d !== undefined)
@@ -302,7 +299,7 @@ const ImportPco = ({ setImport }) => {
         setPCOfOriginIds(uniquePCOfOriginIds)
 
         const propertyKeys = union(
-          flatten(data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))),
+          data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
         )
         const _existsPropertyKey = propertyKeys.length > 0
         checkState.existsPropertyKey = _existsPropertyKey
@@ -320,7 +317,9 @@ const ImportPco = ({ setImport }) => {
               return k.includes('\\')
             })
           : undefined
-        const propertyValues = union(flatten(data.map((d) => Object.values(d))))
+        const propertyValues = union(
+          data.map((d) => Object.values(d))?.flat?.(),
+        )
         checkState.propertyValuesDontContainApostroph = !some(
           propertyValues,
           (k) => {

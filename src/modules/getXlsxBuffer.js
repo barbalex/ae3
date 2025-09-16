@@ -1,15 +1,14 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-import keys from 'lodash/keys'
-import flatten from 'lodash/flatten'
-import uniq from 'lodash/uniq'
 import toPairs from 'lodash/toPairs'
 import { sortBy } from 'es-toolkit'
 import findIndex from 'lodash/findIndex'
 
 export const getXlsxBuffer = async (jsonArray) => {
-  const columns = uniq(flatten(jsonArray.map((object) => keys(object))))
+  const columns = [
+    ...new Set(jsonArray.map((object) => Object.keys(object))?.flat?.()),
+  ]
   // add missing columns to each object
   jsonArray.forEach((o) => {
     columns.forEach((k) => {
