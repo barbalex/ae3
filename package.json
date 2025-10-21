@@ -12,7 +12,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "how-to-install-using-sfw": "sfw npm install -f",
+    "ncu using cooldown": "ncu -c 5 -i"
   },
   "dependencies": {
     "@apollo/client": "4.0.7",
