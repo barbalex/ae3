@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -21,9 +21,7 @@ const ExportStacked = () => {
   const { windowWidth } = store
   const [tab, setTab] = useState(0)
 
-  const onChangeTab = useCallback((event, value) => {
-    setTab(value)
-  }, [])
+  const onChangeTab = (event, value) => setTab(value)
 
   return (
     <>

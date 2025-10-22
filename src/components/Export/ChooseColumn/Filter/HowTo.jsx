@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -35,11 +35,14 @@ const StyledCardContent = styled(CardContent)`
 
 const HowToFilter = () => {
   const [expanded, setExpanded] = useState(false)
-  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickAction = () => setExpanded(!expanded)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={onClickAction}>
+      <StyledCardActions
+        disableSpacing
+        onClick={onClickAction}
+      >
         <CardActionTitle>So geht&apos;s</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -51,7 +54,11 @@ const HowToFilter = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <ul>
             <li>

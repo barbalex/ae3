@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -39,13 +39,13 @@ const Filter = () => {
   const [pcoExpanded, setFilterExpanded] = useState(false)
   const [rcoExpanded, setPropertiesExpanded] = useState(false)
 
-  const onToggleTaxonomies = useCallback(() => {
+  const onToggleTaxonomies = () => {
     setTaxonomiesExpanded(!taxonomiesExpanded)
     // close all others
     setFilterExpanded(false)
     setPropertiesExpanded(false)
-  }, [taxonomiesExpanded])
-  const onTogglePco = useCallback(() => {
+  }
+  const onTogglePco = () => {
     if (!pcoExpanded) {
       setFilterExpanded(true)
       // close all others
@@ -54,8 +54,8 @@ const Filter = () => {
     } else {
       setFilterExpanded(false)
     }
-  }, [pcoExpanded])
-  const onToggleRco = useCallback(() => {
+  }
+  const onToggleRco = () => {
     if (!rcoExpanded) {
       setPropertiesExpanded(true)
       // close all others
@@ -64,7 +64,7 @@ const Filter = () => {
     } else {
       setPropertiesExpanded(false)
     }
-  }, [rcoExpanded])
+  }
 
   return (
     <ErrorBoundary>
@@ -98,8 +98,14 @@ const Filter = () => {
           taxonomiesExpanded={taxonomiesExpanded}
           onToggleTaxonomies={onToggleTaxonomies}
         />
-        <PCOs pcoExpanded={pcoExpanded} onTogglePco={onTogglePco} />
-        <RCOs rcoExpanded={rcoExpanded} onToggleRco={onToggleRco} />
+        <PCOs
+          pcoExpanded={pcoExpanded}
+          onTogglePco={onTogglePco}
+        />
+        <RCOs
+          rcoExpanded={rcoExpanded}
+          onToggleRco={onToggleRco}
+        />
       </Container>
     </ErrorBoundary>
   )
