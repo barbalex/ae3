@@ -41,7 +41,7 @@ const PropertiesTitleValue = styled.p`
   width: 100%;
 `
 
-const Properties = ({ id, properties, stacked }) => {
+const Properties = observer(({ id, properties, stacked }) => {
   const store = useContext(storeContext)
   const { editingTaxonomies } = store
 
@@ -79,6 +79,6 @@ const Properties = ({ id, properties, stacked }) => {
       )}
     </>
   )
-}
+})
 
-export default observer(Properties)
+export default Properties

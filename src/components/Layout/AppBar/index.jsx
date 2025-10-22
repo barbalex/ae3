@@ -102,7 +102,7 @@ const query = gql`
   }
 `
 
-const AppBarComponent = () => {
+const AppBarComponent = observer(() => {
   const store = useContext(storeContext)
   const { login, singleColumnView } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -259,6 +259,6 @@ const AppBarComponent = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(AppBarComponent)
+export default AppBarComponent

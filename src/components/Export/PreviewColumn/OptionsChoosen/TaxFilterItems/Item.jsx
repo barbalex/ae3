@@ -19,7 +19,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportTaxFilterListItem = ({ filter }) => {
+const ExportTaxFilterListItem = observer(({ filter }) => {
   const store = useContext(storeContext)
   const { setTaxFilters } = store.export
 
@@ -41,6 +41,6 @@ const ExportTaxFilterListItem = ({ filter }) => {
       <ResetSpan onClick={onClick}>zurücksetzen</ResetSpan>
     </li>
   )
-}
+})
 
-export default observer(ExportTaxFilterListItem)
+export default ExportTaxFilterListItem
