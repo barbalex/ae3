@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -34,23 +34,20 @@ export const Property = ({
   const { scrollIntoView } = store
 
   const [value, setValue] = useState(taxonomy[field] || '')
-  const onChange = useCallback((event) => setValue(event.target.value), [])
+  const onChange = (event) => setValue(event.target.value)
 
   const [fieldError, setFieldError] = useState()
-  const onBlur = useCallback(
-    () =>
-      onBlurArten({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field,
-        taxonomy,
-        value,
-        prevValue: taxonomy[field],
-        setFieldError,
-      }),
-    [apolloClient, queryClient, field, taxonomy, value],
-  )
+  const onBlur = () =>
+    onBlurArten({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field,
+      taxonomy,
+      value,
+      prevValue: taxonomy[field],
+      setFieldError,
+    })
 
   return (
     <Container>

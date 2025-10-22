@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
@@ -151,72 +151,59 @@ export const Taxonomy = observer(() => {
     !!orgsUserIsTaxWriter.find((o) => o.id === tax?.organizationId) ||
     (userIsTaxWriter && !tax?.organizationId)
 
-  const onClickStopEditing = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setEditingTaxonomies(false)
-    },
-    [setEditingTaxonomies],
-  )
-  const onClickStartEditing = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setEditingTaxonomies(true)
-    },
-    [setEditingTaxonomies],
-  )
-  const onChangeImportedByArten = useCallback(
-    (event) =>
-      onBlurArten({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field: 'importedBy',
-        taxonomy: tax,
-        value: event.target.value,
-        prevValue: tax.importedBy,
-      }),
-    [apolloClient, tax, queryClient],
-  )
-  const onChangeOrganizationArten = useCallback(
-    (event) =>
-      onBlurArten({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field: 'organizationId',
-        taxonomy: tax,
-        value: event.target.value,
-        prevValue: tax.organizationId,
-      }),
-    [apolloClient, tax, queryClient],
-  )
-  const onChangeImportedByLr = useCallback(
-    (event) =>
-      onBlurLr({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field: 'importedBy',
-        taxonomy: tax,
-        value: event.target.value,
-        prevValue: tax.importedBy,
-      }),
-    [apolloClient, tax],
-  )
-  const onChangeOrganizationLr = useCallback(
-    (event) =>
-      onBlurLr({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field: 'organizationId',
-        taxonomy: tax,
-        value: event.target.value,
-        prevValue: tax.organizationId,
-      }),
-    [apolloClient, tax],
-  )
+  const onClickStopEditing = (event) => {
+    event.stopPropagation()
+    setEditingTaxonomies(false)
+  }
+
+  const onClickStartEditing = (event) => {
+    event.stopPropagation()
+    setEditingTaxonomies(true)
+  }
+
+  const onChangeImportedByArten = (event) =>
+    onBlurArten({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field: 'importedBy',
+      taxonomy: tax,
+      value: event.target.value,
+      prevValue: tax.importedBy,
+    })
+
+  const onChangeOrganizationArten = (event) =>
+    onBlurArten({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field: 'organizationId',
+      taxonomy: tax,
+      value: event.target.value,
+      prevValue: tax.organizationId,
+    })
+
+  const onChangeImportedByLr = (event) =>
+    onBlurLr({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field: 'importedBy',
+      taxonomy: tax,
+      value: event.target.value,
+      prevValue: tax.importedBy,
+    })
+
+  const onChangeOrganizationLr = (event) =>
+    onBlurLr({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field: 'organizationId',
+      taxonomy: tax,
+      value: event.target.value,
+      prevValue: tax.organizationId,
+    })
 
   if (taxLoading || allUsersLoading) {
     return <Spinner />

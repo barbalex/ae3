@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
@@ -21,20 +21,17 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
   const store = useContext(storeContext)
   const { scrollIntoView } = store
 
-  const onChange = useCallback((event) => setValue(event.target.value), [])
-  const onBlur = useCallback(
-    (event) =>
-      onBlurLr({
-        apolloClient,
-        queryClient,
-        scrollIntoView,
-        field,
-        taxonomy,
-        value: event.target.value,
-        prevValue: taxonomy[field],
-      }),
-    [field, taxonomy, apolloClient],
-  )
+  const onChange = (event) => setValue(event.target.value)
+  const onBlur = (event) =>
+    onBlurLr({
+      apolloClient,
+      queryClient,
+      scrollIntoView,
+      field,
+      taxonomy,
+      value: event.target.value,
+      prevValue: taxonomy[field],
+    })
 
   return (
     <ErrorBoundary>
