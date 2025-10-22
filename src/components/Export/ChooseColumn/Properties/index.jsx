@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -17,7 +17,7 @@ const Properties = () => {
   const [pcoExpanded, setFilterExpanded] = useState(false)
   const [rcoExpanded, setPropertiesExpanded] = useState(false)
 
-  const onToggleTaxonomies = useCallback(() => {
+  const onToggleTaxonomies = () => {
     setTaxonomiesExpanded(!taxonomiesExpanded)
     // TODO (later)
     // check if only one Taxonomy
@@ -26,8 +26,9 @@ const Properties = () => {
     // close all others
     setFilterExpanded(false)
     setPropertiesExpanded(false)
-  }, [taxonomiesExpanded])
-  const onTogglePco = useCallback(() => {
+  }
+
+  const onTogglePco = () => {
     if (!pcoExpanded) {
       setFilterExpanded(true)
       // close all others
@@ -36,8 +37,9 @@ const Properties = () => {
     } else {
       setFilterExpanded(false)
     }
-  }, [pcoExpanded])
-  const onToggleRco = useCallback(() => {
+  }
+
+  const onToggleRco = () => {
     if (!rcoExpanded) {
       setPropertiesExpanded(true)
       // close all others
@@ -46,7 +48,7 @@ const Properties = () => {
     } else {
       setPropertiesExpanded(false)
     }
-  }, [rcoExpanded])
+  }
 
   return (
     <ErrorBoundary>
@@ -56,8 +58,14 @@ const Properties = () => {
           taxonomiesExpanded={taxonomiesExpanded}
           onToggleTaxonomies={onToggleTaxonomies}
         />
-        <PCOs pcoExpanded={pcoExpanded} onTogglePco={onTogglePco} />
-        <RCOs rcoExpanded={rcoExpanded} onToggleRco={onToggleRco} />
+        <PCOs
+          pcoExpanded={pcoExpanded}
+          onTogglePco={onTogglePco}
+        />
+        <RCOs
+          rcoExpanded={rcoExpanded}
+          onToggleRco={onToggleRco}
+        />
       </Container>
     </ErrorBoundary>
   )
