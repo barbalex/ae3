@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -27,16 +27,13 @@ const Comparator = ({ comparator, taxname, pname, value }) => {
   const store = useContext(storeContext)
   const { setTaxFilters } = store.export
 
-  const onChange = useCallback(
-    (event) =>
-      setTaxFilters({
-        taxname,
-        pname,
-        comparator: event.target.value || 'ILIKE',
-        value,
-      }),
-    [setTaxFilters, taxname, pname, value],
-  )
+  const onChange = (event) =>
+    setTaxFilters({
+      taxname,
+      pname,
+      comparator: event.target.value || 'ILIKE',
+      value,
+    })
 
   return (
     <Container>

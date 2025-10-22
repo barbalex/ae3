@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useRef } from 'react'
+import { useState, useContext, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import styled from '@emotion/styled'
@@ -115,76 +115,60 @@ const IntegrationAutosuggest = ({
   const [value, setValue] = useState(propsValue ?? '')
   const [error, setError] = useState(undefined)
 
-  const loadOptions = useCallback(
-    async (val) => {
-      if (!focusCount) return []
-      const { data, error } = await apolloClient.query({
-        query: taxFieldPropQuery,
-        variables: {
-          tableName: 'object',
-          propName: pname,
-          pcFieldName: 'taxonomy_id',
-          pcTableName: 'taxonomy',
-          pcName: taxname,
-          propValue: val ?? '',
-        },
-      })
-      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
-        value: n.value,
-        label: n.value,
-      }))
-      setValue(val)
-      setError(error)
-      return returnData
-    },
-    [apolloClient, focusCount, pname, taxname],
-  )
+  const loadOptions = async (val) => {
+    if (!focusCount) return []
+    const { data, error } = await apolloClient.query({
+      query: taxFieldPropQuery,
+      variables: {
+        tableName: 'object',
+        propName: pname,
+        pcFieldName: 'taxonomy_id',
+        pcTableName: 'taxonomy',
+        pcName: taxname,
+        propValue: val ?? '',
+      },
+    })
+    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+      value: n.value,
+      label: n.value,
+    }))
+    setValue(val)
+    setError(error)
+    return returnData
+  }
 
-  const setFilter = useCallback(
-    (val) => {
-      // 1. change filter value
-      let comparatorValue = comparator
-      if (!comparator && val) comparatorValue = 'ILIKE'
-      if (!val) comparatorValue = null
-      setTaxFilters({
-        taxname,
-        pname,
-        comparator: comparatorValue,
-        value: val,
-      })
-      // 2. if value and field not choosen, choose it
-      if (addFilterFields && val) {
-        addTaxProperty({ taxname, pname })
-      }
-    },
-    [
-      comparator,
-      setTaxFilters,
+  const setFilter = (val) => {
+    // 1. change filter value
+    let comparatorValue = comparator
+    if (!comparator && val) comparatorValue = 'ILIKE'
+    if (!val) comparatorValue = null
+    setTaxFilters({
       taxname,
       pname,
-      addFilterFields,
-      addTaxProperty,
-    ],
-  )
+      comparator: comparatorValue,
+      value: val,
+    })
+    // 2. if value and field not choosen, choose it
+    if (addFilterFields && val) {
+      addTaxProperty({ taxname, pname })
+    }
+  }
 
-  const onBlur = useCallback(() => setFilter(value), [setFilter, value])
+  const onBlur = () => setFilter(value)
 
-  const onChange = useCallback(
-    (newValue, actionMeta) => {
-      let value
-      switch (actionMeta.action) {
-        case 'clear':
-          value = ''
-          break
-        default:
-          value = newValue?.value
-          break
-      }
-      setValue(value)
-      setFilter(value)
-    },
-    [setFilter],
-  )
+  const onChange = (newValue, actionMeta) => {
+    let value
+    switch (actionMeta.action) {
+      case 'clear':
+        value = ''
+        break
+      default:
+        value = newValue?.value
+        break
+    }
+    setValue(value)
+    setFilter(value)
+  }
 
   if (error) {
     return `Error loading data: ${error.message}`
