@@ -47,7 +47,7 @@ const nodes = [
   },
 ]
 
-const MenuItems = () => {
+const MenuItems = observer(() => {
   const { docFilter } = useContext(storeContext)
   const nodesFiltered = nodes.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
@@ -64,6 +64,6 @@ const MenuItems = () => {
       ))}
     </List>
   )
-}
+})
 
-export default observer(MenuItems)
+export default MenuItems

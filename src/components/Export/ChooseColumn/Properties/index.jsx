@@ -12,7 +12,7 @@ const Container = styled.div`
   padding: 0 5px;
 `
 
-const Properties = () => {
+const Properties = observer(() => {
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(false)
   const [pcoExpanded, setFilterExpanded] = useState(false)
   const [rcoExpanded, setPropertiesExpanded] = useState(false)
@@ -69,6 +69,6 @@ const Properties = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Properties)
+export default Properties

@@ -86,7 +86,7 @@ const objectUrlQuery = gql`
   }
 `
 
-const TreeFilter = () => {
+const TreeFilter = observer(() => {
   // TODO: use local state instead of mobx for label, id
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
@@ -280,6 +280,6 @@ const TreeFilter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(TreeFilter)
+export default TreeFilter

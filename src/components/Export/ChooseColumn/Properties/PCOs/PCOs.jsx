@@ -24,7 +24,7 @@ const query = gql`
   }
 `
 
-const PCOs = () => {
+const PCOs = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -60,6 +60,6 @@ const PCOs = () => {
       count={count}
     />
   ))
-}
+})
 
-export default observer(PCOs)
+export default PCOs
