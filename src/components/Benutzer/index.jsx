@@ -38,7 +38,7 @@ const StyledPaper = styled(Paper)`
   background-color: #ffcc80 !important;
 `
 
-const User = () => {
+const User = observer(() => {
   const { userId } = useParams()
 
   const queryClient = useQueryClient()
@@ -232,6 +232,6 @@ const User = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(User)
+export default User

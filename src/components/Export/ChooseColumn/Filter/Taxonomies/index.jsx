@@ -63,90 +63,95 @@ const propsByTaxQuery = gql`
   }
 `
 
-const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
-  const apolloClient = useApolloClient()
+const TaxonomiesCard = observer(
+  ({ taxonomiesExpanded, onToggleTaxonomies }) => {
+    const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+    const store = useContext(storeContext)
+    const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery({
-    queryKey: ['exportChooseColumnFilterTaxonomiesCard', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query: propsByTaxQuery,
-        variables: {
-          exportTaxonomies,
-          queryExportTaxonomies: exportTaxonomies.length > 0,
-        },
-        fetchPolicy: 'no-cache',
-      }),
-  })
-  const taxProperties =
-    data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+    const { data, error, loading } = useQuery({
+      queryKey: ['exportChooseColumnFilterTaxonomiesCard', exportTaxonomies],
+      queryFn: () =>
+        apolloClient.query({
+          query: propsByTaxQuery,
+          variables: {
+            exportTaxonomies,
+            queryExportTaxonomies: exportTaxonomies.length > 0,
+          },
+          fetchPolicy: 'no-cache',
+        }),
+    })
+    const taxProperties =
+      data?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
-  const taxPropertiesByTaxonomy = groupBy(taxProperties, (p) => p.taxonomyName)
-  const taxPropertiesFields = groupBy(taxProperties, (p) => p.propertyName)
-  const taxCount = Object.keys(taxPropertiesByTaxonomy).length
-  const taxFieldsCount = Object.keys(taxPropertiesFields).length
-  const initiallyExpanded = Object.keys(taxPropertiesByTaxonomy).length === 1
-
-  const jointTaxProperties = joinTaxProperties({
-    taxCount,
-    taxProperties,
-  })
-
-  if (error) {
-    return (
-      <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
+    const taxPropertiesByTaxonomy = groupBy(
+      taxProperties,
+      (p) => p.taxonomyName,
     )
-  }
+    const taxPropertiesFields = groupBy(taxProperties, (p) => p.propertyName)
+    const taxCount = Object.keys(taxPropertiesByTaxonomy).length
+    const taxFieldsCount = Object.keys(taxPropertiesFields).length
+    const initiallyExpanded = Object.keys(taxPropertiesByTaxonomy).length === 1
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <StyledCard>
-          <StyledCardActions
-            disableSpacing
-            onClick={onToggleTaxonomies}
-          >
-            <CardActionTitle>
-              Taxonomien
-              <Count>{`(${loading ? '...' : taxCount} ${
-                taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
-              }, ${loading ? '...' : taxFieldsCount} ${
-                taxFieldsCount === 1 ? 'Feld' : 'Felder'
-              })`}</Count>
-            </CardActionTitle>
-            <CardActionIconButton
-              data-expanded={taxonomiesExpanded}
-              aria-expanded={taxonomiesExpanded}
-              aria-label="Show more"
+    const jointTaxProperties = joinTaxProperties({
+      taxCount,
+      taxProperties,
+    })
+
+    if (error) {
+      return (
+        <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
+      )
+    }
+
+    return (
+      <ErrorBoundary>
+        <Container>
+          <StyledCard>
+            <StyledCardActions
+              disableSpacing
+              onClick={onToggleTaxonomies}
             >
-              <Icon>
-                <ExpandMoreIcon />
-              </Icon>
-            </CardActionIconButton>
-          </StyledCardActions>
-          <Collapse
-            in={taxonomiesExpanded}
-            timeout="auto"
-            unmountOnExit
-          >
-            {jointTaxProperties.length > 0 && (
-              <JointTaxonomy jointTaxProperties={jointTaxProperties} />
-            )}
-            {Object.keys(taxPropertiesByTaxonomy).map((pc) => (
-              <Taxonomy
-                pc={pc}
-                key={pc}
-                initiallyExpanded={initiallyExpanded}
-              />
-            ))}
-          </Collapse>
-        </StyledCard>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+              <CardActionTitle>
+                Taxonomien
+                <Count>{`(${loading ? '...' : taxCount} ${
+                  taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
+                }, ${loading ? '...' : taxFieldsCount} ${
+                  taxFieldsCount === 1 ? 'Feld' : 'Felder'
+                })`}</Count>
+              </CardActionTitle>
+              <CardActionIconButton
+                data-expanded={taxonomiesExpanded}
+                aria-expanded={taxonomiesExpanded}
+                aria-label="Show more"
+              >
+                <Icon>
+                  <ExpandMoreIcon />
+                </Icon>
+              </CardActionIconButton>
+            </StyledCardActions>
+            <Collapse
+              in={taxonomiesExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
+              {jointTaxProperties.length > 0 && (
+                <JointTaxonomy jointTaxProperties={jointTaxProperties} />
+              )}
+              {Object.keys(taxPropertiesByTaxonomy).map((pc) => (
+                <Taxonomy
+                  pc={pc}
+                  key={pc}
+                  initiallyExpanded={initiallyExpanded}
+                />
+              ))}
+            </Collapse>
+          </StyledCard>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
 
-export default observer(TaxonomiesCard)
+export default TaxonomiesCard

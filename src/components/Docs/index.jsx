@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useNavigate } from 'react-router'
 import { Outlet } from 'react-router'
+import { observer } from 'mobx-react-lite'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import Sidebar from './Sidebar/index.jsx'
@@ -46,7 +47,7 @@ const Content = styled.div`
   height: 100%;
 `
 
-const Docs = ({ height }) => {
+const Docs = observer(({ height }) => {
   const store = useContext(storeContext)
   const { stacked } = store
 
@@ -112,6 +113,6 @@ const Docs = ({ height }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
 export default Docs

@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 `
 
-const TaxField = ({ taxname, pname, jsontype }) => {
+const TaxField = observer(({ taxname, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { taxFilters } = store.export
 
@@ -52,6 +52,6 @@ const TaxField = ({ taxname, pname, jsontype }) => {
       )}
     </Container>
   )
-}
+})
 
-export default observer(TaxField)
+export default TaxField

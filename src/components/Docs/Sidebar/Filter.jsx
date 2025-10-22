@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext.js'
 
@@ -23,7 +24,7 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   color: rgba(0, 0, 0, 0.7);
 `
 
-const Filter = () => {
+const Filter = observer(() => {
   const store = useContext(storeContext)
   const { docFilter, setDocFilter } = store
   const onChange = (e) => setDocFilter(e.target.value)
@@ -57,6 +58,6 @@ const Filter = () => {
       />
     </FormControl>
   )
-}
+})
 
 export default Filter
