@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -55,18 +55,15 @@ const Docs = ({ height }) => {
   const pathElements = pathname.split('/').filter((p) => !!p)
 
   const [tab, setTab] = useState(0)
-  const onChangeTab = useCallback(
-    (event, value) => {
-      // console.log('Dokumentation, onChangeTab', { event, value, pathElements })
-      setTab(value)
-      if (value === 0) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [first, ...rest] = pathElements
-        navigate(`/${first}/`)
-      }
-    },
-    [navigate, pathElements],
-  )
+  const onChangeTab = (event, value) => {
+    // console.log('Dokumentation, onChangeTab', { event, value, pathElements })
+    setTab(value)
+    if (value === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [first, ...rest] = pathElements
+      navigate(`/${first}/`)
+    }
+  }
 
   useEffect(() => {
     pathElements.length > 1 && tab === 0 && setTab(1)

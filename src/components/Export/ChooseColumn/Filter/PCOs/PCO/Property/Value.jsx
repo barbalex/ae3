@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useRef } from 'react'
+import { useState, useContext, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import styled from '@emotion/styled'
@@ -109,78 +109,60 @@ export const PcoValue = observer(
     const [value, setValue] = useState(propsValue ?? '')
     const [error, setError] = useState(undefined)
 
-    const loadOptions = useCallback(
-      async (val) => {
-        if (!focusCount) return []
-        const { data, error } = await apolloClient.query({
-          query: pcoFieldPropQuery,
-          variables: {
-            tableName: 'property_collection_object',
-            propName: pname,
-            pcFieldName: 'property_collection_id',
-            pcTableName: 'property_collection',
-            pcName: pcname,
-            propValue: val ?? '',
-          },
-        })
-        const returnData = data?.propValuesFilteredFunction?.nodes?.map(
-          (n) => ({
-            value: n.value,
-            label: n.value,
-          }),
-        )
-        setValue(val)
-        setError(error)
-        return returnData
-      },
-      [apolloClient, focusCount, pcname, pname],
-    )
+    const loadOptions = async (val) => {
+      if (!focusCount) return []
+      const { data, error } = await apolloClient.query({
+        query: pcoFieldPropQuery,
+        variables: {
+          tableName: 'property_collection_object',
+          propName: pname,
+          pcFieldName: 'property_collection_id',
+          pcTableName: 'property_collection',
+          pcName: pcname,
+          propValue: val ?? '',
+        },
+      })
+      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+        value: n.value,
+        label: n.value,
+      }))
+      setValue(val)
+      setError(error)
+      return returnData
+    }
 
-    const setFilter = useCallback(
-      (val) => {
-        // 1. change filter value
-        let comparatorValue = comparator
-        if (!comparator && val) comparatorValue = 'ILIKE'
-        if (!val) comparatorValue = null
-        setPcoFilter({
-          pcname,
-          pname,
-          comparator: comparatorValue,
-          value: val,
-        })
-        // 2. if value and field not choosen, choose it
-        if (addFilterFields && val) {
-          addPcoProperty({ pcname, pname })
-        }
-      },
-      [
-        addFilterFields,
-        addPcoProperty,
-        comparator,
+    const setFilter = (val) => {
+      // 1. change filter value
+      let comparatorValue = comparator
+      if (!comparator && val) comparatorValue = 'ILIKE'
+      if (!val) comparatorValue = null
+      setPcoFilter({
         pcname,
         pname,
-        setPcoFilter,
-      ],
-    )
+        comparator: comparatorValue,
+        value: val,
+      })
+      // 2. if value and field not chosen, choose it
+      if (addFilterFields && val) {
+        addPcoProperty({ pcname, pname })
+      }
+    }
 
-    const onBlur = useCallback(() => setFilter(value), [setFilter, value])
+    const onBlur = () => setFilter(value)
 
-    const onChange = useCallback(
-      (newValue, actionMeta) => {
-        let value
-        switch (actionMeta.action) {
-          case 'clear':
-            value = ''
-            break
-          default:
-            value = newValue?.value
-            break
-        }
-        setValue(value)
-        setFilter(value)
-      },
-      [setFilter],
-    )
+    const onChange = (newValue, actionMeta) => {
+      let value
+      switch (actionMeta.action) {
+        case 'clear':
+          value = ''
+          break
+        default:
+          value = newValue?.value
+          break
+      }
+      setValue(value)
+      setFilter(value)
+    }
 
     if (error) {
       return `Error loading data: ${error.message}`

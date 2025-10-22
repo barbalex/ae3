@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -28,12 +28,8 @@ export const PcoComparator = observer(
     const store = useContext(storeContext)
     const { setPcoFilter } = store.export
 
-    const onChange = useCallback(
-      (event) => {
-        setPcoFilter({ pcname, pname, comparator: event.target.value, value })
-      },
-      [pcname, pname, setPcoFilter, value],
-    )
+    const onChange = (event) =>
+      setPcoFilter({ pcname, pname, comparator: event.target.value, value })
 
     return (
       <Container>
