@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react'
+import { useState, memo } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -66,19 +66,16 @@ export const PcPresentation = memo(({ pC, stacked }) => {
     ([key, value]) => value || value === 0 || value === false,
   )
 
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
   const iconTitle =
     pCDescriptionExpanded ?
       'Beschreibung der Eigenschaften-Sammlung schliessen'
     : 'Beschreibung der Eigenschaften-Sammlung öffnen'
-  const onClickIcon = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setPCDescriptionExpanded(!pCDescriptionExpanded)
-      setExpanded(true)
-    },
-    [pCDescriptionExpanded],
-  )
+  const onClickIcon = (event) => {
+    event.stopPropagation()
+    setPCDescriptionExpanded(!pCDescriptionExpanded)
+    setExpanded(true)
+  }
 
   // console.log('PcPresentation, relations:', relations)
 

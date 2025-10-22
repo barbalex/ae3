@@ -6,7 +6,7 @@
  * if user klicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -144,38 +144,26 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
     linkText = `${linkText} öffnen`
   }
 
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickLink = useCallback(
-    (e) => {
-      // TODO:
-      e.stopPropagation()
-      navigate(linkUrl)
-      setTimeout(() => scrollIntoView())
-    },
-    [linkUrl, navigate, scrollIntoView],
-  )
-  const onClickStopEditing = useCallback(
-    (e) => {
-      e.stopPropagation()
-      setEditingTaxonomies(false)
-    },
-    [setEditingTaxonomies],
-  )
-  const onClickStartEditing = useCallback(
-    (e) => {
-      e.stopPropagation()
-      setEditingTaxonomies(true)
-    },
-    [setEditingTaxonomies],
-  )
-  const onClickToggleTaxDescription = useCallback(
-    (e) => {
-      e.stopPropagation()
-      setTaxExpanded(!taxExpanded)
-      setExpanded(true)
-    },
-    [taxExpanded],
-  )
+  const onClickActions = () => setExpanded(!expanded)
+  const onClickLink = (e) => {
+    // TODO:
+    e.stopPropagation()
+    navigate(linkUrl)
+    setTimeout(() => scrollIntoView())
+  }
+  const onClickStopEditing = (e) => {
+    e.stopPropagation()
+    setEditingTaxonomies(false)
+  }
+  const onClickStartEditing = (e) => {
+    e.stopPropagation()
+    setEditingTaxonomies(true)
+  }
+  const onClickToggleTaxDescription = (e) => {
+    e.stopPropagation()
+    setTaxExpanded(!taxExpanded)
+    setExpanded(true)
+  }
 
   if (organizationUsersLoading) {
     return <Spinner />

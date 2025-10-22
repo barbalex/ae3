@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useRef } from 'react'
+import { useState, useContext, useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -55,75 +55,55 @@ const Login = () => {
   const nameInput = useRef(null)
   const passwordInput = useRef(null)
 
-  const fetchLogin = useCallback(
-    (namePassed, passPassed, navigate) =>
-      fetchLoginModule({
-        client: apolloClient,
-        changeNameErrorText,
-        changePassErrorText,
-        name,
-        changeName,
-        pass,
-        changePass,
-        changeLoginSuccessfull,
-        namePassed,
-        passPassed,
-        idb,
-        store,
-        nameInput,
-        passwordInput,
-        navigate,
-      }),
-    [apolloClient, name, pass, idb, store],
-  )
-  const onLogout = useCallback(() => {
+  const fetchLogin = (namePassed, passPassed, navigate) =>
+    fetchLoginModule({
+      client: apolloClient,
+      changeNameErrorText,
+      changePassErrorText,
+      name,
+      changeName,
+      pass,
+      changePass,
+      changeLoginSuccessfull,
+      namePassed,
+      passPassed,
+      idb,
+      store,
+      nameInput,
+      passwordInput,
+      navigate,
+    })
+  const onLogout = () => {
     idb.users.clear()
     setLogin({
       username: '',
       token: '',
     })
-  }, [idb.users, setLogin])
-  const onBlurName = useCallback(
-    (e) => {
-      changeNameErrorText('')
-      const name = e.target.value
-      changeName(name)
-      if (!name) {
-        changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
-      } else if (pass) {
-        fetchLogin(name, pass, navigate)
-      }
-    },
-    [fetchLogin, navigate, pass],
-  )
-  const onBlurPassword = useCallback(
-    (e) => {
-      changePassErrorText('')
-      const pass = e.target.value
-      changePass(pass)
-      if (!pass) {
-        changePassErrorText('Bitte Passwort eingeben')
-      } else if (name) {
-        fetchLogin(name, pass, navigate)
-      }
-    },
-    [fetchLogin, name, navigate],
-  )
-  const onKeyPressName = useCallback(
-    (e) => e.key === 'Enter' && onBlurName(e),
-    [onBlurName],
-  )
-  const onKeyPressPass = useCallback(
-    (e) => e.key === 'Enter' && onBlurPassword(e),
-    [onBlurPassword],
-  )
-  const onClickTogglePass = useCallback(
-    () => changeShowPass(!showPass),
-    [showPass],
-  )
-  const onMouseDownTogglePass = useCallback((e) => {
-    e.preventDefault()
-  }, [])
+  }
+  const onBlurName = (e) => {
+    changeNameErrorText('')
+    const name = e.target.value
+    changeName(name)
+    if (!name) {
+      changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
+    } else if (pass) {
+      fetchLogin(name, pass, navigate)
+    }
+  }
+  const onBlurPassword = (e) => {
+    changePassErrorText('')
+    const pass = e.target.value
+    changePass(pass)
+    if (!pass) {
+      changePassErrorText('Bitte Passwort eingeben')
+    } else if (name) {
+      fetchLogin(name, pass, navigate)
+    }
+  }
+  const onKeyPressName = (e) => e.key === 'Enter' && onBlurName(e)
+  const onKeyPressPass = (e) => e.key === 'Enter' && onBlurPassword(e)
+  const onClickTogglePass = () => changeShowPass(!showPass)
+  const onMouseDownTogglePass = (e) => e.preventDefault()
 
   return (
     <ErrorBoundary>
