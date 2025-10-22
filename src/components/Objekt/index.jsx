@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { uniqBy } from 'es-toolkit'
 import { useQuery } from '@apollo/client/react'
@@ -39,6 +39,19 @@ const SynonymTitle = styled(Title)`
   margin-bottom: 5px;
 `
 
+const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
+  let pCOs = []
+  synonymObjects.forEach((synonym) => {
+    pCOs = [
+      ...pCOs,
+      ...(synonym?.propertyCollectionObjectsByObjectId?.nodes ?? []),
+    ]
+  })
+  pCOs = uniqBy(pCOs, (pco) => pco.propertyCollectionId)
+  pCOs = pCOs.filter((pco) => !pcsIds.includes(pco.propertyCollectionId))
+  return pCOs
+}
+
 export const Objekt = observer(({ stacked = false }) => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -68,18 +81,8 @@ export const Objekt = observer(({ stacked = false }) => {
   const pcsIds = pcs.map((c) => c.id)
   const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
 
-  const propertyCollectionObjectsOfSynonyms = useMemo(() => {
-    let pCOs = []
-    synonymObjects.forEach((synonym) => {
-      pCOs = [
-        ...pCOs,
-        ...(synonym?.propertyCollectionObjectsByObjectId?.nodes ?? []),
-      ]
-    })
-    pCOs = uniqBy(pCOs, (pco) => pco.propertyCollectionId)
-    pCOs = pCOs.filter((pco) => !pcsIds.includes(pco.propertyCollectionId))
-    return pCOs
-  }, [synonymObjects, pcsIds])
+  const propertyCollectionObjectsOfSynonyms =
+    getPropertyCollectionObjectsOfSynonyms({ synonymObjects, pcsIds })
 
   if (!objekt) return <div />
 

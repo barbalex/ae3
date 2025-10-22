@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext } from 'react'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import styled from '@emotion/styled'
@@ -100,6 +100,13 @@ const removeBadChars = (str) =>
     .replaceAll('-', '')
     .replaceAll('↵', '')
 
+const getSortFieldForQuery = (sortField) => {
+  if (!sortField) return undefined
+  const sf = { ...sortField }
+  delete sf.columnName
+  return sf
+}
+
 const Preview = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
@@ -127,15 +134,7 @@ const Preview = observer(() => {
   const [count, setCount] = useState(15)
   const [sortField, setSortField] = useState()
 
-  const sortFieldForQuery = useMemo(() => {
-    if (!sortField) return undefined
-    const sf = {
-      ...sortField,
-    }
-    delete sf.columnName
-    // console.log('sortFieldForQuery:', { sf, sortField })
-    return sf
-  }, [sortField])
+  const sortFieldForQuery = getSortFieldForQuery(sortField)
 
   const onGridSort = (column, direction) => {
     if (direction === 'NONE') return setSortField(undefined)
@@ -235,14 +234,10 @@ const Preview = observer(() => {
   })
 
   const rowCount = exportData?.data?.exportAll?.exportDatum?.count
-  const rows = useMemo(
-    () =>
-      exportData?.data?.exportAll?.exportDatum?.exportData ?
-        JSON.parse(exportData?.data?.exportAll?.exportDatum?.exportData)
-      : [],
-    [exportData?.data?.exportAll?.exportDatum?.exportData],
-  )
-
+  const rows =
+    exportData?.data?.exportAll?.exportDatum?.exportData ?
+      JSON.parse(exportData?.data?.exportAll?.exportDatum?.exportData)
+    : []
   const [message, setMessage] = useState('')
 
   const onSetMessage = (message) => {
