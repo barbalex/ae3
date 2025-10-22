@@ -39,8 +39,7 @@ const Count = styled.span`
 
 const PCO = ({ pcName, count }) => {
   const [expanded, setExpanded] = useState(false)
-  const onClickActions = () => setExpanded(!expanded),
-    [expanded]
+  const onClickActions = () => setExpanded(!expanded)
 
   return (
     <ErrorBoundary>
