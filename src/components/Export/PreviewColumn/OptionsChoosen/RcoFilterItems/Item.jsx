@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -24,17 +24,14 @@ const ExportRcoFilterListItem = ({ filter }) => {
   const store = useContext(storeContext)
   const { setRcoFilters } = store.export
 
-  const onClick = useCallback(
-    () =>
-      setRcoFilters({
-        pcname,
-        relationtype,
-        pname,
-        comparator: '',
-        value: '',
-      }),
-    [pcname, pname, relationtype, setRcoFilters],
-  )
+  const onClick = () =>
+    setRcoFilters({
+      pcname,
+      relationtype,
+      pname,
+      comparator: '',
+      value: '',
+    })
 
   return (
     <li>

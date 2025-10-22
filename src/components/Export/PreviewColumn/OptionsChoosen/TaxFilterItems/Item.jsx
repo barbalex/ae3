@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -24,16 +24,13 @@ const ExportTaxFilterListItem = ({ filter }) => {
   const { setTaxFilters } = store.export
 
   const { taxname, pname, comparator, value } = filter
-  const onClick = useCallback(
-    () =>
-      setTaxFilters({
-        taxname,
-        pname,
-        comparator: '',
-        value: '',
-      }),
-    [pname, setTaxFilters, taxname],
-  )
+  const onClick = () =>
+    setTaxFilters({
+      taxname,
+      pname,
+      comparator: '',
+      value: '',
+    })
 
   return (
     <li>

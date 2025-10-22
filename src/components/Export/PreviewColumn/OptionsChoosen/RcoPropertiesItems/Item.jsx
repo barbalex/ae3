@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -17,15 +17,12 @@ const ExportRcoPropertiesListItem = ({ properties }) => {
   const store = useContext(storeContext)
   const { removeRcoProperty } = store.export
 
-  const onClick = useCallback(
-    () =>
-      removeRcoProperty({
-        pcname,
-        relationtype,
-        pname,
-      }),
-    [pcname, pname, relationtype, removeRcoProperty],
-  )
+  const onClick = () =>
+    removeRcoProperty({
+      pcname,
+      relationtype,
+      pname,
+    })
 
   return (
     <li>
