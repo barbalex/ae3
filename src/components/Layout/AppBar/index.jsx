@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Icon from '@mui/material/Icon'
@@ -158,19 +158,11 @@ const AppBarComponent = () => {
   const pCName = data?.propertyCollectionById?.name
   const taxName = data?.taxonomyById?.name
 
-  const onClickColumnButtonDocs = useCallback(() => {
-    navigate('/Dokumentation')
-  }, [navigate])
-  const onClickColumnButtonData = useCallback(() => {
-    navigate('/')
-  }, [navigate])
-  const onClickColumnButtonExport = useCallback(() => {
-    navigate('/Export')
-  }, [navigate])
-  const onClickColumnButtonLogin = useCallback(() => {
-    navigate('/Login')
-  }, [navigate])
-  const onClickShare = useCallback(() => {
+  const onClickColumnButtonDocs = () => navigate('/Dokumentation')
+  const onClickColumnButtonData = () => navigate('/')
+  const onClickColumnButtonExport = () => navigate('/Export')
+  const onClickColumnButtonLogin = () => navigate('/Login')
+  const onClickShare = () => {
     const name =
       pCName ? pCName
       : objektName ? `${taxName}: ${objektName}`
@@ -183,8 +175,7 @@ const AppBarComponent = () => {
         title,
         url: window.location.href,
       })
-  }, [pCName, objektName, taxName, url0])
-
+  }
   const { pathname } = location
   const pathArray = pathname.split('/').filter((a) => !!a)
 

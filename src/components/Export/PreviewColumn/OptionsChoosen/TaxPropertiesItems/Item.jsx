@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -17,14 +17,11 @@ const ExportTaxPropertiesListItem = ({ properties }) => {
   const { removeTaxProperty } = store.export
 
   const { taxname, pname } = properties
-  const onClick = useCallback(
-    () =>
-      removeTaxProperty({
-        taxname,
-        pname,
-      }),
-    [pname, removeTaxProperty, taxname],
-  )
+  const onClick = () =>
+    removeTaxProperty({
+      taxname,
+      pname,
+    })
 
   return (
     <li key={`${taxname}: ${pname}`}>

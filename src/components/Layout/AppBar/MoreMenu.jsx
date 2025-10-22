@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import Icon from '@mui/material/Icon'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -40,17 +40,13 @@ const MoreMenu = () => {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const onClickButton = useCallback((event) => {
-    setAnchorEl(event.currentTarget)
-  }, [])
-  const onClose = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
-  const onClickUeber = useCallback(() => {
+  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClose = () => setAnchorEl(null)
+  const onClickUeber = () => {
     navigate('/Dokumentation/projektbeschreibung')
     setAnchorEl(null)
-  }, [navigate])
-  const onClickStruktur = useCallback(() => {
+  }
+  const onClickStruktur = () => {
     setAnchorEl(null)
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -58,19 +54,19 @@ const MoreMenu = () => {
       }
       window.open(relations)
     }
-  }, [])
-  const onClickMelden = useCallback(() => {
+  }
+  const onClickMelden = () => {
     typeof window !== 'undefined' &&
       window.open('https://github.com/barbalex/ae3/issues')
     setAnchorEl(null)
-  }, [])
-  // const onClickGqlQuery = useCallback(() => {
+  }
+  // const onClickGqlQuery = () => {
   //   navigate('/graphiql')
   //   setAnchorEl(null)
-  // }, [])
+  // }
   const hostname =
     typeof window !== 'undefined' ? window.location.hostname : 'artdaten.ch'
-  const onClickUptime = useCallback(() => {
+  const onClickUptime = () => {
     if (typeof window === 'undefined') return
 
     const hostname = window.location.hostname
@@ -80,7 +76,7 @@ const MoreMenu = () => {
       : `//uptime.${hostname.replace('www.', '')}`
     window.open(uptimeUrl)
     setAnchorEl(null)
-  }, [])
+  }
 
   return (
     <div>
