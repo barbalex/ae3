@@ -1,4 +1,4 @@
-import { useState, useCallback, memo, useContext } from 'react'
+import { useState, memo, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
@@ -27,34 +27,27 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
   const [label, setLabel] = useState('')
   const [value, setValue] = useState('')
 
-  const onChangeLabel = useCallback((event) => {
-    setLabel(event.target.value)
-  }, [])
-  const onChangeValue = useCallback((event) => {
-    setValue(event.target.value)
-  }, [])
-  const onBlurValue = useCallback(
-    async (event) => {
-      const { value } = event.target
-      if (value !== null && value !== undefined && !!label) {
-        const properties = {
-          ...propertiesPrevious,
-          ...{ [label]: value },
-        }
-        await apolloClient.mutate({
-          mutation: updatePropertyMutation,
-          variables: { properties: JSON.stringify(properties), id },
-        })
-        setLabel('')
-        setValue('')
-        await queryClient.invalidateQueries({
-          queryKey: ['tree'],
-        })
-        scrollIntoView()
+  const onChangeLabel = (event) => setLabel(event.target.value)
+  const onChangeValue = (event) => setValue(event.target.value)
+  const onBlurValue = async (event) => {
+    const { value } = event.target
+    if (value !== null && value !== undefined && !!label) {
+      const properties = {
+        ...propertiesPrevious,
+        ...{ [label]: value },
       }
-    },
-    [label, propertiesPrevious, apolloClient, id, queryClient],
-  )
+      await apolloClient.mutate({
+        mutation: updatePropertyMutation,
+        variables: { properties: JSON.stringify(properties), id },
+      })
+      setLabel('')
+      setValue('')
+      await queryClient.invalidateQueries({
+        queryKey: ['tree'],
+      })
+      scrollIntoView()
+    }
+  }
 
   return (
     <ErrorBoundary>

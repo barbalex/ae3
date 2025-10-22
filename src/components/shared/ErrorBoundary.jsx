@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -33,11 +33,11 @@ const Pre = styled.pre`
 `
 
 const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
-  const onReload = useCallback(() => {
+  const onReload = () => {
     if (typeof window !== 'undefined') {
       window.location.reload(true)
     }
-  }, [])
+  }
 
   return (
     <Container>
@@ -48,7 +48,11 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
         <Pre>{componentStack}</Pre>
       </Details>
       <ButtonContainer>
-        <StyledButton variant="outlined" onClick={onReload} color="inherit">
+        <StyledButton
+          variant="outlined"
+          onClick={onReload}
+          color="inherit"
+        >
           neu starten
         </StyledButton>
       </ButtonContainer>
@@ -69,7 +73,7 @@ export const ErrorBoundary = ({ children }) => {
   const idb = useContext(idbContext)
   const store = useContext(storeContext)
 
-  const onReset = useCallback(() => {
+  const onReset = () => {
     const { login } = store
     const { setLogin } = login
 
@@ -81,10 +85,13 @@ export const ErrorBoundary = ({ children }) => {
       })
       window.location.reload(true)
     }
-  }, [idb.users, store])
+  }
 
   return (
-    <ErrorBoundaryComponent FallbackComponent={ErrorFallback} onReset={onReset}>
+    <ErrorBoundaryComponent
+      FallbackComponent={ErrorFallback}
+      onReset={onReset}
+    >
       {children}
     </ErrorBoundaryComponent>
   )

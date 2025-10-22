@@ -1,4 +1,4 @@
-import { useState, useCallback, memo, useContext } from 'react'
+import { useState, memo, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -37,42 +37,39 @@ export const Property = memo(
     const store = useContext(storeContext)
     const { scrollIntoView } = store
 
-    const onChange = useCallback((event) => {
-      setValue(event.target.value)
-    }, [])
-    const onBlur = useCallback(
-      async (event) => {
-        const { value } = event.target
-        const prevValue = propertiesPrevious[key]
-        if (value !== prevValue) {
-          const properties = {
-            ...propertiesPrevious,
-            ...{ [key]: value },
-          }
-          await apolloClient.mutate({
-            mutation: updatePropertyMutation,
-            variables: { properties: JSON.stringify(properties), id },
-            optimisticResponse: {
-              updateObjectById: {
-                object: {
-                  id,
-                  properties: JSON.stringify(properties),
-                  __typename: 'Object',
-                },
+    const onChange = (event) => setValue(event.target.value)
+
+    const onBlur = async (event) => {
+      const { value } = event.target
+      const prevValue = propertiesPrevious[key]
+      if (value !== prevValue) {
+        const properties = {
+          ...propertiesPrevious,
+          ...{ [key]: value },
+        }
+        await apolloClient.mutate({
+          mutation: updatePropertyMutation,
+          variables: { properties: JSON.stringify(properties), id },
+          optimisticResponse: {
+            updateObjectById: {
+              object: {
+                id,
+                properties: JSON.stringify(properties),
                 __typename: 'Object',
               },
-              __typename: 'Mutation',
+              __typename: 'Object',
             },
-          })
-          await queryClient.invalidateQueries({
-            queryKey: ['tree'],
-          })
-          scrollIntoView()
-        }
-      },
-      [propertiesPrevious, key, apolloClient, id],
-    )
-    const onDelete = useCallback(async () => {
+            __typename: 'Mutation',
+          },
+        })
+        await queryClient.invalidateQueries({
+          queryKey: ['tree'],
+        })
+        scrollIntoView()
+      }
+    }
+
+    const onDelete = async () => {
       const properties = omit(propertiesPrevious, key)
       await apolloClient.mutate({
         mutation: updatePropertyMutation,
@@ -81,7 +78,7 @@ export const Property = memo(
       queryClient.invalidateQueries({
         queryKey: ['tree'],
       })
-    }, [propertiesPrevious, key, apolloClient, id])
+    }
 
     return (
       <ErrorBoundary>
