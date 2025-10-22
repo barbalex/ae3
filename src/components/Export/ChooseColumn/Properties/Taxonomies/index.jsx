@@ -58,7 +58,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const Properties = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
+const Properties = observer(({ taxonomiesExpanded, onToggleTaxonomies }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -143,6 +143,6 @@ const Properties = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Properties)
+export default Properties

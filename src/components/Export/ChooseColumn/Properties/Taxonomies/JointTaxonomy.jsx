@@ -46,7 +46,7 @@ const Count = styled.span`
   padding-left: 5px;
 `
 
-const JointTaxonomy = ({ jointTaxProperties }) => {
+const JointTaxonomy = observer(({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -86,6 +86,6 @@ const JointTaxonomy = ({ jointTaxProperties }) => {
       </StyledCard>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(JointTaxonomy)
+export default JointTaxonomy

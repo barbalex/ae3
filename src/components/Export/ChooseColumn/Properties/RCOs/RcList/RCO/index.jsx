@@ -73,7 +73,7 @@ const query = gql`
   }
 `
 
-const RCO = ({ pcname, relationtype, count }) => {
+const RCO = observer(({ pcname, relationtype, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -155,6 +155,6 @@ const RCO = ({ pcname, relationtype, count }) => {
       </StyledCard>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(RCO)
+export default RCO

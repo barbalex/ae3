@@ -69,7 +69,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const Taxonomy = ({ initiallyExpanded, tax }) => {
+const Taxonomy = observer(({ initiallyExpanded, tax }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -136,6 +136,6 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
       </StyledCard>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Taxonomy)
+export default Taxonomy
