@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -56,19 +56,19 @@ const Export = () => {
   const [propertiesExpanded, setPropertiesExpanded] = useState(false)
   const [message, setMessage] = useState('')
 
-  const onSetMessage = useCallback((message) => {
+  const onSetMessage = (message) => {
     setMessage(message)
     if (message) {
       setTimeout(() => setMessage(''), 5000)
     }
-  }, [])
-  const onToggleTaxonomies = useCallback(() => {
+  }
+  const onToggleTaxonomies = () => {
     setTaxonomiesExpanded(!taxonomiesExpanded)
     // close all others
     setFilterExpanded(false)
     setPropertiesExpanded(false)
-  }, [taxonomiesExpanded])
-  const onToggleFilter = useCallback(() => {
+  }
+  const onToggleFilter = () => {
     if (!filterExpanded && exportTaxonomies.length > 0) {
       setFilterExpanded(true)
       // close all others
@@ -78,8 +78,8 @@ const Export = () => {
       setFilterExpanded(false)
       onSetMessage('Bitte wählen Sie mindestens eine Taxonomie')
     }
-  }, [filterExpanded, exportTaxonomies.length, onSetMessage])
-  const onToggleProperties = useCallback(() => {
+  }
+  const onToggleProperties = () => {
     if (!propertiesExpanded && exportTaxonomies.length > 0) {
       setPropertiesExpanded(true)
       // close all others
@@ -89,14 +89,17 @@ const Export = () => {
       setPropertiesExpanded(false)
       onSetMessage('Bitte wählen Sie mindestens eine Gruppe')
     }
-  }, [propertiesExpanded, exportTaxonomies.length, onSetMessage])
+  }
 
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <Container>
           <StyledCard>
-            <StyledCardActions disableSpacing onClick={onToggleTaxonomies}>
+            <StyledCardActions
+              disableSpacing
+              onClick={onToggleTaxonomies}
+            >
               <CardActionTitle>1. Taxonomie(n) wählen</CardActionTitle>
               <CardActionIconButton
                 data-expanded={taxonomiesExpanded}
@@ -108,12 +111,19 @@ const Export = () => {
                 </Icon>
               </CardActionIconButton>
             </StyledCardActions>
-            <Collapse in={taxonomiesExpanded} timeout="auto" unmountOnExit>
+            <Collapse
+              in={taxonomiesExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
               <Taxonomies />
             </Collapse>
           </StyledCard>
           <StyledCard>
-            <StyledCardActions disableSpacing onClick={onToggleFilter}>
+            <StyledCardActions
+              disableSpacing
+              onClick={onToggleFilter}
+            >
               <CardActionTitle>2. filtern</CardActionTitle>
               <CardActionIconButton
                 data-expanded={filterExpanded}
@@ -125,12 +135,19 @@ const Export = () => {
                 </Icon>
               </CardActionIconButton>
             </StyledCardActions>
-            <Collapse in={filterExpanded} timeout="auto" unmountOnExit>
+            <Collapse
+              in={filterExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
               <Filter />
             </Collapse>
           </StyledCard>
           <StyledCard>
-            <StyledCardActions disableSpacing onClick={onToggleProperties}>
+            <StyledCardActions
+              disableSpacing
+              onClick={onToggleProperties}
+            >
               <CardActionTitle>3. Eigenschaften wählen</CardActionTitle>
               <CardActionIconButton
                 data-expanded={propertiesExpanded}
@@ -142,11 +159,18 @@ const Export = () => {
                 </Icon>
               </CardActionIconButton>
             </StyledCardActions>
-            <Collapse in={propertiesExpanded} timeout="auto" unmountOnExit>
+            <Collapse
+              in={propertiesExpanded}
+              timeout="auto"
+              unmountOnExit
+            >
               <Properties />
             </Collapse>
           </StyledCard>
-          <StyledSnackbar open={!!message} message={message} />
+          <StyledSnackbar
+            open={!!message}
+            message={message}
+          />
         </Container>
       </SimpleBar>
     </ErrorBoundary>

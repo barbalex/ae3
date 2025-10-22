@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -26,14 +26,14 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 const Filter = () => {
   const store = useContext(storeContext)
   const { docFilter, setDocFilter } = store
-  const onChange = useCallback(
-    (e) => setDocFilter(e.target.value),
-    [setDocFilter],
-  )
-  const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])
+  const onChange = (e) => setDocFilter(e.target.value)
+  const onClickEmptyFilter = () => setDocFilter('')
 
   return (
-    <FormControl fullWidth variant="standard">
+    <FormControl
+      fullWidth
+      variant="standard"
+    >
       <InputLabel htmlFor="filterInput">filtern</InputLabel>
       <StyledInput
         id="filterInput"
@@ -44,7 +44,7 @@ const Filter = () => {
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          docFilter ? (
+          docFilter ?
             <InputAdornment
               position="end"
               onClick={onClickEmptyFilter}
@@ -52,7 +52,7 @@ const Filter = () => {
             >
               <StyledDeleteFilterIcon />
             </InputAdornment>
-          ) : null
+          : null
         }
       />
     </FormControl>

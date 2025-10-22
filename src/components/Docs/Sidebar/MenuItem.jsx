@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
@@ -21,14 +21,18 @@ const MenuItem = ({ node }) => {
   const active =
     activeUrl === location.pathname || `${activeUrl}/` === location.pathname
 
-  const onClickMenuItem = useCallback(() => {
+  const onClickMenuItem = () => {
     navigate(`${activeUrl}/`)
     sidebarWidth && setSidebarWidth(null)
-  }, [activeUrl, navigate, setSidebarWidth, sidebarWidth])
+  }
 
   return (
     <>
-      <ListItem onClick={onClickMenuItem} selected={active} divider>
+      <ListItem
+        onClick={onClickMenuItem}
+        selected={active}
+        divider
+      >
         <ListItemText onClick={onClickMenuItem}>
           {title ?? '(Titel fehlt)'}
         </ListItemText>
