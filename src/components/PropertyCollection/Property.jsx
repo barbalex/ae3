@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -41,24 +41,19 @@ export const Property = ({
   const [value, setValue] = useState(pC[field] || '')
   const [error, setError] = useState(null)
 
-  const onChange = useCallback((event) => {
-    setValue(event.target.value)
-  }, [])
-  const onBlur = useCallback(
-    (event) =>
-      onBlurDo({
-        apolloClient,
-        queryClient,
-        field,
-        pC,
-        value: event.target.value,
-        prevValue: pC[field],
-        setError,
-        navigate,
-        scrollIntoView,
-      }),
-    [apolloClient, field, navigate, pC, queryClient],
-  )
+  const onChange = (event) => setValue(event.target.value)
+  const onBlur = (event) =>
+    onBlurDo({
+      apolloClient,
+      queryClient,
+      field,
+      pC,
+      value: event.target.value,
+      prevValue: pC[field],
+      setError,
+      navigate,
+      scrollIntoView,
+    })
 
   return (
     <ErrorBoundary>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
@@ -212,10 +212,10 @@ export const PCO = observer(() => {
   // enable sorting
   const [orderBy, setOrderBy] = useState('Objekt Name')
   const [sortDirection, setSortDirection] = useState('asc')
-  const setOrder = useCallback(({ orderBy, direction }) => {
+  const setOrder = ({ orderBy, direction }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
-  }, [])
+  }
 
   const [importing, setImport] = useState(false)
 
@@ -279,7 +279,7 @@ export const PCO = observer(() => {
     pcoData?.propertyCollectionById
       ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount
 
-  const fetchAllData = useCallback(async () => {
+  const fetchAllData = async () => {
     const { data, loading, error } = await apolloClient.query({
       query: pcoQuery,
       variables: {
@@ -314,9 +314,9 @@ export const PCO = observer(() => {
     })
     const pCO = doOrderBy(pCOUnsorted, orderBy, sortDirection)
     return { data: pCO, loading, error }
-  }, [apolloClient, pcId, propKeys, sortDirection, orderBy])
+  }
 
-  const onClickXlsx = useCallback(async () => {
+  const onClickXlsx = async () => {
     setXlsxExportLoading(true)
     const { data } = await fetchAllData()
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
@@ -325,16 +325,16 @@ export const PCO = observer(() => {
       onSetMessage: console.log,
     })
     setXlsxExportLoading(false)
-  }, [fetchAllData])
-  const onClickCsv = useCallback(async () => {
+  }
+  const onClickCsv = async () => {
     setCsvExportLoading(true)
     const { data } = await fetchAllData()
     const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(data)
     setCsvExportLoading(false)
-  }, [fetchAllData])
+  }
 
-  const onClickDelete = useCallback(async () => {
+  const onClickDelete = async () => {
     setDeleteLoading(true)
     await apolloClient.mutate({
       mutation: deletePcoOfPcMutation,
@@ -353,11 +353,9 @@ export const PCO = observer(() => {
     queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],
     })
-  }, [apolloClient, pcId, queryClient])
+  }
 
-  const onClickImport = useCallback(() => {
-    setImport(true)
-  }, [])
+  const onClickImport = () => setImport(true)
 
   if (pcoLoading) {
     return <Spinner />

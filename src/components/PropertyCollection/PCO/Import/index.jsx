@@ -1,4 +1,4 @@
-import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
+import { useState, useReducer, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
@@ -141,10 +141,10 @@ const ImportPco = ({ setImport }) => {
 
   const [orderBy, setOrderBy] = useState('objectId')
   const [sortDirection, setSortDirection] = useState('asc')
-  const setOrder = useCallback(({ orderBy, direction }) => {
+  const setOrder = ({ orderBy, direction }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
-  }, [])
+  }
 
   const {
     isLoading,
@@ -171,10 +171,7 @@ const ImportPco = ({ setImport }) => {
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
   const [imported, setImported] = useState(0)
-  const incrementImported = useCallback(
-    () => setImported(() => imported + 1),
-    [imported],
-  )
+  const incrementImported = () => setImported(() => imported + 1)
 
   const [checkState, dispatch] = useReducer(
     checkStateReducer,
@@ -242,7 +239,7 @@ const ImportPco = ({ setImport }) => {
     [importDataFields],
   )
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0]
     if (file) {
       const reader = new FileReader()
@@ -341,9 +338,9 @@ const ImportPco = ({ setImport }) => {
       reader.onerror = () => console.log('file reading has failed')
       reader.readAsBinaryString(file)
     }
-  }, [])
+  }
 
-  const onClickImport = useCallback(async () => {
+  const onClickImport = async () => {
     setImporting(true)
 
     const posts = []
@@ -386,14 +383,7 @@ const ImportPco = ({ setImport }) => {
     queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],
     })
-  }, [
-    setImport,
-    importData,
-    pCId,
-    apolloClient,
-    incrementImported,
-    queryClient,
-  ])
+  }
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
