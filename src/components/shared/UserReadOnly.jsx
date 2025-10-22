@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -39,7 +38,7 @@ const linkifyProperties = {
   },
 }
 
-export const UserReadOnly = memo(({ label, user }) => {
+export const UserReadOnly = ({ label, user }) => {
   if (!user) return null
 
   const name = user ? user.name || '' : ''
@@ -52,7 +51,10 @@ export const UserReadOnly = memo(({ label, user }) => {
         <Container className="property">
           <Label>{`${label}:`}</Label>
           <UserContainer>
-            <StyledA href={link} target="_blank">
+            <StyledA
+              href={link}
+              target="_blank"
+            >
               {name}
             </StyledA>
             <span>{` (${email})`}</span>
@@ -61,4 +63,4 @@ export const UserReadOnly = memo(({ label, user }) => {
       </Linkify>
     </ErrorBoundary>
   )
-})
+}

@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -25,7 +24,7 @@ const linkifyProperties = {
   },
 }
 
-export const TaxonomyDescription = memo(({ taxonomy }) => {
+export const TaxonomyDescription = ({ taxonomy }) => {
   const organizationName = taxonomy?.organizationByOrganizationId?.name
 
   return (
@@ -39,10 +38,16 @@ export const TaxonomyDescription = memo(({ taxonomy }) => {
             />
           )}
           {taxonomy.lastUpdated && (
-            <PropertyReadOnly label="Stand" value={taxonomy.lastUpdated} />
+            <PropertyReadOnly
+              label="Stand"
+              value={taxonomy.lastUpdated}
+            />
           )}
           {taxonomy.links && taxonomy.links.length > 0 && (
-            <PropertyReadOnly label="Link" value={taxonomy.links} />
+            <PropertyReadOnly
+              label="Link"
+              value={taxonomy.links}
+            />
           )}
           {organizationName && (
             <PropertyReadOnly
@@ -54,4 +59,4 @@ export const TaxonomyDescription = memo(({ taxonomy }) => {
       </Linkify>
     </ErrorBoundary>
   )
-})
+}
