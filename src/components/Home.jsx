@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { Link } from 'react-router'
 import MaterialCard from '@mui/material/Card'
 import styled from '@emotion/styled'
@@ -79,9 +78,12 @@ const DokuLink = styled(Link)`
   }
 `
 
-const Home = memo(() => (
+const Home = () => (
   <OuterContainer>
-    <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+    <ProgressiveImg
+      src={image}
+      placeholderSrc={placeholderSrc}
+    />
     <ScrollContainer>
       <CardContainer>
         <Card>
@@ -114,6 +116,6 @@ const Home = memo(() => (
       </CardContainer>
     </ScrollContainer>
   </OuterContainer>
-))
+)
 
 export default Home

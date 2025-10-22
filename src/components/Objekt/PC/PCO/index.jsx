@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -45,7 +45,7 @@ const CardText = styled.div`
   column-width: 500px;
 `
 
-export const PcPresentation = memo(({ pC, stacked }) => {
+export const PcPresentation = ({ pC, stacked }) => {
   const [expanded, setExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
 
@@ -137,4 +137,4 @@ export const PcPresentation = memo(({ pC, stacked }) => {
       </Container>
     </ErrorBoundary>
   )
-})
+}
