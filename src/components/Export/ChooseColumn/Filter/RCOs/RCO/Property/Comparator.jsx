@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -27,17 +27,14 @@ const RcoComparator = ({ pcname, relationtype, pname, value, comparator }) => {
   const store = useContext(storeContext)
   const { setRcoFilters } = store.export
 
-  const onChange = useCallback(
-    (event) =>
-      setRcoFilters({
-        pcname,
-        relationtype,
-        pname,
-        comparator: event.target.value,
-        value,
-      }),
-    [setRcoFilters, pcname, relationtype, pname, value],
-  )
+  const onChange = (event) =>
+    setRcoFilters({
+      pcname,
+      relationtype,
+      pname,
+      comparator: event.target.value,
+      value,
+    })
 
   return (
     <Container>

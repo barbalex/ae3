@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useRef } from 'react'
+import { useState, useContext, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import styled from '@emotion/styled'
@@ -119,80 +119,62 @@ const IntegrationAutosuggest = ({
   const [value, setValue] = useState(propValue || '')
   const [error, setError] = useState(undefined)
 
-  const loadOptions = useCallback(
-    async (val) => {
-      if (!focusCount) return []
-      const { data, error } = await apolloClient.query({
-        query: rcoFieldPropQuery,
-        variables: {
-          tableName: 'relation',
-          propName: pname,
-          pcFieldName: 'property_collection_id',
-          pcTableName: 'property_collection',
-          pcName: pcname,
-          propValue: val ?? '',
-        },
-      })
-      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
-        value: n.value,
-        label: n.value,
-      }))
-      setValue(val)
-      setError(error)
-      return returnData
-    },
-    [apolloClient, focusCount, pcname, pname],
-  )
+  const loadOptions = async (val) => {
+    if (!focusCount) return []
+    const { data, error } = await apolloClient.query({
+      query: rcoFieldPropQuery,
+      variables: {
+        tableName: 'relation',
+        propName: pname,
+        pcFieldName: 'property_collection_id',
+        pcTableName: 'property_collection',
+        pcName: pcname,
+        propValue: val ?? '',
+      },
+    })
+    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+      value: n.value,
+      label: n.value,
+    }))
+    setValue(val)
+    setError(error)
+    return returnData
+  }
 
-  const setFilter = useCallback(
-    (val) => {
-      // 1. change filter value
-      let comparatorValue = comparator
-      if (!comparator && val) comparatorValue = 'ILIKE'
-      if (!val) comparatorValue = null
-      setRcoFilters({
-        pcname,
-        relationtype,
-        pname,
-        comparator: comparatorValue,
-        value: val,
-      })
-      // 2. if value and field not choosen, choose it
-      if (addFilterFields && value) {
-        addRcoProperty({ pcname, relationtype, pname })
-      }
-    },
-    [
-      addFilterFields,
-      addRcoProperty,
-      comparator,
+  const setFilter = (val) => {
+    // 1. change filter value
+    let comparatorValue = comparator
+    if (!comparator && val) comparatorValue = 'ILIKE'
+    if (!val) comparatorValue = null
+    setRcoFilters({
       pcname,
-      pname,
       relationtype,
-      setRcoFilters,
-      value,
-    ],
-  )
+      pname,
+      comparator: comparatorValue,
+      value: val,
+    })
+    // 2. if value and field not choosen, choose it
+    if (addFilterFields && value) {
+      addRcoProperty({ pcname, relationtype, pname })
+    }
+  }
 
-  const onBlur = useCallback(() => setFilter(value), [setFilter, value])
+  const onBlur = () => setFilter(value)
 
-  const onChange = useCallback(
-    (newValue, actionMeta) => {
-      // console.log('onChange', { newValue, actionMeta })
-      let value
-      switch (actionMeta.action) {
-        case 'clear':
-          value = ''
-          break
-        default:
-          value = newValue?.value
-          break
-      }
-      setValue(value)
-      setFilter(value)
-    },
-    [setFilter],
-  )
+  const onChange = (newValue, actionMeta) => {
+    // console.log('onChange', { newValue, actionMeta })
+    let value
+    switch (actionMeta.action) {
+      case 'clear':
+        value = ''
+        break
+      default:
+        value = newValue?.value
+        break
+    }
+    setValue(value)
+    setFilter(value)
+  }
 
   if (error) {
     return `Error loading data: ${error.message}`

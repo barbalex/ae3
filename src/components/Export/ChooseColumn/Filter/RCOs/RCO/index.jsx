@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -90,7 +90,7 @@ const RCO = ({ pc }) => {
   })
 
   const [expanded, setExpanded] = useState(false)
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
 
   const rcoProperties =
     data?.data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
