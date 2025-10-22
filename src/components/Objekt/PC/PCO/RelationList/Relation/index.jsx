@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
@@ -19,7 +18,7 @@ const Container = styled.div`
   }
 `
 
-export const Relation = memo(({ relation, intermediateRelation }) => {
+export const Relation = ({ relation, intermediateRelation }) => {
   // never pass null to Object.entries!!!
   const properties = JSON.parse(relation.properties) || {}
   const taxType = (
@@ -48,4 +47,4 @@ export const Relation = memo(({ relation, intermediateRelation }) => {
       </ErrorBoundary>
     </Container>
   )
-})
+}
