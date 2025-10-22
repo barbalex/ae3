@@ -64,7 +64,7 @@ const query = gql`
   }
 `
 
-const RcosCard = ({ rcoExpanded, onToggleRco }) => {
+const RcosCard = observer(({ rcoExpanded, onToggleRco }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -132,6 +132,6 @@ const RcosCard = ({ rcoExpanded, onToggleRco }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(RcosCard)
+export default RcosCard

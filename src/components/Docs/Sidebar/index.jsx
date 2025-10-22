@@ -34,7 +34,7 @@ const StyledSimpleBar = styled(SimpleBar)`
   height: calc(100cqh - 25px);
 `
 
-const Sidebar = ({ stacked }) => {
+const Sidebar = observer(({ stacked }) => {
   const store = useContext(storeContext)
   const { sidebarWidth } = store
 
@@ -51,6 +51,6 @@ const Sidebar = ({ stacked }) => {
       </StyledSimpleBar>
     </Menu>
   )
-}
+})
 
-export default observer(Sidebar)
+export default Sidebar

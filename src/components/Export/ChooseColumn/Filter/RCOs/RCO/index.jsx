@@ -70,7 +70,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RCO = ({ pc }) => {
+const RCO = observer(({ pc }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -145,6 +145,6 @@ const RCO = ({ pc }) => {
       </StyledCard>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(RCO)
+export default RCO
