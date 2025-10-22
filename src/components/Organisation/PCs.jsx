@@ -45,7 +45,7 @@ const pcsQuery = gql`
   }
 `
 
-const PCs = () => {
+const PCs = observer(() => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const id =
@@ -91,6 +91,6 @@ const PCs = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(PCs)
+export default PCs

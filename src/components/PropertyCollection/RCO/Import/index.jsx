@@ -133,7 +133,7 @@ const initialCheckState = {
   propertyValuesDontContainBackslash: undefined,
 }
 
-const ImportRco = ({ setImport }) => {
+const ImportRco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -560,6 +560,6 @@ const ImportRco = ({ setImport }) => {
       </Container>
     </SimpleBar>
   )
-}
+})
 
-export default observer(ImportRco)
+export default ImportRco

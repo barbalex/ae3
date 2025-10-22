@@ -62,7 +62,7 @@ const orgUsersQuery = gql`
   }
 `
 
-const OrgUsers = () => {
+const OrgUsers = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -137,6 +137,6 @@ const OrgUsers = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(OrgUsers)
+export default OrgUsers
