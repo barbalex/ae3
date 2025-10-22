@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -35,7 +34,7 @@ const linkifyProperties = {
 
 // when relations are passed in, a url is passed in too
 // this enables linking to the related object
-export const PropertyReadOnly = memo(({ label, value, url }) => {
+export const PropertyReadOnly = ({ label, value, url }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
@@ -45,9 +44,13 @@ export const PropertyReadOnly = memo(({ label, value, url }) => {
       <Linkify properties={linkifyProperties}>
         <Container className="property">
           <Label>{`${label}:`}</Label>
-          <Value>{url ? <a href={url}>{val}</a> : val}</Value>
+          <Value>
+            {url ?
+              <a href={url}>{val}</a>
+            : val}
+          </Value>
         </Container>
       </Linkify>
     </ErrorBoundary>
   )
-})
+}
