@@ -1,4 +1,4 @@
-import { useState, useReducer, useCallback, useContext, useMemo } from 'react'
+import { useState, useReducer, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
@@ -152,10 +152,10 @@ const ImportRco = ({ setImport }) => {
 
   const [orderBy, setOrderBy] = useState('objectId')
   const [sortDirection, setSortDirection] = useState('asc')
-  const setOrder = useCallback(({ orderBy, direction }) => {
+  const setOrder = ({ orderBy, direction }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
-  }, [])
+  }
 
   const { isLoading, error, data } = useQuery({
     queryKey: [
@@ -190,10 +190,7 @@ const ImportRco = ({ setImport }) => {
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
   const [imported, setImported] = useState(0)
-  const incrementImported = useCallback(
-    () => setImported(() => imported + 1),
-    [imported],
-  )
+  const incrementImported = () => setImported(() => imported + 1)
 
   const [checkState, dispatch] = useReducer(
     checkStateReducer,
@@ -288,136 +285,129 @@ const ImportRco = ({ setImport }) => {
     [importDataFields],
   )
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = () => {
-          const fileAsBinaryString = reader.result
-          const workbook = read(fileAsBinaryString, {
-              type: 'binary',
-            }),
-            sheetName = workbook.SheetNames[0],
-            worksheet = workbook.Sheets[sheetName]
-          const data = utils
-            .sheet_to_json(worksheet)
-            .map((d) => omit(d, ['__rowNum__']))
-          // test the data
-          setImportData(data)
-          let importDataFields = []
-          data.forEach((d) => {
-            importDataFields = union([...importDataFields, ...Object.keys(d)])
-          })
-          const objectIdFieldExistsAndIsCorrectlySpelled =
-            importDataFields.includes('objectId')
-          checkState.existsNoDataWithoutKey =
-            data.filter((d) => !!d.__EMPTY).length === 0
-          const ids = data.map((d) => d.id).filter((d) => d !== undefined)
-          const _idsExist = ids.length > 0
-          checkState.idsExist = _idsExist
-          checkState.idsAreUuid =
-            _idsExist ?
-              !ids.map((d) => isUuid.anyNonNil(d)).includes(false)
-            : undefined
-          checkState.idsAreUnique =
-            _idsExist ? ids.length === new Set(ids).size : undefined
-          const _objectIds = data
-            .map((d) => d.objectId)
-            .filter((d) => d !== undefined)
-          checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
-          checkState.objectIdsAreUuid =
-            objectIdFieldExistsAndIsCorrectlySpelled ?
-              !_objectIds.map((d) => isUuid.anyNonNil(d)).includes(false)
-            : undefined
-          setObjectIds(_objectIds)
+  const onDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const fileAsBinaryString = reader.result
+        const workbook = read(fileAsBinaryString, {
+            type: 'binary',
+          }),
+          sheetName = workbook.SheetNames[0],
+          worksheet = workbook.Sheets[sheetName]
+        const data = utils
+          .sheet_to_json(worksheet)
+          .map((d) => omit(d, ['__rowNum__']))
+        // test the data
+        setImportData(data)
+        let importDataFields = []
+        data.forEach((d) => {
+          importDataFields = union([...importDataFields, ...Object.keys(d)])
+        })
+        const objectIdFieldExistsAndIsCorrectlySpelled =
+          importDataFields.includes('objectId')
+        checkState.existsNoDataWithoutKey =
+          data.filter((d) => !!d.__EMPTY).length === 0
+        const ids = data.map((d) => d.id).filter((d) => d !== undefined)
+        const _idsExist = ids.length > 0
+        checkState.idsExist = _idsExist
+        checkState.idsAreUuid =
+          _idsExist ?
+            !ids.map((d) => isUuid.anyNonNil(d)).includes(false)
+          : undefined
+        checkState.idsAreUnique =
+          _idsExist ? ids.length === new Set(ids).size : undefined
+        const _objectIds = data
+          .map((d) => d.objectId)
+          .filter((d) => d !== undefined)
+        checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
+        checkState.objectIdsAreUuid =
+          objectIdFieldExistsAndIsCorrectlySpelled ?
+            !_objectIds.map((d) => isUuid.anyNonNil(d)).includes(false)
+          : undefined
+        setObjectIds(_objectIds)
 
-          const _objectRelationIds = data
-            .map((d) => d.objectIdRelation)
-            .filter((d) => d !== undefined)
-          const objectRelationIdFieldExistsAndIsCorrectlySpelled =
-            importDataFields.includes('objectIdRelation')
-          checkState.objectRelationIdsExist =
-            objectRelationIdFieldExistsAndIsCorrectlySpelled
-          checkState.objectRelationIdsAreUuid =
-            objectRelationIdFieldExistsAndIsCorrectlySpelled ?
-              !_objectRelationIds
-                .map((d) => isUuid.anyNonNil(d))
-                .includes(false)
-            : undefined
-          setObjectRelationIds(_objectRelationIds)
+        const _objectRelationIds = data
+          .map((d) => d.objectIdRelation)
+          .filter((d) => d !== undefined)
+        const objectRelationIdFieldExistsAndIsCorrectlySpelled =
+          importDataFields.includes('objectIdRelation')
+        checkState.objectRelationIdsExist =
+          objectRelationIdFieldExistsAndIsCorrectlySpelled
+        checkState.objectRelationIdsAreUuid =
+          objectRelationIdFieldExistsAndIsCorrectlySpelled ?
+            !_objectRelationIds.map((d) => isUuid.anyNonNil(d)).includes(false)
+          : undefined
+        setObjectRelationIds(_objectRelationIds)
 
-          const _relationTypes = data
-            .map((d) => d.relationType)
-            .filter((d) => d !== undefined)
-          const relationTypeFieldExistsAndIsCorrectlySpelled =
-            importDataFields.includes('objectIdRelation')
-          checkState.relationTypeExist =
-            relationTypeFieldExistsAndIsCorrectlySpelled &&
-            _relationTypes.length === data.length
+        const _relationTypes = data
+          .map((d) => d.relationType)
+          .filter((d) => d !== undefined)
+        const relationTypeFieldExistsAndIsCorrectlySpelled =
+          importDataFields.includes('objectIdRelation')
+        checkState.relationTypeExist =
+          relationTypeFieldExistsAndIsCorrectlySpelled &&
+          _relationTypes.length === data.length
 
-          const _pCOfOriginIds = data
-            .map((d) => d.propertyCollectionOfOrigin)
-            .filter((d) => d !== undefined)
-          const uniquePCOfOriginIds = [...new Set(_pCOfOriginIds)]
-          const _pCOfOriginIdsExist = uniquePCOfOriginIds.length > 0
-          checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
-          checkState.pCOfOriginIdsAreUuid =
-            _pCOfOriginIdsExist ?
-              !uniquePCOfOriginIds
-                .map((d) => isUuid.anyNonNil(d))
-                .includes(false)
-            : undefined
-          setPCOfOriginIds(uniquePCOfOriginIds)
+        const _pCOfOriginIds = data
+          .map((d) => d.propertyCollectionOfOrigin)
+          .filter((d) => d !== undefined)
+        const uniquePCOfOriginIds = [...new Set(_pCOfOriginIds)]
+        const _pCOfOriginIdsExist = uniquePCOfOriginIds.length > 0
+        checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
+        checkState.pCOfOriginIdsAreUuid =
+          _pCOfOriginIdsExist ?
+            !uniquePCOfOriginIds.map((d) => isUuid.anyNonNil(d)).includes(false)
+          : undefined
+        setPCOfOriginIds(uniquePCOfOriginIds)
 
-          const propertyKeys = union(
-            data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
-          )
-          const _existsPropertyKey = propertyKeys.length > 0
-          checkState.existsPropertyKey = _existsPropertyKey
-          checkState.propertyKeysDontContainApostroph =
-            _existsPropertyKey ?
-              !some(propertyKeys, (k) => {
-                if (!k || !k.includes) return false
-                return k.includes('"')
-              })
-            : undefined
-          checkState.propertyKeysDontContainBackslash =
-            _existsPropertyKey ?
-              !some(propertyKeys, (k) => {
-                if (!k || !k.includes) return false
-                return k.includes('\\')
-              })
-            : undefined
-          const propertyValues = union(
-            data.map((d) => Object.values(d))?.flat?.(),
-          )
-          checkState.propertyValuesDontContainApostroph = !some(
-            propertyValues,
-            (k) => {
+        const propertyKeys = union(
+          data.map((d) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
+        )
+        const _existsPropertyKey = propertyKeys.length > 0
+        checkState.existsPropertyKey = _existsPropertyKey
+        checkState.propertyKeysDontContainApostroph =
+          _existsPropertyKey ?
+            !some(propertyKeys, (k) => {
               if (!k || !k.includes) return false
               return k.includes('"')
-            },
-          )
-          checkState.propertyValuesDontContainBackslash = !some(
-            propertyValues,
-            (k) => {
+            })
+          : undefined
+        checkState.propertyKeysDontContainBackslash =
+          _existsPropertyKey ?
+            !some(propertyKeys, (k) => {
               if (!k || !k.includes) return false
               return k.includes('\\')
-            },
-          )
+            })
+          : undefined
+        const propertyValues = union(
+          data.map((d) => Object.values(d))?.flat?.(),
+        )
+        checkState.propertyValuesDontContainApostroph = !some(
+          propertyValues,
+          (k) => {
+            if (!k || !k.includes) return false
+            return k.includes('"')
+          },
+        )
+        checkState.propertyValuesDontContainBackslash = !some(
+          propertyValues,
+          (k) => {
+            if (!k || !k.includes) return false
+            return k.includes('\\')
+          },
+        )
 
-          dispatch(checkState)
-        }
-        reader.onabort = () => console.log('file reading was aborted')
-        reader.onerror = () => console.log('file reading has failed')
-        reader.readAsBinaryString(file)
+        dispatch(checkState)
       }
-    },
-    [checkState],
-  )
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.readAsBinaryString(file)
+    }
+  }
 
-  const onClickImport = useCallback(async () => {
+  const onClickImport = useCallbk(async () => {
     setImporting(true)
     const posts = []
     // need a list of all fields
@@ -458,14 +448,7 @@ const ImportRco = ({ setImport }) => {
     })
     setImport(false)
     setImporting(false)
-  }, [
-    apolloClient,
-    importData,
-    incrementImported,
-    pCId,
-    queryClient,
-    setImport,
-  ])
+  }
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
