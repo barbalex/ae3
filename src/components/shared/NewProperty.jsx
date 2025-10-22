@@ -1,4 +1,4 @@
-import { useState, memo, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import styled from '@emotion/styled'
@@ -17,7 +17,7 @@ const FieldContainer = styled.div`
   display: flex;
 `
 
-export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
+export const NewProperty = ({ id, properties: propertiesPrevious }) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
 
@@ -85,4 +85,4 @@ export const NewProperty = memo(({ id, properties: propertiesPrevious }) => {
       </Container>
     </ErrorBoundary>
   )
-})
+}

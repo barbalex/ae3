@@ -1,4 +1,4 @@
-import { useState, memo, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -28,85 +28,87 @@ const DeleteButton = styled(IconButton)`
   }
 `
 
-export const Property = memo(
-  ({ id, properties: propertiesPrevious, field: key }) => {
-    const apolloClient = useApolloClient()
-    const queryClient = useQueryClient()
-    const [value, setValue] = useState(propertiesPrevious[key] || '')
+export const Property = ({
+  id,
+  properties: propertiesPrevious,
+  field: key,
+}) => {
+  const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
+  const [value, setValue] = useState(propertiesPrevious[key] || '')
 
-    const store = useContext(storeContext)
-    const { scrollIntoView } = store
+  const store = useContext(storeContext)
+  const { scrollIntoView } = store
 
-    const onChange = (event) => setValue(event.target.value)
+  const onChange = (event) => setValue(event.target.value)
 
-    const onBlur = async (event) => {
-      const { value } = event.target
-      const prevValue = propertiesPrevious[key]
-      if (value !== prevValue) {
-        const properties = {
-          ...propertiesPrevious,
-          ...{ [key]: value },
-        }
-        await apolloClient.mutate({
-          mutation: updatePropertyMutation,
-          variables: { properties: JSON.stringify(properties), id },
-          optimisticResponse: {
-            updateObjectById: {
-              object: {
-                id,
-                properties: JSON.stringify(properties),
-                __typename: 'Object',
-              },
-              __typename: 'Object',
-            },
-            __typename: 'Mutation',
-          },
-        })
-        await queryClient.invalidateQueries({
-          queryKey: ['tree'],
-        })
-        scrollIntoView()
+  const onBlur = async (event) => {
+    const { value } = event.target
+    const prevValue = propertiesPrevious[key]
+    if (value !== prevValue) {
+      const properties = {
+        ...propertiesPrevious,
+        ...{ [key]: value },
       }
-    }
-
-    const onDelete = async () => {
-      const properties = omit(propertiesPrevious, key)
       await apolloClient.mutate({
         mutation: updatePropertyMutation,
         variables: { properties: JSON.stringify(properties), id },
+        optimisticResponse: {
+          updateObjectById: {
+            object: {
+              id,
+              properties: JSON.stringify(properties),
+              __typename: 'Object',
+            },
+            __typename: 'Object',
+          },
+          __typename: 'Mutation',
+        },
       })
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['tree'],
       })
+      scrollIntoView()
     }
+  }
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <TextField
-            label={key}
-            value={value}
-            onChange={onChange}
-            onBlur={onBlur}
-            fullWidth
-            multiline
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            variant="standard"
-          />
-          <DeleteButton
-            title="Feld löschen"
-            aria-label="Feld löschen"
-            onClick={onDelete}
-          >
-            <Icon>
-              <MdClear color="error" />
-            </Icon>
-          </DeleteButton>
-        </Container>
-      </ErrorBoundary>
-    )
-  },
-)
+  const onDelete = async () => {
+    const properties = omit(propertiesPrevious, key)
+    await apolloClient.mutate({
+      mutation: updatePropertyMutation,
+      variables: { properties: JSON.stringify(properties), id },
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['tree'],
+    })
+  }
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        <TextField
+          label={key}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          fullWidth
+          multiline
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
+          variant="standard"
+        />
+        <DeleteButton
+          title="Feld löschen"
+          aria-label="Feld löschen"
+          onClick={onDelete}
+        >
+          <Icon>
+            <MdClear color="error" />
+          </Icon>
+        </DeleteButton>
+      </Container>
+    </ErrorBoundary>
+  )
+}

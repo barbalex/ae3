@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
@@ -23,7 +22,7 @@ const linkifyProperties = {
   },
 }
 
-export const PCDescription = memo(({ pC }) => {
+export const PCDescription = ({ pC }) => {
   const userImportedByName = pC?.userByImportedBy?.name
   const userImportedByEmail = pC?.userByImportedBy?.email
   const organizationName = pC?.organizationByOrganizationId?.name
@@ -33,7 +32,10 @@ export const PCDescription = memo(({ pC }) => {
       <Linkify properties={linkifyProperties}>
         <Container>
           {pC.description && (
-            <PropertyReadOnly label="Beschreibung" value={pC.description} />
+            <PropertyReadOnly
+              label="Beschreibung"
+              value={pC.description}
+            />
           )}
           {pC.combining && (
             <PropertyReadOnly
@@ -42,10 +44,16 @@ export const PCDescription = memo(({ pC }) => {
             />
           )}
           {pC.lastUpdated && (
-            <PropertyReadOnly label="Stand" value={pC.lastUpdated} />
+            <PropertyReadOnly
+              label="Stand"
+              value={pC.lastUpdated}
+            />
           )}
           {pC.links && pC.links.length > 0 && (
-            <PropertyReadOnly label="Link" value={pC.links} />
+            <PropertyReadOnly
+              label="Link"
+              value={pC.links}
+            />
           )}
           {pC.termsOfUse && (
             <PropertyReadOnly
@@ -71,4 +79,4 @@ export const PCDescription = memo(({ pC }) => {
       </Linkify>
     </ErrorBoundary>
   )
-})
+}
