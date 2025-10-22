@@ -1,4 +1,4 @@
-import { useEffect, useContext, useCallback } from 'react'
+import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext.js'
@@ -9,7 +9,7 @@ export const IntoViewScroller = observer(() => {
   const store = useContext(storeContext)
   const { activeNodeArray, scrollIntoViewCounter } = store
 
-  const scroller = useCallback(() => {
+  const scroller = () => {
     // 1. Get id from url
     const id = getLastIdFromUrl(activeNodeArray)
     // console.log('IntoViewScroller, id:', id)
@@ -35,7 +35,7 @@ export const IntoViewScroller = observer(() => {
       block: 'center',
       inline: 'center',
     })
-  }, [activeNodeArray])
+  }
 
   useEffect(() => {
     scroller()

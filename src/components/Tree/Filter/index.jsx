@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useContext, useMemo } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
@@ -103,39 +103,34 @@ const TreeFilter = () => {
     },
   })
 
-  const onInputChange = useCallback(
-    (option) => {
-      if (!option) return
-      setTreeFilter({ text: option, id: treeFilterId })
-    },
-    [setTreeFilter, treeFilterId],
-  )
-  const onChange = useCallback(
-    (option) => {
-      if (!option) return
-      switch (option.type) {
-        case 'pC':
-          navigate(`/Eigenschaften-Sammlungen/${option.val}`)
-          setTimeout(() => scrollIntoView())
-          break
-        case 'art':
-        case 'lr':
-        default: {
-          /**
-           * set treeFilterId
-           * then app rerenders
-           * effect finds treeFilterId
-           * and result of objectUrlData query
-           * passes it to getUrlForObject
-           * mutates history
-           */
-          setTreeFilter({ id: option.val, text: option.label })
-          setTimeout(() => scrollIntoView())
-        }
+  const onInputChange = (option) => {
+    if (!option) return
+    setTreeFilter({ text: option, id: treeFilterId })
+  }
+
+  const onChange = (option) => {
+    if (!option) return
+    switch (option.type) {
+      case 'pC':
+        navigate(`/Eigenschaften-Sammlungen/${option.val}`)
+        setTimeout(() => scrollIntoView())
+        break
+      case 'art':
+      case 'lr':
+      default: {
+        /**
+         * set treeFilterId
+         * then app rerenders
+         * effect finds treeFilterId
+         * and result of objectUrlData query
+         * passes it to getUrlForObject
+         * mutates history
+         */
+        setTreeFilter({ id: option.val, text: option.label })
+        setTimeout(() => scrollIntoView())
       }
-    },
-    [navigate, scrollIntoView, setTreeFilter],
-  )
+    }
+  }
 
   useEffect(() => {
     const urlObject = objectUrlData?.objectById ?? {}
@@ -168,12 +163,8 @@ const TreeFilter = () => {
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({ client: apolloClient, treeFilter, cb, val })
   }, 600)
-  const loadOptions = useCallback(
-    (val, cb) => {
-      buildOptionsDebounced({ cb, val })
-    },
-    [buildOptionsDebounced],
-  )
+
+  const loadOptions = (val, cb) => buildOptionsDebounced({ cb, val })
 
   // TODO: replace with real value
   const singleColumnView = false

@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import {
   MdExpandMore as ExpandMoreIcon,
@@ -136,39 +136,34 @@ const Row = ({ data }) => {
   const { url } = data
   const level = url?.length ?? 0
 
-  const onClickNode = useCallback(async () => {
+  const onClickNode = async () => {
     // or if node is already active
     if (!isEqual(url, activeNodeArray)) {
       navigate(`/${url.join('/')}`)
     }
-  }, [activeNodeArray, navigate, url])
-  const onClickExpandMore = useCallback(
-    (event) => {
-      if (isEqual(url, activeNodeArray)) {
-        // close node if its expand more symbol was clicked
-        const newUrl = [...url]
-        newUrl.pop()
-        navigate(`/${newUrl.join('/')}`)
-        // prevent onClick on node
-        event.preventDefault()
-      }
-    },
-    [url, activeNodeArray, navigate],
-  )
-  const onClickContextMenu = useCallback(
-    (e, data, target) => {
-      onClickContextMenuDo({
-        e,
-        data,
-        target,
-        client: apolloClient,
-        store,
-        navigate,
-        queryClient,
-      })
-    },
-    [apolloClient, store, navigate, queryClient],
-  )
+  }
+
+  const onClickExpandMore = (event) => {
+    if (isEqual(url, activeNodeArray)) {
+      // close node if its expand more symbol was clicked
+      const newUrl = [...url]
+      newUrl.pop()
+      navigate(`/${newUrl.join('/')}`)
+      // prevent onClick on node
+      event.preventDefault()
+    }
+  }
+
+  const onClickContextMenu = (e, data, target) =>
+    onClickContextMenuDo({
+      e,
+      data,
+      target,
+      client: apolloClient,
+      store,
+      navigate,
+      queryClient,
+    })
 
   //console.log('Row, data:', data)
 
