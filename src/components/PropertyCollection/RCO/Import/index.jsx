@@ -407,7 +407,7 @@ const ImportRco = ({ setImport }) => {
     }
   }
 
-  const onClickImport = useCallbk(async () => {
+  const onClickImport = async () => {
     setImporting(true)
     const posts = []
     // need a list of all fields
