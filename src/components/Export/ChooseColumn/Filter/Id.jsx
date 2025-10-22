@@ -9,7 +9,7 @@ const IdField = styled(TextField)`
   margin-top: 2px !important;
 `
 
-const IdFilterField = () => {
+const IdFilterField = observer(() => {
   const store = useContext(storeContext)
   const { setIds } = store.export
 
@@ -43,6 +43,6 @@ const IdFilterField = () => {
       variant="standard"
     />
   )
-}
+})
 
-export default observer(IdFilterField)
+export default IdFilterField

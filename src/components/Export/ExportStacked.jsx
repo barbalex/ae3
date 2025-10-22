@@ -16,7 +16,7 @@ const Content = styled.div`
   height: 100%;
 `
 
-const ExportStacked = () => {
+const ExportStacked = observer(() => {
   const store = useContext(storeContext)
   const { windowWidth } = store
   const [tab, setTab] = useState(0)
@@ -42,6 +42,6 @@ const ExportStacked = () => {
       </Content>
     </>
   )
-}
+})
 
-export default observer(ExportStacked)
+export default ExportStacked

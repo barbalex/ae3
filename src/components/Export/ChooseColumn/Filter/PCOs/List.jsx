@@ -28,7 +28,7 @@ const query = gql`
   }
 `
 
-const PcosCardList = () => {
+const PcosCardList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -72,6 +72,6 @@ const PcosCardList = () => {
       ))}
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(PcosCardList)
+export default PcosCardList

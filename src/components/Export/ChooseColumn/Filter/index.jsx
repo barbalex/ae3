@@ -26,7 +26,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const Filter = () => {
+const Filter = observer(() => {
   const store = useContext(storeContext)
   const {
     setWithSynonymData,
@@ -109,6 +109,6 @@ const Filter = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Filter)
+export default Filter

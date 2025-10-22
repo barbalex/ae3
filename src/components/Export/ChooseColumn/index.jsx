@@ -47,7 +47,7 @@ const Container = styled.div`
   user-select: none !important;
 `
 
-const Export = () => {
+const Export = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -69,6 +69,10 @@ const Export = () => {
     setPropertiesExpanded(false)
   }
   const onToggleFilter = () => {
+    console.log('Export.ChooseColumn.onToggleFilter', {
+      exportTaxonomies,
+      filterExpanded,
+    })
     if (!filterExpanded && exportTaxonomies.length > 0) {
       setFilterExpanded(true)
       // close all others
@@ -175,6 +179,6 @@ const Export = () => {
       </SimpleBar>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Export)
+export default Export
