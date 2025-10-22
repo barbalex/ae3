@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
@@ -95,7 +95,7 @@ const OrgUsers = () => {
   const organizationId =
     orgUsersData?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
 
-  const onClickNew = useCallback(async () => {
+  const onClickNew = async () => {
     await apolloClient.mutate({
       mutation: createOrgUserMutation,
       variables: {
@@ -107,7 +107,7 @@ const OrgUsers = () => {
        */
     })
     orgUsersRefetch()
-  }, [apolloClient, orgUsersData, organizationId])
+  }
 
   if (orgUsersLoading) {
     return <Spinner />

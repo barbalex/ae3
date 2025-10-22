@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -128,62 +128,15 @@ const OrgUser = ({ orgUser, orgUsersRefetch }) => {
     .sort()
 
   const [nameError, setNameError] = useState()
-  const onChangeName = useCallback(
-    async (e) => {
-      const val = e.target.value
-      const user = users.find((u) => u.name === val)
-      if (user && user.id) {
-        const variables = {
-          nodeId: orgUser.nodeId,
-          organizationId: orgUser.organizationId,
-          userId: user.id,
-          role,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: updateOrgUserMutation,
-            variables,
-            optimisticResponse: {
-              updateOrganizationUser: {
-                organizationUser: {
-                  nodeId: orgUser.nodeId,
-                  id: orgUser.id,
-                  organizationId: orgUser.organizationId,
-                  userId: user.id,
-                  role,
-                  __typename: 'OrganizationUser',
-                },
-                __typename: 'Mutation',
-              },
-            },
-          })
-        } catch (error) {
-          console.log(error)
-          setUserId('')
-          return setNameError(error.message)
-        }
-        setUserId(user.id)
-        setNameError(undefined)
-      }
-    },
-    [
-      users,
-      orgUser.nodeId,
-      orgUser.organizationId,
-      orgUser.id,
-      role,
-      apolloClient,
-    ],
-  )
-  const [roleError, setRoleError] = useState()
-  const onChangeRole = useCallback(
-    async (event) => {
-      const newRole = event.target.value
+  const onChangeName = async (e) => {
+    const val = e.target.value
+    const user = users.find((u) => u.name === val)
+    if (user && user.id) {
       const variables = {
         nodeId: orgUser.nodeId,
         organizationId: orgUser.organizationId,
-        userId,
-        role: newRole,
+        userId: user.id,
+        role,
       }
       try {
         await apolloClient.mutate({
@@ -195,8 +148,8 @@ const OrgUser = ({ orgUser, orgUsersRefetch }) => {
                 nodeId: orgUser.nodeId,
                 id: orgUser.id,
                 organizationId: orgUser.organizationId,
-                userId,
-                role: newRole,
+                userId: user.id,
+                role,
                 __typename: 'OrganizationUser',
               },
               __typename: 'Mutation',
@@ -204,16 +157,52 @@ const OrgUser = ({ orgUser, orgUsersRefetch }) => {
           },
         })
       } catch (error) {
-        console.log('error.message:', error.message)
-        setRole('')
-        return setRoleError(error?.message)
+        console.log(error)
+        setUserId('')
+        return setNameError(error.message)
       }
-      setRole(newRole)
-      setRoleError(undefined)
-    },
-    [apolloClient, orgUser.id, orgUser.nodeId, orgUser.organizationId, userId],
-  )
-  const onClickDelete = useCallback(async () => {
+      setUserId(user.id)
+      setNameError(undefined)
+    }
+  }
+
+  const [roleError, setRoleError] = useState()
+  const onChangeRole = async (event) => {
+    const newRole = event.target.value
+    const variables = {
+      nodeId: orgUser.nodeId,
+      organizationId: orgUser.organizationId,
+      userId,
+      role: newRole,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: updateOrgUserMutation,
+        variables,
+        optimisticResponse: {
+          updateOrganizationUser: {
+            organizationUser: {
+              nodeId: orgUser.nodeId,
+              id: orgUser.id,
+              organizationId: orgUser.organizationId,
+              userId,
+              role: newRole,
+              __typename: 'OrganizationUser',
+            },
+            __typename: 'Mutation',
+          },
+        },
+      })
+    } catch (error) {
+      console.log('error.message:', error.message)
+      setRole('')
+      return setRoleError(error?.message)
+    }
+    setRole(newRole)
+    setRoleError(undefined)
+  }
+
+  const onClickDelete = async () => {
     await apolloClient.mutate({
       mutation: deleteOrgUserMutation,
       variables: {
@@ -251,7 +240,7 @@ const OrgUser = ({ orgUser, orgUsersRefetch }) => {
       },
     })
     orgUsersRefetch()
-  }, [apolloClient, orgName, orgUser.id])
+  }
 
   if (orgUsersLoading || allUsersLoading) {
     return null

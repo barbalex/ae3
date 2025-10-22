@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -166,68 +166,50 @@ export const PropertyCollection = observer(() => {
   const importedBy = pC.importedBy
   const importedByUser = allUsers.find((u) => u.id === importedBy)
 
-  const onClickStopEditing = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setEditingPCs(false)
-    },
-    [setEditingPCs],
-  )
-  const onClickStartEditing = useCallback(
-    (event) => {
-      event.stopPropagation()
-      setEditingPCs(true)
-    },
-    [setEditingPCs],
-  )
-  const onChangeCombining = useCallback(
-    (event, isChecked) =>
-      onBlurDo({
-        client: apolloClient,
-        field: 'combining',
-        pC,
-        value: isChecked,
-        prevValue: pC.combining,
-        queryClient,
-      }),
-    [apolloClient, pC, queryClient],
-  )
-  const onChangeOrganization = useCallback(
-    (event) =>
-      onBlurDo({
-        client: apolloClient,
-        field: 'organizationId',
-        pC,
-        value: event.target.value,
-        prevValue: pC.organizationId,
-        queryClient,
-      }),
-    [apolloClient, pC, queryClient],
-  )
-  const onChangeImportedBy = useCallback(
-    (event) =>
-      onBlurDo({
-        client: apolloClient,
-        field: 'importedBy',
-        pC,
-        value: event.target.value,
-        prevValue: pC.importedBy,
-        queryClient,
-      }),
-    [apolloClient, pC, queryClient],
-  )
-  const onChangeLastUpdated = useCallback(
-    (event) =>
-      onBlurDo({
-        client: apolloClient,
-        field: 'lastUpdated',
-        pC,
-        value: event.target.value,
-        prevValue: pC.lastUpdated,
-        queryClient,
-      }),
-    [apolloClient, pC, queryClient],
-  )
+  const onClickStopEditing = (event) => {
+    event.stopPropagation()
+    setEditingPCs(false)
+  }
+  const onClickStartEditing = (event) => {
+    event.stopPropagation()
+    setEditingPCs(true)
+  }
+  const onChangeCombining = (event, isChecked) =>
+    onBlurDo({
+      client: apolloClient,
+      field: 'combining',
+      pC,
+      value: isChecked,
+      prevValue: pC.combining,
+      queryClient,
+    })
+  const onChangeOrganization = (event) =>
+    onBlurDo({
+      client: apolloClient,
+      field: 'organizationId',
+      pC,
+      value: event.target.value,
+      prevValue: pC.organizationId,
+      queryClient,
+    })
+  const onChangeImportedBy = (event) =>
+    onBlurDo({
+      client: apolloClient,
+      field: 'importedBy',
+      pC,
+      value: event.target.value,
+      prevValue: pC.importedBy,
+      queryClient,
+    })
+  const onChangeLastUpdated = (event) =>
+    onBlurDo({
+      client: apolloClient,
+      field: 'lastUpdated',
+      pC,
+      value: event.target.value,
+      prevValue: pC.lastUpdated,
+      queryClient,
+    })
 
   if (pcLoading || allUsersLoading) {
     return <Container>Lade Daten...</Container>
