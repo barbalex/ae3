@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -86,7 +86,7 @@ const OptionsChoosen = () => {
       ...rcoFilters,
     ].length === 0
 
-  const onClickResetAll = useCallback(() => {
+  const onClickResetAll = () => {
     setType(null)
     setTaxonomies([])
     resetPcoProperties()
@@ -96,27 +96,16 @@ const OptionsChoosen = () => {
     resetPcoFilters()
     resetRcoFilters()
     setWithSynonymData(true)
-  }, [
-    resetPcoFilters,
-    resetPcoProperties,
-    resetRcoFilters,
-    resetRcoProperties,
-    resetTaxFilters,
-    resetTaxProperties,
-    setTaxonomies,
-    setType,
-    setWithSynonymData,
-  ])
-  const onClickResetType = useCallback(() => {
+  }
+
+  const onClickResetType = () => {
     setType()
     setTaxonomies([])
-  }, [setTaxonomies, setType])
-  const onClickResetTaxonomies = useCallback(() => {
-    setTaxonomies([])
-  }, [setTaxonomies])
-  const onClickResetExportWithSynonymData = useCallback(() => {
-    setWithSynonymData(true)
-  }, [setWithSynonymData])
+  }
+
+  const onClickResetTaxonomies = () => setTaxonomies([])
+
+  const onClickResetExportWithSynonymData = () => setWithSynonymData(true)
 
   if (noDataChoosen) return null
 
@@ -132,9 +121,9 @@ const OptionsChoosen = () => {
         </li>
         <li>
           {`Taxonomie${exportTaxonomies.length > 1 ? 'n' : ''}: ${
-            exportTaxonomies.length === 0
-              ? ' keine'
-              : exportTaxonomies.join(', ')
+            exportTaxonomies.length === 0 ?
+              ' keine'
+            : exportTaxonomies.join(', ')
           }`}
           {exportTaxonomies.length > 0 && (
             <ResetSpan onClick={onClickResetTaxonomies}>zurücksetzen</ResetSpan>
@@ -142,9 +131,9 @@ const OptionsChoosen = () => {
         </li>
         <li>
           {`${
-            withSynonymData
-              ? 'Informationen von Synonymen mit exportieren'
-              : 'Ohne Informationen von Synonymen'
+            withSynonymData ?
+              'Informationen von Synonymen mit exportieren'
+            : 'Ohne Informationen von Synonymen'
           }`}
           {!withSynonymData && (
             <ResetSpan onClick={onClickResetExportWithSynonymData}>
@@ -154,9 +143,9 @@ const OptionsChoosen = () => {
         </li>
         <li>
           {`Filter:${
-            [...taxFilters, ...pcoFilters, ...rcoFilters].length === 0
-              ? ' keine'
-              : ''
+            [...taxFilters, ...pcoFilters, ...rcoFilters].length === 0 ?
+              ' keine'
+            : ''
           }`}
           <ul>
             <TaxFilterItems taxFilters={taxFilters} />
@@ -166,9 +155,12 @@ const OptionsChoosen = () => {
         </li>
         <li>
           {`Eigenschaften:${
-            [...taxProperties, ...pcoProperties, ...rcoProperties].length === 0
-              ? ' keine (die id kommt immer mit)'
-              : ' (die id kommt immer mit)'
+            (
+              [...taxProperties, ...pcoProperties, ...rcoProperties].length ===
+              0
+            ) ?
+              ' keine (die id kommt immer mit)'
+            : ' (die id kommt immer mit)'
           }`}
           <ul>
             <TaxPropertiesItems taxProperties={taxProperties} />

@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -25,14 +25,13 @@ const ExportPcoFilterListItem = ({ filter }) => {
 
   const { pcname, pname, comparator, value } = filter
 
-  const onClick = useCallback(() => {
+  const onClick = () =>
     setPcoFilter({
       pcname,
       pname,
       comparator: '',
       value: '',
     })
-  }, [pcname, pname, setPcoFilter])
 
   return (
     <li>
