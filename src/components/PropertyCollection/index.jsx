@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -139,10 +139,7 @@ export const PropertyCollection = observer(() => {
   })
   const pcData = dataPc?.data
 
-  const pC = useMemo(
-    () => pcData?.propertyCollectionById ?? {},
-    [pcData?.propertyCollectionById],
-  )
+  const pC = pcData?.propertyCollectionById ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
   const { username } = login
   const user = allUsers.find((u) => u.name === username)

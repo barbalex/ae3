@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
@@ -177,6 +177,32 @@ export const pcoPreviewQuery = gql`
   }
 `
 
+const getPco = ({ pcoNodes, propKeys, sortDirection, orderBy }) => {
+  const pCORaw = (pcoNodes ?? []).map((p) => {
+    const nP = {}
+    nP['Objekt ID'] = p.objectId
+    nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
+    if (p.properties) {
+      const props = JSON.parse(p.properties)
+      Object.entries(props).forEach(([key, value]) => {
+        if (typeof value === 'boolean') {
+          nP[key] = booleanToJaNein(value)
+        } else {
+          nP[key] = value
+        }
+      })
+    }
+    // add keys that may be missing
+    for (const key of propKeys) {
+      if (!exists(nP[key])) {
+        nP[key] = null
+      }
+    }
+    return nP
+  })
+  return doOrderBy(pCORaw, orderBy, sortDirection)
+}
+
 export const PCO = observer(() => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -224,40 +250,14 @@ export const PCO = observer(() => {
       ?.vPropertyCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const pCO = useMemo(() => {
-    const pCORaw = (
+  const pCO = getPco({
+    pcoNodes:
       pcoData?.propertyCollectionById
-        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
-    ).map((p) => {
-      const nP = {}
-      nP['Objekt ID'] = p.objectId
-      nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
-      if (p.properties) {
-        const props = JSON.parse(p.properties)
-        Object.entries(props).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
-            nP[key] = booleanToJaNein(value)
-          } else {
-            nP[key] = value
-          }
-        })
-      }
-      // add keys that may be missing
-      for (const key of propKeys) {
-        if (!exists(nP[key])) {
-          nP[key] = null
-        }
-      }
-      return nP
-    })
-    return doOrderBy(pCORaw, orderBy, sortDirection)
-  }, [
-    pcoData?.propertyCollectionById
-      ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
+        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
     propKeys,
     sortDirection,
     orderBy,
-  ])
+  })
   // collect all keys and sort property keys by name
   const keys = ['Objekt ID', 'Objekt Name', ...propKeys.sort()]
   const pCOWriters = (

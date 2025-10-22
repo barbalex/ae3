@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -115,10 +115,7 @@ const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   const [userId, setUserId] = useState(orgUser.userId)
   const [role, setRole] = useState(orgUser.role || null)
 
-  const users = useMemo(
-    () => allUsersData?.allUsers?.nodes ?? [],
-    [allUsersData?.allUsers?.nodes],
-  )
+  const users = allUsersData?.allUsers?.nodes ?? []
   const orgName = orgUsersData?.organizationByName?.name ?? ''
   const user = users.find((user) => user.id === userId)
   const userName = user ? user.name || '' : ''
