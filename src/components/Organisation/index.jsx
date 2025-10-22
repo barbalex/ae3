@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -80,9 +80,7 @@ const Organization = () => {
 
   const [tab, setTab] = useState(0)
 
-  const onChangeTab = useCallback((event, value) => {
-    setTab(value)
-  }, [])
+  const onChangeTab = (event, value) => setTab(value)
 
   const org = orgData?.organizationById ?? {}
 

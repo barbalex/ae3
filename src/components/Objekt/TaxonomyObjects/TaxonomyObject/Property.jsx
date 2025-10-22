@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
@@ -20,39 +20,34 @@ export const Property = ({ field, label, objekt, disabled }) => {
   const store = useContext(storeContext)
   const { scrollIntoView } = store
 
-  const onChange = useCallback((event) => {
-    setValue(event.target.value)
-  }, [])
-  const onBlur = useCallback(
-    async (event) => {
-      const { value } = event.target
-      if (value !== 'prevValue') {
-        await apolloClient.mutate({
-          mutation: updateObjectMutation,
-          variables: {
-            name: value,
-            id: objekt.id,
-          },
-          optimisticResponse: {
-            updateObjectById: {
-              object: {
-                id: objekt.id,
-                name: value,
-                __typename: 'Object',
-              },
+  const onChange = (event) => setValue(event.target.value)
+  const onBlur = async (event) => {
+    const { value } = event.target
+    if (value !== 'prevValue') {
+      await apolloClient.mutate({
+        mutation: updateObjectMutation,
+        variables: {
+          name: value,
+          id: objekt.id,
+        },
+        optimisticResponse: {
+          updateObjectById: {
+            object: {
+              id: objekt.id,
+              name: value,
               __typename: 'Object',
             },
-            __typename: 'Mutation',
+            __typename: 'Object',
           },
-        })
-        await queryClient.invalidateQueries({
-          queryKey: ['tree'],
-        })
-        scrollIntoView()
-      }
-    },
-    [apolloClient, objekt.id],
-  )
+          __typename: 'Mutation',
+        },
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['tree'],
+      })
+      scrollIntoView()
+    }
+  }
 
   return (
     <ErrorBoundary>
