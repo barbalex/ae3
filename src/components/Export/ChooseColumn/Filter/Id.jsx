@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -15,19 +15,15 @@ const IdFilterField = () => {
 
   const [value, setValue] = useState('')
 
-  const handleChange = useCallback(
-    (event) => {
-      const { value } = event.target
-      setValue(value)
-      // convert values into an array of values, separated by commas
-      //const valueForStore = value ? JSON.parse(`"[${event.target.value}]"`) : []
-      const valueForStore = value
-        ? event.target.value.replace(/\s/g, '').split(',')
-        : []
-      setIds(valueForStore)
-    },
-    [setIds],
-  )
+  const handleChange = (event) => {
+    const { value } = event.target
+    setValue(value)
+    // convert values into an array of values, separated by commas
+    //const valueForStore = value ? JSON.parse(`"[${event.target.value}]"`) : []
+    const valueForStore =
+      value ? event.target.value.replace(/\s/g, '').split(',') : []
+    setIds(valueForStore)
+  }
 
   return (
     <IdField

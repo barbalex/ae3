@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
@@ -36,22 +36,19 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
   const { addFilterFields, setPcoFilter, addPcoProperty } = store.export
 
-  const onChange = useCallback(
-    (e, val) => {
-      let comparator = '='
-      let value = val
-      if (value === 'null') {
-        comparator = null
-        value = null
-      }
-      setPcoFilter({ pcname, pname, comparator, value })
-      // if value and not choosen, choose
-      if (addFilterFields) {
-        addPcoProperty({ pcname, pname })
-      }
-    },
-    [setPcoFilter, pcname, pname, addFilterFields, addPcoProperty],
-  )
+  const onChange = (e, val) => {
+    let comparator = '='
+    let value = val
+    if (value === 'null') {
+      comparator = null
+      value = null
+    }
+    setPcoFilter({ pcname, pname, comparator, value })
+    // if value and not choosen, choose
+    if (addFilterFields) {
+      addPcoProperty({ pcname, pname })
+    }
+  }
 
   return (
     <Container>

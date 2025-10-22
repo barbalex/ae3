@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -45,12 +45,15 @@ const PropertiesContainer = styled.div`
 const PcoCard = ({ pc, count }) => {
   const [expanded, setExpanded] = useState(false)
 
-  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickAction = () => setExpanded(!expanded)
 
   return (
     <ErrorBoundary>
       <StyledCard key={pc}>
-        <StyledCardActions disableSpacing onClick={onClickAction}>
+        <StyledCardActions
+          disableSpacing
+          onClick={onClickAction}
+        >
           <CardActionTitle>
             {pc}
             <Count>{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</Count>
@@ -65,7 +68,11 @@ const PcoCard = ({ pc, count }) => {
             </Icon>
           </CardActionIconButton>
         </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <PropertiesContainer>
             <Properties pc={pc} />
           </PropertiesContainer>
