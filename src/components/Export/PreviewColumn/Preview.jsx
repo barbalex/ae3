@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo } from 'react'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import styled from '@emotion/styled'
@@ -137,66 +137,57 @@ const Preview = () => {
     return sf
   }, [sortField])
 
-  const onGridSort = useCallback(
-    (column, direction) => {
-      if (direction === 'NONE') return setSortField(undefined)
-      // setSortFields
-      // 1. build array of sortFields including their column name
-      //    will be used to find the correct sortField
-      const sortFieldsWithColumn = []
-      taxFields.forEach((taxField) => {
-        sortFieldsWithColumn.push({
-          tname: 'object',
-          pcname: taxField.taxname,
-          pname: taxField.pname,
-          relationtype: '',
-          direction,
-          columnName: removeBadChars(`${taxField.taxname}__${taxField.pname}`),
-        })
+  const onGridSort = (column, direction) => {
+    if (direction === 'NONE') return setSortField(undefined)
+    // setSortFields
+    // 1. build array of sortFields including their column name
+    //    will be used to find the correct sortField
+    const sortFieldsWithColumn = []
+    taxFields.forEach((taxField) => {
+      sortFieldsWithColumn.push({
+        tname: 'object',
+        pcname: taxField.taxname,
+        pname: taxField.pname,
+        relationtype: '',
+        direction,
+        columnName: removeBadChars(`${taxField.taxname}__${taxField.pname}`),
       })
-      pcoProperties.forEach((pcoProperty) => {
-        sortFieldsWithColumn.push({
-          tname: 'property_collection_object',
-          pcname: pcoProperty.pcname,
-          pname: pcoProperty.pname,
-          relationtype: '',
-          direction,
-          columnName: removeBadChars(
-            `${pcoProperty.pcname}__${pcoProperty.pname}`,
-          ),
-        })
+    })
+    pcoProperties.forEach((pcoProperty) => {
+      sortFieldsWithColumn.push({
+        tname: 'property_collection_object',
+        pcname: pcoProperty.pcname,
+        pname: pcoProperty.pname,
+        relationtype: '',
+        direction,
+        columnName: removeBadChars(
+          `${pcoProperty.pcname}__${pcoProperty.pname}`,
+        ),
       })
-      rcoProperties.forEach((rcoProperty) => {
-        sortFieldsWithColumn.push({
-          tname: 'relation',
-          pcname: rcoProperty.pcname,
-          pname: rcoProperty.pname,
-          relationtype: rcoProperty.relationtype,
-          direction: direction,
-          columnName: removeBadChars(
-            `${rcoProperty.pcname}__${rcoProperty.relationtype}__${rcoProperty.pname}`,
-          ),
-        })
+    })
+    rcoProperties.forEach((rcoProperty) => {
+      sortFieldsWithColumn.push({
+        tname: 'relation',
+        pcname: rcoProperty.pcname,
+        pname: rcoProperty.pname,
+        relationtype: rcoProperty.relationtype,
+        direction: direction,
+        columnName: removeBadChars(
+          `${rcoProperty.pcname}__${rcoProperty.relationtype}__${rcoProperty.pname}`,
+        ),
       })
-      // 2. find sortField, remove columnName, setSortFields
-      const sortField = sortFieldsWithColumn.find(
-        (sf) => sf.columnName === column,
-      )
+    })
+    // 2. find sortField, remove columnName, setSortFields
+    const sortField = sortFieldsWithColumn.find(
+      (sf) => sf.columnName === column,
+    )
 
-      if (sortField) {
-        setSortField(sortField)
-      }
-    },
-    [pcoProperties, rcoProperties, taxFields],
-  )
+    if (sortField) {
+      setSortField(sortField)
+    }
+  }
 
-  const setOrder = useCallback(
-    ({ by, direction }) => {
-      // console.log('setOrder', { by, direction })
-      onGridSort(by, direction)
-    },
-    [onGridSort],
-  )
+  const setOrder = ({ by, direction }) => onGridSort(by, direction)
 
   const {
     isLoading: exportLoading,
@@ -254,18 +245,18 @@ const Preview = () => {
 
   const [message, setMessage] = useState('')
 
-  const onSetMessage = useCallback((message) => {
+  const onSetMessage = (message) => {
     setMessage(message)
     if (message) {
       setTimeout(() => setMessage(''), 5000)
     }
-  }, [])
+  }
 
   const fields = rows[0] ? Object.keys(rows[0]).map((k) => k) : []
 
   const anzFelder = fields.length ?? 0
 
-  const onClickXlsx = useCallback(async () => {
+  const onClickXlsx = async () => {
     // 1. download the full rows
     // 2. rowsFromObjects
     const data = await apolloClient.mutate({
@@ -292,25 +283,12 @@ const Preview = () => {
       : []
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({ rows, onSetMessage })
-  }, [
-    apolloClient,
-    exportIds,
-    onSetMessage,
-    pcoFilters,
-    pcoProperties,
-    rcoFilters,
-    rcoProperties,
-    sortFieldForQuery,
-    taxFields,
-    taxFilters,
-    taxonomies,
-    type,
-    withSynonymData,
-  ])
-  const onClickCsv = useCallback(async () => {
+  }
+
+  const onClickCsv = async () => {
     const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(rows)
-  }, [rows])
+  }
 
   if (exportError) {
     return (

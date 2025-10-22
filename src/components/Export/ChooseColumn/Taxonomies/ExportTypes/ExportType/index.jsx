@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -37,10 +37,9 @@ const ExportTypes = ({ type }) => {
   } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const onCheckType = useCallback(
-    async (event, isChecked) => {
-      const { name } = event.target
-      const taxonomiesQuery = gql`
+  const onCheckType = async (event, isChecked) => {
+    const { name } = event.target
+    const taxonomiesQuery = gql`
         query AllTaxonomiesQuery {
           allTaxonomies(filter: {type: {equalTo: ${
             type === 'Arten' ? 'ART' : 'LEBENSRAUM'
@@ -53,38 +52,34 @@ const ExportTypes = ({ type }) => {
           }
         }
       `
-      const { data } = apolloClient.query({ query: taxonomiesQuery })
-      const taxonomies = data?.allTaxonomies?.nodes
-      if (isChecked) {
-        setExportType(name)
-        // check if only one Taxonomy exists
-        // if so, check it
-        if ((taxonomies ?? []).length === 1) {
-          const taxonomyName = taxonomies[0]?.taxonomyName
-          setTaxonomies([...exportTaxonomies, taxonomyName])
-        }
-        // check if taxonomy(s) of other type was choosen
-        // if so: uncheck
-        const exportTaxonomiesWithoutOtherType = exportTaxonomies.filter(
-          (t) => exportTypeTAXToReadable[t.type] === name,
-        )
-        if (exportTaxonomiesWithoutOtherType.length < exportTaxonomies.length) {
-          setTaxonomies(exportTaxonomiesWithoutOtherType)
-        }
-      } else {
-        setExportType(exportTypes.find((t) => t !== name))
-        // uncheck all taxonomies of this type
-        const taxonomiesToUncheck = (taxonomies ?? []).map(
-          (t) => t.taxonomyName,
-        )
-        const remainingTaxonomies = exportTaxonomies.filter(
-          (t) => !taxonomiesToUncheck.includes(t),
-        )
-        setTaxonomies(remainingTaxonomies)
+    const { data } = apolloClient.query({ query: taxonomiesQuery })
+    const taxonomies = data?.allTaxonomies?.nodes
+    if (isChecked) {
+      setExportType(name)
+      // check if only one Taxonomy exists
+      // if so, check it
+      if ((taxonomies ?? []).length === 1) {
+        const taxonomyName = taxonomies[0]?.taxonomyName
+        setTaxonomies([...exportTaxonomies, taxonomyName])
       }
-    },
-    [type, apolloClient, setExportType, exportTaxonomies, setTaxonomies],
-  )
+      // check if taxonomy(s) of other type was choosen
+      // if so: uncheck
+      const exportTaxonomiesWithoutOtherType = exportTaxonomies.filter(
+        (t) => exportTypeTAXToReadable[t.type] === name,
+      )
+      if (exportTaxonomiesWithoutOtherType.length < exportTaxonomies.length) {
+        setTaxonomies(exportTaxonomiesWithoutOtherType)
+      }
+    } else {
+      setExportType(exportTypes.find((t) => t !== name))
+      // uncheck all taxonomies of this type
+      const taxonomiesToUncheck = (taxonomies ?? []).map((t) => t.taxonomyName)
+      const remainingTaxonomies = exportTaxonomies.filter(
+        (t) => !taxonomiesToUncheck.includes(t),
+      )
+      setTaxonomies(remainingTaxonomies)
+    }
+  }
 
   return (
     <ErrorBoundary>

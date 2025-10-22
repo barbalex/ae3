@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -49,25 +49,22 @@ const Taxonomies = ({ type }) => {
   const { data, error } = useQuery(taxonomiesQuery)
   const taxonomies = data?.allTaxonomies?.nodes
 
-  const onCheckTaxonomy = useCallback(
-    async (event, isChecked) => {
-      const { name } = event.target
-      let taxonomies
-      if (isChecked) {
-        taxonomies = [...exportTaxonomies, name]
-        setTaxonomies(taxonomies)
-      } else {
-        taxonomies = exportTaxonomies.filter((c) => c !== name)
-        setTaxonomies(taxonomies)
-        if ((taxonomies ?? []).length === 0) {
-          // this was the only taxonomy in this type
-          // it makes sense to also uncheck the type
-          setType(null)
-        }
+  const onCheckTaxonomy = async (event, isChecked) => {
+    const { name } = event.target
+    let taxonomies
+    if (isChecked) {
+      taxonomies = [...exportTaxonomies, name]
+      setTaxonomies(taxonomies)
+    } else {
+      taxonomies = exportTaxonomies.filter((c) => c !== name)
+      setTaxonomies(taxonomies)
+      if ((taxonomies ?? []).length === 0) {
+        // this was the only taxonomy in this type
+        // it makes sense to also uncheck the type
+        setType(null)
       }
-    },
-    [exportTaxonomies, setTaxonomies, setType],
-  )
+    }
+  }
 
   if (error) return `Fehler beim Laden der Taxonomien: ${error.message}`
 
