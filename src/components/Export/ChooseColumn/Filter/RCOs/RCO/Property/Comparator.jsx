@@ -23,30 +23,32 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const RcoComparator = ({ pcname, relationtype, pname, value, comparator }) => {
-  const store = useContext(storeContext)
-  const { setRcoFilters } = store.export
+const RcoComparator = observer(
+  ({ pcname, relationtype, pname, value, comparator }) => {
+    const store = useContext(storeContext)
+    const { setRcoFilters } = store.export
 
-  const onChange = (event) =>
-    setRcoFilters({
-      pcname,
-      relationtype,
-      pname,
-      comparator: event.target.value,
-      value,
-    })
+    const onChange = (event) =>
+      setRcoFilters({
+        pcname,
+        relationtype,
+        pname,
+        comparator: event.target.value,
+        value,
+      })
 
-  return (
-    <Container>
-      <StyledFormControl variant="standard">
-        <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
-        <ComparatorSelect
-          comparator={comparator}
-          onChange={onChange}
-        />
-      </StyledFormControl>
-    </Container>
-  )
-}
+    return (
+      <Container>
+        <StyledFormControl variant="standard">
+          <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
+          <ComparatorSelect
+            comparator={comparator}
+            onChange={onChange}
+          />
+        </StyledFormControl>
+      </Container>
+    )
+  },
+)
 
-export default observer(RcoComparator)
+export default RcoComparator

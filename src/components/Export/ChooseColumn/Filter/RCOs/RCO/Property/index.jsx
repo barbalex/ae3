@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `
 
-const RcoField = ({ pcname, relationtype, pname, jsontype }) => {
+const RcoField = observer(({ pcname, relationtype, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { rcoFilters } = store.export
 
@@ -60,6 +60,6 @@ const RcoField = ({ pcname, relationtype, pname, jsontype }) => {
       )}
     </Container>
   )
-}
+})
 
-export default observer(RcoField)
+export default RcoField

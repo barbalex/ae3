@@ -36,7 +36,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RcosCardList = () => {
+const RcosCardList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -89,6 +89,6 @@ const RcosCardList = () => {
       ))}
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(RcosCardList)
+export default RcosCardList

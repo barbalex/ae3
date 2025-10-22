@@ -96,124 +96,119 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
   />
 )
 
-const IntegrationAutosuggest = ({
-  relationtype,
-  pcname,
-  pname,
-  jsontype,
-  comparator,
-  value: propValue,
-}) => {
-  const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const { addFilterFields, setRcoFilters, addRcoProperty } = store.export
+const IntegrationAutosuggest = observer(
+  ({ relationtype, pcname, pname, jsontype, comparator, value: propValue }) => {
+    const apolloClient = useApolloClient()
+    const store = useContext(storeContext)
+    const { addFilterFields, setRcoFilters, addRcoProperty } = store.export
 
-  // Problem with loading data
-  // Want to load all data when user focuses on input
-  // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
-  // So need to set key on Select and update it on focus
-  // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
-  const ref = useRef()
-  const [focusCount, setFocusCount] = useState(0)
+    // Problem with loading data
+    // Want to load all data when user focuses on input
+    // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
+    // So need to set key on Select and update it on focus
+    // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
+    const ref = useRef()
+    const [focusCount, setFocusCount] = useState(0)
 
-  const [value, setValue] = useState(propValue || '')
-  const [error, setError] = useState(undefined)
+    const [value, setValue] = useState(propValue || '')
+    const [error, setError] = useState(undefined)
 
-  const loadOptions = async (val) => {
-    if (!focusCount) return []
-    const { data, error } = await apolloClient.query({
-      query: rcoFieldPropQuery,
-      variables: {
-        tableName: 'relation',
-        propName: pname,
-        pcFieldName: 'property_collection_id',
-        pcTableName: 'property_collection',
-        pcName: pcname,
-        propValue: val ?? '',
-      },
-    })
-    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
-      value: n.value,
-      label: n.value,
-    }))
-    setValue(val)
-    setError(error)
-    return returnData
-  }
-
-  const setFilter = (val) => {
-    // 1. change filter value
-    let comparatorValue = comparator
-    if (!comparator && val) comparatorValue = 'ILIKE'
-    if (!val) comparatorValue = null
-    setRcoFilters({
-      pcname,
-      relationtype,
-      pname,
-      comparator: comparatorValue,
-      value: val,
-    })
-    // 2. if value and field not choosen, choose it
-    if (addFilterFields && value) {
-      addRcoProperty({ pcname, relationtype, pname })
+    const loadOptions = async (val) => {
+      if (!focusCount) return []
+      const { data, error } = await apolloClient.query({
+        query: rcoFieldPropQuery,
+        variables: {
+          tableName: 'relation',
+          propName: pname,
+          pcFieldName: 'property_collection_id',
+          pcTableName: 'property_collection',
+          pcName: pcname,
+          propValue: val ?? '',
+        },
+      })
+      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+        value: n.value,
+        label: n.value,
+      }))
+      setValue(val)
+      setError(error)
+      return returnData
     }
-  }
 
-  const onBlur = () => setFilter(value)
-
-  const onChange = (newValue, actionMeta) => {
-    // console.log('onChange', { newValue, actionMeta })
-    let value
-    switch (actionMeta.action) {
-      case 'clear':
-        value = ''
-        break
-      default:
-        value = newValue?.value
-        break
+    const setFilter = (val) => {
+      // 1. change filter value
+      let comparatorValue = comparator
+      if (!comparator && val) comparatorValue = 'ILIKE'
+      if (!val) comparatorValue = null
+      setRcoFilters({
+        pcname,
+        relationtype,
+        pname,
+        comparator: comparatorValue,
+        value: val,
+      })
+      // 2. if value and field not choosen, choose it
+      if (addFilterFields && value) {
+        addRcoProperty({ pcname, relationtype, pname })
+      }
     }
-    setValue(value)
-    setFilter(value)
-  }
 
-  if (error) {
-    return `Error loading data: ${error.message}`
-  }
+    const onBlur = () => setFilter(value)
 
-  const valueToShow = value ? { value, label: value } : undefined
+    const onChange = (newValue, actionMeta) => {
+      // console.log('onChange', { newValue, actionMeta })
+      let value
+      switch (actionMeta.action) {
+        case 'clear':
+          value = ''
+          break
+        default:
+          value = newValue?.value
+          break
+      }
+      setValue(value)
+      setFilter(value)
+    }
 
-  return (
-    <Container>
-      <Label>{`${pname} (${readableType(jsontype)})`}</Label>
-      <StyledSelect
-        key={focusCount}
-        ref={ref}
-        value={valueToShow}
-        defaultOptions={true}
-        onChange={onChange}
-        onBlur={onBlur}
-        onFocus={() => {
-          if (focusCount === 0) {
-            setFocusCount(1)
-            setTimeout(() => {
-              ref.current.onMenuOpen()
-              ref.current.focus()
-            })
-          }
-        }}
-        formatOptionLabel={formatOptionLabel}
-        placeholder={''}
-        noOptionsMessage={noOptionsMessage}
-        loadingMessage={loadingMessage}
-        classNamePrefix="react-select"
-        loadOptions={loadOptions}
-        cacheOptions
-        isClearable
-        openMenuOnFocus={true}
-        spellCheck={false}
-      />
-    </Container>
-  )
-}
+    if (error) {
+      return `Error loading data: ${error.message}`
+    }
 
-export default observer(IntegrationAutosuggest)
+    const valueToShow = value ? { value, label: value } : undefined
+
+    return (
+      <Container>
+        <Label>{`${pname} (${readableType(jsontype)})`}</Label>
+        <StyledSelect
+          key={focusCount}
+          ref={ref}
+          value={valueToShow}
+          defaultOptions={true}
+          onChange={onChange}
+          onBlur={onBlur}
+          onFocus={() => {
+            if (focusCount === 0) {
+              setFocusCount(1)
+              setTimeout(() => {
+                ref.current.onMenuOpen()
+                ref.current.focus()
+              })
+            }
+          }}
+          formatOptionLabel={formatOptionLabel}
+          placeholder={''}
+          noOptionsMessage={noOptionsMessage}
+          loadingMessage={loadingMessage}
+          classNamePrefix="react-select"
+          loadOptions={loadOptions}
+          cacheOptions
+          isClearable
+          openMenuOnFocus={true}
+          spellCheck={false}
+        />
+      </Container>
+    )
+  },
+)
+
+export default IntegrationAutosuggest
