@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -95,16 +95,12 @@ const RCO = ({ pc }) => {
   const rcoProperties =
     data?.data?.rcoPropertiesByTaxonomiesFunction?.nodes ?? []
 
-  const rcoPropertiesByPropertyCollection = useMemo(
-    () =>
-      groupBy(rcoProperties, (x) => {
-        if (x.propertyCollectionName.includes(x.relationType)) {
-          return x.propertyCollectionName
-        }
-        return `${x.propertyCollectionName}: ${x.relationType}`
-      }),
-    [rcoProperties],
-  )
+  const rcoPropertiesByPropertyCollection = groupBy(rcoProperties, (x) => {
+    if (x.propertyCollectionName.includes(x.relationType)) {
+      return x.propertyCollectionName
+    }
+    return `${x.propertyCollectionName}: ${x.relationType}`
+  })
 
   if (error) {
     return (

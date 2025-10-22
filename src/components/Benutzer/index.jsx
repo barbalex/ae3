@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useMemo } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -61,7 +61,7 @@ const User = () => {
         },
       }),
   })
-  const user = useMemo(() => data?.data?.userById ?? {}, [data?.data?.userById])
+  const user = data?.data?.userById ?? {}
 
   const [name, setName] = useState(user?.name)
   const [nameErrorText, setNameErrorText] = useState('')
