@@ -25,7 +25,7 @@ const StyledPaper = styled(Paper)`
   margin-top: 10px;
 `
 
-const Taxonomies = () => {
+const Taxonomies = observer(() => {
   const store = useContext(storeContext)
   const { type: exportType } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -45,7 +45,10 @@ const Taxonomies = () => {
       <Container>
         <HowTo />
         <ExportTypes />
-        <StyledPaper elevation={1} data-bgcolor={paperBackgroundColor}>
+        <StyledPaper
+          elevation={1}
+          data-bgcolor={paperBackgroundColor}
+        >
           <PaperTextContainer>
             <PropertyTextDiv>{textProperties}</PropertyTextDiv>
           </PaperTextContainer>
@@ -53,6 +56,6 @@ const Taxonomies = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Taxonomies)
+export default Taxonomies

@@ -31,7 +31,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const TaxChooser = ({ taxname, pname, count }) => {
+const TaxChooser = observer(({ taxname, pname, count }) => {
   const store = useContext(storeContext)
   const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
 
@@ -64,6 +64,6 @@ const TaxChooser = ({ taxname, pname, count }) => {
       />
     </Container>
   )
-}
+})
 
-export default observer(TaxChooser)
+export default TaxChooser

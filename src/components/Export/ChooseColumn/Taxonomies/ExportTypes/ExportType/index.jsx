@@ -27,7 +27,7 @@ const TypeLabel = styled(FormControlLabel)`
   }
 `
 
-const ExportTypes = ({ type }) => {
+const ExportTypes = observer(({ type }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -99,6 +99,6 @@ const ExportTypes = ({ type }) => {
       </TypeContainer>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(ExportTypes)
+export default ExportTypes
