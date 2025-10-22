@@ -48,7 +48,7 @@ const objectQuery = gql`
   }
 `
 
-const IdParameter = () => {
+const IdParameter = observer(() => {
   const store = useContext(storeContext)
   const navigate = useNavigate()
   /**
@@ -76,6 +76,6 @@ const IdParameter = () => {
     }
   }, [data?.objectById, error, hasObjectId, navigate, store])
   return null
-}
+})
 
-export default observer(IdParameter)
+export default IdParameter

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import storeContext from '../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
 
-const ActiveNodeArraySetter = () => {
+const ActiveNodeArraySetter = observer(() => {
   const store = useContext(storeContext)
   const { setActiveNodeArray } = store
 
@@ -18,6 +18,6 @@ const ActiveNodeArraySetter = () => {
     // console.log('ActiveNodeArraySetter: setting activeNodeArray')
     setActiveNodeArray(getActiveNodeArrayFromPathname(), navigate)
   }, [navigate, pathname, setActiveNodeArray])
-}
+})
 
-export default observer(ActiveNodeArraySetter)
+export default ActiveNodeArraySetter

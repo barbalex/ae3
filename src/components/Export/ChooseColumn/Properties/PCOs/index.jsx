@@ -61,7 +61,7 @@ const query = gql`
   }
 `
 
-const PcoList = ({ pcoExpanded, onTogglePco }) => {
+const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -119,6 +119,6 @@ const PcoList = ({ pcoExpanded, onTogglePco }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(PcoList)
+export default PcoList

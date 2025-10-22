@@ -93,123 +93,119 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
   />
 )
 
-const IntegrationAutosuggest = ({
-  taxname,
-  pname,
-  jsontype,
-  comparator,
-  value: propsValue,
-}) => {
-  const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const { addFilterFields, addTaxProperty, setTaxFilters } = store.export
+const IntegrationAutosuggest = observer(
+  ({ taxname, pname, jsontype, comparator, value: propsValue }) => {
+    const apolloClient = useApolloClient()
+    const store = useContext(storeContext)
+    const { addFilterFields, addTaxProperty, setTaxFilters } = store.export
 
-  // Problem with loading data
-  // Want to load all data when user focuses on input
-  // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
-  // So need to set key on Select and update it on focus
-  // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
-  const ref = useRef()
-  const [focusCount, setFocusCount] = useState(0)
+    // Problem with loading data
+    // Want to load all data when user focuses on input
+    // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
+    // So need to set key on Select and update it on focus
+    // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
+    const ref = useRef()
+    const [focusCount, setFocusCount] = useState(0)
 
-  const [value, setValue] = useState(propsValue ?? '')
-  const [error, setError] = useState(undefined)
+    const [value, setValue] = useState(propsValue ?? '')
+    const [error, setError] = useState(undefined)
 
-  const loadOptions = async (val) => {
-    if (!focusCount) return []
-    const { data, error } = await apolloClient.query({
-      query: taxFieldPropQuery,
-      variables: {
-        tableName: 'object',
-        propName: pname,
-        pcFieldName: 'taxonomy_id',
-        pcTableName: 'taxonomy',
-        pcName: taxname,
-        propValue: val ?? '',
-      },
-    })
-    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
-      value: n.value,
-      label: n.value,
-    }))
-    setValue(val)
-    setError(error)
-    return returnData
-  }
-
-  const setFilter = (val) => {
-    // 1. change filter value
-    let comparatorValue = comparator
-    if (!comparator && val) comparatorValue = 'ILIKE'
-    if (!val) comparatorValue = null
-    setTaxFilters({
-      taxname,
-      pname,
-      comparator: comparatorValue,
-      value: val,
-    })
-    // 2. if value and field not choosen, choose it
-    if (addFilterFields && val) {
-      addTaxProperty({ taxname, pname })
+    const loadOptions = async (val) => {
+      if (!focusCount) return []
+      const { data, error } = await apolloClient.query({
+        query: taxFieldPropQuery,
+        variables: {
+          tableName: 'object',
+          propName: pname,
+          pcFieldName: 'taxonomy_id',
+          pcTableName: 'taxonomy',
+          pcName: taxname,
+          propValue: val ?? '',
+        },
+      })
+      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+        value: n.value,
+        label: n.value,
+      }))
+      setValue(val)
+      setError(error)
+      return returnData
     }
-  }
 
-  const onBlur = () => setFilter(value)
-
-  const onChange = (newValue, actionMeta) => {
-    let value
-    switch (actionMeta.action) {
-      case 'clear':
-        value = ''
-        break
-      default:
-        value = newValue?.value
-        break
+    const setFilter = (val) => {
+      // 1. change filter value
+      let comparatorValue = comparator
+      if (!comparator && val) comparatorValue = 'ILIKE'
+      if (!val) comparatorValue = null
+      setTaxFilters({
+        taxname,
+        pname,
+        comparator: comparatorValue,
+        value: val,
+      })
+      // 2. if value and field not choosen, choose it
+      if (addFilterFields && val) {
+        addTaxProperty({ taxname, pname })
+      }
     }
-    setValue(value)
-    setFilter(value)
-  }
 
-  if (error) {
-    return `Error loading data: ${error.message}`
-  }
+    const onBlur = () => setFilter(value)
 
-  const valueToShow = value ? { value, label: value } : undefined
+    const onChange = (newValue, actionMeta) => {
+      let value
+      switch (actionMeta.action) {
+        case 'clear':
+          value = ''
+          break
+        default:
+          value = newValue?.value
+          break
+      }
+      setValue(value)
+      setFilter(value)
+    }
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <Label>{`${pname} (${readableType(jsontype)})`}</Label>
-        <StyledSelect
-          key={focusCount}
-          ref={ref}
-          value={valueToShow}
-          defaultOptions={true}
-          onChange={onChange}
-          onBlur={onBlur}
-          onFocus={() => {
-            if (focusCount === 0) {
-              setFocusCount(1)
-              setTimeout(() => {
-                ref.current.onMenuOpen()
-                ref.current.focus()
-              })
-            }
-          }}
-          formatOptionLabel={formatOptionLabel}
-          placeholder={''}
-          noOptionsMessage={noOptionsMessage}
-          loadingMessage={loadingMessage}
-          classNamePrefix="react-select"
-          loadOptions={loadOptions}
-          cacheOptions
-          isClearable
-          openMenuOnFocus={true}
-          spellCheck={false}
-        />
-      </Container>
-    </ErrorBoundary>
-  )
-}
+    if (error) {
+      return `Error loading data: ${error.message}`
+    }
 
-export default observer(IntegrationAutosuggest)
+    const valueToShow = value ? { value, label: value } : undefined
+
+    return (
+      <ErrorBoundary>
+        <Container>
+          <Label>{`${pname} (${readableType(jsontype)})`}</Label>
+          <StyledSelect
+            key={focusCount}
+            ref={ref}
+            value={valueToShow}
+            defaultOptions={true}
+            onChange={onChange}
+            onBlur={onBlur}
+            onFocus={() => {
+              if (focusCount === 0) {
+                setFocusCount(1)
+                setTimeout(() => {
+                  ref.current.onMenuOpen()
+                  ref.current.focus()
+                })
+              }
+            }}
+            formatOptionLabel={formatOptionLabel}
+            placeholder={''}
+            noOptionsMessage={noOptionsMessage}
+            loadingMessage={loadingMessage}
+            classNamePrefix="react-select"
+            loadOptions={loadOptions}
+            cacheOptions
+            isClearable
+            openMenuOnFocus={true}
+            spellCheck={false}
+          />
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
+
+export default IntegrationAutosuggest
