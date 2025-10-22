@@ -37,7 +37,7 @@ const query = gql`
   }
 `
 
-const ChooserRouter = ({ pcName, count }) => {
+const ChooserRouter = observer(({ pcName, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -76,6 +76,6 @@ const ChooserRouter = ({ pcName, count }) => {
       </PropertiesContainer>
     </>
   )
-}
+})
 
-export default observer(ChooserRouter)
+export default ChooserRouter

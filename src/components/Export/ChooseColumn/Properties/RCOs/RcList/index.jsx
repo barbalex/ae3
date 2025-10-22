@@ -24,7 +24,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RCOs = () => {
+const RCOs = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -55,6 +55,6 @@ const RCOs = () => {
       count={count}
     />
   ))
-}
+})
 
-export default observer(RCOs)
+export default RCOs

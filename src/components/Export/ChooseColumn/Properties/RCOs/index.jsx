@@ -49,7 +49,7 @@ const query = gql`
   }
 `
 
-const RCOs = ({ rcoExpanded, onToggleRco }) => {
+const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -99,6 +99,6 @@ const RCOs = ({ rcoExpanded, onToggleRco }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(RCOs)
+export default RCOs

@@ -28,7 +28,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const PcoChooser = ({ pcname, pname }) => {
+const PcoChooser = observer(({ pcname, pname }) => {
   const store = useContext(storeContext)
   const { pcoProperties, addPcoProperty, removePcoProperty } = store.export
 
@@ -57,6 +57,6 @@ const PcoChooser = ({ pcname, pname }) => {
       />
     </Container>
   )
-}
+})
 
-export default observer(PcoChooser)
+export default PcoChooser
