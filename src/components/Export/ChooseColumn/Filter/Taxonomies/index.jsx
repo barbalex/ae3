@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
-import { groupBy, sumBy } from 'es-toolkit'
+import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -16,6 +16,7 @@ import Taxonomy from './Taxonomy.jsx'
 import JointTaxonomy from './JointTaxonomy.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
+import { joinTaxProperties } from './joinTaxProperties.js'
 
 const Container = styled.div`
   margin: 10px 0;
@@ -89,23 +90,10 @@ const TaxonomiesCard = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
   const taxFieldsCount = Object.keys(taxPropertiesFields).length
   const initiallyExpanded = Object.keys(taxPropertiesByTaxonomy).length === 1
 
-  const jointTaxProperties = useMemo(() => {
-    let props = []
-    if (taxCount > 1) {
-      props = Object.values(
-        groupBy(taxProperties, (t) => `${t.propertyName}/${t.jsontype}`),
-      )
-        .filter((v) => v.length === taxCount)
-        .map((t) => ({
-          count: sumBy(t, (x) => Number(x.count)),
-          jsontype: t[0].jsontype,
-          propertyName: t[0].propertyName,
-          taxonomies: t.map((x) => x.taxonomyName),
-          taxname: 'Taxonomie',
-        }))
-    }
-    return props
-  }, [taxCount, taxProperties])
+  const jointTaxProperties = joinTaxProperties({
+    taxCount,
+    taxProperties,
+  })
 
   if (error) {
     return (
