@@ -114,6 +114,15 @@ const Container = styled.div`
   }
 `
 
+const getUserIsTaxWriter = (data) => {
+  const userRoles = (
+    data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
+  ).map((r) => r?.role)
+  return (
+    userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
+  )
+}
+
 export const Tree = observer(() => {
   const store = useContext(storeContext)
 
@@ -131,14 +140,7 @@ export const Tree = observer(() => {
       }),
   })
 
-  const userIsTaxWriter = useMemo(() => {
-    const userRoles = (
-      data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
-    ).map((r) => r?.role)
-    return (
-      userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
-    )
-  }, [data?.data?.userByName?.organizationUsersByUserId?.nodes])
+  const userIsTaxWriter = getUserIsTaxWriter(data)
 
   if (error) {
     return (

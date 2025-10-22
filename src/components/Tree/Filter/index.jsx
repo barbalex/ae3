@@ -1,4 +1,4 @@
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
@@ -86,6 +86,92 @@ const objectUrlQuery = gql`
   }
 `
 
+const getCustomStyles = (singleColumnView) => ({
+  control: (provided) => ({
+    ...provided,
+    border: 'none',
+    borderRadius: '3px',
+    backgroundColor: '#FFCC8042',
+    marginLeft: 0,
+    paddingLeft: singleColumnView ? '2px' : '25px',
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    borderRadius: '3px',
+    paddingLeft: 0,
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: 'rgba(0,0,0,0.8)',
+  }),
+  option: (provided) => ({
+    ...provided,
+    color: 'rgba(0,0,0,0.8)',
+    fontSize: '0.8em',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }),
+  groupHeading: (provided) => ({
+    ...provided,
+    lineHeight: '1em',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    color: 'rgba(0, 0, 0, 0.8)',
+    fontWeight: '700',
+    userSelect: 'none',
+    textTransform: 'none',
+  }),
+  input: (provided) => ({
+    ...provided,
+    color: 'rgba(0, 0, 0, 0.8)',
+  }),
+  menuList: (provided) => ({
+    ...provided,
+    maxHeight: `calc(100vh - ${constants.appBarHeight}px - 39px)`,
+    '::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      borderRadius: '4px',
+      boxShadow: 'inset 0 0 7px #e65100',
+      background: 'rgba(85, 85, 85, 0.05)',
+    },
+    '::-webkit-scrollbar-track': {
+      background: 'rgba(0, 0, 0, 0) !important',
+      borderRadius: '1rem',
+    },
+    // '::-webkit-scrollbar-thumb:hover': {
+    //   background: '#6B2500',
+    // },
+  }),
+  menu: (provided) => ({
+    ...provided,
+    width: 'auto',
+    maxWidth: '100%',
+    marginTop: 0,
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: 'rgba(0,0,0,0.4)',
+  }),
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    display: 'none',
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    display: 'none',
+  }),
+  clearIndicator: (provided) => ({
+    ...provided,
+    color: 'rgba(0,0,0,0.8)',
+  }),
+})
+
 const TreeFilter = observer(() => {
   // TODO: use local state instead of mobx for label, id
   const apolloClient = useApolloClient()
@@ -169,94 +255,7 @@ const TreeFilter = observer(() => {
   // TODO: replace with real value
   const singleColumnView = false
 
-  const customStyles = useMemo(
-    () => ({
-      control: (provided) => ({
-        ...provided,
-        border: 'none',
-        borderRadius: '3px',
-        backgroundColor: '#FFCC8042',
-        marginLeft: 0,
-        paddingLeft: singleColumnView ? '2px' : '25px',
-      }),
-      valueContainer: (provided) => ({
-        ...provided,
-        borderRadius: '3px',
-        paddingLeft: 0,
-      }),
-      singleValue: (provided) => ({
-        ...provided,
-        color: 'rgba(0,0,0,0.8)',
-      }),
-      option: (provided) => ({
-        ...provided,
-        color: 'rgba(0,0,0,0.8)',
-        fontSize: '0.8em',
-        paddingTop: '5px',
-        paddingBottom: '5px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-      }),
-      groupHeading: (provided) => ({
-        ...provided,
-        lineHeight: '1em',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        color: 'rgba(0, 0, 0, 0.8)',
-        fontWeight: '700',
-        userSelect: 'none',
-        textTransform: 'none',
-      }),
-      input: (provided) => ({
-        ...provided,
-        color: 'rgba(0, 0, 0, 0.8)',
-      }),
-      menuList: (provided) => ({
-        ...provided,
-        maxHeight: `calc(100vh - ${constants.appBarHeight}px - 39px)`,
-        '::-webkit-scrollbar': {
-          width: '6px',
-        },
-        '::-webkit-scrollbar-thumb': {
-          borderRadius: '4px',
-          boxShadow: 'inset 0 0 7px #e65100',
-          background: 'rgba(85, 85, 85, 0.05)',
-        },
-        '::-webkit-scrollbar-track': {
-          background: 'rgba(0, 0, 0, 0) !important',
-          borderRadius: '1rem',
-        },
-        // '::-webkit-scrollbar-thumb:hover': {
-        //   background: '#6B2500',
-        // },
-      }),
-      menu: (provided) => ({
-        ...provided,
-        width: 'auto',
-        maxWidth: '100%',
-        marginTop: 0,
-      }),
-      placeholder: (provided) => ({
-        ...provided,
-        color: 'rgba(0,0,0,0.4)',
-      }),
-      indicatorSeparator: (provided) => ({
-        ...provided,
-        display: 'none',
-      }),
-      dropdownIndicator: (provided) => ({
-        ...provided,
-        display: 'none',
-      }),
-      clearIndicator: (provided) => ({
-        ...provided,
-        color: 'rgba(0,0,0,0.8)',
-      }),
-    }),
-    [singleColumnView],
-  )
+  const customStyles = getCustomStyles(singleColumnView)
 
   return (
     <ErrorBoundary>
