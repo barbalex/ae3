@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -35,11 +35,14 @@ const StyledCardContent = styled(CardContent)`
 
 const HowToTaxonomies = () => {
   const [expanded, setExpanded] = useState(false)
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={onClickActions}>
+      <StyledCardActions
+        disableSpacing
+        onClick={onClickActions}
+      >
         <CardActionTitle>So geht&apos;s</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -51,7 +54,11 @@ const HowToTaxonomies = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <ul>
             <li>Wählen Sie Arten oder Lebensräume...</li>

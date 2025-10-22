@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -84,7 +84,7 @@ const Taxonomy = ({ initiallyExpanded, tax }) => {
   )
 
   const [expanded, setExpanded] = useState(initiallyExpanded)
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
 
   const taxProperties =
     propsByTaxData?.taxPropertiesOnlyByTaxonomiesFunction?.nodes ?? []

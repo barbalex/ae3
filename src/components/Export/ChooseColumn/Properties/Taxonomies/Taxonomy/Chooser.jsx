@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
@@ -35,15 +35,12 @@ const TaxChooser = ({ taxname, pname, count }) => {
   const store = useContext(storeContext)
   const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
 
-  const onCheck = useCallback(
-    (event, isChecked) => {
-      if (isChecked) {
-        return addTaxProperty({ taxname, pname })
-      }
-      return removeTaxProperty({ taxname, pname })
-    },
-    [removeTaxProperty, taxname, pname, addTaxProperty],
-  )
+  const onCheck = (event, isChecked) => {
+    if (isChecked) {
+      return addTaxProperty({ taxname, pname })
+    }
+    return removeTaxProperty({ taxname, pname })
+  }
 
   const checked =
     taxProperties.filter((x) => /*x.taxname === taxname && */ x.pname === pname)
@@ -53,7 +50,11 @@ const TaxChooser = ({ taxname, pname, count }) => {
     <Container>
       <Label
         control={
-          <Checkbox color="primary" checked={checked} onChange={onCheck} />
+          <Checkbox
+            color="primary"
+            checked={checked}
+            onChange={onCheck}
+          />
         }
         label={
           <div>
