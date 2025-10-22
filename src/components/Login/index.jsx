@@ -36,7 +36,7 @@ const StyledSnackbar = styled(Snackbar)`
   }
 `
 
-const Login = () => {
+const Login = observer(() => {
   const apolloClient = useApolloClient()
   const idb = useContext(idbContext)
   const store = useContext(storeContext)
@@ -184,6 +184,6 @@ const Login = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Login)
+export default Login

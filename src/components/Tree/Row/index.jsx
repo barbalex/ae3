@@ -101,7 +101,7 @@ function collect(props) {
   return props
 }
 
-const Row = ({ data }) => {
+const Row = observer(({ data }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -221,6 +221,6 @@ const Row = ({ data }) => {
       </StyledNode>
     </ContextMenuTrigger>
   )
-}
+})
 
-export default observer(Row)
+export default Row

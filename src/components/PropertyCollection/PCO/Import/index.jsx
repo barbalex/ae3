@@ -121,7 +121,7 @@ const initialCheckState = {
   existsPropertyKey: undefined,
 }
 
-const ImportPco = ({ setImport }) => {
+const ImportPco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -490,6 +490,6 @@ const ImportPco = ({ setImport }) => {
       </Container>
     </SimpleBar>
   )
-}
+})
 
-export default observer(ImportPco)
+export default ImportPco
