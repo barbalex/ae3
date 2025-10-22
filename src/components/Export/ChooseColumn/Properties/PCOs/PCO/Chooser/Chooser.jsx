@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
@@ -32,15 +32,12 @@ const PcoChooser = ({ pcname, pname }) => {
   const store = useContext(storeContext)
   const { pcoProperties, addPcoProperty, removePcoProperty } = store.export
 
-  const onCheck = useCallback(
-    (event, isChecked) => {
-      if (isChecked) {
-        return addPcoProperty({ pcname, pname })
-      }
-      removePcoProperty({ pcname, pname })
-    },
-    [addPcoProperty, pcname, pname, removePcoProperty],
-  )
+  const onCheck = (event, isChecked) => {
+    if (isChecked) {
+      return addPcoProperty({ pcname, pname })
+    }
+    removePcoProperty({ pcname, pname })
+  }
 
   const checked =
     pcoProperties.filter((x) => x.pcname === pcname && x.pname === pname)
@@ -50,7 +47,11 @@ const PcoChooser = ({ pcname, pname }) => {
     <Container>
       <Label
         control={
-          <Checkbox color="primary" checked={checked} onChange={onCheck} />
+          <Checkbox
+            color="primary"
+            checked={checked}
+            onChange={onCheck}
+          />
         }
         label={<div>{pname}</div>}
       />

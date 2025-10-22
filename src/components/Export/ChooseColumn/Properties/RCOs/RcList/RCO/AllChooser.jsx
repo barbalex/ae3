@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
@@ -22,24 +22,21 @@ const AllRcoChooser = ({ properties, relationtype }) => {
   const store = useContext(storeContext)
   const { rcoProperties, addRcoProperty, removeRcoProperty } = store.export
 
-  const onCheck = useCallback(
-    (event, isChecked) => {
-      if (isChecked) {
-        return properties.forEach(({ pcname, property }) =>
-          addRcoProperty({ pcname, relationtype, pname: property }),
-        )
-      }
-      removeRcoProperty({
-        pcname: properties[0].pcname,
-        relationtype,
-        pname: properties[0].property,
-      })
-      properties.forEach(({ pcname, property }) => {
-        removeRcoProperty({ pcname, relationtype, pname: property })
-      })
-    },
-    [addRcoProperty, properties, relationtype, removeRcoProperty],
-  )
+  const onCheck = (event, isChecked) => {
+    if (isChecked) {
+      return properties.forEach(({ pcname, property }) =>
+        addRcoProperty({ pcname, relationtype, pname: property }),
+      )
+    }
+    removeRcoProperty({
+      pcname: properties[0].pcname,
+      relationtype,
+      pname: properties[0].property,
+    })
+    properties.forEach(({ pcname, property }) => {
+      removeRcoProperty({ pcname, relationtype, pname: property })
+    })
+  }
 
   const checkedArray = properties.map(
     (p) =>
@@ -56,7 +53,11 @@ const AllRcoChooser = ({ properties, relationtype }) => {
     <Container>
       <Label
         control={
-          <Checkbox color="primary" checked={checked} onChange={onCheck} />
+          <Checkbox
+            color="primary"
+            checked={checked}
+            onChange={onCheck}
+          />
         }
         label="alle"
       />
