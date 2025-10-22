@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -100,7 +100,7 @@ const RCO = ({ pcname, relationtype, count }) => {
 
   const [expanded, setExpanded] = useState(false)
 
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
 
   if (error) return `Error fetching data: ${error.message}`
 

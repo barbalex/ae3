@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
@@ -22,21 +22,18 @@ const AllTaxChooser = ({ properties }) => {
   const store = useContext(storeContext)
   const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
 
-  const onCheck = useCallback(
-    async (event, isChecked) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const p of properties) {
-        const taxname = p.taxname ? p.taxname : p.taxonomyName
-        const pname = p.propertyName
-        if (isChecked) {
-          addTaxProperty({ taxname, pname })
-        } else {
-          removeTaxProperty({ taxname, pname })
-        }
+  const onCheck = async (event, isChecked) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for (const p of properties) {
+      const taxname = p.taxname ? p.taxname : p.taxonomyName
+      const pname = p.propertyName
+      if (isChecked) {
+        addTaxProperty({ taxname, pname })
+      } else {
+        removeTaxProperty({ taxname, pname })
       }
-    },
-    [addTaxProperty, properties, removeTaxProperty],
-  )
+    }
+  }
 
   const checkedArray = properties.map((p) => {
     const taxname = p.taxname ? p.taxname : p.taxonomyName
@@ -52,7 +49,11 @@ const AllTaxChooser = ({ properties }) => {
     <Container>
       <Label
         control={
-          <Checkbox color="primary" checked={checked} onChange={onCheck} />
+          <Checkbox
+            color="primary"
+            checked={checked}
+            onChange={onCheck}
+          />
         }
         label="alle"
       />

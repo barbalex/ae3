@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -48,12 +48,15 @@ const Count = styled.span`
 
 const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
-  const onClickActions = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickActions = () => setExpanded(!expanded)
 
   return (
     <ErrorBoundary>
       <StyledCard key="jointTax">
-        <StyledCardActions disableSpacing onClick={onClickActions}>
+        <StyledCardActions
+          disableSpacing
+          onClick={onClickActions}
+        >
           <CardActionTitle>
             {`Gemeinsame Felder`}
             <Count>{`(${jointTaxProperties.length})`}</Count>
@@ -68,7 +71,11 @@ const JointTaxonomy = ({ jointTaxProperties }) => {
             </Icon>
           </CardActionIconButton>
         </StyledCardActions>
-        <StyledCollapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCollapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           {jointTaxProperties.length > 1 && (
             <AllChooser properties={jointTaxProperties} />
           )}
