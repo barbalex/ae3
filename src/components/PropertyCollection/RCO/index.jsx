@@ -173,6 +173,38 @@ export const rcoPreviewQuery = gql`
   }
 `
 
+const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
+  const rCOUnsorted = (
+    rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
+    []
+  ).map((p) => {
+    const nP = {}
+    nP['Objekt ID'] = p.objectId
+    nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
+    nP['Beziehung ID'] = p.objectIdRelation
+    nP['Beziehung Name'] = p?.objectByObjectIdRelation?.name ?? null
+    nP['Art der Beziehung'] = p.relationType
+    if (p.properties) {
+      const props = JSON.parse(p.properties)
+      Object.defineProperties(props).forEach(([key, value]) => {
+        if (typeof value === 'boolean') {
+          nP[key] = booleanToJaNein(value)
+        } else {
+          nP[key] = value
+        }
+      })
+    }
+    // add keys that may be missing
+    for (const key of propKeys) {
+      if (!exists(nP[key])) {
+        nP[key] = null
+      }
+    }
+    return nP
+  })
+  return doOrderBy(rCOUnsorted, orderBy, sortDirection)
+}
+
 export const RCO = observer(() => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -211,42 +243,12 @@ export const RCO = observer(() => {
       ?.vRelationCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const rCO = useMemo(() => {
-    const rCOUnsorted = (
-      rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
-      []
-    ).map((p) => {
-      const nP = {}
-      nP['Objekt ID'] = p.objectId
-      nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
-      nP['Beziehung ID'] = p.objectIdRelation
-      nP['Beziehung Name'] = p?.objectByObjectIdRelation?.name ?? null
-      nP['Art der Beziehung'] = p.relationType
-      if (p.properties) {
-        const props = JSON.parse(p.properties)
-        Object.defineProperties(props).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
-            nP[key] = booleanToJaNein(value)
-          } else {
-            nP[key] = value
-          }
-        })
-      }
-      // add keys that may be missing
-      for (const key of propKeys) {
-        if (!exists(nP[key])) {
-          nP[key] = null
-        }
-      }
-      return nP
-    })
-    return doOrderBy(rCOUnsorted, orderBy, sortDirection)
-  }, [
+  const rCO = getRCO({
     propKeys,
-    rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes,
+    rcoData,
     sortDirection,
     orderBy,
-  ])
+  })
   // collect all keys and sort property keys by name
   const keys = [
     'Objekt ID',
