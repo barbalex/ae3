@@ -86,12 +86,12 @@ const User = () => {
     setName(user?.name)
     setEmail(user?.email)
   }, [user])
-  const onChangeTab = useCallback((event, value) => setTab(value), [])
-  const onChangeName = useCallback((e) => setName(e.target.value), [])
-  const onChangeEmail = useCallback((e) => setEmail(e.target.value), [])
-  const onChangePassNew = useCallback((e) => setPassNew(e.target.value), [])
+  const onChangeTab = (event, value) => setTab(value)
+  const onChangeName = (e) => setName(e.target.value)
+  const onChangeEmail = (e) => setEmail(e.target.value)
+  const onChangePassNew = (e) => setPassNew(e.target.value)
 
-  const onSave = useCallback(async () => {
+  const onSave = async () => {
     const variables =
       passNew ?
         {
@@ -130,7 +130,7 @@ const User = () => {
     setNameErrorText('')
     setEmailErrorText('')
     setPassNew('')
-  }, [passNew, name, email, id, queryClient, apolloClient])
+  }
 
   if (dataLoading) {
     return <Spinner />

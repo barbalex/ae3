@@ -8,7 +8,7 @@ export const Stacker = observer(() => {
   const store = useContext(storeContext)
   const { setWindowWidth, setWindowHeight, setStacked } = store
 
-  const updateStacked = useCallback(() => {
+  const updateStacked = () => {
     if (typeof window === 'undefined') return
     const w = window
     const d = document
@@ -20,7 +20,7 @@ export const Stacker = observer(() => {
     setStacked(shouldBeStacked)
     setWindowWidth(windowWidth)
     setWindowHeight(windowHeight)
-  }, [setStacked, setWindowHeight, setWindowWidth])
+  }
 
   useEffect(() => {
     updateStacked()
