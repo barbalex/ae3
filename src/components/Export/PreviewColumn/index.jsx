@@ -15,7 +15,7 @@ const HowToDiv = styled.div`
   padding: 15px 10px 0 10px;
 `
 
-const Filter = () => {
+const Filter = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -34,6 +34,6 @@ const Filter = () => {
       </SimpleBar>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Filter)
+export default Filter

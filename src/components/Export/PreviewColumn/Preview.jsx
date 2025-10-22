@@ -100,7 +100,7 @@ const removeBadChars = (str) =>
     .replaceAll('-', '')
     .replaceAll('↵', '')
 
-const Preview = () => {
+const Preview = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -373,6 +373,6 @@ const Preview = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
 
-export default observer(Preview)
+export default Preview

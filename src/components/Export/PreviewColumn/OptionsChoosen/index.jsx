@@ -46,7 +46,7 @@ const HinweiseUl = styled.ul`
   font-size: small;
 `
 
-const OptionsChoosen = () => {
+const OptionsChoosen = observer(() => {
   const store = useContext(storeContext)
   const {
     setType,
@@ -204,6 +204,6 @@ const OptionsChoosen = () => {
       </StyledButton>
     </Container>
   )
-}
+})
 
-export default observer(OptionsChoosen)
+export default OptionsChoosen

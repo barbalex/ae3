@@ -12,7 +12,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportPcoPropertiesListItem = ({ properties }) => {
+const ExportPcoPropertiesListItem = observer(({ properties }) => {
   const store = useContext(storeContext)
   const { removePcoProperty } = store.export
   const { pcname, pname } = properties
@@ -29,6 +29,6 @@ const ExportPcoPropertiesListItem = ({ properties }) => {
       <ResetSpan onClick={onClick}>zurücksetzen</ResetSpan>
     </li>
   )
-}
+})
 
-export default observer(ExportPcoPropertiesListItem)
+export default ExportPcoPropertiesListItem
