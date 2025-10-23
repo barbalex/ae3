@@ -133,6 +133,24 @@ const initialCheckState = {
   propertyValuesDontContainBackslash: undefined,
 }
 
+const getObjectIdsUnreal = ({ data, objectIds }) => {
+  const realIds = (data?.allObjects?.nodes ?? []).map((o) => o.id)
+
+  return objectIds.filter((i) => !realIds.includes(i))
+}
+
+const getObjectRelationIdsUnreal = ({ data, objectIds }) => {
+  const realIds = (data?.allObjectRelations?.nodes ?? []).map((o) => o.id)
+
+  return objectIds.filter((i) => !realIds.includes(i))
+}
+
+const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }) => {
+  const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o) => o.id)
+
+  return pCOfOriginIds.filter((i) => !realIds.includes(i))
+}
+
 const ImportRco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -201,32 +219,20 @@ const ImportRco = observer(({ setImport }) => {
     console.log('error', error.message)
   }
 
-  const objectIdsUnreal = useMemo(() => {
-    const realIds = (data?.allObjects?.nodes ?? []).map((o) => o.id)
-    return objectIds.filter((i) => !realIds.includes(i))
-  }, [data, objectIds])
-  const objectIdsAreReal = useMemo(
-    () =>
-      !isLoading && objectIds.length > 0 ?
-        objectIdsUnreal.length === 0
-      : undefined,
-    [isLoading, objectIds.length, objectIdsUnreal.length],
-  )
-  const objectRelationIdsUnreal = useMemo(() => {
-    const realIds = (data?.allObjectRelations?.nodes ?? []).map((o) => o.id)
-    return objectIds.filter((i) => !realIds.includes(i))
-  }, [data, objectIds])
-  const objectRelationIdsAreReal = useMemo(
-    () =>
-      !isLoading && objectRelationIds.length > 0 ?
-        objectRelationIdsUnreal.length === 0
-      : undefined,
-    [isLoading, objectRelationIds.length, objectRelationIdsUnreal.length],
-  )
-  const pCOfOriginIdsUnreal = useMemo(() => {
-    const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o) => o.id)
-    return pCOfOriginIds.filter((i) => !realIds.includes(i))
-  }, [data, pCOfOriginIds])
+  const objectIdsUnreal = getObjectIdsUnreal({ data, objectIds })
+  const objectIdsAreReal =
+    !isLoading && objectIds.length > 0 ?
+      objectIdsUnreal.length === 0
+    : undefined
+  const objectRelationIdsUnreal = getObjectRelationIdsUnreal({
+    data,
+    objectIds,
+  })
+  const objectRelationIdsAreReal =
+    !isLoading && objectRelationIds.length > 0 ?
+      objectRelationIdsUnreal.length === 0
+    : undefined
+  const pCOfOriginIdsUnreal = getPCOfOriginIdsUnreal({ data, pCOfOriginIds })
   const pCOfOriginIdsAreReal = useMemo(
     () =>
       !isLoading && pCOfOriginIds.length > 0 ?
