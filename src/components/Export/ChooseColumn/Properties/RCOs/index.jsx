@@ -10,7 +10,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
-import RcList from './RcList/index.jsx'
+import { RcList } from './RcList/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
@@ -49,7 +49,7 @@ const query = gql`
   }
 `
 
-const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
+export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -100,5 +100,3 @@ const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
     </ErrorBoundary>
   )
 })
-
-export default RCOs

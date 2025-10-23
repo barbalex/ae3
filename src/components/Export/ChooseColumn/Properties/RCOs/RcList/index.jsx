@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
-import RCO from './RCO/index.jsx'
+import { RCO } from './RCO/index.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
@@ -24,7 +24,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RCOs = observer(() => {
+export const RcList = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -56,5 +56,3 @@ const RCOs = observer(() => {
     />
   ))
 })
-
-export default RCOs
