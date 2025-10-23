@@ -14,10 +14,10 @@ import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import upsertRCOMutation from './upsertRCOMutation.js'
+import { upsertRCOMutation } from './upsertRCOMutation.js'
 import storeContext from '../../../../storeContext.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
-import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
+import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'
 
 const Container = styled.div`
@@ -159,7 +159,7 @@ const getImportDataFields = (importData) => {
   return fields
 }
 
-const ImportRco = observer(({ setImport }) => {
+export const ImportRco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -563,5 +563,3 @@ const ImportRco = observer(({ setImport }) => {
     </SimpleBar>
   )
 })
-
-export default ImportRco

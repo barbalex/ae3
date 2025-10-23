@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const upsertRCOMutation = gql`
   mutation upsertRCO(
     $objectId: UUID!
     $objectIdRelation: UUID!
