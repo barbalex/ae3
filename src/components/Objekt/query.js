@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const query = gql`
   query ObjectQuery($objectId: UUID!) {
     objectById(id: $objectId) {
       id
