@@ -46,7 +46,7 @@ const Count = styled.span`
   padding-left: 5px;
 `
 
-const JointTaxonomy = observer(({ jointTaxProperties }) => {
+export const JointTaxonomy = observer(({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -87,5 +87,3 @@ const JointTaxonomy = observer(({ jointTaxProperties }) => {
     </ErrorBoundary>
   )
 })
-
-export default JointTaxonomy

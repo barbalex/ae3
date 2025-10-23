@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { TaxonomiesList } from './TaxonomiesList.jsx'
-import JointTaxonomy from './JointTaxonomy.jsx'
+import { JointTaxonomy } from './JointTaxonomy.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
