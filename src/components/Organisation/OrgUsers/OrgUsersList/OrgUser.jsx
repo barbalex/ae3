@@ -91,7 +91,7 @@ const orgUsersQuery = gql`
   }
 `
 
-const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
+export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -305,5 +305,3 @@ const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
     </ErrorBoundary>
   )
 })
-
-export default OrgUser

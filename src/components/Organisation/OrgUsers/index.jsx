@@ -9,8 +9,8 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import createOrgUserMutation from './createOrgUserMutation.js'
-import OrgUsersList from './OrgUsersList/index.jsx'
+import { createOrgUserMutation } from './createOrgUserMutation.js'
+import { OrgUsersList } from './OrgUsersList/index.jsx'
 import storeContext from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -62,7 +62,7 @@ const orgUsersQuery = gql`
   }
 `
 
-const OrgUsers = observer(() => {
+export const OrgUsers = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -138,5 +138,3 @@ const OrgUsers = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default OrgUsers

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const createOrgUserMutation = gql`
   mutation createOrganizationUser($organizationId: UUID!) {
     createOrganizationUser(
       input: { organizationUser: { organizationId: $organizationId } }

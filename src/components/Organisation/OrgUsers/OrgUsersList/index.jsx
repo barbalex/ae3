@@ -1,6 +1,6 @@
-import OrgUser from './OrgUser.jsx'
+import { OrgUser } from './OrgUser.jsx'
 
-const OrgUsersList = ({ orgUsers, orgUsersRefetch }) =>
+export const OrgUsersList = ({ orgUsers, orgUsersRefetch }) =>
   orgUsers.map((orgUser) => (
     <OrgUser
       key={`${orgUser.id}/${orgUser.role}`}
@@ -8,5 +8,3 @@ const OrgUsersList = ({ orgUsers, orgUsersRefetch }) =>
       orgUsersRefetch={orgUsersRefetch}
     />
   ))
-
-export default OrgUsersList

@@ -11,7 +11,7 @@ import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { UserReadOnly } from '../shared/UserReadOnly.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import OrgUsers from './OrgUsers/index.jsx'
+import { OrgUsers } from './OrgUsers/index.jsx'
 import TCs from './TCs.jsx'
 import PCs from './PCs.jsx'
 
