@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const updateOrgUserMutation = gql`
   mutation updateOrganizationUser(
     $organizationId: UUID!
     $userId: UUID
