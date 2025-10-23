@@ -42,7 +42,7 @@ const PropertiesContainer = styled.div`
   container-type: inline-size;
 `
 
-const PcoCard = ({ pc, count }) => {
+export const PCO = ({ pc, count }) => {
   const [expanded, setExpanded] = useState(false)
 
   const onClickAction = () => setExpanded(!expanded)
@@ -81,5 +81,3 @@ const PcoCard = ({ pc, count }) => {
     </ErrorBoundary>
   )
 }
-
-export default PcoCard

@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import PCO from './PCO/index.jsx'
+import { PCO } from './PCO/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
@@ -28,7 +28,7 @@ const query = gql`
   }
 `
 
-const PcosCardList = observer(() => {
+export const PcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -73,5 +73,3 @@ const PcosCardList = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default PcosCardList
