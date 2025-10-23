@@ -45,7 +45,7 @@ const tcsQuery = gql`
   }
 `
 
-const TCs = observer(() => {
+export const TCs = observer(() => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const id =
@@ -97,5 +97,3 @@ const TCs = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default TCs
