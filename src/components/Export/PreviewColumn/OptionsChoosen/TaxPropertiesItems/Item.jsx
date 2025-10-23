@@ -12,7 +12,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportTaxPropertiesListItem = observer(({ properties }) => {
+export const Item = observer(({ properties }) => {
   const store = useContext(storeContext)
   const { removeTaxProperty } = store.export
 
@@ -30,5 +30,3 @@ const ExportTaxPropertiesListItem = observer(({ properties }) => {
     </li>
   )
 })
-
-export default ExportTaxPropertiesListItem
