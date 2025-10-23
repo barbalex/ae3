@@ -12,6 +12,7 @@ import '@fontsource/roboto/700.css'
 import { theme } from './theme.js'
 import './index.css'
 import 'react-reflex/styles.css'
+
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
 import { initializeIdb } from './modules/initializeIdb.js'
 import { setLoginFromIdb } from './modules/setLoginFromIdb.js'

@@ -96,5 +96,3 @@ export const ErrorBoundary = ({ children }) => {
     </ErrorBoundaryComponent>
   )
 }
-
-export default ErrorBoundary
