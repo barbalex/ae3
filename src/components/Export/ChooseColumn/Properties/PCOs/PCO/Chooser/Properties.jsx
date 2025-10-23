@@ -1,6 +1,6 @@
-import Chooser from './Chooser.jsx'
+import { Chooser } from './Chooser.jsx'
 
-const PCO = ({ properties, pcName }) =>
+export const Properties = ({ properties, pcName }) =>
   properties.map((p) => (
     <Chooser
       key={`${p.property}${p.type}`}
@@ -9,5 +9,3 @@ const PCO = ({ properties, pcName }) =>
       jsontype={p.type}
     />
   ))
-
-export default PCO

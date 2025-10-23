@@ -12,8 +12,8 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
-import AllChooser from './AllChooser.jsx'
-import Properties from '../Properties.jsx'
+import { AllChooser } from './AllChooser.jsx'
+import { Properties } from '../Properties.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
@@ -69,7 +69,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const Taxonomy = observer(({ initiallyExpanded, tax }) => {
+export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -137,5 +137,3 @@ const Taxonomy = observer(({ initiallyExpanded, tax }) => {
     </ErrorBoundary>
   )
 })
-
-export default Taxonomy

@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import { Taxonomies } from './Taxonomies/index.jsx'
-import Properties from './Properties/index.jsx'
+import { Properties } from './Properties/index.jsx'
 import Filter from './Filter/index.jsx'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'

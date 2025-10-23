@@ -32,7 +32,7 @@ const query = gql`
   }
 `
 
-const Properties = observer(({ pc }) => {
+export const Properties = observer(({ pc }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -74,5 +74,3 @@ const Properties = observer(({ pc }) => {
     />
   ))
 })
-
-export default Properties

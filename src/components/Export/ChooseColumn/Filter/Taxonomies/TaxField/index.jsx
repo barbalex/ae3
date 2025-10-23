@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import Comparator from './Comparator.jsx'
-import Value from './Value.jsx'
+import { Comparator } from './Comparator.jsx'
+import { Value } from './Value.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { constants } from '../../../../../../modules/constants.js'
 
@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 `
 
-const TaxField = observer(({ taxname, pname, jsontype }) => {
+export const TaxField = observer(({ taxname, pname, jsontype }) => {
   const store = useContext(storeContext)
   const { taxFilters } = store.export
 
@@ -53,5 +53,3 @@ const TaxField = observer(({ taxname, pname, jsontype }) => {
     </Container>
   )
 })
-
-export default TaxField

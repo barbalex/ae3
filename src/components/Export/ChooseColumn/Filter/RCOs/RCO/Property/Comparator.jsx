@@ -23,7 +23,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const RcoComparator = observer(
+export const Comparator = observer(
   ({ pcname, relationtype, pname, value, comparator }) => {
     const store = useContext(storeContext)
     const { setRcoFilters } = store.export
@@ -50,5 +50,3 @@ const RcoComparator = observer(
     )
   },
 )
-
-export default RcoComparator

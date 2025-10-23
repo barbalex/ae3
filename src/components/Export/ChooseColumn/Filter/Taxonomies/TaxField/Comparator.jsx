@@ -23,7 +23,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const Comparator = observer(({ comparator, taxname, pname, value }) => {
+export const Comparator = observer(({ comparator, taxname, pname, value }) => {
   const store = useContext(storeContext)
   const { setTaxFilters } = store.export
 
@@ -47,5 +47,3 @@ const Comparator = observer(({ comparator, taxname, pname, value }) => {
     </Container>
   )
 })
-
-export default Comparator

@@ -33,12 +33,15 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const HowToProperties = () => {
+export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>So geht's</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -50,7 +53,11 @@ const HowToProperties = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <ul>
             <li>
@@ -67,5 +74,3 @@ const HowToProperties = () => {
     </StyledCard>
   )
 }
-
-export default HowToProperties

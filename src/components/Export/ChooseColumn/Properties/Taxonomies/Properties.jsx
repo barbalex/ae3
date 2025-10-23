@@ -1,6 +1,6 @@
-import Chooser from './Taxonomy/Chooser.jsx'
+import { Chooser } from './Taxonomy/Chooser.jsx'
 
-const TaxProperties = ({ properties }) =>
+export const Properties = ({ properties }) =>
   properties.map((p) => (
     <Chooser
       key={`${p.propertyName}${p.jsontype}`}
@@ -10,5 +10,3 @@ const TaxProperties = ({ properties }) =>
       count={p.count}
     />
   ))
-
-export default TaxProperties

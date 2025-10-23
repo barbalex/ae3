@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import Property from './Property/index.jsx'
+import { Property } from './Property/index.jsx'
 
-const RcoCard = ({ properties }) => {
+export const Properties = ({ properties }) => {
   const queryClient = useQueryClient()
 
   return properties.map((p) => (
@@ -15,5 +15,3 @@ const RcoCard = ({ properties }) => {
     />
   ))
 }
-
-export default RcoCard

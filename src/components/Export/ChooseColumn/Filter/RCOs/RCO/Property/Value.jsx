@@ -96,7 +96,7 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
   />
 )
 
-const IntegrationAutosuggest = observer(
+export const Value = observer(
   ({ relationtype, pcname, pname, jsontype, comparator, value: propValue }) => {
     const apolloClient = useApolloClient()
     const store = useContext(storeContext)
@@ -210,5 +210,3 @@ const IntegrationAutosuggest = observer(
     )
   },
 )
-
-export default IntegrationAutosuggest

@@ -1,6 +1,6 @@
-import TaxField from './TaxField/index.jsx'
+import { TaxField } from './TaxField/index.jsx'
 
-const TaxProperties = ({ properties }) =>
+export const Properties = ({ properties }) =>
   properties.map((p) => (
     <TaxField
       key={`${p.propertyName}${p.jsontype}`}
@@ -9,5 +9,3 @@ const TaxProperties = ({ properties }) =>
       jsontype={p.jsontype}
     />
   ))
-
-export default TaxProperties
