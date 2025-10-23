@@ -69,7 +69,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const TaxonomyCard = observer(({ pc, initiallyExpanded }) => {
+export const Taxonomy = observer(({ pc, initiallyExpanded }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -147,5 +147,3 @@ const TaxonomyCard = observer(({ pc, initiallyExpanded }) => {
     </ErrorBoundary>
   )
 })
-
-export default TaxonomyCard

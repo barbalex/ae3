@@ -41,7 +41,7 @@ const PropertiesContainer = styled.div`
   container-type: inline-size;
 `
 
-const JointTaxonomiesCard = ({ jointTaxProperties }) => {
+export const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -79,5 +79,3 @@ const JointTaxonomiesCard = ({ jointTaxProperties }) => {
     </ErrorBoundary>
   )
 }
-
-export default JointTaxonomiesCard
