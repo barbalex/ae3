@@ -11,7 +11,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import PCOs from './PCOs.jsx'
+import { PcoList as List } from './PCOs.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
@@ -61,7 +61,7 @@ const query = gql`
   }
 `
 
-const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
+export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -113,12 +113,10 @@ const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
             timeout="auto"
             unmountOnExit
           >
-            <PCOs />
+            <List />
           </Collapse>
         </StyledCard>
       </Container>
     </ErrorBoundary>
   )
 })
-
-export default PcoList

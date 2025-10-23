@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { HowTo } from './HowTo.jsx'
 import { Taxonomies } from './Taxonomies/index.jsx'
-import PCOs from './PCOs/index.jsx'
+import { PcoList } from './PCOs/index.jsx'
 import RCOs from './RCOs/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
@@ -58,7 +58,7 @@ export const Properties = observer(() => {
           taxonomiesExpanded={taxonomiesExpanded}
           onToggleTaxonomies={onToggleTaxonomies}
         />
-        <PCOs
+        <PcoList
           pcoExpanded={pcoExpanded}
           onTogglePco={onTogglePco}
         />
