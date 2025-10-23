@@ -33,12 +33,15 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const Tipps = () => {
+export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <StyledCard>
-      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
         <CardActionTitle>Tipps und Tricks</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -50,7 +53,11 @@ const Tipps = () => {
           </Icon>
         </CardActionIconButton>
       </StyledCardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
         <StyledCardContent>
           <ul>
             <li>
@@ -91,5 +98,3 @@ const Tipps = () => {
     </StyledCard>
   )
 }
-
-export default Tipps

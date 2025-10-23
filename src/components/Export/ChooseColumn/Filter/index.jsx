@@ -5,8 +5,8 @@ import Checkbox from '@mui/material/Checkbox'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import HowTo from './HowTo.jsx'
-import Tipps from './Tipps.jsx'
+import { HowTo } from './HowTo.jsx'
+import { Tipps } from './Tipps.jsx'
 import Id from './Id.jsx'
 import Taxonomies from './Taxonomies/index.jsx'
 import PCOs from './PCOs/index.jsx'
@@ -26,7 +26,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const Filter = observer(() => {
+export const Filter = observer(() => {
   const store = useContext(storeContext)
   const {
     setWithSynonymData,
@@ -110,5 +110,3 @@ const Filter = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default Filter

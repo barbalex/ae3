@@ -33,7 +33,7 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const HowToFilter = () => {
+export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
   const onClickAction = () => setExpanded(!expanded)
 
@@ -79,5 +79,3 @@ const HowToFilter = () => {
     </StyledCard>
   )
 }
-
-export default HowToFilter

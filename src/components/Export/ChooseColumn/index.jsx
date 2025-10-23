@@ -12,7 +12,7 @@ import SimpleBar from 'simplebar-react'
 
 import { Taxonomies } from './Taxonomies/index.jsx'
 import { Properties } from './Properties/index.jsx'
-import Filter from './Filter/index.jsx'
+import { Filter } from './Filter/index.jsx'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
@@ -69,10 +69,6 @@ export const ChooseColumn = observer(() => {
     setPropertiesExpanded(false)
   }
   const onToggleFilter = () => {
-    console.log('Export.ChooseColumn.onToggleFilter', {
-      exportTaxonomies,
-      filterExpanded,
-    })
     if (!filterExpanded && exportTaxonomies.length > 0) {
       setFilterExpanded(true)
       // close all others
