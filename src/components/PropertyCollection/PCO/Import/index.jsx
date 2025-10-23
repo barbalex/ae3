@@ -121,6 +121,20 @@ const initialCheckState = {
   existsPropertyKey: undefined,
 }
 
+const getobjectIdsUnreal = ({ data, objectIds }) => {
+  const realObjectIds = (data?.allObjects?.nodes ?? []).map((o) => o.id)
+
+  return objectIds.filter((i) => !realObjectIds.includes(i))
+}
+
+const getImportDataFields = (importData) => {
+  let fields = []
+  importData.forEach((d) => {
+    fields = union([...fields, ...Object.keys(d)])
+  })
+  return fields
+}
+
 const ImportPco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -181,33 +195,20 @@ const ImportPco = observer(({ setImport }) => {
   if (error && error.message) {
     console.log('error', error.message)
   }
-  const objectIdsUnreal = useMemo(() => {
-    const realObjectIds = (data?.allObjects?.nodes ?? []).map((o) => o.id)
-    return objectIds.filter((i) => !realObjectIds.includes(i))
-  }, [data, objectIds])
 
-  const objectIdsAreReal = useMemo(
-    () =>
-      !isLoading && objectIds.length > 0 ?
-        objectIdsUnreal.length === 0
-      : undefined,
-    [isLoading, objectIds.length, objectIdsUnreal.length],
-  )
+  const objectIdsUnreal = getobjectIdsUnreal({ data, objectIds })
+  const objectIdsAreReal =
+    !isLoading && objectIds.length > 0 ?
+      objectIdsUnreal.length === 0
+    : undefined
   const pCOfOriginsCheckData = data?.allPropertyCollections?.nodes ?? []
-  const pCOfOriginIdsAreReal = useMemo(
-    () =>
-      !isLoading && pCOfOriginIds.length > 0 ?
-        pCOfOriginIds.length === pCOfOriginsCheckData.length
-      : undefined,
-    [isLoading, pCOfOriginIds.length, pCOfOriginsCheckData.length],
-  )
-  const importDataFields = useMemo(() => {
-    let fields = []
-    importData.forEach((d) => {
-      fields = union([...fields, ...Object.keys(d)])
-    })
-    return fields
-  }, [importData])
+  const pCOfOriginIdsAreReal =
+    !isLoading && pCOfOriginIds.length > 0 ?
+      pCOfOriginIds.length === pCOfOriginsCheckData.length
+    : undefined
+  const importDataFields = getImportDataFields(importData)
+
+  // keep this explicit memo because of the Object.values(checkState) dependency
   const showImportButton = useMemo(
     () =>
       importData.length > 0 &&
@@ -231,12 +232,8 @@ const ImportPco = observer(({ setImport }) => {
     [Object.values(checkState), importData.length, objectIdsAreReal],
   )
   const showPreview = importData.length > 0
-  const propertyFields = useMemo(
-    () =>
-      importDataFields.filter(
-        (f) => !['id', 'objectId', 'propertyCollectionOfOrigin'].includes(f),
-      ),
-    [importDataFields],
+  const propertyFields = importDataFields.filter(
+    (f) => !['id', 'objectId', 'propertyCollectionOfOrigin'].includes(f),
   )
 
   const onDrop = (acceptedFiles) => {
