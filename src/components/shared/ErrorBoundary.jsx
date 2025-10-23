@@ -3,7 +3,7 @@ import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
-import idbContext from '../../idbContext.js'
+import { idbContext } from '../../idbContext.js'
 import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`

@@ -18,7 +18,7 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
 import { fetchLogin } from './fetchLogin.js'
-import idbContext from '../../idbContext.js'
+import { idbContext } from '../../idbContext.js'
 import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 

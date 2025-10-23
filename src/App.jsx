@@ -1,5 +1,5 @@
 import { useEffect, useState, Suspense, lazy } from 'react'
-import { ApolloProvider } from "@apollo/client/react";
+import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
@@ -17,8 +17,8 @@ import { initializeIdb } from './modules/initializeIdb.js'
 import { setLoginFromIdb } from './modules/setLoginFromIdb.js'
 import { detectIE } from './modules/detectIE.js'
 import { client } from './client.js'
-import { Provider as IdbProvider } from './idbContext.js'
-import { Provider as MobxProvider } from './storeContext.js'
+import { IdbProvider } from './idbContext.js'
+import { MobxProvider } from './storeContext.js'
 import { store as Store } from './store/index.js'
 import { Router } from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
