@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import PCO from './PCO/index.jsx'
+import { PCO } from './PCO/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 

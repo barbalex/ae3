@@ -1,6 +1,6 @@
-import Chooser from './Chooser.jsx'
+import { Chooser } from './Chooser.jsx'
 
-const RcoProperties = ({ properties, relationtype }) =>
+export const Properties = ({ properties, relationtype }) =>
   properties.map((p) => (
     <Chooser
       key={`${p.property ?? 'Beziehungspartner'}${p.jsontype ?? 'Boolaen'}`}
@@ -12,5 +12,3 @@ const RcoProperties = ({ properties, relationtype }) =>
       propertiesLength={properties.length}
     />
   ))
-
-export default RcoProperties

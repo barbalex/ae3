@@ -18,7 +18,7 @@ const Label = styled(FormControlLabel)`
   }
 `
 
-const RcoChooser = observer(
+export const Chooser = observer(
   ({ pcname, relationtype, pname, propertiesLength }) => {
     const store = useContext(storeContext)
     const { rcoProperties, addRcoProperty, removeRcoProperty } = store.export
@@ -56,5 +56,3 @@ const RcoChooser = observer(
     )
   },
 )
-
-export default RcoChooser

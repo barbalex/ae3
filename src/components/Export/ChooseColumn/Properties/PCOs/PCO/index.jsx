@@ -37,7 +37,7 @@ const Count = styled.span`
   padding-left: 5px;
 `
 
-const PCO = ({ pcName, count }) => {
+export const PCO = ({ pcName, count }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -78,5 +78,3 @@ const PCO = ({ pcName, count }) => {
     </ErrorBoundary>
   )
 }
-
-export default PCO

@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { AllChooser } from './AllChooser.jsx'
-import Properties from './Properties.jsx'
+import { Properties } from './Properties.jsx'
 import storeContext from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
