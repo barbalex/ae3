@@ -33,7 +33,7 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const HowToTaxonomies = () => {
+export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -71,5 +71,3 @@ const HowToTaxonomies = () => {
     </StyledCard>
   )
 }
-
-export default HowToTaxonomies

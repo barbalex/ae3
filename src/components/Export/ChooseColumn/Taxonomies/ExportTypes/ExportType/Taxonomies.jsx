@@ -28,7 +28,7 @@ const TaxonomyLabel = styled(FormControlLabel)`
   }
 `
 
-const Taxonomies = observer(({ type }) => {
+export const Taxonomies = observer(({ type }) => {
   const store = useContext(storeContext)
   const { setType, setTaxonomies } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -92,5 +92,3 @@ const Taxonomies = observer(({ type }) => {
     </TaxContainer>
   )
 })
-
-export default Taxonomies

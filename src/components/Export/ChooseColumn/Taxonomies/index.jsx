@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 
-import HowTo from './HowTo.jsx'
-import ExportTypes from './ExportTypes/index.jsx'
+import { HowTo } from './HowTo.jsx'
+import { ExportTypes } from './ExportTypes/index.jsx'
 import storeContext from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
@@ -25,7 +25,7 @@ const StyledPaper = styled(Paper)`
   margin-top: 10px;
 `
 
-const Taxonomies = observer(() => {
+export const Taxonomies = observer(() => {
   const store = useContext(storeContext)
   const { type: exportType } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
@@ -57,5 +57,3 @@ const Taxonomies = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default Taxonomies

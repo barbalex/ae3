@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import Taxonomies from './Taxonomies/index.jsx'
+import { Taxonomies } from './Taxonomies/index.jsx'
 import Properties from './Properties/index.jsx'
 import Filter from './Filter/index.jsx'
 import storeContext from '../../../storeContext.js'

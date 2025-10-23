@@ -7,7 +7,7 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import Taxonomies from './Taxonomies.jsx'
+import { Taxonomies } from './Taxonomies.jsx'
 import storeContext from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
@@ -27,7 +27,7 @@ const TypeLabel = styled(FormControlLabel)`
   }
 `
 
-const ExportTypes = observer(({ type }) => {
+export const ExportType = observer(({ type }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -100,5 +100,3 @@ const ExportTypes = observer(({ type }) => {
     </ErrorBoundary>
   )
 })
-
-export default ExportTypes
