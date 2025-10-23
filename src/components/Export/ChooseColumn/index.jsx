@@ -47,7 +47,7 @@ const Container = styled.div`
   user-select: none !important;
 `
 
-const Export = observer(() => {
+export const ChooseColumn = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -180,5 +180,3 @@ const Export = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default Export

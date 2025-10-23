@@ -15,7 +15,7 @@ const HowToDiv = styled.div`
   padding: 15px 10px 0 10px;
 `
 
-const Filter = observer(() => {
+export const PreviewColumn = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
@@ -35,5 +35,3 @@ const Filter = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default Filter

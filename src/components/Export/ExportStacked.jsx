@@ -5,8 +5,8 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import ChooseColumn from './ChooseColumn/index.jsx'
-import PreviewColumn from './PreviewColumn/index.jsx'
+import { ChooseColumn } from './ChooseColumn/index.jsx'
+import { PreviewColumn } from './PreviewColumn/index.jsx'
 import storeContext from '../../storeContext.js'
 
 const StyledPaper = styled(Paper)`
@@ -16,7 +16,7 @@ const Content = styled.div`
   height: 100%;
 `
 
-const ExportStacked = observer(() => {
+export const ExportStacked = observer(() => {
   const store = useContext(storeContext)
   const { windowWidth } = store
   const [tab, setTab] = useState(0)
@@ -43,5 +43,3 @@ const ExportStacked = observer(() => {
     </>
   )
 })
-
-export default ExportStacked
