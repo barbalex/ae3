@@ -12,7 +12,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportPcoPropertiesListItem = observer(({ properties }) => {
+export const Item = observer(({ properties }) => {
   const store = useContext(storeContext)
   const { removePcoProperty } = store.export
   const { pcname, pname } = properties
@@ -30,5 +30,3 @@ const ExportPcoPropertiesListItem = observer(({ properties }) => {
     </li>
   )
 })
-
-export default ExportPcoPropertiesListItem

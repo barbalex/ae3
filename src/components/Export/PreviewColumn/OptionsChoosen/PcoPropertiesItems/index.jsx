@@ -1,8 +1,9 @@
-import Item from './Item.jsx'
+import { Item } from './Item.jsx'
 
-const ExportPcoPropertiesListItems = ({ pcoProperties }) =>
+export const PcoPropertiesItems = ({ pcoProperties }) =>
   pcoProperties.map((p) => (
-    <Item key={`${p.pcname}: ${p.pname}`} properties={p} />
+    <Item
+      key={`${p.pcname}: ${p.pname}`}
+      properties={p}
+    />
   ))
-
-export default ExportPcoPropertiesListItems
