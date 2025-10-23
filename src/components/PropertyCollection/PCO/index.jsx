@@ -9,14 +9,14 @@ import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import ImportPco from './Import/index.jsx'
+import { ImportPco } from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'
-import deletePcoOfPcMutation from './deletePcoOfPcMutation.js'
+import { deletePcoOfPcMutation } from './deletePcoOfPcMutation.js'
 import storeContext from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 import { exists } from '../../../modules/exists.js'
-import CountInput from '../../Export/PreviewColumn/CountInput.jsx'
+import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
 const Container = styled.div`
   height: 100%;

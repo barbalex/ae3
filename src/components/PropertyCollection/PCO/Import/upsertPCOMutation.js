@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const upsertPCOMutation = gql`
   mutation upsertPCO(
     $id: UUID
     $objectId: UUID

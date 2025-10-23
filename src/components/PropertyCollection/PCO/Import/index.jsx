@@ -13,11 +13,11 @@ import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import upsertPCOMutation from './upsertPCOMutation.js'
+import { upsertPCOMutation } from './upsertPCOMutation.js'
 import storeContext from '../../../../storeContext.js'
 import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
-import CountInput from '../../../Export/PreviewColumn/CountInput.jsx'
+import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { PcoInstructions } from './Instructions.jsx'
 
 const Container = styled.div`
@@ -135,7 +135,7 @@ const getImportDataFields = (importData) => {
   return fields
 }
 
-const ImportPco = observer(({ setImport }) => {
+export const ImportPco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -488,5 +488,3 @@ const ImportPco = observer(({ setImport }) => {
     </SimpleBar>
   )
 })
-
-export default ImportPco

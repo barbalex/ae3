@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const deletePcoOfPcMutation = gql`
   mutation deletePcoOfPc($pcId: UUID!) {
     deletePcoOfPc(input: { pcId: $pcId }) {
       taxonomies {
