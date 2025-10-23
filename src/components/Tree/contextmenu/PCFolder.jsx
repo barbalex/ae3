@@ -29,6 +29,4 @@ const DynamicMenu = ({ id, trigger }) => {
   )
 }
 
-const ConnectedMenu = connectMenu('CmPCFolder')(DynamicMenu)
-
-export default ConnectedMenu
+export const CmPCFolder = connectMenu('CmPCFolder')(DynamicMenu)
