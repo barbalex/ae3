@@ -7,7 +7,7 @@ import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import Chooser from './Chooser/index.jsx'
+import { Chooser } from './Chooser/index.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 const StyledCard = styled(Card)`
