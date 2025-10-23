@@ -13,7 +13,7 @@ const List = styled.div`
   }
 `
 
-const Roles = ({ orgUsers }) => (
+export const Roles = ({ orgUsers }) => (
   <Container>
     <List>
       <ul>
@@ -28,5 +28,3 @@ const Roles = ({ orgUsers }) => (
     </List>
   </Container>
 )
-
-export default Roles

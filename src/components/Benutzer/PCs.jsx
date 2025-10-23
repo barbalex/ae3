@@ -21,28 +21,27 @@ const StyledA = styled.a`
   text-decoration-style: dotted;
 `
 
-const PCs = ({ pcs }) => {
-  return (
-    <Container>
-      <List>
-        <ul>
-          {pcs.map(u => {
-            const link = `${appBaseUrl}/Eigenschaften-Sammlungen/${encodeURIComponent(
-              u.id,
-            )}`
+export const PCs = ({ pcs }) => (
+  <Container>
+    <List>
+      <ul>
+        {pcs.map((u) => {
+          const link = `${appBaseUrl}/Eigenschaften-Sammlungen/${encodeURIComponent(
+            u.id,
+          )}`
 
-            return (
-              <li key={u.name}>
-                <StyledA href={link} target="_blank">
-                  {u.name}
-                </StyledA>
-              </li>
-            )
-          })}
-        </ul>
-      </List>
-    </Container>
-  )
-}
-
-export default PCs
+          return (
+            <li key={u.name}>
+              <StyledA
+                href={link}
+                target="_blank"
+              >
+                {u.name}
+              </StyledA>
+            </li>
+          )
+        })}
+      </ul>
+    </List>
+  </Container>
+)

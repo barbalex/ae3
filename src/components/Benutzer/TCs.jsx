@@ -21,17 +21,20 @@ const StyledA = styled.a`
   text-decoration-style: dotted;
 `
 
-const TCs = ({ tcs }) => (
+export const TCs = ({ tcs }) => (
   <Container>
     <List>
       <ul>
-        {tcs.map(u => {
+        {tcs.map((u) => {
           const elem2 = tcs.type === 'ART' ? 'Arten' : 'Lebensräume'
           const link = `${appBaseUrl}/${encodeURIComponent(elem2)}/${u.id}`
 
           return (
             <li key={u.name}>
-              <StyledA href={link} target="_blank">
+              <StyledA
+                href={link}
+                target="_blank"
+              >
                 {u.name}
               </StyledA>
             </li>
@@ -41,5 +44,3 @@ const TCs = ({ tcs }) => (
     </List>
   </Container>
 )
-
-export default TCs

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const updateUserMutationWithPass = gql`
   mutation updateUser(
     $username: String
     $email: String
