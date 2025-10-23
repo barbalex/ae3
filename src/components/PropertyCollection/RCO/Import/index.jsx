@@ -151,6 +151,14 @@ const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }) => {
   return pCOfOriginIds.filter((i) => !realIds.includes(i))
 }
 
+const getImportDataFields = (importData) => {
+  let fields = []
+  importData.forEach((d) => {
+    fields = union([...fields, ...Object.keys(d)])
+  })
+  return fields
+}
+
 const ImportRco = observer(({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -233,14 +241,12 @@ const ImportRco = observer(({ setImport }) => {
       objectRelationIdsUnreal.length === 0
     : undefined
   const pCOfOriginIdsUnreal = getPCOfOriginIdsUnreal({ data, pCOfOriginIds })
-  const pCOfOriginIdsAreReal = useMemo(
-    () =>
-      !isLoading && pCOfOriginIds.length > 0 ?
-        pCOfOriginIdsUnreal.length === 0
-      : undefined,
-    [isLoading, pCOfOriginIds.length, pCOfOriginIdsUnreal.length],
-  )
+  const pCOfOriginIdsAreReal =
+    !isLoading && pCOfOriginIds.length > 0 ?
+      pCOfOriginIdsUnreal.length === 0
+    : undefined
 
+  // keep this memo due to Object.values(checkState) dependency
   const showImportButton = useMemo(
     () =>
       importData.length > 0 &&
@@ -276,19 +282,9 @@ const ImportRco = observer(({ setImport }) => {
   )
   const showPreview = importData.length > 0
 
-  const importDataFields = useMemo(() => {
-    let fields = []
-    importData.forEach((d) => {
-      fields = union([...fields, ...Object.keys(d)])
-    })
-    return fields
-  }, [importData])
-  const propertyFields = useMemo(
-    () =>
-      importDataFields.filter(
-        (f) => !['id', 'objectId', 'propertyCollectionOfOrigin'].includes(f),
-      ),
-    [importDataFields],
+  const importDataFields = getImportDataFields(importData)
+  const propertyFields = importDataFields.filter(
+    (f) => !['id', 'objectId', 'propertyCollectionOfOrigin'].includes(f),
   )
 
   const onDrop = (acceptedFiles) => {
