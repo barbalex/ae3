@@ -19,7 +19,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportTaxFilterListItem = observer(({ filter }) => {
+export const Item = observer(({ filter }) => {
   const store = useContext(storeContext)
   const { setTaxFilters } = store.export
 
@@ -42,5 +42,3 @@ const ExportTaxFilterListItem = observer(({ filter }) => {
     </li>
   )
 })
-
-export default ExportTaxFilterListItem

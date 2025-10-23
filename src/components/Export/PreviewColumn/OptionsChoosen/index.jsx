@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import TaxFilterItems from './TaxFilterItems/index.jsx'
+import { TaxFilterItems } from './TaxFilterItems/index.jsx'
 import PcoFilterItems from './PcoFilterItems/index.jsx'
 import RcoFilterItems from './RcoFilterItems/index.jsx'
 import TaxPropertiesItems from './TaxPropertiesItems/index.jsx'
