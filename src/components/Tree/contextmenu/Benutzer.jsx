@@ -38,6 +38,4 @@ const DynamicMenu = ({ id, trigger }) => {
   )
 }
 
-const ConnectedMenu = connectMenu('CmBenutzer')(DynamicMenu)
-
-export default ConnectedMenu
+export const CmBenutzer = connectMenu('CmBenutzer')(DynamicMenu)

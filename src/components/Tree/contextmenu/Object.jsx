@@ -1,4 +1,3 @@
-
 import {
   ContextMenu,
   MenuItem,
@@ -40,6 +39,4 @@ const DynamicMenu = ({ id, trigger }) => {
   )
 }
 
-const ConnectedMenu = connectMenu('CmObject')(DynamicMenu)
-
-export default ConnectedMenu
+export const CmObject = connectMenu('CmObject')(DynamicMenu)
