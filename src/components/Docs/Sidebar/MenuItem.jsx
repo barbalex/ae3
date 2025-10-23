@@ -10,7 +10,7 @@ const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
 `
 
-const MenuItem = ({ node }) => {
+export const MenuItem = ({ node }) => {
   const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
 
   const location = useLocation()
@@ -40,5 +40,3 @@ const MenuItem = ({ node }) => {
     </>
   )
 }
-
-export default MenuItem

@@ -24,7 +24,7 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   color: rgba(0, 0, 0, 0.7);
 `
 
-const Filter = observer(() => {
+export const Filter = observer(() => {
   const store = useContext(storeContext)
   const { docFilter, setDocFilter } = store
   const onChange = (e) => setDocFilter(e.target.value)
@@ -59,5 +59,3 @@ const Filter = observer(() => {
     </FormControl>
   )
 })
-
-export default Filter

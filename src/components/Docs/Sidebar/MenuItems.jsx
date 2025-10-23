@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import MenuItem from './MenuItem.jsx'
+import { MenuItem } from './MenuItem.jsx'
 import storeContext from '../../../storeContext.js'
 
 // don't know why but divider is too thick,
@@ -47,7 +47,7 @@ const nodes = [
   },
 ]
 
-const MenuItems = observer(() => {
+export const MenuItems = observer(() => {
   const { docFilter } = useContext(storeContext)
   const nodesFiltered = nodes.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
@@ -65,5 +65,3 @@ const MenuItems = observer(() => {
     </List>
   )
 })
-
-export default MenuItems

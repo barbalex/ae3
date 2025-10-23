@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
 import storeContext from '../../../storeContext.js'
-import MenuItems from './MenuItems.jsx'
-import Filter from './Filter.jsx'
+import { MenuItems } from './MenuItems.jsx'
+import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
 
 const Menu = styled.div`
@@ -34,7 +34,7 @@ const StyledSimpleBar = styled(SimpleBar)`
   height: calc(100cqh - 25px);
 `
 
-const Sidebar = observer(({ stacked }) => {
+export const Sidebar = observer(({ stacked }) => {
   const store = useContext(storeContext)
   const { sidebarWidth } = store
 
@@ -52,5 +52,3 @@ const Sidebar = observer(({ stacked }) => {
     </Menu>
   )
 })
-
-export default Sidebar
