@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import OptionsChoosen from './OptionsChoosen/index.jsx'
+import { OptionsChoosen } from './OptionsChoosen/index.jsx'
 import Preview from './Preview.jsx'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
