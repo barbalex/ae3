@@ -12,7 +12,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportRcoPropertiesListItem = observer(({ properties }) => {
+export const Item = observer(({ properties }) => {
   const { pcname, relationtype, pname } = properties
   const store = useContext(storeContext)
   const { removeRcoProperty } = store.export
@@ -31,5 +31,3 @@ const ExportRcoPropertiesListItem = observer(({ properties }) => {
     </li>
   )
 })
-
-export default ExportRcoPropertiesListItem
