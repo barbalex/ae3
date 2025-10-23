@@ -11,6 +11,7 @@ import { jwtDecode } from 'jwt-decode'
 
 import './index.css'
 import 'react-reflex/styles.css'
+
 import { graphQlUri } from './modules/graphQlUri.js'
 
 export const client = ({ idb, store }) => {
