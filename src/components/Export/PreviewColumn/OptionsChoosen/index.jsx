@@ -6,7 +6,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { TaxFilterItems } from './TaxFilterItems/index.jsx'
 import { PcoFilterItems } from './PcoFilterItems/index.jsx'
-import RcoFilterItems from './RcoFilterItems/index.jsx'
+import { RcoFilterItems } from './RcoFilterItems/index.jsx'
 import TaxPropertiesItems from './TaxPropertiesItems/index.jsx'
 import PcoPropertiesItems from './PcoPropertiesItems/index.jsx'
 import RcoPropertiesItems from './RcoPropertiesItems/index.jsx'

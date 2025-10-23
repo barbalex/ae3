@@ -19,7 +19,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportRcoFilterListItem = observer(({ filter }) => {
+export const Item = observer(({ filter }) => {
   const { pcname, relationtype, pname, comparator, value } = filter
   const store = useContext(storeContext)
   const { setRcoFilters } = store.export
@@ -43,5 +43,3 @@ const ExportRcoFilterListItem = observer(({ filter }) => {
     </li>
   )
 })
-
-export default ExportRcoFilterListItem

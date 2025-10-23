@@ -1,8 +1,9 @@
-import Item from './Item.jsx'
+import { Item } from './Item.jsx'
 
-const ExportRcoFilterListItems = ({ rcoFilters }) =>
+export const RcoFilterItems = ({ rcoFilters }) =>
   rcoFilters.map((f) => (
-    <Item key={`${f.pcname}|${f.relationtype}|${f.pname}`} filter={f} />
+    <Item
+      key={`${f.pcname}|${f.relationtype}|${f.pname}`}
+      filter={f}
+    />
   ))
-
-export default ExportRcoFilterListItems
