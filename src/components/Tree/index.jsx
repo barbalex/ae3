@@ -6,7 +6,7 @@ import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
 
 import { Filter } from './Filter/index.jsx'
-import treeQuery from './treeQuery.js'
+import { treeQuery } from './treeQuery.js'
 import CmBenutzerFolder from './contextmenu/BenutzerFolder.jsx'
 import CmBenutzer from './contextmenu/Benutzer.jsx'
 import CmObject from './contextmenu/Object.jsx'

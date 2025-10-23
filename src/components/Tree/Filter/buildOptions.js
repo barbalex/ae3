@@ -23,7 +23,7 @@ const filterSuggestionsQuery = gql`
   }
 `
 
-const buildOptions = async ({ cb, client, treeFilter }) => {
+export const buildOptions = async ({ cb, client, treeFilter }) => {
   let resultFilterSuggestionsQuery
   try {
     resultFilterSuggestionsQuery = await client.query({
@@ -92,5 +92,3 @@ const buildOptions = async ({ cb, client, treeFilter }) => {
 
   cb(options)
 }
-
-export default buildOptions

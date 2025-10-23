@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router'
 import { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import buildOptions from './buildOptions.js'
+import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
 
 const Container = styled.div`

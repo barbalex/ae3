@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export default gql`
+export const treeQuery = gql`
   query TreeQuery($username: String!) {
     userByName(name: $username) {
       id
