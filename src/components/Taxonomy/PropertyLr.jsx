@@ -13,7 +13,13 @@ const Container = styled.div`
   margin: 5px 0;
 `
 
-const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
+export const PropertyLr = ({
+  taxonomy,
+  field,
+  label,
+  type = 'text',
+  disabled,
+}) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [value, setValue] = useState(taxonomy[field] || '')
@@ -60,5 +66,3 @@ const Property = ({ taxonomy, field, label, type = 'text', disabled }) => {
     </ErrorBoundary>
   )
 }
-
-export default Property

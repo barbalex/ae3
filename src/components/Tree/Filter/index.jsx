@@ -172,7 +172,7 @@ const getCustomStyles = (singleColumnView) => ({
   }),
 })
 
-const TreeFilter = observer(() => {
+export const Filter = observer(() => {
   // TODO: use local state instead of mobx for label, id
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
@@ -280,5 +280,3 @@ const TreeFilter = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default TreeFilter
