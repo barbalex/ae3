@@ -6,7 +6,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import RCO from './RCO/index.jsx'
+import { RCO } from './RCO/index.jsx'
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
@@ -36,7 +36,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-const RcosCardList = observer(() => {
+export const RcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -90,5 +90,3 @@ const RcosCardList = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default RcosCardList

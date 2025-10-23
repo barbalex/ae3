@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import List from './List.jsx'
+import { RcoList } from './List.jsx'
 
 const Container = styled.div`
   margin: 10px 0;
@@ -64,7 +64,7 @@ const query = gql`
   }
 `
 
-const RcosCard = observer(({ rcoExpanded, onToggleRco }) => {
+export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
@@ -126,12 +126,10 @@ const RcosCard = observer(({ rcoExpanded, onToggleRco }) => {
             timeout="auto"
             unmountOnExit
           >
-            <List />
+            <RcoList />
           </Collapse>
         </StyledCard>
       </Container>
     </ErrorBoundary>
   )
 })
-
-export default RcosCard
