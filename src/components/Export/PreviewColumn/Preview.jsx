@@ -10,7 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import CountInput from './CountInput.jsx'
+import { CountInput } from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 
 const Container = styled.div`
@@ -107,7 +107,7 @@ const getSortFieldForQuery = (sortField) => {
   return sf
 }
 
-const Preview = observer(() => {
+export const Preview = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -369,5 +369,3 @@ const Preview = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default Preview

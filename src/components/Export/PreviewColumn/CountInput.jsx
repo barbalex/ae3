@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const CountInput = ({ count, setCount }) => {
+export const CountInput = ({ count, setCount }) => {
   const [value, setValue] = useState(count)
 
   return (
@@ -13,5 +13,3 @@ const CountInput = ({ count, setCount }) => {
     />
   )
 }
-
-export default CountInput
