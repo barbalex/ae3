@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 import { isElementInViewport } from '../../modules/isElementInViewport.js'
 import { getLastIdFromUrl } from '../../modules/getLastIdFromUrl.js'
 

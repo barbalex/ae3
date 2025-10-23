@@ -12,7 +12,7 @@ import { PC } from './PC/index.jsx'
 import { getActiveObjectIdFromNodeArray } from '../../modules/getActiveObjectIdFromNodeArray.js'
 import { query } from './query.js'
 import { querySynonyms } from './querySynonyms.js'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import idbContext from '../../idbContext.js'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   padding: 15px;

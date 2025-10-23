@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 20px 10px 12px 0;

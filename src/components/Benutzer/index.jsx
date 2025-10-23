@@ -19,7 +19,7 @@ import { PCs } from './PCs.jsx'
 import { TCs } from './TCs.jsx'
 import { updateUserMutation } from './updateUserMutation.js'
 import { updateUserMutationWithPass } from './updateUserMutationWithPass.js'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 

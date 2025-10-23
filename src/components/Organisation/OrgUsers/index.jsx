@@ -11,7 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { createOrgUserMutation } from './createOrgUserMutation.js'
 import { OrgUsersList } from './OrgUsersList/index.jsx'
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 

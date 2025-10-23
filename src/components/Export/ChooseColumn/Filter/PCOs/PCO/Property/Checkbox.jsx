@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../../storeContext.js'
 
 const Container = styled.div`
   width: 100%;

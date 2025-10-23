@@ -11,7 +11,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../../../storeContext.js'
+import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { RcoList } from './List.jsx'
 

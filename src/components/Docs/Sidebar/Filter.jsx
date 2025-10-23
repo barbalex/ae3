@@ -7,7 +7,7 @@ import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 
 const StyledInput = styled(Input)`
   div hr {

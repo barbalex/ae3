@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 import { DataFlexed } from './DataFlexed.jsx'
 import { DataStacked } from './DataStacked.jsx'
 

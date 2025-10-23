@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Comparator } from './Comparator.jsx'
 import { Value } from './Value.jsx'
-import storeContext from '../../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
 const Container = styled.div`

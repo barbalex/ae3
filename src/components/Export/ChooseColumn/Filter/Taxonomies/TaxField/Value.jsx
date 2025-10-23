@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { readableType } from '../../../../../../modules/readableType.js'
-import storeContext from '../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../storeContext.js'
 
 const Container = styled.div`
   flex-grow: 1;

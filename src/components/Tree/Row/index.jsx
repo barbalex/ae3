@@ -18,7 +18,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
 import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
 import onClickContextMenuDo from './onClickContextMenu.js'
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 
 const rowHeight = 23
 const StyledNode = styled.div`

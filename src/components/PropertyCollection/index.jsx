@@ -23,7 +23,7 @@ import { DateField } from '../shared/Date.jsx'
 import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   padding: 10px;

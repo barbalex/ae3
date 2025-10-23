@@ -8,7 +8,7 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import storeContext from '../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../storeContext.js'
 
 const TaxContainer = styled.div`
   margin-left: 39px;

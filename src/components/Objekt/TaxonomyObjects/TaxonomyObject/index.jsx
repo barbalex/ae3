@@ -37,7 +37,7 @@ import { Property } from './Property.jsx'
 import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
-import storeContext from '../../../../storeContext.js'
+import { storeContext } from '../../../../storeContext.js'
 
 const LoadingContainer = styled.div`
   margin: 10px;

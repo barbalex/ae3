@@ -15,7 +15,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { upsertRCOMutation } from './upsertRCOMutation.js'
-import storeContext from '../../../../storeContext.js'
+import { storeContext } from '../../../../storeContext.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'

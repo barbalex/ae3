@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router'
 
 import { onBlurDo } from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 5px 0;

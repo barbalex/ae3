@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MenuItem } from './MenuItem.jsx'
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 
 // don't know why but divider is too thick,
 // thicker than ListItemButton divider

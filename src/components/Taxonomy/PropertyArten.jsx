@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { onBlurArten } from './onBlurArten.js'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   margin: 5px 0;

@@ -6,7 +6,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { PcoComparator } from './Comparator.jsx'
 import { PcoValue } from './Value.jsx'
 import { PcoCheckbox } from './Checkbox.jsx'
-import storeContext from '../../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
 const Container = styled.div`

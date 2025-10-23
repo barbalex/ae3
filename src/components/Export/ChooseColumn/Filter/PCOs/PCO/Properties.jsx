@@ -6,7 +6,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { PcoProperty } from './Property/index.jsx'
-import storeContext from '../../../../../../storeContext.js'
+import { storeContext } from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
 const SpinnerContainer = styled.div`

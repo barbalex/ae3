@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router'
 
 import { getUrlForObject } from '../modules/getUrlForObject.js'
 import { getUrlParamByName } from '../modules/getUrlParamByName.js'
-import storeContext from '../storeContext.js'
+import { storeContext } from '../storeContext.js'
 
 const objectQuery = gql`
   query ObjectQuery($id: UUID!, $hasObjectId: Boolean!) {

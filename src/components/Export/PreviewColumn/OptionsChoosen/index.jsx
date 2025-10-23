@@ -10,7 +10,7 @@ import { RcoFilterItems } from './RcoFilterItems/index.jsx'
 import { TaxPropertiesItems } from './TaxPropertiesItems/index.jsx'
 import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { storeContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   margin: 0;

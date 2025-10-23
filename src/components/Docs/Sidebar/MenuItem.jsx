@@ -4,7 +4,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 
 const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}

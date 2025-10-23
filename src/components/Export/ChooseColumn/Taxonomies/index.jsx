@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { HowTo } from './HowTo.jsx'
 import { ExportTypes } from './ExportTypes/index.jsx'
-import storeContext from '../../../../storeContext.js'
+import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

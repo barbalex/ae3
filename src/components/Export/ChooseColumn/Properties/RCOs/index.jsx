@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { RcList } from './RcList/index.jsx'
-import storeContext from '../../../../../storeContext.js'
+import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

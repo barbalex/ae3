@@ -9,7 +9,7 @@ import LR from './LR/index.jsx'
 import PC from './PC/index.jsx'
 import Users from './Users/index.jsx'
 import Organizations from './Organizations/index.jsx'
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 import LoadingRow from '../LoadingRow.jsx'
 
 export const Root = observer(() => {

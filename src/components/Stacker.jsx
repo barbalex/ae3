@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react'
 import { debounce } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../storeContext.js'
+import { storeContext } from '../storeContext.js'
 
 export const Stacker = observer(() => {
   const store = useContext(storeContext)

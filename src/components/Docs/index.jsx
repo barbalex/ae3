@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Sidebar } from './Sidebar/index.jsx'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

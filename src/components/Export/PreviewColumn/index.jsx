@@ -5,7 +5,7 @@ import SimpleBar from 'simplebar-react'
 
 import { OptionsChoosen } from './OptionsChoosen/index.jsx'
 import { Preview } from './Preview.jsx'
-import storeContext from '../../../storeContext.js'
+import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`

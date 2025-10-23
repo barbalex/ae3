@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ChooseColumn } from './ChooseColumn/index.jsx'
 import { PreviewColumn } from './PreviewColumn/index.jsx'
-import storeContext from '../../storeContext.js'
+import { storeContext } from '../../storeContext.js'
 
 const StyledPaper = styled(Paper)`
   background-color: #ffcc80 !important;
