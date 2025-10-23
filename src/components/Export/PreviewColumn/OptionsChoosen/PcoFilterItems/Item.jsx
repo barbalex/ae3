@@ -19,7 +19,7 @@ const ResetSpan = styled.span`
   text-decoration: underline dotted rgba(0, 0, 0, 0.3);
 `
 
-const ExportPcoFilterListItem = observer(({ filter }) => {
+export const Item = observer(({ filter }) => {
   const store = useContext(storeContext)
   const { setPcoFilter } = store.export
 
@@ -43,5 +43,3 @@ const ExportPcoFilterListItem = observer(({ filter }) => {
     </li>
   )
 })
-
-export default ExportPcoFilterListItem

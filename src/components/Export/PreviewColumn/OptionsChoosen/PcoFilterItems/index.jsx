@@ -1,6 +1,9 @@
-import Item from './Item.jsx'
+import { Item } from './Item.jsx'
 
-const PcoFilterItems = ({ pcoFilters }) =>
-  pcoFilters.map((f) => <Item key={`${f.pcname}: ${f.pname}`} filter={f} />)
-
-export default PcoFilterItems
+export const PcoFilterItems = ({ pcoFilters }) =>
+  pcoFilters.map((f) => (
+    <Item
+      key={`${f.pcname}: ${f.pname}`}
+      filter={f}
+    />
+  ))
