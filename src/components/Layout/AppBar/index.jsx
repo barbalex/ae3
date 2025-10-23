@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import AppBar from '@mui/material/AppBar'
+import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Icon from '@mui/material/Icon'
 import { MdShare as ShareIcon } from 'react-icons/md'
@@ -14,17 +14,17 @@ import { useLocation, useNavigate, Link } from 'react-router'
 import { getActiveObjectIdFromNodeArray } from '../../../modules/getActiveObjectIdFromNodeArray.js'
 import storeContext from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import MoreMenu from './MoreMenu.jsx'
+import { MoreMenu } from './MoreMenu.jsx'
 
 /**
- * For unknown reason appbar does not follow display flex when
- * user form is shown: user covers appbar!!??
+ * For unknown reason AppBar does not follow display flex when
+ * user form is shown: user covers AppBar!!??
  * Container with display block is needed to prevent that
  */
 const Container = styled.div`
   display: block;
 `
-const StyledAppBar = styled(AppBar)`
+const StyledAppBar = styled(MuiAppBar)`
   background-color: #e65100 !important;
   @media print {
     display: none !important;
@@ -102,7 +102,7 @@ const query = gql`
   }
 `
 
-const AppBarComponent = observer(() => {
+export const AppBar = observer(() => {
   const store = useContext(storeContext)
   const { login, singleColumnView } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
@@ -260,5 +260,3 @@ const AppBarComponent = observer(() => {
     </ErrorBoundary>
   )
 })
-
-export default AppBarComponent

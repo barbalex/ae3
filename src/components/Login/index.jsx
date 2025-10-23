@@ -17,7 +17,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
-import fetchLoginModule from './fetchLogin.js'
+import { fetchLogin } from './fetchLogin.js'
 import idbContext from '../../idbContext.js'
 import storeContext from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -55,8 +55,8 @@ const Login = observer(() => {
   const nameInput = useRef(null)
   const passwordInput = useRef(null)
 
-  const fetchLogin = (namePassed, passPassed, navigate) =>
-    fetchLoginModule({
+  const doFetchLogin = (namePassed, passPassed, navigate) =>
+    fetchLogin({
       client: apolloClient,
       changeNameErrorText,
       changePassErrorText,
@@ -87,7 +87,7 @@ const Login = observer(() => {
     if (!name) {
       changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
     } else if (pass) {
-      fetchLogin(name, pass, navigate)
+      doFetchLogin(name, pass, navigate)
     }
   }
   const onBlurPassword = (e) => {
@@ -97,7 +97,7 @@ const Login = observer(() => {
     if (!pass) {
       changePassErrorText('Bitte Passwort eingeben')
     } else if (name) {
-      fetchLogin(name, pass, navigate)
+      doFetchLogin(name, pass, navigate)
     }
   }
   const onKeyPressName = (e) => e.key === 'Enter' && onBlurName(e)

@@ -1,9 +1,9 @@
 import { jwtDecode } from 'jwt-decode'
 import { CombinedGraphQLErrors } from '@apollo/client'
 
-import loginDbMutation from './loginDbMutation.js'
+import { loginDbMutation } from './loginDbMutation.js'
 
-const fetchLogin = async ({
+export const fetchLogin = async ({
   client,
   changeNameErrorText,
   changePassErrorText,
@@ -90,5 +90,3 @@ const fetchLogin = async ({
     }, 2000)
   }
 }
-
-export default fetchLogin

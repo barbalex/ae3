@@ -36,7 +36,7 @@ const Version = styled.div`
 const ITEM_HEIGHT = 48
 const paperProps = { style: { maxHeight: ITEM_HEIGHT * 7 } }
 
-const MoreMenu = () => {
+export const MoreMenu = () => {
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -124,5 +124,3 @@ const MoreMenu = () => {
     </div>
   )
 }
-
-export default MoreMenu
