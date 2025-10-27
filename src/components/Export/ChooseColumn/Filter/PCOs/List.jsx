@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -28,13 +28,19 @@ const query = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const PcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['filterPcosList', exportTaxonomies],
     queryFn: () =>
       apolloClient.query({
@@ -53,23 +59,17 @@ export const PcoList = observer(() => {
     )
   }
 
-  if (isLoading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
   return (
     <ErrorBoundary>
-      {nodes.map(({ name, count }) => (
-        <PCO
-          key={name}
-          pc={name}
-          count={count}
-        />
-      ))}
+      <Suspense fallback={fallback}>
+        {nodes.map(({ name, count }) => (
+          <PCO
+            key={name}
+            pc={name}
+            count={count}
+          />
+        ))}
+      </Suspense>
     </ErrorBoundary>
   )
 })
