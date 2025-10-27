@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 

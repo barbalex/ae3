@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 

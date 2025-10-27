@@ -8,7 +8,7 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -273,7 +273,11 @@ export const Taxonomy = observer(() => {
             {!!tax.lastUpdated && (
               <PropertyReadOnly
                 key="lastUpdated"
-                value={format(new Date(tax.lastUpdated), 'dd.MM.yyyy')}
+                value={
+                  tax.lastUpdated ?
+                    format(new Date(tax.lastUpdated), 'dd.MM.yyyy')
+                  : tax.lastUpdated
+                }
                 label="Zuletzt aktualisiert"
               />
             )}

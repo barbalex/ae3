@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -24,13 +24,19 @@ const query = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const PcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcos', exportTaxonomies],
     queryFn: () =>
       apolloClient.query({
@@ -45,19 +51,15 @@ export const PcoList = observer(() => {
 
   if (error) return `Error fetching data: ${error.message}`
 
-  if (isLoading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
-  return nodes.map(({ name, count }) => (
-    <PCO
-      key={name}
-      pcName={name}
-      count={count}
-    />
-  ))
+  return (
+    <Suspense fallback={fallback}>
+      {nodes.map(({ name, count }) => (
+        <PCO
+          key={name}
+          pcName={name}
+          count={count}
+        />
+      ))}
+    </Suspense>
+  )
 })
