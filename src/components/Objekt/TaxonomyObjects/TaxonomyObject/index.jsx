@@ -160,8 +160,6 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
     setExpanded(true)
   }
 
-  console.log('TaxonomyObject objekt:', objekt)
-
   if (error) {
     return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
   }
