@@ -41,22 +41,34 @@ const Export = lazy(async () => ({
 const Data = lazy(async () => ({
   default: (await import('./Data/index.jsx')).Data,
 }))
+const RouterErrorBoundary = lazy(async () => ({
+  default: (await import('./shared/RouterErrorBoundary.jsx'))
+    .RouterErrorBoundary,
+}))
 
 // Use react-router with outlets
 // render routes in outlet inside Data
 export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout />}>
+      <Route
+        element={<Layout />}
+        errorElement={<RouterErrorBoundary />}
+      >
         <Route
           path="/"
           element={<Data />}
+          errorElement={<RouterErrorBoundary />}
         >
           <Route
             index
             element={<Home />}
+            errorElement={<RouterErrorBoundary />}
           />
-          <Route path="Arten">
+          <Route
+            path="Arten"
+            errorElement={<RouterErrorBoundary />}
+          >
             <Route
               index
               element={<Home />}
@@ -72,7 +84,10 @@ export const Router = () => {
               />
             </Route>
           </Route>
-          <Route path="Lebensräume">
+          <Route
+            path="Lebensräume"
+            errorElement={<RouterErrorBoundary />}
+          >
             <Route
               index
               element={<Home />}
@@ -88,7 +103,10 @@ export const Router = () => {
               />
             </Route>
           </Route>
-          <Route path="Eigenschaften-Sammlungen">
+          <Route
+            path="Eigenschaften-Sammlungen"
+            errorElement={<RouterErrorBoundary />}
+          >
             <Route
               index
               element={<Home />}
@@ -108,7 +126,10 @@ export const Router = () => {
               />
             </Route>
           </Route>
-          <Route path="Benutzer">
+          <Route
+            path="Benutzer"
+            errorElement={<RouterErrorBoundary />}
+          >
             <Route
               index
               element={<Home />}
@@ -118,7 +139,10 @@ export const Router = () => {
               element={<Benutzer />}
             />
           </Route>
-          <Route path="Organisationen">
+          <Route
+            path="Organisationen"
+            errorElement={<RouterErrorBoundary />}
+          >
             <Route
               index
               element={<Home />}
@@ -131,19 +155,23 @@ export const Router = () => {
           <Route
             path="*"
             element={<FourOhFour />}
+            errorElement={<RouterErrorBoundary />}
           />
         </Route>
         <Route
           path="Export/*"
           element={<Export />}
+          errorElement={<RouterErrorBoundary />}
         />
         <Route
           path="Login"
           element={<Login />}
+          errorElement={<RouterErrorBoundary />}
         />
         <Route
           path="Dokumentation"
           element={<Docs />}
+          errorElement={<RouterErrorBoundary />}
         >
           <Route
             index
@@ -177,15 +205,10 @@ export const Router = () => {
         <Route
           path="*"
           element={<FourOhFour />}
+          errorElement={<RouterErrorBoundary />}
         />
       </Route>,
     ),
-    {
-      future: {
-        v7_relativeSplatPath: true,
-        v7_startTransition: true,
-      },
-    },
   )
 
   return <RouterProvider router={router} />
