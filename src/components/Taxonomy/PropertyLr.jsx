@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
@@ -13,56 +14,52 @@ const Container = styled.div`
   margin: 5px 0;
 `
 
-export const PropertyLr = ({
-  taxonomy,
-  field,
-  label,
-  type = 'text',
-  disabled,
-}) => {
-  const apolloClient = useApolloClient()
-  const queryClient = useQueryClient()
-  const [value, setValue] = useState(taxonomy[field] || '')
+export const PropertyLr = observer(
+  ({ taxonomy, field, label, type = 'text', disabled }) => {
+    const apolloClient = useApolloClient()
+    const queryClient = useQueryClient()
+    const [value, setValue] = useState(taxonomy[field] || '')
 
-  const store = useContext(storeContext)
-  const { scrollIntoView } = store
+    const store = useContext(storeContext)
+    const { scrollIntoView } = store
 
-  const onChange = (event) => setValue(event.target.value)
-  const onBlur = (event) =>
-    onBlurLr({
-      apolloClient,
-      queryClient,
-      scrollIntoView,
-      field,
-      taxonomy,
-      value: event.target.value,
-      prevValue: taxonomy[field],
-    })
+    const onChange = (event) => setValue(event.target.value)
+    const onBlur = (event) =>
+      onBlurLr({
+        apolloClient,
+        queryClient,
+        scrollIntoView,
+        field,
+        taxonomy,
+        value: event.target.value,
+        prevValue: taxonomy[field],
+      })
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <TextField
-          autoFocus={label === 'Name' && !value}
-          label={label}
-          value={
-            field === 'lastUpdated' && value ?
-              format(new Date(value), 'dd.MM.yyyy')
-            : value
-          }
-          onChange={onChange}
-          onBlur={onBlur}
-          fullWidth
-          multiline={type === 'number' ? false : true}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          disabled={!!disabled}
-          type={type}
-          variant="standard"
-        />
-      </Container>
-    </ErrorBoundary>
-  )
-}
+    return (
+      <ErrorBoundary>
+        <Container>
+          <TextField
+            autoFocus={label === 'Name' && !value}
+            label={label}
+            value={
+              field === 'lastUpdated' && value ?
+                format(new Date(value), 'dd.MM.yyyy')
+              : value
+            }
+            onChange={onChange}
+            onBlur={onBlur}
+            fullWidth
+            multiline={type === 'number' ? false : true}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            disabled={!!disabled}
+            type={type}
+            variant="standard"
+          />
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
