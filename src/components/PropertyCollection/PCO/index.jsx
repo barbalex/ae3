@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
@@ -217,11 +217,7 @@ export const PCO = observer(() => {
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
-  const {
-    data,
-    isLoading: pcoLoading,
-    error: pcoError,
-  } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['pcoPreviewQuery', pcId, count],
     queryFn: () =>
       apolloClient.query({
@@ -280,12 +276,13 @@ export const PCO = observer(() => {
       ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount
 
   const fetchAllData = async () => {
-    const { data, loading, error } = await apolloClient.query({
+    const { data } = await apolloClient.query({
       query: pcoQuery,
       variables: {
         pCId: pcId,
       },
     })
+
     // collect all keys
     const pCOUnsorted = (
       data?.propertyCollectionById
@@ -310,15 +307,17 @@ export const PCO = observer(() => {
           nP[key] = null
         }
       }
+
       return nP
     })
     const pCO = doOrderBy(pCOUnsorted, orderBy, sortDirection)
-    return { data: pCO, loading, error }
+
+    return pCO
   }
 
   const onClickXlsx = async () => {
     setXlsxExportLoading(true)
-    const { data } = await fetchAllData()
+    const data = await fetchAllData()
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({
       rows: data,
@@ -328,7 +327,7 @@ export const PCO = observer(() => {
   }
   const onClickCsv = async () => {
     setCsvExportLoading(true)
-    const { data } = await fetchAllData()
+    const data = await fetchAllData()
     const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(data)
     setCsvExportLoading(false)
@@ -357,81 +356,80 @@ export const PCO = observer(() => {
 
   const onClickImport = () => setImport(true)
 
-  if (pcoLoading) {
-    return <Spinner />
-  }
-  if (pcoError) {
-    return <Container>{`Error fetching data: ${pcoError.message}`}</Container>
+  if (error) {
+    return <Container>{`Error fetching data: ${error.message}`}</Container>
   }
 
   return (
     <Container>
-      {!showImportPco && (
-        <TotalDiv>
-          {`${totalCount.toLocaleString(
-            'de-CH',
-          )} Datensätze, ${propKeys.length.toLocaleString('de-CH')} Feld${
-            propKeys.length === 1 ? '' : 'er'
-          }${pCO.length > 0 ? ':' : ''}, Erste `}
-          <CountInput
-            count={count}
-            setCount={setCount}
-          />
-          {' :'}
-        </TotalDiv>
-      )}
-      {!importing && pCO.length > 0 && (
-        <>
-          <DataTable
-            data={pCO}
-            idKey="Objekt ID"
-            keys={keys}
-            setOrder={setOrder}
-            orderBy={orderBy}
-            order={sortDirection}
-          />
-          <ButtonsContainer>
-            <ExportButtons>
-              <StyledButton
-                onClick={onClickXlsx}
-                variant="outlined"
-                color="inherit"
-                data-loading={xlsxExportLoading}
-              >
-                xlsx exportieren
-              </StyledButton>
-              <StyledButton
-                onClick={onClickCsv}
-                variant="outlined"
-                color="inherit"
-                data-loading={csvExportLoading}
-              >
-                csv exportieren
-              </StyledButton>
-            </ExportButtons>
-            {userIsWriter && (
-              <MutationButtons>
+      <Suspense fallback={<Spinner />}>
+        {!showImportPco && (
+          <TotalDiv>
+            {`${totalCount?.toLocaleString?.(
+              'de-CH',
+            )} Datensätze, ${propKeys?.length?.toLocaleString?.('de-CH')} Feld${
+              propKeys?.length === 1 ? '' : 'er'
+            }${pCO.length > 0 ? ':' : ''}, Erste `}
+            <CountInput
+              count={count}
+              setCount={setCount}
+            />
+            {' :'}
+          </TotalDiv>
+        )}
+        {!importing && pCO.length > 0 && (
+          <>
+            <DataTable
+              data={pCO}
+              idKey="Objekt ID"
+              keys={keys}
+              setOrder={setOrder}
+              orderBy={orderBy}
+              order={sortDirection}
+            />
+            <ButtonsContainer>
+              <ExportButtons>
                 <StyledButton
-                  onClick={onClickImport}
+                  onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
+                  data-loading={xlsxExportLoading}
                 >
-                  importieren
+                  xlsx exportieren
                 </StyledButton>
                 <StyledButton
-                  onClick={onClickDelete}
+                  onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  data-loading={deleteLoading}
+                  data-loading={csvExportLoading}
                 >
-                  Daten löschen
+                  csv exportieren
                 </StyledButton>
-              </MutationButtons>
-            )}
-          </ButtonsContainer>
-        </>
-      )}
-      {showImportPco && <ImportPco setImport={setImport} />}
+              </ExportButtons>
+              {userIsWriter && (
+                <MutationButtons>
+                  <StyledButton
+                    onClick={onClickImport}
+                    variant="outlined"
+                    color="inherit"
+                  >
+                    importieren
+                  </StyledButton>
+                  <StyledButton
+                    onClick={onClickDelete}
+                    variant="outlined"
+                    color="inherit"
+                    data-loading={deleteLoading}
+                  >
+                    Daten löschen
+                  </StyledButton>
+                </MutationButtons>
+              )}
+            </ButtonsContainer>
+          </>
+        )}
+        {showImportPco && <ImportPco setImport={setImport} />}
+      </Suspense>
     </Container>
   )
 })
