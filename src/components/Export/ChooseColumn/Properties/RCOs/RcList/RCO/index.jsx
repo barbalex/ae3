@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -73,11 +73,17 @@ const query = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const RCO = observer(({ pcname, relationtype, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, error } = useQuery(query, {
     variables: {
       exportTaxonomies,
       pcname,
@@ -132,25 +138,20 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
           timeout="auto"
           unmountOnExit
         >
-          {loading ?
-            <SpinnerContainer>
-              <Spinner message="" />
-            </SpinnerContainer>
-          : <>
-              {count > 1 && (
-                <AllChooser
-                  properties={nodes}
-                  relationtype={relationtype}
-                />
-              )}
-              <PropertiesContainer>
-                <Properties
-                  properties={nodes}
-                  relationtype={relationtype}
-                />
-              </PropertiesContainer>
-            </>
-          }
+          <Suspense fallback={fallback}>
+            {count > 1 && (
+              <AllChooser
+                properties={nodes}
+                relationtype={relationtype}
+              />
+            )}
+            <PropertiesContainer>
+              <Properties
+                properties={nodes}
+                relationtype={relationtype}
+              />
+            </PropertiesContainer>
+          </Suspense>
         </StyledCollapse>
       </StyledCard>
     </ErrorBoundary>
