@@ -3,10 +3,10 @@
  * if user is logged in and is orgAdmin or orgTaxonomyWriter
  * and object is not synonym
  * show editing symbol
- * if user klicks it, toggle store > editingTaxonomies
+ * if user clicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
-import { useState, useContext } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -261,14 +261,14 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
               {editing ?
                 <>
                   <Property
-                    key={`${objekt.id}/id`}
+                    key={`${objekt?.id}/id`}
                     label="ID"
                     field="id"
                     objekt={objekt}
                     disabled={true}
                   />
                   <Property
-                    key={`${objekt.id}/name`}
+                    key={`${objekt?.id}/name`}
                     label="Name"
                     field="name"
                     objekt={objekt}
@@ -277,31 +277,31 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
               : stacked ?
                 <>
                   <PropertyReadOnlyStacked
-                    key={`${objekt.id}/id`}
-                    value={objekt.id}
+                    key={`${objekt?.id}/id`}
+                    value={objekt?.id}
                     label="ID"
                   />
                   <PropertyReadOnlyStacked
-                    key={`${objekt.id}/name`}
-                    value={objekt.name}
+                    key={`${objekt?.id}/name`}
+                    value={objekt?.name}
                     label="Name"
                   />
                 </>
               : <>
                   <PropertyReadOnly
-                    key={`${objekt.id}/id`}
-                    value={objekt.id}
+                    key={`${objekt?.id}/id`}
+                    value={objekt?.id}
                     label="ID"
                   />
                   <PropertyReadOnly
-                    key={`${objekt.id}/name`}
-                    value={objekt.name}
+                    key={`${objekt?.id}/name`}
+                    value={objekt?.name}
                     label="Name"
                   />
                 </>
               }
               <Properties
-                id={objekt.id}
+                id={objekt?.id}
                 properties={properties}
                 stacked={stacked}
               />
