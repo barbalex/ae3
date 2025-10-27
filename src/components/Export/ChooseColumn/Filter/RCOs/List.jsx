@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
@@ -36,13 +36,19 @@ const propsByTaxQuery = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const RcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['exportChooseColumnFilterRcoList', exportTaxonomies],
     queryFn: () =>
       apolloClient.query({
@@ -71,22 +77,16 @@ export const RcoList = observer(() => {
     )
   }
 
-  if (isLoading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
   return (
     <ErrorBoundary>
-      {Object.keys(rcoPropertiesByPropertyCollection).map((pc) => (
-        <RCO
-          key={pc}
-          pc={pc}
-        />
-      ))}
+      <Suspense fallback={fallback}>
+        {Object.keys(rcoPropertiesByPropertyCollection).map((pc) => (
+          <RCO
+            key={pc}
+            pc={pc}
+          />
+        ))}
+      </Suspense>
     </ErrorBoundary>
   )
 })
