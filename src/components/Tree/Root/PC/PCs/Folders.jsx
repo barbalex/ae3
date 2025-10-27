@@ -1,6 +1,6 @@
-import Row from '../../../Row/index.jsx'
+import { Row } from '../../../Row/index.jsx'
 
-const PcFolders = ({ pc, pcoCount, relCount }) => {
+export const Folders = ({ pc, pcoCount, relCount }) => {
   const dataPc = {
     label: 'Eigenschaften',
     id: `${pc.id}/Eigenschaften`,
@@ -25,5 +25,3 @@ const PcFolders = ({ pc, pcoCount, relCount }) => {
     </>
   )
 }
-
-export default PcFolders

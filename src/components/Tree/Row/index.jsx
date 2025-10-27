@@ -17,7 +17,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
 import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
-import onClickContextMenuDo from './onClickContextMenu.js'
+import { onClickContextMenu } from './onClickContextMenu.js'
 import { storeContext } from '../../../storeContext.js'
 
 const rowHeight = 23
@@ -101,7 +101,7 @@ function collect(props) {
   return props
 }
 
-const Row = observer(({ data }) => {
+export const Row = observer(({ data }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
@@ -154,8 +154,8 @@ const Row = observer(({ data }) => {
     }
   }
 
-  const onClickContextMenu = (e, data, target) =>
-    onClickContextMenuDo({
+  const onClickContextCallback = (e, data, target) =>
+    onClickContextMenu({
       e,
       data,
       target,
@@ -174,7 +174,7 @@ const Row = observer(({ data }) => {
       nodeId={data.id}
       nodeLabel={data.label}
       key={data.id}
-      onItemClick={onClickContextMenu}
+      onItemClick={onClickContextCallback}
     >
       <StyledNode
         data-level={level}
@@ -222,5 +222,3 @@ const Row = observer(({ data }) => {
     </ContextMenuTrigger>
   )
 })
-
-export default Row

@@ -19,10 +19,8 @@ const StyledIcon = styled(CircularProgress)`
   height: 20px !important;
 `
 
-const LoadingRow = ({ level }) => (
+export const LoadingRow = ({ level }) => (
   <StyledNode data-level={level}>
     <StyledIcon />
   </StyledNode>
 )
-
-export default LoadingRow

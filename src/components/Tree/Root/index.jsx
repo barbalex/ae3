@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { Arten } from './Arten/index.jsx'
-import LR from './LR/index.jsx'
-import PC from './PC/index.jsx'
-import Users from './Users/index.jsx'
-import Organizations from './Organizations/index.jsx'
+import { LR } from './LR/index.jsx'
+import { PC } from './PC/index.jsx'
+import { UsersFolder } from './Users/index.jsx'
+import { OrganizationsFolder } from './Organizations/index.jsx'
 import { storeContext } from '../../../storeContext.js'
-import LoadingRow from '../LoadingRow.jsx'
+import { LoadingRow } from '../LoadingRow.jsx'
 
 export const Root = observer(() => {
   const apolloClient = useApolloClient()
@@ -73,11 +73,11 @@ export const Root = observer(() => {
       />
       {hasToken && (
         <>
-          <Users
+          <UsersFolder
             isLoading={isLoading}
             count={data?.data?.allUsers?.totalCount}
           />
-          <Organizations
+          <OrganizationsFolder
             isLoading={isLoading}
             count={data?.data?.allOrganizations?.totalCount}
           />
