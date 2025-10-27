@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import styled from '@emotion/styled'
@@ -23,74 +24,69 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-export const Property = ({
-  field,
-  label,
-  pC,
-  helperText,
-  type = 'text',
-  disabled,
-}) => {
-  const apolloClient = useApolloClient()
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
+export const Property = observer(
+  ({ field, label, pC, helperText, type = 'text', disabled }) => {
+    const apolloClient = useApolloClient()
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
-  const store = useContext(storeContext)
-  const { scrollIntoView } = store
+    const store = useContext(storeContext)
+    const { scrollIntoView } = store
 
-  const [value, setValue] = useState(pC[field] || '')
-  const [error, setError] = useState(null)
+    const [value, setValue] = useState(pC[field] || '')
+    const [error, setError] = useState(null)
 
-  const onChange = (event) => setValue(event.target.value)
-  const onBlur = (event) =>
-    onBlurDo({
-      apolloClient,
-      queryClient,
-      field,
-      pC,
-      value: event.target.value,
-      prevValue: pC[field],
-      setError,
-      navigate,
-      scrollIntoView,
-    })
+    const onChange = (event) => setValue(event.target.value)
+    const onBlur = (event) =>
+      onBlurDo({
+        apolloClient,
+        queryClient,
+        field,
+        pC,
+        value: event.target.value,
+        prevValue: pC[field],
+        setError,
+        navigate,
+        scrollIntoView,
+      })
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <StyledFormControl
-          error={!!error}
-          variant="standard"
-        >
-          <StyledTextField
-            autoFocus={label === 'Name' && !value}
-            label={label}
-            value={
-              field === 'lastUpdated' && value ?
-                format(new Date(value), 'dd.MM.yyyy')
-              : value
-            }
-            onChange={onChange}
-            onBlur={onBlur}
-            fullWidth
-            multiline
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            disabled={!!disabled}
-            type={type}
-            helperText={
-              error ? error
-              : helperText ?
-                helperText
-              : ''
-            }
+    return (
+      <ErrorBoundary>
+        <Container>
+          <StyledFormControl
             error={!!error}
             variant="standard"
-          />
-        </StyledFormControl>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+          >
+            <StyledTextField
+              autoFocus={label === 'Name' && !value}
+              label={label}
+              value={
+                field === 'lastUpdated' && value ?
+                  format(new Date(value), 'dd.MM.yyyy')
+                : value
+              }
+              onChange={onChange}
+              onBlur={onBlur}
+              fullWidth
+              multiline
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              disabled={!!disabled}
+              type={type}
+              helperText={
+                error ? error
+                : helperText ?
+                  helperText
+                : ''
+              }
+              error={!!error}
+              variant="standard"
+            />
+          </StyledFormControl>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
