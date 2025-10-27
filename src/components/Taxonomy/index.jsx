@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
@@ -116,16 +116,9 @@ export const Taxonomy = observer(() => {
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
 
-  const {
-    data: allUsersData,
-    loading: allUsersLoading,
-    error: allUsersError,
-  } = useQuery(allUsersQuery)
-  const {
-    data: taxData,
-    loading: taxLoading,
-    error: taxError,
-  } = useQuery(taxQuery, {
+  const { data: allUsersData, error: allUsersError } = useQuery(allUsersQuery)
+
+  const { data: taxData, error: taxError } = useQuery(taxQuery, {
     variables: {
       taxId,
     },
@@ -169,7 +162,7 @@ export const Taxonomy = observer(() => {
       field: 'importedBy',
       taxonomy: tax,
       value: event.target.value,
-      prevValue: tax.importedBy,
+      prevValue: tax?.importedBy,
     })
 
   const onChangeOrganizationArten = (event) =>
@@ -180,7 +173,7 @@ export const Taxonomy = observer(() => {
       field: 'organizationId',
       taxonomy: tax,
       value: event.target.value,
-      prevValue: tax.organizationId,
+      prevValue: tax?.organizationId,
     })
 
   const onChangeImportedByLr = (event) =>
@@ -191,7 +184,7 @@ export const Taxonomy = observer(() => {
       field: 'importedBy',
       taxonomy: tax,
       value: event.target.value,
-      prevValue: tax.importedBy,
+      prevValue: tax?.importedBy,
     })
 
   const onChangeOrganizationLr = (event) =>
@@ -202,12 +195,9 @@ export const Taxonomy = observer(() => {
       field: 'organizationId',
       taxonomy: tax,
       value: event.target.value,
-      prevValue: tax.organizationId,
+      prevValue: tax?.organizationId,
     })
 
-  if (taxLoading || allUsersLoading) {
-    return <Spinner />
-  }
   if (taxError) {
     return <Container>{`Fehler: ${taxError.message}`}</Container>
   }
@@ -219,311 +209,315 @@ export const Taxonomy = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        {userIsThisTaxWriter && editing && (
-          <CardEditButton
-            aria-label="Daten anzeigen"
-            title="Daten anzeigen"
-            onClick={onClickStopEditing}
-          >
-            <Icon>
-              <ViewIcon />
-            </Icon>
-          </CardEditButton>
-        )}
-        {userIsThisTaxWriter && !editing && (
-          <CardEditButton
-            aria-label="Daten bearbeiten"
-            title="Daten bearbeiten"
-            onClick={onClickStartEditing}
-          >
-            <Icon>
-              <EditIcon />
-            </Icon>
-          </CardEditButton>
-        )}
-        {!editing && (
-          <>
-            <PropertyReadOnly
-              key="id"
-              value={tax.id}
-              label="ID"
-            />
-            {!!tax.name && (
-              <PropertyReadOnly
-                key="name"
-                value={tax.name}
-                label="Name"
-              />
-            )}
-            {!!tax.description && (
-              <PropertyReadOnly
-                key="description"
-                value={tax.description}
-                label="Beschreibung"
-              />
-            )}
-            {!!tax.links && (
-              <PropertyReadOnly
-                key="links"
-                value={tax.links.join(', ')}
-                label="Links"
-              />
-            )}
-            {!!tax.lastUpdated && (
-              <PropertyReadOnly
-                key="lastUpdated"
-                value={
-                  tax.lastUpdated ?
-                    format(new Date(tax.lastUpdated), 'dd.MM.yyyy')
-                  : tax.lastUpdated
-                }
-                label="Zuletzt aktualisiert"
-              />
-            )}
-            {!!tax.termsOfUse && (
-              <PropertyReadOnly
-                key="termsOfUse"
-                value={tax.termsOfUse}
-                label="Nutzungsbedingungen"
-              />
-            )}
-            {!!importedByName && (
-              <PropertyReadOnly
-                key="userByImportedBy"
-                value={importedByName}
-                label="Importiert von"
-              />
-            )}
-            {!!organizationName && (
-              <PropertyReadOnly
-                key="organizationByOrganizationId"
-                value={organizationName}
-                label="Zuständige Organisation"
-              />
-            )}
-            {!!tax.habitatLabel && (
-              <PropertyReadOnly
-                key="habitatLabel"
-                value={tax.habitatLabel}
-                label="Label"
-              />
-            )}
-            {!!tax.habitatNrFnsMin && (
-              <PropertyReadOnly
-                key="habitatNrFnsMin"
-                value={tax.habitatNrFnsMin}
-                label="FNS-Nr. von"
-              />
-            )}
-            {!!tax.habitatNrFnsMax && (
-              <PropertyReadOnly
-                key="habitatNrFnsMax"
-                value={tax.habitatNrFnsMax}
-                label="FNS-Nr. bis"
-              />
-            )}
-            {!!tax.habitatComments && (
-              <PropertyReadOnly
-                key="habitatComments"
-                value={tax.habitatComments}
-                label="Bemerkungen"
-              />
-            )}
-          </>
-        )}
-        {editingArten && (
-          <>
-            <Property
-              key={`${tax.id}/id`}
-              label="ID"
-              field="id"
-              taxonomy={tax}
-              disabled={true}
-            />
-            <Property
-              key={`${tax.id}/name`}
-              label="Name"
-              field="name"
-              taxonomy={tax}
-            />
-            <Property
-              key={`${tax.id}/description`}
-              label="Beschreibung"
-              field="description"
-              taxonomy={tax}
-            />
-            <StyledFormControl
-              variant="standard"
-              fullWidth
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          {userIsThisTaxWriter && editing && (
+            <CardEditButton
+              aria-label="Daten anzeigen"
+              title="Daten anzeigen"
+              onClick={onClickStopEditing}
             >
-              <InputLabel htmlFor="importedByArten">Importiert von</InputLabel>
-              <Select
-                key={`${tax.id}/importedBy`}
-                value={tax.importedBy}
-                onChange={onChangeImportedByArten}
-                input={
-                  <Input
-                    id="importedByArten"
-                    fullWidth
-                  />
-                }
+              <Icon>
+                <ViewIcon />
+              </Icon>
+            </CardEditButton>
+          )}
+          {userIsThisTaxWriter && !editing && (
+            <CardEditButton
+              aria-label="Daten bearbeiten"
+              title="Daten bearbeiten"
+              onClick={onClickStartEditing}
+            >
+              <Icon>
+                <EditIcon />
+              </Icon>
+            </CardEditButton>
+          )}
+          {!editing && (
+            <>
+              <PropertyReadOnly
+                key="id"
+                value={tax?.id}
+                label="ID"
+              />
+              {!!tax?.name && (
+                <PropertyReadOnly
+                  key="name"
+                  value={tax?.name}
+                  label="Name"
+                />
+              )}
+              {!!tax?.description && (
+                <PropertyReadOnly
+                  key="description"
+                  value={tax?.description}
+                  label="Beschreibung"
+                />
+              )}
+              {!!tax?.links && (
+                <PropertyReadOnly
+                  key="links"
+                  value={tax?.links.join(', ')}
+                  label="Links"
+                />
+              )}
+              {!!tax?.lastUpdated && (
+                <PropertyReadOnly
+                  key="lastUpdated"
+                  value={
+                    tax?.lastUpdated ?
+                      format(new Date(tax?.lastUpdated), 'dd.MM.yyyy')
+                    : tax?.lastUpdated
+                  }
+                  label="Zuletzt aktualisiert"
+                />
+              )}
+              {!!tax?.termsOfUse && (
+                <PropertyReadOnly
+                  key="termsOfUse"
+                  value={tax?.termsOfUse}
+                  label="Nutzungsbedingungen"
+                />
+              )}
+              {!!importedByName && (
+                <PropertyReadOnly
+                  key="userByImportedBy"
+                  value={importedByName}
+                  label="Importiert von"
+                />
+              )}
+              {!!organizationName && (
+                <PropertyReadOnly
+                  key="organizationByOrganizationId"
+                  value={organizationName}
+                  label="Zuständige Organisation"
+                />
+              )}
+              {!!tax?.habitatLabel && (
+                <PropertyReadOnly
+                  key="habitatLabel"
+                  value={tax?.habitatLabel}
+                  label="Label"
+                />
+              )}
+              {!!tax?.habitatNrFnsMin && (
+                <PropertyReadOnly
+                  key="habitatNrFnsMin"
+                  value={tax?.habitatNrFnsMin}
+                  label="FNS-Nr. von"
+                />
+              )}
+              {!!tax?.habitatNrFnsMax && (
+                <PropertyReadOnly
+                  key="habitatNrFnsMax"
+                  value={tax?.habitatNrFnsMax}
+                  label="FNS-Nr. bis"
+                />
+              )}
+              {!!tax?.habitatComments && (
+                <PropertyReadOnly
+                  key="habitatComments"
+                  value={tax?.habitatComments}
+                  label="Bemerkungen"
+                />
+              )}
+            </>
+          )}
+          {editingArten && (
+            <>
+              <Property
+                key={`${tax?.id}/id`}
+                label="ID"
+                field="id"
+                taxonomy={tax}
+                disabled={true}
+              />
+              <Property
+                key={`${tax?.id}/name`}
+                label="Name"
+                field="name"
+                taxonomy={tax}
+              />
+              <Property
+                key={`${tax?.id}/description`}
+                label="Beschreibung"
+                field="description"
+                taxonomy={tax}
+              />
+              <StyledFormControl
+                variant="standard"
                 fullWidth
               >
-                {allUsers.map((u) => (
-                  <MenuItem
-                    key={u.id}
-                    value={u.id}
-                  >
-                    {u.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl
-              variant="standard"
-              fullWidth
-            >
-              <InputLabel htmlFor="organizationIdArten">
-                Zuständige Organisation
-              </InputLabel>
-              <Select
-                key={`${tax.id}/organizationId`}
-                value={tax.organizationId || ''}
-                onChange={onChangeOrganizationArten}
-                input={
-                  <Input
-                    id="organizationIdArten"
-                    fullWidth
-                  />
-                }
+                <InputLabel htmlFor="importedByArten">
+                  Importiert von
+                </InputLabel>
+                <Select
+                  key={`${tax?.id}/importedBy`}
+                  value={tax?.importedBy}
+                  onChange={onChangeImportedByArten}
+                  input={
+                    <Input
+                      id="importedByArten"
+                      fullWidth
+                    />
+                  }
+                  fullWidth
+                >
+                  {allUsers.map((u) => (
+                    <MenuItem
+                      key={u.id}
+                      value={u.id}
+                    >
+                      {u.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl
+                variant="standard"
+                fullWidth
               >
-                {orgsUserIsTaxWriter.map((o) => (
-                  <MenuItem
-                    key={o.id}
-                    value={o.id}
-                  >
-                    {o.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <Property
-              key={`${tax.id}/lastUpdated`}
-              label="Zuletzt aktualisiert"
-              field="lastUpdated"
-              taxonomy={tax}
-              disabled={true}
-            />
-            <Property
-              key={`${tax.id}/termsOfUse`}
-              label="Nutzungs-Bedingungen"
-              field="termsOfUse"
-              taxonomy={tax}
-            />
-          </>
-        )}
-        {editingLr && (
-          <>
-            <PropertyLr
-              key={`${tax.id}/id`}
-              label="ID"
-              field="id"
-              taxonomy={tax}
-              disabled={true}
-            />
-            <PropertyLr
-              key={`${tax.id}/name`}
-              label="Name"
-              field="name"
-              taxonomy={tax}
-            />
-            <PropertyLr
-              key={`${tax.id}/description`}
-              label="Beschreibung"
-              field="description"
-              taxonomy={tax}
-            />
-            <StyledFormControl variant="standard">
-              <InputLabel htmlFor="importedByLr">Importiert von</InputLabel>
-              <Select
-                key={`${tax.id}/importedBy`}
-                value={tax.importedBy}
-                onChange={onChangeImportedByLr}
-                input={<Input id="importedByLr" />}
-              >
-                {allUsers.map((u) => (
-                  <MenuItem
-                    key={u.id}
-                    value={u.id}
-                  >
-                    {u.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl variant="standard">
-              <InputLabel htmlFor="organizationIdLr">
-                Zuständige Organisation
-              </InputLabel>
-              <Select
-                key={`${tax.id}/organizationId`}
-                value={tax.organizationId || ''}
-                onChange={onChangeOrganizationLr}
-                input={<Input id="organizationIdLr" />}
-              >
-                {orgsUserIsTaxWriter.map((o) => (
-                  <MenuItem
-                    key={o.id}
-                    value={o.id}
-                  >
-                    {o.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <PropertyLr
-              key={`${tax.id}/lastUpdated`}
-              label="Zuletzt aktualisiert"
-              field="lastUpdated"
-              taxonomy={tax}
-              disabled={true}
-            />
-            <PropertyLr
-              key={`${tax.id}/termsOfUse`}
-              label="Nutzungs-Bedingungen"
-              field="termsOfUse"
-              taxonomy={tax}
-            />
-            <PropertyLr
-              key={`${tax.id}/habitatLabel`}
-              label="Einheit-Abkürzung"
-              field="habitatLabel"
-              taxonomy={tax}
-            />
-            <PropertyLr
-              key={`${tax.id}/habitatComments`}
-              label="Bemerkungen"
-              field="habitatComments"
-              taxonomy={tax}
-            />
-            <PropertyLr
-              key={`${tax.id}/habitatNrFnsMin`}
-              label="Einheit-Nrn FNS von"
-              field="habitatNrFnsMin"
-              taxonomy={tax}
-              type="number"
-            />
-            <PropertyLr
-              key={`${tax.id}/habitatNrFnsMax`}
-              label="Einheit-Nrn FNS bis"
-              field="habitatNrFnsMax"
-              taxonomy={tax}
-              type="number"
-            />
-          </>
-        )}
-      </Container>
+                <InputLabel htmlFor="organizationIdArten">
+                  Zuständige Organisation
+                </InputLabel>
+                <Select
+                  key={`${tax?.id}/organizationId`}
+                  value={tax?.organizationId || ''}
+                  onChange={onChangeOrganizationArten}
+                  input={
+                    <Input
+                      id="organizationIdArten"
+                      fullWidth
+                    />
+                  }
+                >
+                  {orgsUserIsTaxWriter.map((o) => (
+                    <MenuItem
+                      key={o.id}
+                      value={o.id}
+                    >
+                      {o.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <Property
+                key={`${tax?.id}/lastUpdated`}
+                label="Zuletzt aktualisiert"
+                field="lastUpdated"
+                taxonomy={tax}
+                disabled={true}
+              />
+              <Property
+                key={`${tax?.id}/termsOfUse`}
+                label="Nutzungs-Bedingungen"
+                field="termsOfUse"
+                taxonomy={tax}
+              />
+            </>
+          )}
+          {editingLr && (
+            <>
+              <PropertyLr
+                key={`${tax?.id}/id`}
+                label="ID"
+                field="id"
+                taxonomy={tax}
+                disabled={true}
+              />
+              <PropertyLr
+                key={`${tax?.id}/name`}
+                label="Name"
+                field="name"
+                taxonomy={tax}
+              />
+              <PropertyLr
+                key={`${tax?.id}/description`}
+                label="Beschreibung"
+                field="description"
+                taxonomy={tax}
+              />
+              <StyledFormControl variant="standard">
+                <InputLabel htmlFor="importedByLr">Importiert von</InputLabel>
+                <Select
+                  key={`${tax?.id}/importedBy`}
+                  value={tax?.importedBy}
+                  onChange={onChangeImportedByLr}
+                  input={<Input id="importedByLr" />}
+                >
+                  {allUsers.map((u) => (
+                    <MenuItem
+                      key={u.id}
+                      value={u.id}
+                    >
+                      {u.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl variant="standard">
+                <InputLabel htmlFor="organizationIdLr">
+                  Zuständige Organisation
+                </InputLabel>
+                <Select
+                  key={`${tax?.id}/organizationId`}
+                  value={tax?.organizationId || ''}
+                  onChange={onChangeOrganizationLr}
+                  input={<Input id="organizationIdLr" />}
+                >
+                  {orgsUserIsTaxWriter.map((o) => (
+                    <MenuItem
+                      key={o.id}
+                      value={o.id}
+                    >
+                      {o.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <PropertyLr
+                key={`${tax?.id}/lastUpdated`}
+                label="Zuletzt aktualisiert"
+                field="lastUpdated"
+                taxonomy={tax}
+                disabled={true}
+              />
+              <PropertyLr
+                key={`${tax?.id}/termsOfUse`}
+                label="Nutzungs-Bedingungen"
+                field="termsOfUse"
+                taxonomy={tax}
+              />
+              <PropertyLr
+                key={`${tax?.id}/habitatLabel`}
+                label="Einheit-Abkürzung"
+                field="habitatLabel"
+                taxonomy={tax}
+              />
+              <PropertyLr
+                key={`${tax?.id}/habitatComments`}
+                label="Bemerkungen"
+                field="habitatComments"
+                taxonomy={tax}
+              />
+              <PropertyLr
+                key={`${tax?.id}/habitatNrFnsMin`}
+                label="Einheit-Nrn FNS von"
+                field="habitatNrFnsMin"
+                taxonomy={tax}
+                type="number"
+              />
+              <PropertyLr
+                key={`${tax?.id}/habitatNrFnsMax`}
+                label="Einheit-Nrn FNS bis"
+                field="habitatNrFnsMax"
+                taxonomy={tax}
+                type="number"
+              />
+            </>
+          )}
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 })
