@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
@@ -10,7 +11,7 @@ const ListItem = styled(ListItemButton)`
   ${(props) => props.ischild1 === 'true' && 'padding-left: 35px !important;'}
 `
 
-export const MenuItem = ({ node }) => {
+export const MenuItem = observer(({ node }) => {
   const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
 
   const location = useLocation()
@@ -39,4 +40,4 @@ export const MenuItem = ({ node }) => {
       </ListItem>
     </>
   )
-}
+})
