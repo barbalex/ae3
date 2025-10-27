@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -24,11 +24,17 @@ const propsByTaxQuery = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const RcList = observer(() => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(propsByTaxQuery, {
+  const { data, error } = useQuery(propsByTaxQuery, {
     variables: {
       exportTaxonomies,
       queryExportTaxonomies: exportTaxonomies.length > 0,
@@ -39,20 +45,16 @@ export const RcList = observer(() => {
 
   if (error) return `Error fetching data: ${error.message}`
 
-  if (loading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
-  return nodes.map(({ pcname, relationtype, count }) => (
-    <RCO
-      key={`${pcname}/${relationtype}}`}
-      pcname={pcname}
-      relationtype={relationtype}
-      count={count}
-    />
-  ))
+  return (
+    <Suspense fallback={fallback}>
+      {nodes.map(({ pcname, relationtype, count }) => (
+        <RCO
+          key={`${pcname}/${relationtype}}`}
+          pcname={pcname}
+          relationtype={relationtype}
+          count={count}
+        />
+      ))}
+    </Suspense>
+  )
 })
