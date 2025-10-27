@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
@@ -53,42 +53,37 @@ export const PCs = observer(() => {
       activeNodeArray[1]
     : '99999999-9999-9999-9999-999999999999'
 
-  const {
-    data: pcsData,
-    loading: pcsLoading,
-    error: pcsError,
-  } = useQuery(pcsQuery, {
-    variables: {
-      id,
-    },
+  const { data, error } = useQuery(pcsQuery, {
+    variables: { id },
   })
 
   const pcs = sortBy(
-    pcsData?.organizationById?.propertyCollectionsByOrganizationId?.nodes ?? [],
+    data?.organizationById?.propertyCollectionsByOrganizationId?.nodes ?? [],
     ['name'],
   )
 
-  if (pcsLoading) return <Spinner />
-  if (pcsError) return <Container>{`Fehler: ${pcsError.message}`}</Container>
+  if (error) return <Container>{`Fehler: ${error.message}`}</Container>
 
   return (
     <ErrorBoundary>
-      <Container>
-        <List>
-          <ul>
-            {pcs.map((u) => (
-              <li key={u.name}>
-                <StyledA
-                  href={`${appBaseUrl}Eigenschaften-Sammlungen/${u.id}`}
-                  target="_blank"
-                >
-                  {u.name}
-                </StyledA>
-              </li>
-            ))}
-          </ul>
-        </List>
-      </Container>
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <List>
+            <ul>
+              {pcs.map((u) => (
+                <li key={u.name}>
+                  <StyledA
+                    href={`${appBaseUrl}Eigenschaften-Sammlungen/${u.id}`}
+                    target="_blank"
+                  >
+                    {u.name}
+                  </StyledA>
+                </li>
+              ))}
+            </ul>
+          </List>
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 })
