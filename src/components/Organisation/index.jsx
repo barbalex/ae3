@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -68,65 +68,58 @@ const orgQuery = gql`
 const Organization = () => {
   const { orgId } = useParams()
 
-  const {
-    data: orgData,
-    loading: orgLoading,
-    error: orgError,
-  } = useQuery(orgQuery, {
-    variables: {
-      orgId,
-    },
+  const { data, error } = useQuery(orgQuery, {
+    variables: { orgId },
   })
 
   const [tab, setTab] = useState(0)
 
   const onChangeTab = (event, value) => setTab(value)
 
-  const org = orgData?.organizationById ?? {}
+  const org = data?.organizationById ?? {}
 
-  if (orgLoading) {
-    return <Spinner />
-  }
-  if (orgError) {
-    return <Container>{`Fehler: ${orgError.message}`}</Container>
+  if (error) {
+    return <Container>{`Fehler: ${error.message}`}</Container>
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <OrgContainer>
-          <PropertyReadOnly
-            key="name"
-            value={org.name}
-            label="Name"
-          />
-          <PropertyReadOnly
-            key="links"
-            value={org.links ? org.links.join(', ') : ''}
-            label="Link(s)"
-          />
-          <UserReadOnly
-            key="contact"
-            user={org.userByContact}
-            label="Kontakt"
-          />
-        </OrgContainer>
-        <StyledPaper>
-          <Tabs
-            variant="fullWidth"
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-          >
-            <Tab label="Benutzer mit Rollen" />
-            <Tab label="Taxonomien" />
-            <Tab label="Eigenschaften-Sammlungen" />
-          </Tabs>
-        </StyledPaper>
-        {tab === 0 && <OrgUsers key={org.id} />}
-        {tab === 1 && <TCs />}
-        {tab === 2 && <PCs />}
-      </Container>
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <OrgContainer>
+            <PropertyReadOnly
+              key="name"
+              value={org?.name}
+              label="Name"
+            />
+            <PropertyReadOnly
+              key="links"
+              value={org?.links ? org?.links.join(', ') : ''}
+              label="Link(s)"
+            />
+            <UserReadOnly
+              key="contact"
+              user={org?.userByContact}
+              label="Kontakt"
+            />
+          </OrgContainer>
+          <StyledPaper>
+            <Tabs
+              variant="fullWidth"
+              value={tab}
+              onChange={onChangeTab}
+              indicatorColor="primary"
+            >
+              <Tab label="Benutzer mit Rollen" />
+              <Tab label="Taxonomien" />
+              <Tab label="Eigenschaften-Sammlungen" />
+            </Tabs>
+          </StyledPaper>
+          {tab === 0 && <OrgUsers key={org?.id} />}
+          {tab === 1 && <TCs />}
+          {tab === 2 && <PCs />}
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 }
