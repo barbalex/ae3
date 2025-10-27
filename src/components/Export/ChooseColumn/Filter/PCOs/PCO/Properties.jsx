@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -32,13 +32,19 @@ const query = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const Properties = observer(({ pc }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['exportFilterPcos', exportTaxonomies, pc],
     queryFn: () =>
       apolloClient.query({
@@ -57,20 +63,16 @@ export const Properties = observer(({ pc }) => {
     return `Error loading data: ${error.message}`
   }
 
-  if (isLoading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
-  return properties.map((p) => (
-    <PcoProperty
-      key={`${p.property}${p.type}`}
-      pcname={pc}
-      pname={p.property}
-      jsontype={p.type}
-    />
-  ))
+  return (
+    <Suspense fallback={fallback}>
+      {properties.map((p) => (
+        <PcoProperty
+          key={`${p.property}${p.type}`}
+          pcname={pc}
+          pname={p.property}
+          jsontype={p.type}
+        />
+      ))}
+    </Suspense>
+  )
 })
