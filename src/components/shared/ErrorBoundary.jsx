@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
@@ -69,7 +70,7 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = ({ children }) => {
+export const ErrorBoundary = observer(({ children }) => {
   const idb = useContext(idbContext)
   const store = useContext(storeContext)
 
@@ -95,4 +96,4 @@ export const ErrorBoundary = ({ children }) => {
       {children}
     </ErrorBoundaryComponent>
   )
-}
+})
