@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router'
 
-import Row from '../../Row/index.jsx'
-import Users from './Users.jsx'
+import { Row } from '../../Row/index.jsx'
+import { Users } from './Users.jsx'
 
-const UsersFolder = ({ count, isLoading }) => {
+export const UsersFolder = ({ count, isLoading }) => {
   const { pathname } = useLocation()
 
   const data = {
@@ -25,5 +25,3 @@ const UsersFolder = ({ count, isLoading }) => {
     </>
   )
 }
-
-export default UsersFolder

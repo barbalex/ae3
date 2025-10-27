@@ -14,7 +14,7 @@ const taxonomyTypeConverter = {
   Lebensraeume: 'LEBENSRAUM',
 }
 
-const onClickContextMenu = async ({
+export const onClickContextMenu = async ({
   data,
   target,
   client,
@@ -229,5 +229,3 @@ const onClickContextMenu = async ({
     console.log(`action "${action}" unknown, therefore not executed`)
   }
 }
-
-export default onClickContextMenu
