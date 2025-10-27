@@ -113,22 +113,14 @@ export const PropertyCollection = observer(() => {
   const store = useContext(storeContext)
   const { editingPCs, setEditingPCs, login } = store
 
-  const {
-    data: dataAllUsers,
-    isLoading: allUsersLoading,
-    error: allUsersError,
-  } = useQuery({
+  const { data: dataAllUsers, error: allUsersError } = useQuery({
     queryKey: ['allUsersForPc'],
     queryFn: () =>
       apolloClient.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
   })
   const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
 
-  const {
-    data: dataPc,
-    isLoading: pcLoading,
-    error: pcError,
-  } = useQuery({
+  const { data: dataPc, error: pcError } = useQuery({
     queryKey: ['pc', pcId],
     queryFn: () =>
       apolloClient.query({
