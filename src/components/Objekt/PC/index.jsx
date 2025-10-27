@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client/react'
 
@@ -19,20 +20,19 @@ export const PC = ({ pcId, objId, stacked = false }) => {
 
   const pC = data?.propertyCollectionById
 
-  // dont want too many spinners
-  if (!pC) return <div />
-
-  // if (loading) return <Spinner />
   if (error) {
     return <Container2>{`Fehler: ${error.message}`}</Container2>
   }
 
+  // don't want too many spinners
   return (
     <ErrorBoundary>
-      <PcPresentation
-        pC={pC}
-        stacked={stacked}
-      />
+      <Suspense fallback={null}>
+        <PcPresentation
+          pC={pC}
+          stacked={stacked}
+        />
+      </Suspense>
     </ErrorBoundary>
   )
 }
