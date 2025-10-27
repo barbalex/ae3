@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from 'react'
+import { useState, useContext, useMemo, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
@@ -215,11 +215,7 @@ export const RCO = observer(() => {
 
   const [count, setCount] = useState(15)
 
-  const {
-    data,
-    isLoading: rcoLoading,
-    error: rcoError,
-  } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['rcoPreviewQuery', pcId, count],
     queryFn: () =>
       apolloClient.query({
@@ -284,7 +280,7 @@ export const RCO = observer(() => {
 
   // TODO: key in data table should bu unique, thus: objectId + objectIdRelation
   const fetchAllData = async () => {
-    const { data, loading, error } = await apolloClient.query({
+    const { data } = await apolloClient.query({
       query: rcoQuery,
       variables: {
         pCId: pcId,
@@ -317,12 +313,12 @@ export const RCO = observer(() => {
       }
       return nP
     })
-    return { data: doOrderBy(rCORaw, orderBy, sortDirection), loading, error }
+    return doOrderBy(rCORaw, orderBy, sortDirection)
   }
 
   const onClickXlsx = async () => {
     setXlsxExportLoading(true)
-    const { data } = await fetchAllData()
+    const data = await fetchAllData()
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({
       rows: data,
@@ -334,7 +330,7 @@ export const RCO = observer(() => {
   const onClickCsv = async () => {
     // download all data
     setCsvExportLoading(true)
-    const { data } = await fetchAllData()
+    const data = await fetchAllData()
     const { exportCsv } = await import('../../../modules/exportCsv.js')
     exportCsv(data)
     setCsvExportLoading(false)
@@ -363,82 +359,81 @@ export const RCO = observer(() => {
 
   const onClickImport = () => setImport(true)
 
-  if (rcoLoading) {
-    return <Spinner />
-  }
-  if (rcoError) {
-    return <Container>{`Error fetching data: ${rcoError.message}`}</Container>
+  if (error) {
+    return <Container>{`Error fetching data: ${error.message}`}</Container>
   }
 
   return (
     <Container>
-      {!showImportRco && (
-        <TotalDiv>
-          {`${totalCount.toLocaleString(
-            'de-CH',
-          )} Datensätze, ${propKeys.length.toLocaleString('de-CH')} Feld${
-            propKeys.length === 1 ? '' : 'er'
-          }${rCO.length > 0 ? ':' : ''}, Erste `}
-          <CountInput
-            count={count}
-            setCount={setCount}
-          />
-          {' :'}
-        </TotalDiv>
-      )}
-      {!importing && rCO.length > 0 && (
-        <>
-          <DataTable
-            data={rCO}
-            idKey="Objekt ID"
-            keys={keys}
-            setOrder={setOrder}
-            orderBy={orderBy}
-            order={sortDirection}
-            uniqueKeyCombo={['Objekt ID', 'Beziehung ID']}
-          />
-          <ButtonsContainer>
-            <ExportButtons>
-              <StyledButton
-                onClick={onClickXlsx}
-                variant="outlined"
-                color="inherit"
-                data-loading={xlsxExportLoading}
-              >
-                xlsx exportieren
-              </StyledButton>
-              <StyledButton
-                onClick={onClickCsv}
-                variant="outlined"
-                color="inherit"
-                data-loading={csvExportLoading}
-              >
-                csv exportieren
-              </StyledButton>
-            </ExportButtons>
-            {userIsWriter && (
-              <MutationButtons>
+      <Suspense fallback={<Spinner />}>
+        {!showImportRco && (
+          <TotalDiv>
+            {`${totalCount?.toLocaleString?.(
+              'de-CH',
+            )} Datensätze, ${propKeys?.length?.toLocaleString?.('de-CH')} Feld${
+              propKeys?.length === 1 ? '' : 'er'
+            }${rCO?.length > 0 ? ':' : ''}, Erste `}
+            <CountInput
+              count={count}
+              setCount={setCount}
+            />
+            {' :'}
+          </TotalDiv>
+        )}
+        {!importing && rCO?.length > 0 && (
+          <>
+            <DataTable
+              data={rCO}
+              idKey="Objekt ID"
+              keys={keys}
+              setOrder={setOrder}
+              orderBy={orderBy}
+              order={sortDirection}
+              uniqueKeyCombo={['Objekt ID', 'Beziehung ID']}
+            />
+            <ButtonsContainer>
+              <ExportButtons>
                 <StyledButton
-                  onClick={onClickImport}
+                  onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
+                  data-loading={xlsxExportLoading}
                 >
-                  importieren
+                  xlsx exportieren
                 </StyledButton>
                 <StyledButton
-                  onClick={onClickDelete}
+                  onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  data-loading={deleteLoading}
+                  data-loading={csvExportLoading}
                 >
-                  Daten löschen
+                  csv exportieren
                 </StyledButton>
-              </MutationButtons>
-            )}
-          </ButtonsContainer>
-        </>
-      )}
-      {showImportRco && <ImportRco setImport={setImport} />}
+              </ExportButtons>
+              {userIsWriter && (
+                <MutationButtons>
+                  <StyledButton
+                    onClick={onClickImport}
+                    variant="outlined"
+                    color="inherit"
+                  >
+                    importieren
+                  </StyledButton>
+                  <StyledButton
+                    onClick={onClickDelete}
+                    variant="outlined"
+                    color="inherit"
+                    data-loading={deleteLoading}
+                  >
+                    Daten löschen
+                  </StyledButton>
+                </MutationButtons>
+              )}
+            </ButtonsContainer>
+          </>
+        )}
+        {showImportRco && <ImportRco setImport={setImport} />}
+      </Suspense>
     </Container>
   )
 })
