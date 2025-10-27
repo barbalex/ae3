@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -97,19 +97,10 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const name = activeNodeArray.length > 1 ? activeNodeArray[1] : 'none'
 
-  const {
-    data: allUsersData,
-    loading: allUsersLoading,
-    error: allUsersError,
-  } = useQuery(allUsersQuery)
-  const {
-    data: orgUsersData,
-    loading: orgUsersLoading,
-    error: orgUsersError,
-  } = useQuery(orgUsersQuery, {
-    variables: {
-      name,
-    },
+  const { data: allUsersData, error: allUsersError } = useQuery(allUsersQuery)
+
+  const { data: orgUsersData, error: orgUsersError } = useQuery(orgUsersQuery, {
+    variables: { name },
   })
 
   const [userId, setUserId] = useState(orgUser.userId)
@@ -239,9 +230,6 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
     orgUsersRefetch()
   }
 
-  if (orgUsersLoading || allUsersLoading) {
-    return null
-  }
   if (orgUsersError) {
     return <OrgUserDiv>{`Fehler: ${orgUsersError.message}`}</OrgUserDiv>
   }
@@ -251,57 +239,59 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
 
   return (
     <ErrorBoundary>
-      <OrgUserDiv>
-        <StyledFormControl variant="standard">
-          <InputLabel htmlFor="Benutzer">Benutzer</InputLabel>
-          <Select
-            value={userName}
-            onChange={onChangeName}
-            input={<Input id="Benutzer" />}
+      <Suspense fallback={null}>
+        <OrgUserDiv>
+          <StyledFormControl variant="standard">
+            <InputLabel htmlFor="Benutzer">Benutzer</InputLabel>
+            <Select
+              value={userName}
+              onChange={onChangeName}
+              input={<Input id="Benutzer" />}
+            >
+              {userNames.map((u) => (
+                <MenuItem
+                  key={u}
+                  value={u}
+                >
+                  {u}
+                </MenuItem>
+              ))}
+            </Select>
+            {!!nameError && (
+              <FormHelperText id={`RolleErrorText`}>{nameError}</FormHelperText>
+            )}
+          </StyledFormControl>
+          <StyledFormControl variant="standard">
+            <InputLabel htmlFor="Rolle">Rolle</InputLabel>
+            <Select
+              value={role || ''}
+              onChange={onChangeRole}
+              input={<Input id="Rolle" />}
+            >
+              {roles.map((u) => (
+                <MenuItem
+                  key={u}
+                  value={u}
+                >
+                  {u}
+                </MenuItem>
+              ))}
+            </Select>
+            {!!roleError && (
+              <FormHelperText id={`RolleErrorText`}>{roleError}</FormHelperText>
+            )}
+          </StyledFormControl>
+          <DeleteButton
+            title="löschen"
+            aria-label="löschen"
+            onClick={onClickDelete}
           >
-            {userNames.map((u) => (
-              <MenuItem
-                key={u}
-                value={u}
-              >
-                {u}
-              </MenuItem>
-            ))}
-          </Select>
-          {!!nameError && (
-            <FormHelperText id={`RolleErrorText`}>{nameError}</FormHelperText>
-          )}
-        </StyledFormControl>
-        <StyledFormControl variant="standard">
-          <InputLabel htmlFor="Rolle">Rolle</InputLabel>
-          <Select
-            value={role || ''}
-            onChange={onChangeRole}
-            input={<Input id="Rolle" />}
-          >
-            {roles.map((u) => (
-              <MenuItem
-                key={u}
-                value={u}
-              >
-                {u}
-              </MenuItem>
-            ))}
-          </Select>
-          {!!roleError && (
-            <FormHelperText id={`RolleErrorText`}>{roleError}</FormHelperText>
-          )}
-        </StyledFormControl>
-        <DeleteButton
-          title="löschen"
-          aria-label="löschen"
-          onClick={onClickDelete}
-        >
-          <Icon>
-            <MdClear color="error" />
-          </Icon>
-        </DeleteButton>
-      </OrgUserDiv>
+            <Icon>
+              <MdClear color="error" />
+            </Icon>
+          </DeleteButton>
+        </OrgUserDiv>
+      </Suspense>
     </ErrorBoundary>
   )
 })
