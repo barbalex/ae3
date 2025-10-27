@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, Suspense } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -47,11 +47,7 @@ const User = observer(() => {
   const store = useContext(storeContext)
   const { login, scrollIntoView } = store
 
-  const {
-    data,
-    isLoading: dataLoading,
-    error: dataError,
-  } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['user', userId],
     queryFn: () =>
       apolloClient.query({
@@ -75,10 +71,9 @@ const User = observer(() => {
   const pcs = user?.propertyCollectionsByImportedBy?.nodes ?? []
   const tcs = user?.taxonomiesByImportedBy?.nodes ?? []
   const saveEnabled =
-    !dataLoading &&
-    (passNew ||
-      (!!name && !!data && !!user && name !== user?.name) ||
-      (!!email && !!data && !!user && email !== user?.email))
+    passNew ||
+    (!!name && !!data && !!user && name !== user?.name) ||
+    (!!email && !!data && !!user && email !== user?.email)
   const userIsLoggedIn =
     !!user && !!login.username && user?.name === login.username
 
@@ -132,14 +127,9 @@ const User = observer(() => {
     setPassNew('')
   }
 
-  if (dataLoading) {
-    return <Spinner />
-  }
-  if (dataError) {
+  if (error) {
     return (
-      <LEContainer>
-        `Fehler beim Laden der Daten: ${dataError.message}`
-      </LEContainer>
+      <LEContainer>`Fehler beim Laden der Daten: ${error.message}`</LEContainer>
     )
   }
 
@@ -147,89 +137,91 @@ const User = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <OrgContainer>
-          <FormControl
-            fullWidth
-            error={!!nameErrorText}
-            aria-describedby="name-error-text"
-            variant="standard"
-          >
-            <TextField
-              name="name"
-              label="Name"
-              value={name || ''}
-              onChange={onChangeName}
-              fullWidth
-              autoComplete="username"
-              variant="standard"
-            />
-            <FormHelperText id="name-error-text">
-              {nameErrorText}
-            </FormHelperText>
-          </FormControl>
-          <FormControl
-            fullWidth
-            error={!!emailErrorText}
-            aria-describedby="email-error-text"
-            variant="standard"
-          >
-            <TextField
-              name="email"
-              label="Email"
-              value={email || ''}
-              onChange={onChangeEmail}
-              fullWidth
-              autoComplete="email"
-              variant="standard"
-            />
-            <FormHelperText id="email-error-text">
-              {emailErrorText}
-            </FormHelperText>
-          </FormControl>
-          {userIsLoggedIn && (
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <OrgContainer>
             <FormControl
               fullWidth
+              error={!!nameErrorText}
+              aria-describedby="name-error-text"
               variant="standard"
             >
               <TextField
-                name="passNew"
-                label="Passwort ändern"
-                type="password"
-                value={passNew || ''}
-                onChange={onChangePassNew}
+                name="name"
+                label="Name"
+                value={name || ''}
+                onChange={onChangeName}
                 fullWidth
-                autoComplete="new-password"
+                autoComplete="username"
                 variant="standard"
               />
+              <FormHelperText id="name-error-text">
+                {nameErrorText}
+              </FormHelperText>
             </FormControl>
-          )}
-          <SaveButton
-            onClick={onSave}
-            disabled={!saveEnabled}
-            color="inherit"
-          >
-            Änderungen speichern
-          </SaveButton>
-        </OrgContainer>
-        <StyledPaper>
-          <Tabs
-            variant="fullWidth"
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-          >
-            <Tab label={`Rollen (${orgUsers.length})`} />
-            <Tab label={`importierte Taxonomien (${tcs.length})`} />
-            <Tab
-              label={`importierte Eigenschaften-Sammlungen (${pcs.length})`}
-            />
-          </Tabs>
-        </StyledPaper>
-        {tab === 0 && <Roles orgUsers={orgUsers} />}
-        {tab === 1 && <TCs tcs={tcs} />}
-        {tab === 2 && <PCs pcs={pcs} />}
-      </Container>
+            <FormControl
+              fullWidth
+              error={!!emailErrorText}
+              aria-describedby="email-error-text"
+              variant="standard"
+            >
+              <TextField
+                name="email"
+                label="Email"
+                value={email || ''}
+                onChange={onChangeEmail}
+                fullWidth
+                autoComplete="email"
+                variant="standard"
+              />
+              <FormHelperText id="email-error-text">
+                {emailErrorText}
+              </FormHelperText>
+            </FormControl>
+            {userIsLoggedIn && (
+              <FormControl
+                fullWidth
+                variant="standard"
+              >
+                <TextField
+                  name="passNew"
+                  label="Passwort ändern"
+                  type="password"
+                  value={passNew || ''}
+                  onChange={onChangePassNew}
+                  fullWidth
+                  autoComplete="new-password"
+                  variant="standard"
+                />
+              </FormControl>
+            )}
+            <SaveButton
+              onClick={onSave}
+              disabled={!saveEnabled}
+              color="inherit"
+            >
+              Änderungen speichern
+            </SaveButton>
+          </OrgContainer>
+          <StyledPaper>
+            <Tabs
+              variant="fullWidth"
+              value={tab}
+              onChange={onChangeTab}
+              indicatorColor="primary"
+            >
+              <Tab label={`Rollen (${orgUsers.length})`} />
+              <Tab label={`importierte Taxonomien (${tcs.length})`} />
+              <Tab
+                label={`importierte Eigenschaften-Sammlungen (${pcs.length})`}
+              />
+            </Tabs>
+          </StyledPaper>
+          {tab === 0 && <Roles orgUsers={orgUsers} />}
+          {tab === 1 && <TCs tcs={tcs} />}
+          {tab === 2 && <PCs pcs={pcs} />}
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 })
