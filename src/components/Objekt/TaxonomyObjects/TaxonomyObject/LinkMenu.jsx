@@ -26,6 +26,13 @@ const StyledLinkIcon = styled(LinkIcon)`
 
 const ITEM_HEIGHT = 48
 
+const paperProps = {
+  style: {
+    maxHeight: ITEM_HEIGHT * 4.5,
+    width: 200,
+  },
+}
+
 const LinkMenu = ({ objekt }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -35,14 +42,8 @@ const LinkMenu = ({ objekt }) => {
   const gattung = props?.Gattung
   const art = props?.Art
   const taxName = objekt?.taxonomyByTaxonomyId?.name
-  const isSisf2 = taxName.toLowerCase().includes('sisf')
-  const isDbTaxref = taxName.toLowerCase().includes('db-taxref')
-  const paperProps = {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5,
-      width: 200,
-    },
-  }
+  const isSisf2 = taxName?.toLowerCase?.().includes?.('sisf')
+  const isDbTaxref = taxName?.toLowerCase?.().includes?.('db-taxref')
 
   const onClickIcon = (e) => {
     e.stopPropagation()
@@ -55,7 +56,7 @@ const LinkMenu = ({ objekt }) => {
     const url =
       einheit ?
         `https://www.google.ch/search?tbm=isch&q=${einheit}`
-      : `https://www.google.ch/search?tbm=isch&q="${objekt.name}"${
+      : `https://www.google.ch/search?tbm=isch&q="${objekt?.name}"${
           nameDeutsch ? `+OR+"${nameDeutsch}"` : ''
         }`
     typeof window !== 'undefined' && window.open(url)
@@ -66,8 +67,8 @@ const LinkMenu = ({ objekt }) => {
     const url =
       einheit ? `https://www.google.ch/search?q=${einheit} site:wikipedia.org`
       : nameDeutsch ?
-        `https://www.google.ch/search?q="${nameDeutsch}"+OR+"${objekt.name}" site:wikipedia.org`
-      : `https://www.google.ch/search?q="${objekt.name}" site:wikipedia.org`
+        `https://www.google.ch/search?q="${nameDeutsch}"+OR+"${objekt?.name}" site:wikipedia.org`
+      : `https://www.google.ch/search?q="${objekt?.name}" site:wikipedia.org`
     typeof window !== 'undefined' && window.open(url)
     setAnchorEl(null)
   }
@@ -82,14 +83,14 @@ const LinkMenu = ({ objekt }) => {
   const onClickGbifFromDbTaxref = (e) => {
     e.stopPropagation()
     const url = `https://www.gbif.org/species/search?q=${encodeURIComponent(
-      `${props['Artname vollständig']}`,
+      `${props?.['Artname vollständig']}`,
     )}`
     typeof window !== 'undefined' && window.open(url)
     setAnchorEl(null)
   }
   const onClickSisf2 = (e) => {
     e.stopPropagation()
-    const url = `https://www.infoflora.ch/de/flora/${`${gattung.toLowerCase()}-${art.toLowerCase()}.html`}`
+    const url = `https://www.infoflora.ch/de/flora/${`${gattung?.toLowerCase?.()}-${art?.toLowerCase?.()}.html`}`
     typeof window !== 'undefined' && window.open(url)
     setAnchorEl(null)
   }
