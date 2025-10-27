@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -37,11 +37,17 @@ const query = gql`
   }
 `
 
+const fallback = (
+  <SpinnerContainer>
+    <Spinner message="" />
+  </SpinnerContainer>
+)
+
 export const Chooser = observer(({ pcName, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error } = useQuery(query, {
     variables: {
       exportTaxonomies,
       pcName,
@@ -52,16 +58,8 @@ export const Chooser = observer(({ pcName, count }) => {
 
   if (error) return `Error fetching data: ${error.message}`
 
-  if (loading) {
-    return (
-      <SpinnerContainer>
-        <Spinner message="" />
-      </SpinnerContainer>
-    )
-  }
-
   return (
-    <>
+    <Suspense fallback={fallback}>
       {count > 1 && (
         <AllChooser
           properties={properties}
@@ -74,6 +72,6 @@ export const Chooser = observer(({ pcName, count }) => {
           pcName={pcName}
         />
       </PropertiesContainer>
-    </>
+    </Suspense>
   )
 })
