@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
@@ -72,20 +72,12 @@ export const OrgUsers = observer(() => {
     : '99999999-9999-9999-9999-999999999999'
 
   // use tanstack-query to enable refetching from delete?
-  const {
-    data: orgUsersData,
-    loading: orgUsersLoading,
-    error: orgUsersError,
-    refetch: orgUsersRefetch,
-  } = useQuery(orgUsersQuery, {
-    variables: {
-      id,
-    },
+  const { data, error, refetch } = useQuery(orgUsersQuery, {
+    variables: { id },
   })
 
   const orgUsers =
-    orgUsersData?.organizationById?.organizationUsersByOrganizationId?.nodes ??
-    []
+    data?.organizationById?.organizationUsersByOrganizationId?.nodes ?? []
   const orgUserSorted = sortBy(orgUsers, [
     (orgUser) =>
       `${orgUser.userByUserId ? orgUser.userByUserId.name : 'zzzzz'}${
@@ -93,7 +85,7 @@ export const OrgUsers = observer(() => {
       }`,
   ])
   const organizationId =
-    orgUsersData?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
+    data?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
 
   const onClickNew = async () => {
     await apolloClient.mutate({
@@ -102,39 +94,38 @@ export const OrgUsers = observer(() => {
         organizationId,
       },
       /**
-       * adding to cache seems to be darn hard
+       * adding to cache seems to be hard
        * so just refetch
        */
     })
-    orgUsersRefetch()
+    refetch()
   }
 
-  if (orgUsersLoading) {
-    return <Spinner />
-  }
-  if (orgUsersError) {
-    return <Container>{`Fehler: ${orgUsersError.message}`}</Container>
+  if (error) {
+    return <Container>{`Fehler: ${error.message}`}</Container>
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <OrgUsersList
-          orgUsers={orgUserSorted}
-          orgUsersRefetch={orgUsersRefetch}
-        />
-        <ButtonContainer>
-          <AddNewButton
-            title="Neuen Benutzer mit Rolle erstellen"
-            aria-label="Neue Rolle vergeben"
-            onClick={onClickNew}
-          >
-            <Icon>
-              <AddIcon color="error" />
-            </Icon>
-          </AddNewButton>
-        </ButtonContainer>
-      </Container>
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <OrgUsersList
+            orgUsers={orgUserSorted}
+            orgUsersRefetch={refetch}
+          />
+          <ButtonContainer>
+            <AddNewButton
+              title="Neuen Benutzer mit Rolle erstellen"
+              aria-label="Neue Rolle vergeben"
+              onClick={onClickNew}
+            >
+              <Icon>
+                <AddIcon color="error" />
+              </Icon>
+            </AddNewButton>
+          </ButtonContainer>
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 })
