@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
@@ -12,7 +13,7 @@ const Container = styled.div`
   margin: 12px 8px 12px 0;
 `
 
-export const Property = ({ field, label, objekt, disabled }) => {
+export const Property = observer(({ field, label, objekt, disabled }) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [value, setValue] = useState(objekt[field] || '')
@@ -70,4 +71,4 @@ export const Property = ({ field, label, objekt, disabled }) => {
       </Container>
     </ErrorBoundary>
   )
-}
+})
