@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
@@ -53,47 +53,42 @@ export const TCs = observer(() => {
       activeNodeArray[1]
     : '99999999-9999-9999-9999-999999999999'
 
-  const {
-    data: tcsData,
-    loading: tcsLoading,
-    error: tcsError,
-  } = useQuery(tcsQuery, {
-    variables: {
-      id,
-    },
+  const { data, error } = useQuery(tcsQuery, {
+    variables: { id },
   })
 
   const tcs = sortBy(
-    tcsData?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
+    data?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
     ['name'],
   )
 
-  if (tcsLoading) return <Spinner />
-  if (tcsError) return <Container>{`Fehler: ${tcsError.message}`}</Container>
+  if (error) return <Container>{`Fehler: ${error.message}`}</Container>
 
   return (
     <ErrorBoundary>
-      <Container>
-        <List>
-          <ul>
-            {tcs.map((u) => {
-              const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
-              const link = `${appBaseUrl}/${encodeURIComponent(elem2)}/${u.id}`
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <List>
+            <ul>
+              {tcs.map((u) => {
+                const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
+                const link = `${appBaseUrl}/${encodeURIComponent(elem2)}/${u.id}`
 
-              return (
-                <li key={u.name}>
-                  <StyledA
-                    href={link}
-                    target="_blank"
-                  >
-                    {u.name}
-                  </StyledA>
-                </li>
-              )
-            })}
-          </ul>
-        </List>
-      </Container>
+                return (
+                  <li key={u.name}>
+                    <StyledA
+                      href={link}
+                      target="_blank"
+                    >
+                      {u.name}
+                    </StyledA>
+                  </li>
+                )
+              })}
+            </ul>
+          </List>
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 })
