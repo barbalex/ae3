@@ -130,7 +130,7 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
   const taxonomy = objekt?.taxonomyByTaxonomyId ?? {}
   let taxname = taxonomy?.name ?? '(Name fehlt)'
   // never pass null to object.entries!!!
-  const properties = JSON.parse(objekt.properties) || {}
+  const properties = JSON.parse(objekt?.properties ?? '{}')
   if (properties['Artname vollständig']) {
     taxname = `${taxname}: ${properties['Artname vollständig']}`
   }
