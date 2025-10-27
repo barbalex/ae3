@@ -3,8 +3,8 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
 
-import Row from '../../Row/index.jsx'
-import LoadingRow from '../../LoadingRow.jsx'
+import { Row } from '../../Row/index.jsx'
+import { LoadingRow } from '../../LoadingRow.jsx'
 import { Object } from './Object.jsx'
 
 export const TopLevelObject = ({ type = 'Lebensräume' }) => {

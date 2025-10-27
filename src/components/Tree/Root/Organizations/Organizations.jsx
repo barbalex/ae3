@@ -2,10 +2,10 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
-import Row from '../../Row/index.jsx'
-import LoadingRow from '../../LoadingRow.jsx'
+import { Row } from '../../Row/index.jsx'
+import { LoadingRow } from '../../LoadingRow.jsx'
 
-const Organizations = () => {
+export const Organizations = () => {
   const apolloClient = useApolloClient()
 
   const { data, isLoading } = useQuery({
@@ -58,5 +58,3 @@ const Organizations = () => {
 
   return nodes
 }
-
-export default Organizations
