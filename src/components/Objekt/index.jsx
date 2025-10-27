@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { uniqBy } from 'es-toolkit'
@@ -57,11 +57,7 @@ export const Objekt = observer(({ stacked = false }) => {
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
   const objectId = getActiveObjectIdFromNodeArray(activeNodeArray)
-  const {
-    data: objectData,
-    loading: objectLoading,
-    error: objectError,
-  } = useQuery(query, {
+  const { data: objectData, error: objectError } = useQuery(query, {
     variables: {
       objectId,
     },
@@ -84,9 +80,8 @@ export const Objekt = observer(({ stacked = false }) => {
   const propertyCollectionObjectsOfSynonyms =
     getPropertyCollectionObjectsOfSynonyms({ synonymObjects, pcsIds })
 
-  if (!objekt) return <div />
+  // if (!objekt) return <div />
 
-  if (objectLoading) return <Spinner />
   if (objectError) {
     return <Container2>{`Fehler: ${objectError.message}`}</Container2>
   }
@@ -103,57 +98,61 @@ export const Objekt = observer(({ stacked = false }) => {
       <Container>
         <SimpleBar style={{ maxHeight: '100%' }}>
           <FirstTitle>Taxonomie</FirstTitle>
-          <TaxonomyObject
-            objekt={objekt}
-            stacked={stacked}
-          />
-          {synonymObjects.length > 0 && (
-            <SynonymTitle>
-              {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
-              <TitleSpan>
-                {synonymObjects.length > 1 ? ` (${synonymObjects.length})` : ''}
-              </TitleSpan>
-            </SynonymTitle>
-          )}
-          <TaxonomyObjects
-            objects={synonymObjects}
-            stacked={stacked}
-          />
-          {pcs.length > 0 && (
-            <Title>
-              Eigenschaften
-              <TitleSpan>{` (${pcs.length} ${
-                pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-              })`}</TitleSpan>
-            </Title>
-          )}
-          {pcs.map((pc) => (
-            <PC
-              key={pc.id}
-              pcId={pc.id}
-              objId={objekt.id}
-              stacked={stacked}
-              isSynonym={false}
-            />
-          ))}
-          {synonymPcs.length > 0 && (
-            <Title>
-              Eigenschaften von Synonymen
-              <TitleSpan>
-                {` (${synonymPcs.length} ${
-                  synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-                })`}
-              </TitleSpan>
-            </Title>
-          )}
-          {synonymPcs.map((pc) => (
-            <PC
-              key={pc.id}
-              pcId={pc.id}
-              objId={objekt?.synonymsByObjectId?.nodes?.[0]?.objectIdSynonym}
+          <Suspense fallback={<Spinner />}>
+            <TaxonomyObject
+              objekt={objekt}
               stacked={stacked}
             />
-          ))}
+            {synonymObjects.length > 0 && (
+              <SynonymTitle>
+                {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
+                <TitleSpan>
+                  {synonymObjects.length > 1 ?
+                    ` (${synonymObjects.length})`
+                  : ''}
+                </TitleSpan>
+              </SynonymTitle>
+            )}
+            <TaxonomyObjects
+              objects={synonymObjects}
+              stacked={stacked}
+            />
+            {pcs.length > 0 && (
+              <Title>
+                Eigenschaften
+                <TitleSpan>{` (${pcs.length} ${
+                  pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+                })`}</TitleSpan>
+              </Title>
+            )}
+            {pcs.map((pc) => (
+              <PC
+                key={pc.id}
+                pcId={pc.id}
+                objId={objekt?.id}
+                stacked={stacked}
+                isSynonym={false}
+              />
+            ))}
+            {synonymPcs.length > 0 && (
+              <Title>
+                Eigenschaften von Synonymen
+                <TitleSpan>
+                  {` (${synonymPcs.length} ${
+                    synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+                  })`}
+                </TitleSpan>
+              </Title>
+            )}
+            {synonymPcs.map((pc) => (
+              <PC
+                key={pc.id}
+                pcId={pc.id}
+                objId={objekt?.synonymsByObjectId?.nodes?.[0]?.objectIdSynonym}
+                stacked={stacked}
+              />
+            ))}
+          </Suspense>
         </SimpleBar>
       </Container>
     </ErrorBoundary>
