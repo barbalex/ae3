@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router'
 
-import Row from '../../Row/index.jsx'
-import Organizations from './Organizations.jsx'
+import { Row } from '../../Row/index.jsx'
+import { Organizations } from './Organizations.jsx'
 
-const OrganizationsFolder = ({ count, isLoading }) => {
+export const OrganizationsFolder = ({ count, isLoading }) => {
   const { pathname } = useLocation()
 
   const data = {
@@ -24,5 +24,3 @@ const OrganizationsFolder = ({ count, isLoading }) => {
     </>
   )
 }
-
-export default OrganizationsFolder

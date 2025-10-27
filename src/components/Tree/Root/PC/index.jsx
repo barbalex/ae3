@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router'
 
-import Row from '../../Row/index.jsx'
-import PCs from './PCs/index.jsx'
+import { Row } from '../../Row/index.jsx'
+import { PCs } from './PCs/index.jsx'
 
-const PcNode = ({ isLoading, count }) => {
+export const PC = ({ isLoading, count }) => {
   const { pathname } = useLocation()
   const isOpen = pathname.startsWith('/Eigenschaften-Sammlungen')
 
@@ -23,5 +23,3 @@ const PcNode = ({ isLoading, count }) => {
     </>
   )
 }
-
-export default PcNode

@@ -3,11 +3,11 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import Row from '../../../Row/index.jsx'
-import LoadingRow from '../../../LoadingRow.jsx'
-import Folders from './Folders.jsx'
+import { Row } from '../../../Row/index.jsx'
+import { LoadingRow } from '../../../LoadingRow.jsx'
+import { Folders } from './Folders.jsx'
 
-const PCs = () => {
+export const PCs = () => {
   const { pcId } = useParams()
   const apolloClient = useApolloClient()
 
@@ -78,5 +78,3 @@ const PCs = () => {
 
   return nodes
 }
-
-export default PCs
