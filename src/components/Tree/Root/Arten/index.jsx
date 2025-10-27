@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router'
 
-import Row from '../../Row/index.jsx'
+import { Row } from '../../Row/index.jsx'
 import { Tax } from '../LR/Tax.jsx'
 
 export const Arten = ({ isLoading, count }) => {
