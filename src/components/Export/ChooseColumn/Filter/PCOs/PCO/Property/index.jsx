@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -7,26 +6,8 @@ import { PcoComparator } from './Comparator.jsx'
 import { PcoValue } from './Value.jsx'
 import { PcoCheckbox } from './Checkbox.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
-import { constants } from '../../../../../../../modules/constants.js'
 
-const Container = styled.div`
-  display: flex;
-  align-content: stretch;
-  padding: 4px 16px;
-  width: 100%;
-  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
-    width: calc(50cqw - 32px);
-  }
-  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
-    width: calc(33cqw - 32px);
-  }
-  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
-    width: calc(25cqw - 32px);
-  }
-  > div {
-    height: auto;
-  }
-`
+import { container } from './index.module.css'
 
 export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
   const store = useContext(storeContext)
@@ -40,18 +21,18 @@ export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
 
   if (jsontype === 'Boolean') {
     return (
-      <Container>
+      <div className={container}>
         <PcoCheckbox
           pcname={pcname}
           pname={pname}
           value={value}
         />
-      </Container>
+      </div>
     )
   }
 
   return (
-    <Container>
+    <div className={container}>
       <PcoValue
         key={`${pcname}/${pname}/${jsontype}/${value}`}
         pcname={pcname}
@@ -68,6 +49,6 @@ export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
           value={value}
         />
       )}
-    </Container>
+    </div>
   )
 })
