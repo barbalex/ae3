@@ -1,0 +1,12 @@
+.container {
+  padding: 0 5px;
+}
+
+.label {
+  height: 30px;
+  min-height: 30px;
+  > span {
+    font-weight: 500;
+    line-height: 1em;
+  }
+}

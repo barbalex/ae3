@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { HowTo } from './HowTo.jsx'
@@ -14,17 +13,7 @@ import { RCOs } from './RCOs/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  padding: 0 5px;
-`
-const Label = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { container, label } from './index.module.css'
 
 export const Filter = observer(() => {
   const store = useContext(storeContext)
@@ -68,11 +57,11 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <HowTo />
         <Tipps />
         <FormGroup>
-          <Label
+          <FormControlLabel
             control={
               <Checkbox
                 color="primary"
@@ -81,8 +70,9 @@ export const Filter = observer(() => {
               />
             }
             label="Informationen von Synonymen mit exportieren"
+            className={label}
           />
-          <Label
+          <FormControlLabel
             control={
               <Checkbox
                 color="primary"
@@ -91,6 +81,7 @@ export const Filter = observer(() => {
               />
             }
             label="Gefilterte Felder immer exportieren"
+            className={label}
           />
         </FormGroup>
         <Id />
@@ -106,7 +97,7 @@ export const Filter = observer(() => {
           rcoExpanded={rcoExpanded}
           onToggleRco={onToggleRco}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
