@@ -1,0 +1,15 @@
+.input {
+  div hr {
+    width: calc(100% - 20px) !important;
+  }
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.deleteFilterIcon {
+  cursor: pointer;
+  pointer-events: auto;
+  padding-top: 5px;
+  color: rgba(0, 0, 0, 0.7);
+}
