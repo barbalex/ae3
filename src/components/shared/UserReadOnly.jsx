@@ -43,7 +43,7 @@ export const UserReadOnly = ({ label, user }) => {
 
   const name = user ? user.name || '' : ''
   const email = user ? user.email || '' : ''
-  const link = `${appBaseUrl}/Benutzer/${user.id}`
+  const link = `${appBaseUrl}Benutzer/${user.id}`
 
   return (
     <ErrorBoundary>

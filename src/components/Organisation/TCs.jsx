@@ -72,7 +72,7 @@ export const TCs = observer(() => {
             <ul>
               {tcs.map((u) => {
                 const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
-                const link = `${appBaseUrl}/${encodeURIComponent(elem2)}/${u.id}`
+                const link = `${appBaseUrl}${encodeURIComponent(elem2)}/${u.id}`
 
                 return (
                   <li key={u.name}>

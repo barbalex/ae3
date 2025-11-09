@@ -6,7 +6,7 @@ export const PCs = ({ pcs }) => (
     <div className={list}>
       <ul>
         {pcs.map((u) => {
-          const link = `${appBaseUrl}/Eigenschaften-Sammlungen/${encodeURIComponent(
+          const link = `${appBaseUrl}Eigenschaften-Sammlungen/${encodeURIComponent(
             u.id,
           )}`
 
