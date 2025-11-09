@@ -2,19 +2,13 @@ import { useState, useContext } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { ChooseColumn } from './ChooseColumn/index.jsx'
 import { PreviewColumn } from './PreviewColumn/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const StyledPaper = styled(Paper)`
-  background-color: #ffcc80 !important;
-`
-const Content = styled.div`
-  height: 100%;
-`
+import { paper, content } from './ExportStacked.module.css'
 
 export const ExportStacked = observer(() => {
   const store = useContext(storeContext)
@@ -25,7 +19,7 @@ export const ExportStacked = observer(() => {
 
   return (
     <>
-      <StyledPaper>
+      <Paper className={paper}>
         <Tabs
           variant="fullWidth"
           value={tab}
@@ -35,11 +29,11 @@ export const ExportStacked = observer(() => {
           <Tab label="Auswählen" />
           <Tab label="Vorschau" />
         </Tabs>
-      </StyledPaper>
-      <Content>
+      </Paper>
+      <div className={content}>
         {tab === 0 && <ChooseColumn dimensions={{ width: windowWidth }} />}
         {tab === 1 && <PreviewColumn dimensions={{ width: windowWidth }} />}
-      </Content>
+      </div>
     </>
   )
 })
