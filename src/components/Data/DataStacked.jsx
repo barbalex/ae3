@@ -2,20 +2,13 @@ import { useState, useContext } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 
 import { Tree } from '../Tree/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const StyledPaper = styled(Paper)`
-  background-color: #ffcc80 !important;
-`
-const Content = styled.div`
-  /* the following height is needed for home to scroll */
-  height: ${(props) => props['data-height']}px;
-`
+import { paper } from './DataStacked.module.css'
 
 export const DataStacked = observer(() => {
   const store = useContext(storeContext)
@@ -26,7 +19,7 @@ export const DataStacked = observer(() => {
 
   return (
     <>
-      <StyledPaper>
+      <Paper className={paper}>
         <Tabs
           variant="fullWidth"
           value={tab}
@@ -39,11 +32,16 @@ export const DataStacked = observer(() => {
             disabled={false}
           />
         </Tabs>
-      </StyledPaper>
-      <Content data-height={windowHeight - 103}>
+      </Paper>
+      <div
+        // the following height is needed for home to scroll
+        style={{
+          height: windowHeight - 103,
+        }}
+      >
         {tab === 0 && <Tree />}
         {tab === 1 && <Outlet />}
-      </Content>
+      </div>
     </>
   )
 })
