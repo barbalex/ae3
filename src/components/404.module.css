@@ -1,0 +1,38 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.textContainer {
+  display: flex;
+  justify-content: center;
+  font-weight: 700 !important;
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
+    -2px 2px 3px white;
+}
+
+.pageTitle {
+  font-size: 2em !important;
+  padding: 15px;
+  font-weight: 700 !important;
+}
+
+.text {
+  font-size: 1.5em !important;
+  padding: 15px;
+  font-weight: 700 !important;
+}
+
+.button {
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
+    -2px 2px 3px white;
+  border-color: white !important;
+  margin-top: 10px !important;
+}

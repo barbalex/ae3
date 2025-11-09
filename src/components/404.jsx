@@ -1,44 +1,15 @@
 import Typography from '@mui/material/Typography'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
-
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const TextContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  font-weight: 700 !important;
-  text-shadow:
-    2px 2px 3px white,
-    -2px -2px 3px white,
-    2px -2px 3px white,
-    -2px 2px 3px white;
-`
-const PageTitle = styled(Typography)`
-  font-size: 2em !important;
-  padding: 15px;
-  font-weight: 700 !important;
-`
-const Text = styled(Typography)`
-  font-size: 1.5em !important;
-  padding: 15px;
-  font-weight: 700 !important;
-`
-const StyledButton = styled(Button)`
-  text-shadow:
-    2px 2px 3px white,
-    -2px -2px 3px white,
-    2px -2px 3px white,
-    -2px 2px 3px white;
-  border-color: white !important;
-  margin-top: 10px !important;
-`
+import {
+  container,
+  textContainer,
+  pageTitle,
+  text,
+  button,
+} from './404.module.css'
 
 const FourOFour = () => {
   const navigate = useNavigate()
@@ -46,33 +17,36 @@ const FourOFour = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TextContainer>
-          <PageTitle
+      <div className={container}>
+        <div className={textContainer}>
+          <Typography
             align="center"
             variant="h6"
+            className={pageTitle}
           >
             Oh je
-          </PageTitle>
-        </TextContainer>
-        <TextContainer>
-          <Text
+          </Typography>
+        </div>
+        <div className={textContainer}>
+          <Typography
             align="center"
             variant="h6"
+            className={text}
           >
             Diese Seite ist nicht verfügbar.
-          </Text>
-        </TextContainer>
-        <TextContainer>
-          <StyledButton
+          </Typography>
+        </div>
+        <div className={textContainer}>
+          <Button
             variant="outlined"
             onClick={onClickBack}
             color="inherit"
+            className={button}
           >
             Zurück zur Startseite
-          </StyledButton>
-        </TextContainer>
-      </Container>
+          </Button>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
