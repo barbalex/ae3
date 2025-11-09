@@ -1,5 +1,4 @@
 import { useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -9,10 +8,7 @@ import { PcoProperty } from './Property/index.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-const SpinnerContainer = styled.div`
-  padding-top: 15px;
-  width: 100%;
-`
+import { spinnerContainer } from './Properties.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCO(
@@ -33,9 +29,9 @@ const query = gql`
 `
 
 const fallback = (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <Spinner message="" />
-  </SpinnerContainer>
+  </div>
 )
 
 export const Properties = observer(({ pc }) => {
