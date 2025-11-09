@@ -1,14 +1,11 @@
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { Tree } from '../Tree/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const DataElement = styled(ReflexElement)`
-  overflow-x: hidden !important;
-`
+import { dataElement } from './DataFlexed.module.css'
 
 export const DataFlexed = observer(() => (
   <ErrorBoundary>
@@ -20,9 +17,9 @@ export const DataFlexed = observer(() => (
         <Tree />
       </ReflexElement>
       <ReflexSplitter key="treeSplitter" />
-      <DataElement>
+      <ReflexElement className={dataElement}>
         <Outlet />
-      </DataElement>
+      </ReflexElement>
     </ReflexContainer>
   </ErrorBoundary>
 ))
