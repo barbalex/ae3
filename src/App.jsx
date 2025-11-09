@@ -85,7 +85,7 @@ export const App = () => {
           </QueryClientProvider>
         </ApolloProvider>
       </MobxProvider>
-      <Analytics />
+      <Analytics debug={false} />
     </IdbProvider>
   )
 }
