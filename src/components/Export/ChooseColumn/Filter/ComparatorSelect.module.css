@@ -1,0 +1,20 @@
+.select {
+  height: 39px;
+  > div {
+    padding-left: 8px;
+  }
+}
+
+.menuItemRow {
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  flex-basis: 85px;
+  flex-shrink: 0;
+}
+
+.comment {
+  font-size: 0.7em;
+}
