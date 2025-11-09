@@ -7,7 +7,9 @@ import { ProgressiveImg } from './shared/ProgressiveImg.tsx'
 import image from '../images/home.webp'
 import placeholderSrc from '../images/home_small.webp'
 
-const OuterContainer = styled.div`
+import {} from './Home.module.css'
+
+const Container = styled.div`
   height: 100%;
   min-height: 100%;
   position: relative;
@@ -79,7 +81,7 @@ const DokuLink = styled(Link)`
 `
 
 const Home = () => (
-  <OuterContainer>
+  <Container>
     <ProgressiveImg
       src={image}
       placeholderSrc={placeholderSrc}
@@ -115,7 +117,7 @@ const Home = () => (
         </Card>
       </CardContainer>
     </ScrollContainer>
-  </OuterContainer>
+  </Container>
 )
 
 export default Home
