@@ -1,5 +1,4 @@
 import { useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -10,12 +9,7 @@ import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
-const ErrorContainer = styled.div`
-  padding: 5px;
-`
-const SpinnerContainer = styled.div`
-  padding-top: 15px;
-`
+import { errorContainer, spinnerContainer } from './List.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCOs($exportTaxonomies: [String!]) {
@@ -29,9 +23,9 @@ const query = gql`
 `
 
 const fallback = (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <Spinner message="" />
-  </SpinnerContainer>
+  </div>
 )
 
 export const PcoList = observer(() => {
@@ -55,7 +49,9 @@ export const PcoList = observer(() => {
 
   if (error) {
     return (
-      <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
+      <div className={errorContainer}>
+        `Error loading data: ${error.message}`
+      </div>
     )
   }
 
