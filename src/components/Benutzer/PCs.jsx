@@ -1,29 +1,9 @@
-import styled from '@emotion/styled'
-
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-`
-const List = styled.div`
-  column-width: 400px;
-  margin-bottom: 10px;
-  ul {
-    -webkit-margin-before: 0px;
-  }
-`
-const StyledA = styled.a`
-  color: inherit;
-  cursor: pointer;
-  text-decoration-color: rgba(0, 0, 0, 0.3);
-  text-decoration-style: dotted;
-`
+import { container, list, a } from './PC.module.css'
 
 export const PCs = ({ pcs }) => (
-  <Container>
-    <List>
+  <div className={container}>
+    <div className={list}>
       <ul>
         {pcs.map((u) => {
           const link = `${appBaseUrl}/Eigenschaften-Sammlungen/${encodeURIComponent(
@@ -32,16 +12,17 @@ export const PCs = ({ pcs }) => (
 
           return (
             <li key={u.name}>
-              <StyledA
+              <a
+                className={a}
                 href={link}
                 target="_blank"
               >
                 {u.name}
-              </StyledA>
+              </a>
             </li>
           )
         })}
       </ul>
-    </List>
-  </Container>
+    </div>
+  </div>
 )
