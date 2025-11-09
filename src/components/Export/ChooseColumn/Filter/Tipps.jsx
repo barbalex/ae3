@@ -6,40 +6,25 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCardContent = styled(CardContent)`
-  padding: 0 16px 0 0 !important;
-  margin: -10px 0 0 0;
-  li {
-    margin-top: 8px;
-  }
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  cardContent,
+} from './Tipps.module.css'
 
 export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
-      <StyledCardActions
+    <Card className={card}>
+      <CardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
+        className={cardActions}
       >
-        <CardActionTitle>Tipps und Tricks</CardActionTitle>
+        <div className={cardActionTitle}>Tipps und Tricks</div>
         <IconButton
           aria-expanded={expanded}
           aria-label="Show more"
@@ -49,13 +34,13 @@ export const Tipps = () => {
             <ExpandMoreIcon />
           </Icon>
         </IconButton>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           <ul>
             <li>
               {`Sie können nach beliebig vielen Eigenschaften filtern. Jedes Kriterium reduziert die Anzahl "Treffer".`}
@@ -90,8 +75,8 @@ export const Tipps = () => {
               {`Sie können die ungefilterte Liste aller enthaltenen Werte öffnen, indem Sie einen Leerschlag tippen.`}
             </li>
           </ul>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }
