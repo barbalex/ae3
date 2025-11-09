@@ -69,4 +69,11 @@ export default defineConfig({
       },
     }),
   ],
+  css: {
+    modules: {
+      // enable using named exports for css classes
+      // https://vite.dev/guide/features.html#css-modules
+      localsConvention: 'camelCaseOnly',
+    },
+  },
 })
