@@ -32,9 +32,6 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
   background-color: #ffcc80;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -101,15 +98,17 @@ export const ChooseColumn = observer(() => {
               onClick={onToggleTaxonomies}
             >
               <CardActionTitle>1. Taxonomie(n) wählen</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={taxonomiesExpanded}
+              <IconButton
                 aria-expanded={taxonomiesExpanded}
                 aria-label="Show more"
+                style={{
+                  transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
+                }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
+              </IconButton>
             </StyledCardActions>
             <Collapse
               in={taxonomiesExpanded}
@@ -125,15 +124,17 @@ export const ChooseColumn = observer(() => {
               onClick={onToggleFilter}
             >
               <CardActionTitle>2. filtern</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={filterExpanded}
+              <IconButton
                 aria-expanded={filterExpanded}
                 aria-label="Show more"
+                style={{
+                  transform: filterExpanded ? 'rotate(180deg)' : 'none',
+                }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
+              </IconButton>
             </StyledCardActions>
             <Collapse
               in={filterExpanded}
@@ -149,15 +150,17 @@ export const ChooseColumn = observer(() => {
               onClick={onToggleProperties}
             >
               <CardActionTitle>3. Eigenschaften wählen</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={propertiesExpanded}
+              <IconButton
                 aria-expanded={propertiesExpanded}
                 aria-label="Show more"
+                style={{
+                  transform: propertiesExpanded ? 'rotate(180deg)' : 'none',
+                }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
+              </IconButton>
             </StyledCardActions>
             <Collapse
               in={propertiesExpanded}
