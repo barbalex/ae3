@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -9,27 +8,7 @@ import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
 
-const Menu = styled.div`
-  height: calc(100vh - 64px);
-  padding: 25px 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  container-type: size;
-`
-const MenuTitle = styled.div`
-  padding: 0 16px;
-`
-const MenuTitleLink = styled(Link)`
-  font-size: 21px;
-  font-weight: 700;
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
-  &:hover {
-    text-decoration: underline;
-  }
-`
-const StyledSimpleBar = styled(SimpleBar)`
-  height: calc(100cqh - 25px);
-`
+import { menu, menuTitle, menuTitleLink, simpleBar } from './index.module.css'
 
 export const Sidebar = observer(({ stacked }) => {
   const store = useContext(storeContext)
@@ -38,20 +17,26 @@ export const Sidebar = observer(({ stacked }) => {
   if (sidebarWidth === 0) return null
 
   return (
-    <Menu
+    <div
+      className={menu}
       data-stacked={stacked}
       style={{
         width: stacked ? '100%' : constants.sidebar.width,
         minWidth: constants.sidebar.width,
       }}
     >
-      <StyledSimpleBar>
-        <MenuTitle>
-          <MenuTitleLink to={`/Dokumentation/`}>Dokumentation</MenuTitleLink>
+      <SimpleBar className={simpleBar}>
+        <div className={menuTitle}>
+          <Link
+            to={`/Dokumentation/`}
+            className={menuTitleLink}
+          >
+            Dokumentation
+          </Link>
           <Filter />
-        </MenuTitle>
+        </div>
         <MenuItems />
-      </StyledSimpleBar>
-    </Menu>
+      </SimpleBar>
+    </div>
   )
 })
