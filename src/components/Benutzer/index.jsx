@@ -6,7 +6,6 @@ import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { CombinedGraphQLErrors } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
@@ -23,20 +22,12 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div``
-const LEContainer = styled.div`
-  padding: 10px;
-`
-const OrgContainer = styled.div`
-  padding: 10px;
-`
-const SaveButton = styled(Button)`
-  border: 1px solid !important;
-  margin-top: 10px !important;
-`
-const StyledPaper = styled(Paper)`
-  background-color: #ffcc80 !important;
-`
+import {
+  leContainer,
+  orgContainer,
+  saveButton,
+  paper,
+} from './index.module.css'
 
 const User = observer(() => {
   const { userId } = useParams()
@@ -129,7 +120,9 @@ const User = observer(() => {
 
   if (error) {
     return (
-      <LEContainer>`Fehler beim Laden der Daten: ${error.message}`</LEContainer>
+      <div className={leContainer}>
+        `Fehler beim Laden der Daten: ${error.message}`
+      </div>
     )
   }
 
@@ -138,8 +131,8 @@ const User = observer(() => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <Container>
-          <OrgContainer>
+        <div>
+          <div className={orgContainer}>
             <FormControl
               fullWidth
               error={!!nameErrorText}
@@ -195,15 +188,16 @@ const User = observer(() => {
                 />
               </FormControl>
             )}
-            <SaveButton
+            <Button
               onClick={onSave}
               disabled={!saveEnabled}
               color="inherit"
+              className={saveButton}
             >
               Änderungen speichern
-            </SaveButton>
-          </OrgContainer>
-          <StyledPaper>
+            </Button>
+          </div>
+          <Paper className={paper}>
             <Tabs
               variant="fullWidth"
               value={tab}
@@ -216,11 +210,11 @@ const User = observer(() => {
                 label={`importierte Eigenschaften-Sammlungen (${pcs.length})`}
               />
             </Tabs>
-          </StyledPaper>
+          </Paper>
           {tab === 0 && <Roles orgUsers={orgUsers} />}
           {tab === 1 && <TCs tcs={tcs} />}
           {tab === 2 && <PCs pcs={pcs} />}
-        </Container>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )

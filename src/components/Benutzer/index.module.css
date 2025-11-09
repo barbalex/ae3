@@ -1,0 +1,16 @@
+.leContainer {
+  padding: 10px;
+}
+
+.orgContainer {
+  padding: 10px;
+}
+
+.saveButton {
+  border: 1px solid !important;
+  margin-top: 10px !important;
+}
+
+.paper {
+  background-color: #ffcc80 !important;
+}
