@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -12,40 +11,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Sidebar } from './Sidebar/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  height: calc(100vh - 64px);
-  display: flex;
-`
-const Doku = styled.div`
-  padding: 25px;
-  ul,
-  ol {
-    margin-top: 5px;
-    padding-inline-start: 20px;
-  }
-  p,
-  li {
-    margin-bottom: 0;
-    line-height: 1.5em;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  ol {
-    margin-bottom: 10px;
-  }
-`
-export const DokuDate = styled.p`
-  margin-bottom: 15px !important;
-  color: grey;
-`
-const StyledPaper = styled(Paper)`
-  background-color: #ffcc80 !important;
-`
-const Content = styled.div`
-  height: 100%;
-`
+import { container, doku, paper, content } from './index.module.css'
 
 const Docs = observer(({ height }) => {
   const store = useContext(storeContext)
@@ -74,7 +40,7 @@ const Docs = observer(({ height }) => {
   if (stacked) {
     return (
       <ErrorBoundary>
-        <StyledPaper>
+        <Paper className={paper}>
           <Tabs
             variant="fullWidth"
             value={tab}
@@ -84,33 +50,33 @@ const Docs = observer(({ height }) => {
             <Tab label="Navigation" />
             <Tab label="Formular" />
           </Tabs>
-        </StyledPaper>
-        <Content>
+        </Paper>
+        <div className={content}>
           {tab === 0 && <Sidebar stacked={true} />}
           {tab === 1 && (
             <SimpleBar
               style={{ maxHeight: height, height: '100%', width: '100%' }}
             >
-              <Doku>
+              <div className={doku}>
                 <Outlet />
-              </Doku>
+              </div>
             </SimpleBar>
           )}
-        </Content>
+        </div>
       </ErrorBoundary>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Sidebar />
         <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
-          <Doku>
+          <div className={doku}>
             <Outlet />
-          </Doku>
+          </div>
         </SimpleBar>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })

@@ -1,9 +1,9 @@
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 const NeueArtDoc = () => (
   <>
     <h1>Neue Art erfassen</h1>
-    <DokuDate>02.11.2021</DokuDate>
+    <p className={dokuDate}>02.11.2021</p>
 
     <p>
       Grundsätzlich sind die Autoren einer Taxonomie für deren Nachführung
@@ -24,7 +24,11 @@ const NeueArtDoc = () => (
 
     <p>
       Wer den Vorgang zuerst testen will, kann das auf{' '}
-      <a href="https://artdaten.ch" target="_blank" rel="noreferrer">
+      <a
+        href="https://artdaten.ch"
+        target="_blank"
+        rel="noreferrer"
+      >
         https://artdaten.ch
       </a>{' '}
       machen.

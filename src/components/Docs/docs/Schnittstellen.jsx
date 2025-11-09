@@ -1,9 +1,9 @@
-import { DokuDate } from '../index.jsx'
+import { dokuDate } from '../index.module.css'
 
 const SchnittstellenDoc = () => (
   <>
     <h1>Schnittstellen</h1>
-    <DokuDate>25.10.2021</DokuDate>
+    <p className={dokuDate}>25.10.2021</p>
     <p>
       Unter{' '}
       <a

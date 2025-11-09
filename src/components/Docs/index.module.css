@@ -1,0 +1,38 @@
+.container {
+  height: calc(100vh - 64px);
+  display: flex;
+}
+
+.doku {
+  padding: 25px;
+  ul,
+  ol {
+    margin-top: 5px;
+    padding-inline-start: 20px;
+  }
+  p,
+  li {
+    margin-bottom: 0;
+    line-height: 1.5em;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  ol {
+    margin-bottom: 10px;
+  }
+}
+
+.dokuDate {
+  margin-bottom: 15px !important;
+  color: grey;
+}
+
+.paper {
+  background-color: #ffcc80 !important;
+}
+
+.content {
+  height: 100%;
+}
