@@ -1,13 +1,9 @@
 import { useState, useContext } from 'react'
 import TextField from '@mui/material/TextField'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../storeContext.js'
-
-const IdField = styled(TextField)`
-  margin-top: 2px !important;
-`
+import { field } from './Id.module.css'
 
 export const Id = observer(() => {
   const store = useContext(storeContext)
@@ -26,7 +22,7 @@ export const Id = observer(() => {
   }
 
   return (
-    <IdField
+    <TextField
       id="id"
       label="id"
       multiline
@@ -41,6 +37,7 @@ export const Id = observer(() => {
       autoCapitalize="off"
       spellCheck="false"
       variant="standard"
+      className={field}
     />
   )
 })
