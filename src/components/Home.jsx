@@ -24,7 +24,7 @@ const ScrollContainer = styled.div`
 `
 // TODO:
 // use container-queries when they are supported by all browsers
-// meanwhile: dedice width from window width
+// meanwhile: deduce width from window width
 // stacked when < 700
 // tree: in standard .35 of width
 const CardContainer = styled.div`
