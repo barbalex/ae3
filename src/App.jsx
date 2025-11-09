@@ -2,6 +2,7 @@ import { useEffect, useState, Suspense, lazy } from 'react'
 import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
+import { Analytics } from '@vercel/analytics/react'
 
 import 'simplebar-react/dist/simplebar.min.css'
 
@@ -84,6 +85,7 @@ export const App = () => {
           </QueryClientProvider>
         </ApolloProvider>
       </MobxProvider>
+      <Analytics />
     </IdbProvider>
   )
 }
