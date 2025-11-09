@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  padding: 8px 0;
+}
+
+.formLabel {
+  margin-top: 10px;
+  padding-bottom: 8px !important;
+  cursor: text;
+  font-size: 12px !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+/**
+ * material-ui sets -14px
+ * which leads to NOTHING SHOWING!!!???
+ */
+.formControlLabel {
+  margin-left: -2px !important;
+}
+
+.radio {
+  height: 26px !important;
+}

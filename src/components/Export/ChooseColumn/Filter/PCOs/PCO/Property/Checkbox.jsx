@@ -4,33 +4,16 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
 
-const Container = styled.div`
-  width: 100%;
-  padding: 8px 0;
-`
-const StyledFormLabel = styled(FormLabel)`
-  margin-top: 10px;
-  padding-bottom: 8px !important;
-  cursor: text;
-  font-size: 12px !important;
-  pointer-events: none;
-  user-select: none;
-`
-/**
- * material-ui sets -14px
- * which leads to NOTHING SHOWING!!!???
- */
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-left: -2px !important;
-`
-const StyledRadio = styled(Radio)`
-  height: 26px !important;
-`
+import {
+  container,
+  formLabel,
+  formControlLabel,
+  radio,
+} from './Checkbox.module.css'
 
 export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
@@ -51,35 +34,58 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   }
 
   return (
-    <Container>
+    <div className={container}>
       <FormControl
         component="fieldset"
         variant="standard"
       >
-        <StyledFormLabel component="legend">{pname}</StyledFormLabel>
+        <FormLabel
+          component="legend"
+          className={formLabel}
+        >
+          {pname}
+        </FormLabel>
         <RadioGroup
           aria-label={pname}
           name={pname}
           value={value}
           onChange={onChange}
         >
-          <StyledFormControlLabel
+          <FormControlLabel
             value="true"
-            control={<StyledRadio color="primary" />}
+            control={
+              <Radio
+                className={radio}
+                color="primary"
+              />
+            }
             label="Ja"
+            className={formControlLabel}
           />
-          <StyledFormControlLabel
+          <FormControlLabel
             value="false"
-            control={<StyledRadio color="primary" />}
+            control={
+              <Radio
+                className={radio}
+                color="primary"
+              />
+            }
             label="Nein"
+            className={formControlLabel}
           />
-          <StyledFormControlLabel
+          <FormControlLabel
             value="null"
-            control={<StyledRadio color="primary" />}
+            control={
+              <Radio
+                className={radio}
+                color="primary"
+              />
+            }
             label="nicht filtern"
+            className={formControlLabel}
           />
         </RadioGroup>
       </FormControl>
-    </Container>
+    </div>
   )
 })
