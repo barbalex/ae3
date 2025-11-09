@@ -5,39 +5,17 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
 import { Properties } from './Properties.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  height: auto !important;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
-const PropertiesContainer = styled.div`
-  margin: 8px 0;
-  padding-bottom: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  container-type: inline-size;
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  countClass,
+  propertiesContainer,
+} from './index.module.css'
 
 export const PCO = ({ pc, count }) => {
   const [expanded, setExpanded] = useState(false)
@@ -46,15 +24,21 @@ export const PCO = ({ pc, count }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard key={pc}>
-        <StyledCardActions
+      <Card
+        key={pc}
+        className={card}
+      >
+        <CardActions
           disableSpacing
           onClick={onClickAction}
+          className={cardActions}
         >
-          <CardActionTitle>
+          <div className={cardActionTitle}>
             {pc}
-            <Count>{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</Count>
-          </CardActionTitle>
+            <span
+              className={countClass}
+            >{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</span>
+          </div>
           <IconButton
             aria-expanded={expanded}
             aria-label="Show more"
@@ -64,17 +48,17 @@ export const PCO = ({ pc, count }) => {
               <ExpandMoreIcon />
             </Icon>
           </IconButton>
-        </StyledCardActions>
+        </CardActions>
         <Collapse
           in={expanded}
           timeout="auto"
           unmountOnExit
         >
-          <PropertiesContainer>
+          <div className={propertiesContainer}>
             <Properties pc={pc} />
-          </PropertiesContainer>
+          </div>
         </Collapse>
-      </StyledCard>
+      </Card>
     </ErrorBoundary>
   )
 }
