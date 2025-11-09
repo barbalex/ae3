@@ -10,9 +10,6 @@ import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
 
 const Menu = styled.div`
-  width: ${(props) =>
-    props['data-stacked'] ? '100%' : `${constants.sidebar.width}px`};
-  min-width: ${constants.sidebar.width}px;
   height: calc(100vh - 64px);
   padding: 25px 0;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
@@ -41,7 +38,13 @@ export const Sidebar = observer(({ stacked }) => {
   if (sidebarWidth === 0) return null
 
   return (
-    <Menu data-stacked={stacked}>
+    <Menu
+      data-stacked={stacked}
+      style={{
+        width: stacked ? '100%' : constants.sidebar.width,
+        minWidth: constants.sidebar.width,
+      }}
+    >
       <StyledSimpleBar>
         <MenuTitle>
           <MenuTitleLink to={`/Dokumentation/`}>Dokumentation</MenuTitleLink>
