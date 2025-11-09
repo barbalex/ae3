@@ -21,44 +21,6 @@ const Label = styled.div`
 `
 const StyledSelect = styled(Select)`
   width: 100%;
-  .react-select__control {
-    border-bottom: 1px solid;
-    background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.3);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-    padding-left: 0 !important;
-  }
-  .react-select__value-container {
-    padding-left: 0 !important;
-  }
-  .react-select__control:hover {
-    border-bottom-width: 2px;
-  }
-  .react-select__control:focus-within {
-    border-bottom-color: rgba(230, 81, 0, 0.6) !important;
-    box-shadow: none;
-  }
-  .react-select__input-container {
-    padding-left: 0;
-  }
-  .react-select__option {
-    font-size: small;
-  }
-  .react-select__menu {
-    /* z-index: 9999; */
-    position: unset;
-  }
-  .react-select__menu,
-  .react-select__menu-list {
-    height: 130px;
-    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
-  }
-  .react-select__indicator {
-    color: rgba(0, 0, 0, 0.4);
-  }
 `
 
 const rcoFieldPropQuery = gql`
