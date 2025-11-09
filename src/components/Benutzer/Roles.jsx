@@ -1,21 +1,8 @@
-import styled from '@emotion/styled'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-`
-const List = styled.div`
-  column-width: 400px;
-  margin-bottom: 10px;
-  ul {
-    -webkit-margin-before: 0px;
-  }
-`
+import { container, list } from './Roles.module.css'
 
 export const Roles = ({ orgUsers }) => (
-  <Container>
-    <List>
+  <div className={container}>
+    <div className={list}>
       <ul>
         {orgUsers.map((u) => {
           const orgName = u?.organizationByOrganizationId?.name ?? ''
@@ -25,6 +12,6 @@ export const Roles = ({ orgUsers }) => (
           return <li key={val}>{val}</li>
         })}
       </ul>
-    </List>
-  </Container>
+    </div>
+  </div>
 )
