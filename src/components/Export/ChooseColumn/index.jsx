@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import Snackbar from '@mui/material/Snackbar'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
@@ -16,33 +15,13 @@ import { Filter } from './Filter/index.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const StyledSnackbar = styled(Snackbar)`
-  div {
-    min-width: auto;
-    background-color: #2e7d32 !important;
-  }
-`
-const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Container = styled.div`
-  padding: 0 5px;
-  overflow-x: hidden !important;
-  height: 100%;
-  user-select: none !important;
-`
+import {
+  snackbar,
+  card,
+  cardActions,
+  cardActionTitle,
+  container,
+} from './index.module.css'
 
 export const ChooseColumn = observer(() => {
   const store = useContext(storeContext)
@@ -91,13 +70,14 @@ export const ChooseColumn = observer(() => {
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <Container>
-          <StyledCard>
-            <StyledCardActions
+        <div className={container}>
+          <Card className={card}>
+            <CardActions
+              className={cardActions}
               disableSpacing
               onClick={onToggleTaxonomies}
             >
-              <CardActionTitle>1. Taxonomie(n) wählen</CardActionTitle>
+              <div className={cardActionTitle}>1. Taxonomie(n) wählen</div>
               <IconButton
                 aria-expanded={taxonomiesExpanded}
                 aria-label="Show more"
@@ -109,7 +89,7 @@ export const ChooseColumn = observer(() => {
                   <ExpandMoreIcon />
                 </Icon>
               </IconButton>
-            </StyledCardActions>
+            </CardActions>
             <Collapse
               in={taxonomiesExpanded}
               timeout="auto"
@@ -117,13 +97,14 @@ export const ChooseColumn = observer(() => {
             >
               <Taxonomies />
             </Collapse>
-          </StyledCard>
-          <StyledCard>
-            <StyledCardActions
+          </Card>
+          <Card className={card}>
+            <CardActions
+              className={cardActions}
               disableSpacing
               onClick={onToggleFilter}
             >
-              <CardActionTitle>2. filtern</CardActionTitle>
+              <div className={cardActionTitle}>2. filtern</div>
               <IconButton
                 aria-expanded={filterExpanded}
                 aria-label="Show more"
@@ -135,7 +116,7 @@ export const ChooseColumn = observer(() => {
                   <ExpandMoreIcon />
                 </Icon>
               </IconButton>
-            </StyledCardActions>
+            </CardActions>
             <Collapse
               in={filterExpanded}
               timeout="auto"
@@ -143,13 +124,14 @@ export const ChooseColumn = observer(() => {
             >
               <Filter />
             </Collapse>
-          </StyledCard>
-          <StyledCard>
-            <StyledCardActions
+          </Card>
+          <Card className={card}>
+            <CardActions
+              className={cardActions}
               disableSpacing
               onClick={onToggleProperties}
             >
-              <CardActionTitle>3. Eigenschaften wählen</CardActionTitle>
+              <div className={cardActionTitle}>3. Eigenschaften wählen</div>
               <IconButton
                 aria-expanded={propertiesExpanded}
                 aria-label="Show more"
@@ -161,7 +143,7 @@ export const ChooseColumn = observer(() => {
                   <ExpandMoreIcon />
                 </Icon>
               </IconButton>
-            </StyledCardActions>
+            </CardActions>
             <Collapse
               in={propertiesExpanded}
               timeout="auto"
@@ -169,12 +151,13 @@ export const ChooseColumn = observer(() => {
             >
               <Properties />
             </Collapse>
-          </StyledCard>
-          <StyledSnackbar
+          </Card>
+          <Snackbar
             open={!!message}
             message={message}
+            className={snackbar}
           />
-        </Container>
+        </div>
       </SimpleBar>
     </ErrorBoundary>
   )
