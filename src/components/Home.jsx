@@ -1,123 +1,61 @@
 import { Link } from 'react-router'
-import MaterialCard from '@mui/material/Card'
-import styled from '@emotion/styled'
+import Card from '@mui/material/Card'
 
 // maybe use https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
 import { ProgressiveImg } from './shared/ProgressiveImg.tsx'
 import image from '../images/home.webp'
 import placeholderSrc from '../images/home_small.webp'
 
-import {} from './Home.module.css'
-
-const Container = styled.div`
-  height: 100%;
-  min-height: 100%;
-  position: relative;
-  overflow: hidden;
-`
-const ScrollContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  overflow-y: auto;
-  /* prevent layout shift when scrollbar appears */
-  scrollbar-gutter: stable;
-`
-// TODO:
-// use container-queries when they are supported by all browsers
-// meanwhile: deduce width from window width
-// stacked when < 700
-// tree: in standard .35 of width
-const CardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
-  padding: 25px;
-  @media (min-width: 1231px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    padding: 35px;
-  }
-  @media (min-width: 1847px) {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 50px;
-    padding: 45px;
-  }
-  p {
-    margin-bottom: 10px !important;
-  }
-  p:last-of-type {
-    margin-bottom: 0 !important;
-    margin-top: 10px !important;
-  }
-  position: relative;
-  color: black !important;
-`
-const Card = styled(MaterialCard)`
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.6) !important;
-  font-weight: 700;
-  ul {
-    margin-bottom: 0;
-  }
-  li:last-of-type {
-    margin-bottom: 0;
-  }
-  li {
-    font-weight: 500;
-  }
-`
-const CardTitle = styled.h3`
-  font-weight: 700;
-  margin: 0 0 12px 0;
-`
-const DokuLink = styled(Link)`
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
-  &:hover {
-    text-decoration: underline;
-  }
-`
+import {
+  container,
+  scrollContainer,
+  cardContainer,
+  card,
+  cardTitle,
+  dokuLink,
+} from './Home.module.css'
 
 const Home = () => (
-  <Container>
+  <div className={container}>
     <ProgressiveImg
       src={image}
       placeholderSrc={placeholderSrc}
     />
-    <ScrollContainer>
-      <CardContainer>
-        <Card>
-          <CardTitle>Informationen zu:</CardTitle>
+    <div className={scrollContainer}>
+      <div className={cardContainer}>
+        <Card className={card}>
+          <h3 className={cardTitle}>Informationen zu:</h3>
           Arten, Lebensräumen und ihren Taxonomien
         </Card>
-        <Card>
-          <CardTitle>...nachschlagen</CardTitle>Eigenschaften finden.
+        <Card className={card}>
+          <h3 className={cardTitle}>...nachschlagen</h3>Eigenschaften finden.
           <br />
           Auch von Synonymen aus anderen Taxonomien
         </Card>
-        <Card>
-          <CardTitle>...exportieren</CardTitle>Eigenschaften wählen, Arten
-          filtern
+        <Card className={card}>
+          <h3 className={cardTitle}>...exportieren</h3>Eigenschaften wählen,
+          Arten filtern
         </Card>
-        <Card>
-          <CardTitle>...direkt einbinden</CardTitle>Daten direkt aus anderen
-          Anwendungen abfragen
+        <Card className={card}>
+          <h3 className={cardTitle}>...direkt einbinden</h3>Daten direkt aus
+          anderen Anwendungen abfragen
         </Card>
-        <Card>
-          <CardTitle>...importieren und ändern</CardTitle>Benutzer mit Konto
-          können Eigenschaften importieren oder direkt bearbeiten
+        <Card className={card}>
+          <h3 className={cardTitle}>...importieren und ändern</h3>Benutzer mit
+          Konto können Eigenschaften importieren oder direkt bearbeiten
         </Card>
-        <Card>
-          <CardTitle>Mehr Info:</CardTitle>
-          <DokuLink to="/Dokumentation/projektbeschreibung">
+        <Card className={card}>
+          <h3 className={cardTitle}>Mehr Info:</h3>
+          <Link
+            className={dokuLink}
+            to="/Dokumentation/projektbeschreibung"
+          >
             in der Dokumentation
-          </DokuLink>
+          </Link>
         </Card>
-      </CardContainer>
-    </ScrollContainer>
-  </Container>
+      </div>
+    </div>
+  </div>
 )
 
 export default Home
