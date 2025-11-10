@@ -1,0 +1,29 @@
+.container {
+  margin: 10px 0;
+}
+
+.errorContainer {
+  padding: 5px;
+}
+
+.card {
+  background-color: rgb(255, 243, 224) !important;
+}
+
+.cardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  height: auto !important;
+  background-color: #ffcc80;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.count {
+  font-size: x-small;
+  padding-left: 5px;
+}

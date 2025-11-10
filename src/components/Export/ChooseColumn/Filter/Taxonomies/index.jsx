@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -18,33 +17,14 @@ import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { joinTaxProperties } from './joinTaxProperties.js'
 
-const Container = styled.div`
-  margin: 10px 0;
-`
-const ErrorContainer = styled.div`
-  padding: 5px;
-`
-const StyledCard = styled(Card)`
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-`
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  container,
+  errorContainer,
+  card,
+  cardActions,
+  cardActionTitle,
+  count,
+} from './index.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForFilterTaxonomies(
@@ -101,36 +81,41 @@ export const Taxonomies = observer(
 
     if (error) {
       return (
-        <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
+        <div className={errorContainer}>
+          `Error loading data: ${error.message}`
+        </div>
       )
     }
 
     return (
       <ErrorBoundary>
-        <Container>
-          <StyledCard>
-            <StyledCardActions
+        <div className={container}>
+          <Card className={card}>
+            <CardActions
               disableSpacing
               onClick={onToggleTaxonomies}
+              className={cardActions}
             >
-              <CardActionTitle>
+              <div className={cardActionTitle}>
                 Taxonomien
-                <Count>{`(${loading ? '...' : taxCount} ${
+                <span className={count}>{`(${loading ? '...' : taxCount} ${
                   taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
                 }, ${loading ? '...' : taxFieldsCount} ${
                   taxFieldsCount === 1 ? 'Feld' : 'Felder'
-                })`}</Count>
-              </CardActionTitle>
-              <CardActionIconButton
-                data-expanded={taxonomiesExpanded}
+                })`}</span>
+              </div>
+              <IconButton
                 aria-expanded={taxonomiesExpanded}
                 aria-label="Show more"
+                style={{
+                  transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
+                }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
-            </StyledCardActions>
+              </IconButton>
+            </CardActions>
             <Collapse
               in={taxonomiesExpanded}
               timeout="auto"
@@ -147,8 +132,8 @@ export const Taxonomies = observer(
                 />
               ))}
             </Collapse>
-          </StyledCard>
-        </Container>
+          </Card>
+        </div>
       </ErrorBoundary>
     )
   },
