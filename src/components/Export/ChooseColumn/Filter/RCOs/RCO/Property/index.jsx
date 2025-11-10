@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { Comparator } from './Comparator.jsx'
@@ -7,24 +6,7 @@ import { Value } from './Value.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
-const Container = styled.div`
-  display: flex;
-  align-content: stretch;
-  padding: 4px 16px;
-  width: 100%;
-  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
-    width: calc(50cqw - 32px);
-  }
-  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
-    width: calc(33cqw - 32px);
-  }
-  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
-    width: calc(25cqw - 32px);
-  }
-  > div {
-    height: auto;
-  }
-`
+import { container } from './index.module.css'
 
 export const Property = observer(
   ({ pcname, relationtype, pname, jsontype }) => {
@@ -40,7 +22,7 @@ export const Property = observer(
     const { comparator, value } = exportRcoFilter
 
     return (
-      <Container>
+      <div className={container}>
         <Value
           key={`${pcname}/${pname}/${jsontype}/${value}`}
           pcname={pcname}
@@ -59,7 +41,7 @@ export const Property = observer(
             value={value}
           />
         )}
-      </Container>
+      </div>
     )
   },
 )
