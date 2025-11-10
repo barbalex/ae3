@@ -95,7 +95,12 @@ html {
   border-left: none;
   border-right: none;
   border-radius: 0;
+}
+.react-select__control {
   padding-left: 0 !important;
+}
+.pad-left-25 .react-select__control {
+  padding-left: 25px !important;
 }
 .react-select__value-container {
   padding-left: 0 !important;
@@ -107,19 +112,14 @@ html {
   border-bottom-color: rgba(230, 81, 0, 0.6) !important;
   box-shadow: none;
 }
+.react-select__menu-list {
+  scrollbar-width: thin;
+}
 .react-select__input-container {
   padding-left: 0;
 }
 .react-select__option {
   font-size: small;
-}
-.react-select__menu {
-  /* z-index: 9999; */
-  position: unset;
-}
-.react-select__menu,
-.react-select__menu-list {
-  max-height: 130px;
 }
 .react-select__indicator {
   color: rgba(0, 0, 0, 0.4);

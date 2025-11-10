@@ -167,6 +167,8 @@ export const Value = observer(
             isClearable
             openMenuOnFocus={true}
             spellCheck={false}
+            // ensure the menu always is on top
+            menuPortalTarget={document.body}
           />
         </Container>
       </ErrorBoundary>

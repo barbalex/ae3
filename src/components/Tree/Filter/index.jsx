@@ -23,16 +23,6 @@ const Container = styled.div`
 `
 const StyledSelect = styled(Select)`
   width: 100%;
-  .react-select__control:hover {
-    background-color: #ffcc80 !important !important;
-  }
-  .react-select__control:focus-within {
-    background-color: #ffcc80 !important !important;
-    box-shadow: none;
-  }
-  .react-select__option--is-focused {
-    background-color: rgba(74, 20, 140, 0.1) !important;
-  }
 `
 
 const SearchIcon = styled(FaSearch)`
@@ -275,6 +265,9 @@ export const Filter = observer(() => {
           loadOptions={loadOptions}
           isClearable
           spellCheck={false}
+          className={`pad-left-25`}
+          // ensure the menu always is on top
+          menuPortalTarget={document.body}
         />
       </Container>
     </ErrorBoundary>
