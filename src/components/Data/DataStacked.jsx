@@ -35,9 +35,7 @@ export const DataStacked = observer(() => {
       </Paper>
       <div
         // the following height is needed for home to scroll
-        style={{
-          height: windowHeight - 103,
-        }}
+        style={{ height: windowHeight - 103 }}
       >
         {tab === 0 && <Tree />}
         {tab === 1 && <Outlet />}
