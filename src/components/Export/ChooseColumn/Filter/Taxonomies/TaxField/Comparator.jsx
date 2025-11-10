@@ -9,7 +9,7 @@ import { storeContext } from '../../../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
-  flew-wrap: wrap;
+  flex-wrap: wrap;
   flex-basis: 150px;
   flex-shrink: 0;
   flex-grow: 1;

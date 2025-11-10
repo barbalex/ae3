@@ -1,27 +1,12 @@
 import { useContext } from 'react'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { ComparatorSelect } from '../../../ComparatorSelect.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 
-const Container = styled.div`
-  display: flex;
-  flew-wrap: wrap;
-  flex-basis: 150px;
-  flex-shrink: 0;
-  flex-grow: 1;
-`
-const StyledFormControl = styled(FormControl)`
-  margin: 0 !important;
-  width: 100%;
-  min-width: 120px;
-  > label {
-    padding-left: 8px;
-  }
-`
+import { container, formControl } from './Comparator.module.css'
 
 export const Comparator = observer(
   ({ pcname, relationtype, pname, value, comparator }) => {
@@ -38,15 +23,18 @@ export const Comparator = observer(
       })
 
     return (
-      <Container>
-        <StyledFormControl variant="standard">
+      <div className={container}>
+        <FormControl
+          variant="standard"
+          className={formControl}
+        >
           <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
           <ComparatorSelect
             comparator={comparator}
             onChange={onChange}
           />
-        </StyledFormControl>
-      </Container>
+        </FormControl>
+      </div>
     )
   },
 )

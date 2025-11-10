@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 150px;
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+.formControl {
+  margin: 0 !important;
+  width: 100%;
+  min-width: 120px;
+  > label {
+    padding-left: 8px;
+  }
+}
