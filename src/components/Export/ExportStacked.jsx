@@ -8,7 +8,7 @@ import { ChooseColumn } from './ChooseColumn/index.jsx'
 import { PreviewColumn } from './PreviewColumn/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { paper, content } from './ExportStacked.module.css'
+import { paper, content, container } from './ExportStacked.module.css'
 
 export const ExportStacked = observer(() => {
   const store = useContext(storeContext)
@@ -17,8 +17,10 @@ export const ExportStacked = observer(() => {
 
   const onChangeTab = (event, value) => setTab(value)
 
+  console.log('ExportStacked')
+
   return (
-    <>
+    <div className={container}>
       <Paper className={paper}>
         <Tabs
           variant="fullWidth"
@@ -34,6 +36,6 @@ export const ExportStacked = observer(() => {
         {tab === 0 && <ChooseColumn dimensions={{ width: windowWidth }} />}
         {tab === 1 && <PreviewColumn dimensions={{ width: windowWidth }} />}
       </div>
-    </>
+    </div>
   )
 })
