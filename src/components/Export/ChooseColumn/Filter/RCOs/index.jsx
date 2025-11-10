@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -15,30 +14,14 @@ import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { RcoList } from './List.jsx'
 
-const Container = styled.div`
-  margin: 10px 0;
-`
-const ErrorContainer = styled.div`
-  padding: 5px;
-`
-const StyledCard = styled(Card)`
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  container,
+  errorContainer,
+  card,
+  cardActions,
+  cardActionTitle,
+  count,
+} from './index.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterRCOs($exportTaxonomies: [String!]) {
@@ -84,30 +67,33 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
 
   if (error) {
     return (
-      <ErrorContainer>`Error loading data: ${error.message}`</ErrorContainer>
+      <div className={errorContainer}>
+        `Error loading data: ${error.message}`
+      </div>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledCard>
-          <StyledCardActions
+      <div className={container}>
+        <Card className={card}>
+          <CardActions
             disableSpacing
             onClick={onToggleRco}
+            className={cardActions}
           >
-            <CardActionTitle>
+            <div className={cardActionTitle}>
               Beziehungssammlungen
               {
-                <Count>{`(${
+                <span className={count}>{`(${
                   isLoading ? '...' : pcCount
                 } Sammlungen, ${propertyCount} ${
                   isLoading ? '...'
                   : propertyCount === 1 ? 'Feld'
                   : 'Felder'
-                })`}</Count>
+                })`}</span>
               }
-            </CardActionTitle>
+            </div>
             <IconButton
               aria-expanded={rcoExpanded}
               aria-label="Show more"
@@ -117,7 +103,7 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
                 <ExpandMoreIcon />
               </Icon>
             </IconButton>
-          </StyledCardActions>
+          </CardActions>
           <Collapse
             in={rcoExpanded}
             timeout="auto"
@@ -125,8 +111,8 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
           >
             <RcoList />
           </Collapse>
-        </StyledCard>
-      </Container>
+        </Card>
+      </div>
     </ErrorBoundary>
   )
 })
