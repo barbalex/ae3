@@ -8,6 +8,7 @@ const ActiveNodeArraySetter = lazy(() => import('../ActiveNodeArraySetter.jsx'))
 const IdParameter = lazy(() => import('../IdParameter.jsx'))
 
 const Container = styled.div`
+  height: 100%;
   @media print {
     height: auto;
     overflow: visible !important;
