@@ -1,7 +1,6 @@
 import { useState, useContext, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -9,19 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { readableType } from '../../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../../storeContext.js'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-`
-const Label = styled.div`
-  font-size: 12px;
-  color: rgb(0, 0, 0, 0.54);
-`
-const StyledSelect = styled(Select)`
-  width: 100%;
-`
+import { container, labelClass, select } from './Value.module.css'
 
 const rcoFieldPropQuery = gql`
   query propDataQuery(
@@ -139,9 +126,11 @@ export const Value = observer(
     const valueToShow = value ? { value, label: value } : undefined
 
     return (
-      <Container>
-        <Label>{`${pname} (${readableType(jsontype)})`}</Label>
-        <StyledSelect
+      <div className={container}>
+        <div
+          className={labelClass}
+        >{`${pname} (${readableType(jsontype)})`}</div>
+        <Select
           key={focusCount}
           ref={ref}
           value={valueToShow}
@@ -169,8 +158,9 @@ export const Value = observer(
           spellCheck={false}
           // ensure the menu always is on top
           menuPortalTarget={document.body}
+          className={select}
         />
-      </Container>
+      </div>
     )
   },
 )
