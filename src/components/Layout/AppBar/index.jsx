@@ -16,25 +16,18 @@ import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
 
-import {} from './index.module.css'
+import {
+  container,
+  appBar,
+  toolbar,
+  buttons,
+  button,
+  shareButton,
+  moreVertIcon,
+  titleContainer,
+  siteTitle,
+} from './index.module.css'
 
-/**
- * For unknown reason AppBar does not follow display flex when
- * user form is shown: user covers AppBar!!??
- * Container with display block is needed to prevent that
- */
-const Container = styled.div`
-  display: block;
-`
-const StyledAppBar = styled(MuiAppBar)`
-  background-color: #e65100 !important;
-  @media print {
-    display: none !important;
-  }
-`
-const StyledToolbar = styled(Toolbar)`
-  flex-wrap: nowrap;
-`
 const Buttons = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -180,10 +173,13 @@ export const AppBar = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledAppBar position="static">
+      <div className={container}>
+        <MuiAppBar
+          position="static"
+          className={appBar}
+        >
           <div>
-            <StyledToolbar>
+            <Toolbar className={toolbar}>
               {wide ?
                 <TitleContainer>
                   <SiteTitle
@@ -265,10 +261,10 @@ export const AppBar = observer(() => {
                   <MoreMenu />
                 </div>
               </Buttons>
-            </StyledToolbar>
+            </Toolbar>
           </div>
-        </StyledAppBar>
-      </Container>
+        </MuiAppBar>
+      </div>
     </ErrorBoundary>
   )
 })

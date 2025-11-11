@@ -1,0 +1,65 @@
+/**
+ * For unknown reason AppBar does not follow display flex when
+ * user form is shown: user covers AppBar!!??
+ * Container with display block is needed to prevent that
+ */
+.container {
+  display: block;
+}
+
+.appBar {
+  background-color: #e65100 !important;
+  @media print {
+    display: none !important;
+  }
+}
+
+.toolbar {
+  flex-wrap: nowrap;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.button {
+  color: rgb(255, 255, 255) !important;
+  margin: 8px;
+  hyphens: manual;
+  white-space: nowrap;
+}
+
+.shareButton {
+  color: rgb(255, 255, 255) !important;
+  margin: 8px;
+  hyphens: manual;
+  white-space: nowrap;
+  min-width: 40px !important;
+  max-width: 40px;
+  padding-top: 0 !important;
+  .MuiIcon-root {
+    height: 30px;
+  }
+}
+
+.moreVertIcon {
+  color: white !important;
+}
+
+.titleContainer {
+  flex: 1;
+  margin-left: -20px;
+}
+
+.siteTitle {
+  color: white !important;
+  font-size: 20px !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
+  text-transform: none !important;
+  :hover {
+    border-width: 1px !important;
+  }
+}
