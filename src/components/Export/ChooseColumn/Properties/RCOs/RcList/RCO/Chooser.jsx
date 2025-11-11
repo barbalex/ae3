@@ -1,22 +1,10 @@
 import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
-
-const Container = styled.div`
-  width: ${(props) => `${props['data-width']}%`};
-`
-const Label = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { label } from './Chooser.module.css'
 
 export const Chooser = observer(
   ({ pcname, relationtype, pname, propertiesLength }) => {
@@ -41,8 +29,8 @@ export const Chooser = observer(
     const containerWidth = propertiesLength === 1 ? 100 : 100 / propertiesLength
 
     return (
-      <Container data-width={containerWidth}>
-        <Label
+      <div style={{ width: `${containerWidth}%` }}>
+        <FormControlLabel
           control={
             <Checkbox
               color="primary"
@@ -51,8 +39,9 @@ export const Chooser = observer(
             />
           }
           label={<div>{pname}</div>}
+          className={label}
         />
-      </Container>
+      </div>
     )
   },
 )
