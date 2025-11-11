@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 
@@ -8,22 +7,12 @@ import { ExportTypes } from './ExportTypes/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  padding: 0 5px;
-`
-const PaperTextContainer = styled.div`
-  padding: 16px;
-`
-const PropertyTextDiv = styled.div`
-  padding-bottom: 5px;
-`
-const StyledPaper = styled(Paper)`
-  width: 100%;
-  color: white;
-  background-color: ${(props) => `${props['data-bgcolor']} !important`};
-  margin-bottom: 10px;
-  margin-top: 10px;
-`
+import {
+  container,
+  paperTextContainer,
+  propertyText,
+  paper,
+} from './index.module.css'
 
 export const Taxonomies = observer(() => {
   const store = useContext(storeContext)
@@ -42,18 +31,19 @@ export const Taxonomies = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <HowTo />
         <ExportTypes />
-        <StyledPaper
+        <Paper
           elevation={1}
-          data-bgcolor={paperBackgroundColor}
+          style={{ backgroundColor: paperBackgroundColor }}
+          className={paper}
         >
-          <PaperTextContainer>
-            <PropertyTextDiv>{textProperties}</PropertyTextDiv>
-          </PaperTextContainer>
-        </StyledPaper>
-      </Container>
+          <div className={paperTextContainer}>
+            <div className={propertyText}>{textProperties}</div>
+          </div>
+        </Paper>
+      </div>
     </ErrorBoundary>
   )
 })
