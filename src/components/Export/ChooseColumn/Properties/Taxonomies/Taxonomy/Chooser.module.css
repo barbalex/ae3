@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+
+  @container (min-width: 800px) {
+    width: 50cqw;
+  }
+  @container (min-width: 1200px) {
+    width: 33cqw;
+  }
+  @container (min-width: 1600px) {
+    width: 25cqw;
+  }
+}
+
+.countClass {
+  font-size: xx-small;
+}
+
+.label {
+  height: 30px;
+  min-height: 30px;
+
+  > span {
+    font-weight: 500;
+    line-height: 1em;
+  }
+}

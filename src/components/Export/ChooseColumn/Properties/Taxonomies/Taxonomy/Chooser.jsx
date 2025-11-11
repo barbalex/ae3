@@ -1,35 +1,10 @@
 import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../storeContext.js'
-
-const Container = styled.div`
-  width: 100%;
-  @container (min-width: 800px) {
-    width: 50cqw;
-  }
-  @container (min-width: 1200px) {
-    width: 33cqw;
-  }
-  @container (min-width: 1600px) {
-    width: 25cqw;
-  }
-`
-const Count = styled.span`
-  font-size: xx-small;
-`
-const Label = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { container, countClass, label } from './Chooser.module.css'
 
 export const Chooser = observer(({ taxname, pname, count }) => {
   const store = useContext(storeContext)
@@ -42,13 +17,11 @@ export const Chooser = observer(({ taxname, pname, count }) => {
     return removeTaxProperty({ taxname, pname })
   }
 
-  const checked =
-    taxProperties.filter((x) => /*x.taxname === taxname && */ x.pname === pname)
-      .length > 0
+  const checked = taxProperties.filter((x) => x.pname === pname).length > 0
 
   return (
-    <Container>
-      <Label
+    <div className={container}>
+      <FormControlLabel
         control={
           <Checkbox
             color="primary"
@@ -58,10 +31,15 @@ export const Chooser = observer(({ taxname, pname, count }) => {
         }
         label={
           <div>
-            {pname} <Count title="Anzahl Objekte">{`(${count} Objekte)`}</Count>
+            {pname}{' '}
+            <span
+              title="Anzahl Objekte"
+              className={countClass}
+            >{`(${count} Objekte)`}</span>
           </div>
         }
+        className={label}
       />
-    </Container>
+    </div>
   )
 })
