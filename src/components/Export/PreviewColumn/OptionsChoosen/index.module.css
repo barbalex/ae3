@@ -1,0 +1,41 @@
+.container {
+  margin: 0;
+  padding: 8px 8px 0 8px;
+  ul > li > ul {
+    margin-top: 0;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  ul > li:first-of-type {
+    padding-top: 4px;
+  }
+}
+
+.title {
+  font-weight: bold;
+}
+
+.reset {
+  margin-left: 8px;
+  font-weight: 100;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
+}
+
+.button {
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+
+.optionen {
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.hinweise {
+  font-size: small;
+  margin-top: 0;
+  margin-bottom: 10px;
+}

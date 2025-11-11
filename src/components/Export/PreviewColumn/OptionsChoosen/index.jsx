@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -12,39 +11,14 @@ import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 
-const Container = styled.div`
-  margin: 0;
-  padding: 8px 8px 0 8px;
-  ul {
-    margin-bottom: 5px;
-  }
-  ul > li > ul {
-    margin-top: 0;
-  }
-  li {
-    margin-bottom: 4px;
-  }
-  ul > li:first-of-type {
-    padding-top: 4px;
-  }
-`
-const Title = styled.div`
-  font-weight: bold;
-`
-const ResetSpan = styled.span`
-  margin-left: 8px;
-  font-weight: 100;
-  font-style: italic;
-  cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
-`
-const StyledButton = styled(Button)`
-  margin-left: 0 !important;
-  margin-top: 0 !important;
-`
-const HinweiseUl = styled.ul`
-  font-size: small;
-`
+import {
+  container,
+  title,
+  reset,
+  button,
+  hinweise,
+  optionen,
+} from './index.module.css'
 
 export const OptionsChoosen = observer(() => {
   const store = useContext(storeContext)
@@ -110,13 +84,23 @@ export const OptionsChoosen = observer(() => {
   if (noDataChoosen) return null
 
   return (
-    <Container>
-      <Title title="Gewählte Optionen">Gewählte Optionen</Title>
-      <ul>
+    <div className={container}>
+      <div
+        className={title}
+        title="Gewählte Optionen"
+      >
+        Gewählte Optionen
+      </div>
+      <ul className={optionen}>
         <li>
           {`Typ: ${!exportType ? ' keiner' : exportType}`}
           {!!exportType && (
-            <ResetSpan onClick={onClickResetType}>zurücksetzen</ResetSpan>
+            <span
+              className={reset}
+              onClick={onClickResetType}
+            >
+              zurücksetzen
+            </span>
           )}
         </li>
         <li>
@@ -126,7 +110,12 @@ export const OptionsChoosen = observer(() => {
             : exportTaxonomies.join(', ')
           }`}
           {exportTaxonomies.length > 0 && (
-            <ResetSpan onClick={onClickResetTaxonomies}>zurücksetzen</ResetSpan>
+            <span
+              className={reset}
+              onClick={onClickResetTaxonomies}
+            >
+              zurücksetzen
+            </span>
           )}
         </li>
         <li>
@@ -136,9 +125,12 @@ export const OptionsChoosen = observer(() => {
             : 'Ohne Informationen von Synonymen'
           }`}
           {!withSynonymData && (
-            <ResetSpan onClick={onClickResetExportWithSynonymData}>
+            <span
+              className={reset}
+              onClick={onClickResetExportWithSynonymData}
+            >
               zurücksetzen
-            </ResetSpan>
+            </span>
           )}
         </li>
         <li>
@@ -169,8 +161,13 @@ export const OptionsChoosen = observer(() => {
           </ul>
         </li>
       </ul>
-      <Title title="Hinweise">Hinweise</Title>
-      <HinweiseUl>
+      <div
+        className={title}
+        title="Hinweise"
+      >
+        Hinweise
+      </div>
+      <ul className={hinweise}>
         <li>
           Spaltentitel werden aus den Namen der Taxonomie, Eigenschaften- oder
           Beziehungssammlung und dem jeweiligen Feldnamen zusammengesetzt. Bei
@@ -194,14 +191,15 @@ export const OptionsChoosen = observer(() => {
             einer Zelle gesammelt.
           </li>
         )}
-      </HinweiseUl>
-      <StyledButton
+      </ul>
+      <Button
         onClick={onClickResetAll}
         variant="outlined"
         color="inherit"
+        className={button}
       >
         alle Optionen zurücksetzen
-      </StyledButton>
-    </Container>
+      </Button>
+    </div>
   )
 })
