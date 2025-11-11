@@ -16,6 +16,8 @@ import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
 
+import {} from './index.module.css'
+
 /**
  * For unknown reason AppBar does not follow display flex when
  * user form is shown: user covers AppBar!!??
@@ -40,18 +42,15 @@ const Buttons = styled.div`
 `
 const StyledButton = styled(Button)`
   color: rgb(255, 255, 255) !important;
-  border: ${(props) =>
-    props['data-active'] ? '1px solid !important' : 'none'};
   margin: 8px;
   hyphens: manual;
   white-space: nowrap;
 `
-const LoginButton = styled(StyledButton)`
-  min-width: ${(props) =>
-    props['data-widelayout'] ? 'inherit' : '40px !important'};
-  max-width: ${(props) => (props['data-widelayout'] ? 'inherit' : '40px')};
-`
-const ShareButton = styled(StyledButton)`
+const ShareButton = styled(Button)`
+  color: rgb(255, 255, 255) !important;
+  margin: 8px;
+  hyphens: manual;
+  white-space: nowrap;
   min-width: 40px !important;
   max-width: 40px;
   padding-top: 0 !important;
@@ -200,37 +199,50 @@ export const AppBar = observer(() => {
               <Buttons>
                 <div>
                   <StyledButton
-                    data-active={
-                      pathArray[0] === 'Daten' || pathArray.length === 0
-                    }
                     onClick={onClickColumnButtonData}
+                    style={{
+                      border:
+                        pathArray[0] === 'Daten' || pathArray.length === 0 ?
+                          '1px solid'
+                        : 'none',
+                    }}
                   >
                     Daten
                   </StyledButton>
                 </div>
                 <div>
                   <StyledButton
-                    data-active={pathname === '/Export/'}
                     onClick={onClickColumnButtonExport}
+                    style={{
+                      border: pathname === '/Export' ? '1px solid' : 'none',
+                    }}
                   >
                     Export
                   </StyledButton>
                 </div>
                 <div>
-                  <LoginButton
-                    data-active={pathname === '/Login/'}
-                    data-widelayout={wide}
+                  <StyledButton
                     onClick={onClickColumnButtonLogin}
                     title={loginTitle}
                     color="inherit"
+                    style={{
+                      border: pathname === '/Login' ? '1px solid' : 'none',
+                      minWidth: wide ? 'inherit' : '40px',
+                      maxWidth: wide ? 'inherit' : '40px',
+                    }}
                   >
                     {loginLabel}
-                  </LoginButton>
+                  </StyledButton>
                 </div>
                 <div>
                   <StyledButton
-                    data-active={pathname.includes('/Dokumentation')}
                     onClick={onClickColumnButtonDocs}
+                    style={{
+                      border:
+                        pathname.includes('/Dokumentation') ? '1px solid' : (
+                          'none'
+                        ),
+                    }}
                   >
                     Dokumentation
                   </StyledButton>
