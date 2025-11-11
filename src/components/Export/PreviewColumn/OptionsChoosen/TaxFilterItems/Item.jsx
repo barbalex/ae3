@@ -1,23 +1,10 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
 import { storeContext } from '../../../../../storeContext.js'
 
-const FilterValueSpan = styled.span`
-  background-color: #dadada;
-  padding: 1px 8px;
-  margin-left: 5px;
-  border-radius: 3px;
-`
-const ResetSpan = styled.span`
-  margin-left: 8px;
-  font-weight: 100;
-  font-style: italic;
-  cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
-`
+import { filterValue, reset } from './Item.module.css'
 
 export const Item = observer(({ filter }) => {
   const store = useContext(storeContext)
@@ -35,10 +22,15 @@ export const Item = observer(({ filter }) => {
   return (
     <li>
       {`${taxname}: ${pname} ${comparator ? `${comparator}` : ''}`}
-      <FilterValueSpan>
+      <span className={filterValue}>
         {typeof value === 'boolean' ? booleanToJaNein(value) : value}
-      </FilterValueSpan>
-      <ResetSpan onClick={onClick}>zurücksetzen</ResetSpan>
+      </span>
+      <span
+        onClick={onClick}
+        className={reset}
+      >
+        zurücksetzen
+      </span>
     </li>
   )
 })
