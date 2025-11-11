@@ -2,15 +2,12 @@ import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { RCO } from './RCO/index.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-const SpinnerContainer = styled.div`
-  padding-top: 15px;
-`
+import { spinnerContainer } from './index.module.css'
 
 const propsByTaxQuery = gql`
   query exportRcoListQuery($exportTaxonomies: [String]) {
@@ -25,9 +22,9 @@ const propsByTaxQuery = gql`
 `
 
 const fallback = (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <Spinner message="" />
-  </SpinnerContainer>
+  </div>
 )
 
 export const RcList = observer(() => {
