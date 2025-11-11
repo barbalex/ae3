@@ -5,17 +5,16 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../storeContext.js'
-import { constants } from '../../../../../../modules/constants.js'
 
 const Container = styled.div`
   width: 100%;
-  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
+  @container (min-width: 800px) {
     width: 50cqw;
   }
-  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
+  @container (min-width: 1200px) {
     width: 33cqw;
   }
-  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
+  @container (min-width: 1600px) {
     width: 25cqw;
   }
 `
@@ -25,6 +24,7 @@ const Count = styled.span`
 const Label = styled(FormControlLabel)`
   height: 30px;
   min-height: 30px;
+
   > span {
     font-weight: 500;
     line-height: 1em;
