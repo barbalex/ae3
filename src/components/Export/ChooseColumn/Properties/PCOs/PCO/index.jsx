@@ -21,9 +21,6 @@ const StyledCardActions = styled(CardActions)`
   background-color: #fff3e0;
   border-bottom: 1px solid #ebebeb;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -52,15 +49,15 @@ export const PCO = ({ pcName, count }) => {
             {pcName}
             <Count>{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</Count>
           </CardActionTitle>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
             aria-expanded={expanded}
             aria-label="Show more"
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
           >
             <Icon>
               <ExpandMoreIcon />
             </Icon>
-          </CardActionIconButton>
+          </IconButton>
         </StyledCardActions>
         <StyledCollapse
           in={expanded}
