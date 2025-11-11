@@ -5,43 +5,20 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { AllChooser } from './Taxonomy/AllChooser.jsx'
 import { Properties } from './Properties.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #fff3e0;
-  border-bottom: 1px solid #ebebeb;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCollapse = styled(Collapse)`
-  display: flex;
-  flex-direction: column;
-  padding: 8px 14px;
-`
-const PropertiesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  container-type: inline-size;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  collapse,
+  propertiesContainer,
+  count,
+} from './JointTaxonomy.module.css'
 
 export const JointTaxonomy = observer(({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
@@ -49,15 +26,19 @@ export const JointTaxonomy = observer(({ jointTaxProperties }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard key="jointTax">
-        <StyledCardActions
+      <Card
+        key="jointTax"
+        className={card}
+      >
+        <CardActions
           disableSpacing
           onClick={onClickActions}
+          className={cardActions}
         >
-          <CardActionTitle>
+          <div className={cardActionTitle}>
             {`Gemeinsame Felder`}
-            <Count>{`(${jointTaxProperties.length})`}</Count>
-          </CardActionTitle>
+            <span className={count}>{`(${jointTaxProperties.length})`}</span>
+          </div>
           <IconButton
             aria-expanded={expanded}
             aria-label="Show more"
@@ -67,20 +48,21 @@ export const JointTaxonomy = observer(({ jointTaxProperties }) => {
               <ExpandMoreIcon />
             </Icon>
           </IconButton>
-        </StyledCardActions>
-        <StyledCollapse
+        </CardActions>
+        <Collapse
           in={expanded}
           timeout="auto"
           unmountOnExit
+          className={collapse}
         >
           {jointTaxProperties.length > 1 && (
             <AllChooser properties={jointTaxProperties} />
           )}
-          <PropertiesContainer>
+          <div className={propertiesContainer}>
             <Properties properties={jointTaxProperties} />
-          </PropertiesContainer>
-        </StyledCollapse>
-      </StyledCard>
+          </div>
+        </Collapse>
+      </Card>
     </ErrorBoundary>
   )
 })
