@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -14,28 +13,13 @@ import { RcList } from './RcList/index.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  margin: 10px 0;
-`
-const StyledCard = styled(Card)`
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-  display: flex;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  container,
+  card,
+  cardActions,
+  cardActionTitle,
+  count,
+} from './index.module.css'
 
 const query = gql`
   query exportRcoCountQuery($exportTaxonomies: [String!]) {
@@ -63,18 +47,21 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledCard>
-          <StyledCardActions
+      <div className={container}>
+        <Card className={card}>
+          <CardActions
             disableSpacing
             onClick={onToggleRco}
+            className={cardActions}
           >
-            <CardActionTitle>
+            <div className={cardActionTitle}>
               Beziehungssammlungen
-              <Count>{`(${loading ? '...' : pcCount} Sammlungen, ${
+              <span
+                className={count}
+              >{`(${loading ? '...' : pcCount} Sammlungen, ${
                 loading ? '...' : propertyCount
-              } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</Count>
-            </CardActionTitle>
+              } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</span>
+            </div>
             <IconButton
               aria-expanded={rcoExpanded}
               aria-label="Show more"
@@ -84,7 +71,7 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
                 <ExpandMoreIcon />
               </Icon>
             </IconButton>
-          </StyledCardActions>
+          </CardActions>
           <Collapse
             in={rcoExpanded}
             timeout="auto"
@@ -92,8 +79,8 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
           >
             <RcList />
           </Collapse>
-        </StyledCard>
-      </Container>
+        </Card>
+      </div>
     </ErrorBoundary>
   )
 })
