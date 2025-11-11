@@ -1,0 +1,10 @@
+.propertiesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  container-type: inline-size;
+}
+
+.spinnerContainer {
+  padding-top: 15px;
+  width: 100%;
+}

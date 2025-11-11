@@ -2,22 +2,13 @@ import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { storeContext } from '../../../../../../../storeContext.js'
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from './Properties.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 
-const PropertiesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  container-type: inline-size;
-`
-const SpinnerContainer = styled.div`
-  padding-top: 15px;
-  width: 100%;
-`
+import { propertiesContainer, spinnerContainer } from './index.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCO(
@@ -38,9 +29,9 @@ const query = gql`
 `
 
 const fallback = (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <Spinner message="" />
-  </SpinnerContainer>
+  </div>
 )
 
 export const Chooser = observer(({ pcName, count }) => {
@@ -66,12 +57,12 @@ export const Chooser = observer(({ pcName, count }) => {
           pcName={pcName}
         />
       )}
-      <PropertiesContainer>
+      <div className={propertiesContainer}>
         <Properties
           properties={properties}
           pcName={pcName}
         />
-      </PropertiesContainer>
+      </div>
     </Suspense>
   )
 })
