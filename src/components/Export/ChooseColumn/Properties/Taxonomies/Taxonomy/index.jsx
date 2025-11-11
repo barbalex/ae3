@@ -6,7 +6,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
@@ -18,39 +17,14 @@ import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-import {} from './index.module.css'
-
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  background-color: #fff3e0;
-  border-bottom: 1px solid #ebebeb;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  height: auto !important;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCardContent = styled(CardContent)`
-  display: flex;
-  flex-direction: column;
-`
-const PropertiesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  container-type: inline-size;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  cardContent,
+  propertiesContainer,
+  count,
+} from './index.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForPropertiesTaxonomy(
@@ -97,16 +71,17 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
-        <StyledCardActions
+      <Card className={card}>
+        <CardActions
           disableSpacing
           onClick={onClickActions}
+          className={cardActions}
         >
-          <CardActionTitle>
+          <div className={cardActionTitle}>
             {tax}
-            <Count>{`(${properties.length} ${
+            <span className={count}>{`(${properties.length} ${
               properties.length === 1 ? 'Feld' : 'Felder'
-            })`}</Count>
+            })`}</span>
             <IconButton
               aria-expanded={expanded}
               aria-label="Show more"
@@ -116,23 +91,21 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
                 <ExpandMoreIcon />
               </Icon>
             </IconButton>
-          </CardActionTitle>
-        </StyledCardActions>
+          </div>
+        </CardActions>
         <Collapse
           in={expanded}
           timeout="auto"
           unmountOnExit
         >
-          <StyledCardContent>
-            <>
-              {properties.length > 1 && <AllChooser properties={properties} />}
-              <PropertiesContainer>
-                <Properties properties={properties} />
-              </PropertiesContainer>
-            </>
-          </StyledCardContent>
+          <CardContent className={cardContent}>
+            {properties.length > 1 && <AllChooser properties={properties} />}
+            <div className={propertiesContainer}>
+              <Properties properties={properties} />
+            </div>
+          </CardContent>
         </Collapse>
-      </StyledCard>
+      </Card>
     </ErrorBoundary>
   )
 })

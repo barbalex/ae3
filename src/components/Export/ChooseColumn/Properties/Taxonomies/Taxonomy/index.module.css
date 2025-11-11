@@ -1,0 +1,36 @@
+.card {
+  margin: 0;
+  background-color: rgb(255, 243, 224) !important;
+}
+
+.cardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  background-color: #fff3e0;
+  border-bottom: 1px solid #ebebeb;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  height: auto !important;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.propertiesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  container-type: inline-size;
+}
+
+.count {
+  font-size: x-small;
+  padding-left: 5px;
+}
