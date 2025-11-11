@@ -6,43 +6,26 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-import {} from './HowTo.module.css'
-
-const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCardContent = styled(CardContent)`
-  padding: 0 16px 0 0 !important;
-  margin: -10px 0 0 0;
-  li {
-    margin-top: 4px;
-  }
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  cardContent,
+} from './HowTo.module.css'
 
 export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
   return (
-    <StyledCard>
-      <StyledCardActions
+    <Card className={card}>
+      <CardActions
         disableSpacing
         onClick={onClickActions}
+        className={cardActions}
       >
-        <CardActionTitle>So geht&apos;s</CardActionTitle>
+        <div className={cardActionTitle}>So geht&apos;s</div>
         <IconButton
           aria-expanded={expanded}
           aria-label="Show more"
@@ -52,21 +35,21 @@ export const HowTo = () => {
             <ExpandMoreIcon />
           </Icon>
         </IconButton>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           <ul>
             <li>Wählen Sie Arten oder Lebensräume...</li>
             <li>...und darin Taxonomien</li>
             <li>...dann werden ihre Eigenschaften aufgebaut</li>
             <li>...und Sie können filtern und Eigenschaften wählen</li>
           </ul>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }
