@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Icon from '@mui/material/Icon'
 import { MdShare as ShareIcon } from 'react-icons/md'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -23,51 +23,16 @@ import {
   buttons,
   button,
   shareButton,
-  moreVertIcon,
+  shareIcon,
   titleContainer,
   siteTitle,
 } from './index.module.css'
 
-const Buttons = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-`
-const StyledButton = styled(Button)`
-  color: rgb(255, 255, 255) !important;
-  margin: 8px;
-  hyphens: manual;
-  white-space: nowrap;
-`
-const ShareButton = styled(Button)`
-  color: rgb(255, 255, 255) !important;
-  margin: 8px;
-  hyphens: manual;
-  white-space: nowrap;
-  min-width: 40px !important;
-  max-width: 40px;
-  padding-top: 0 !important;
-  .MuiIcon-root {
-    height: 30px;
-  }
-`
-const StyledMoreVertIcon = styled(ShareIcon)`
-  color: white !important;
-`
-const TitleContainer = styled.div`
-  flex: 1;
-  margin-left: -20px;
-`
-const SiteTitle = styled(Button)`
-  color: white !important;
-  font-size: 20px !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: none !important;
-  :hover {
-    border-width: 1px !important;
-  }
-`
+// https://mui.com/material-ui/react-menu/#customization
+const ShareButton = styled((props) => <Button {...props} />)(() => ({
+  '& .MuiIcon-root': { height: 30 },
+}))
+
 const getInitials = (name) => name.match(/\b(\w)/g).join('')
 
 const query = gql`
@@ -181,20 +146,22 @@ export const AppBar = observer(() => {
           <div>
             <Toolbar className={toolbar}>
               {wide ?
-                <TitleContainer>
-                  <SiteTitle
-                    variant="outlined"
+                <div className={titleContainer}>
+                  <Button
+                    className={siteTitle}
+                    variant="text"
                     component={Link}
                     to="/"
                     title="Home"
                   >
                     Arteigenschaften
-                  </SiteTitle>
-                </TitleContainer>
+                  </Button>
+                </div>
               : <div />}
-              <Buttons>
+              <div className={buttons}>
                 <div>
-                  <StyledButton
+                  <Button
+                    className={button}
                     onClick={onClickColumnButtonData}
                     style={{
                       border:
@@ -204,20 +171,22 @@ export const AppBar = observer(() => {
                     }}
                   >
                     Daten
-                  </StyledButton>
+                  </Button>
                 </div>
                 <div>
-                  <StyledButton
+                  <Button
+                    className={button}
                     onClick={onClickColumnButtonExport}
                     style={{
                       border: pathname === '/Export' ? '1px solid' : 'none',
                     }}
                   >
                     Export
-                  </StyledButton>
+                  </Button>
                 </div>
                 <div>
-                  <StyledButton
+                  <Button
+                    className={button}
                     onClick={onClickColumnButtonLogin}
                     title={loginTitle}
                     color="inherit"
@@ -228,10 +197,11 @@ export const AppBar = observer(() => {
                     }}
                   >
                     {loginLabel}
-                  </StyledButton>
+                  </Button>
                 </div>
                 <div>
-                  <StyledButton
+                  <Button
+                    className={button}
                     onClick={onClickColumnButtonDocs}
                     style={{
                       border:
@@ -241,18 +211,19 @@ export const AppBar = observer(() => {
                     }}
                   >
                     Dokumentation
-                  </StyledButton>
+                  </Button>
                 </div>
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
                     <>
                       <ShareButton
+                        className={shareButton}
                         aria-label="teilen"
                         onClick={onClickShare}
                         color="inherit"
                       >
                         <Icon>
-                          <StyledMoreVertIcon />
+                          <ShareIcon className={shareIcon} />
                         </Icon>
                       </ShareButton>
                     </>
@@ -260,7 +231,7 @@ export const AppBar = observer(() => {
                 <div>
                   <MoreMenu />
                 </div>
-              </Buttons>
+              </div>
             </Toolbar>
           </div>
         </MuiAppBar>
