@@ -1,0 +1,14 @@
+.filterValue {
+  background-color: #dadada;
+  padding: 1px 8px;
+  margin-left: 5px;
+  border-radius: 3px;
+}
+
+.reset {
+  margin-left: 8px;
+  font-weight: 100;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
+}
