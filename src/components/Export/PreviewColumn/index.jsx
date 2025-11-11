@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
@@ -8,12 +7,7 @@ import { Preview } from './Preview.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  padding: 5px 0;
-`
-const HowToDiv = styled.div`
-  padding: 15px 10px 0 10px;
-`
+import { container, howTo } from './index.module.css'
 
 export const PreviewColumn = observer(() => {
   const store = useContext(storeContext)
@@ -22,15 +16,15 @@ export const PreviewColumn = observer(() => {
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <Container>
+        <div className={container}>
           <OptionsChoosen />
           <Preview />
           {exportTaxonomies.length === 0 && (
-            <HowToDiv>
+            <div className={howTo}>
               Sobald eine Taxonomie gewählt ist, werden hier Daten angezeigt.
-            </HowToDiv>
+            </div>
           )}
-        </Container>
+        </div>
       </SimpleBar>
     </ErrorBoundary>
   )
