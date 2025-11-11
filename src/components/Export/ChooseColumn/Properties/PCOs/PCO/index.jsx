@@ -5,34 +5,17 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
 import { Chooser } from './Chooser/index.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #fff3e0;
-  border-bottom: 1px solid #ebebeb;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCollapse = styled(Collapse)`
-  padding: 8px 20px;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  collapse,
+  countClass,
+} from './index.module.css'
 
 export const PCO = ({ pcName, count }) => {
   const [expanded, setExpanded] = useState(false)
@@ -40,15 +23,18 @@ export const PCO = ({ pcName, count }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
-        <StyledCardActions
+      <Card className={card}>
+        <CardActions
           disableSpacing
           onClick={onClickActions}
+          className={cardActions}
         >
-          <CardActionTitle>
+          <div className={cardActionTitle}>
             {pcName}
-            <Count>{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</Count>
-          </CardActionTitle>
+            <span
+              className={countClass}
+            >{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</span>
+          </div>
           <IconButton
             aria-expanded={expanded}
             aria-label="Show more"
@@ -58,11 +44,12 @@ export const PCO = ({ pcName, count }) => {
               <ExpandMoreIcon />
             </Icon>
           </IconButton>
-        </StyledCardActions>
-        <StyledCollapse
+        </CardActions>
+        <Collapse
           in={expanded}
           timeout="auto"
           unmountOnExit
+          className={collapse}
         >
           {expanded && (
             <Chooser
@@ -70,8 +57,8 @@ export const PCO = ({ pcName, count }) => {
               pcName={pcName}
             />
           )}
-        </StyledCollapse>
-      </StyledCard>
+        </Collapse>
+      </Card>
     </ErrorBoundary>
   )
 }
