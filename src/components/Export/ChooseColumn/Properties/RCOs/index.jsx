@@ -27,9 +27,6 @@ const StyledCardActions = styled(CardActions)`
   background-color: #ffcc80;
   display: flex;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -78,15 +75,15 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
                 loading ? '...' : propertyCount
               } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</Count>
             </CardActionTitle>
-            <CardActionIconButton
-              data-expanded={rcoExpanded}
+            <IconButton
               aria-expanded={rcoExpanded}
               aria-label="Show more"
+              style={{ transform: rcoExpanded ? 'rotate(180deg)' : 'none' }}
             >
               <Icon>
                 <ExpandMoreIcon />
               </Icon>
-            </CardActionIconButton>
+            </IconButton>
           </StyledCardActions>
           <Collapse
             in={rcoExpanded}
