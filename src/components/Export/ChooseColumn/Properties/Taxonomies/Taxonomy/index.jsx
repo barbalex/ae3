@@ -18,6 +18,8 @@ import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
+import {} from './index.module.css'
+
 const StyledCard = styled(Card)`
   margin: 0;
   background-color: rgb(255, 243, 224) !important;
@@ -30,9 +32,6 @@ const StyledCardActions = styled(CardActions)`
   padding-top: 4px !important;
   padding-bottom: 4px !important;
   height: auto !important;
-`
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -108,15 +107,15 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
             <Count>{`(${properties.length} ${
               properties.length === 1 ? 'Feld' : 'Felder'
             })`}</Count>
-            <CardActionIconButton
-              data-expanded={expanded}
+            <IconButton
               aria-expanded={expanded}
               aria-label="Show more"
+              style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             >
               <Icon>
                 <ExpandMoreIcon />
               </Icon>
-            </CardActionIconButton>
+            </IconButton>
           </CardActionTitle>
         </StyledCardActions>
         <Collapse
