@@ -1,5 +1,4 @@
 import { Suspense, lazy } from 'react'
-import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
 import { AppBar } from './AppBar/index.jsx'
@@ -7,16 +6,10 @@ import { Spinner } from '../shared/Spinner.jsx'
 const ActiveNodeArraySetter = lazy(() => import('../ActiveNodeArraySetter.jsx'))
 const IdParameter = lazy(() => import('../IdParameter.jsx'))
 
-const Container = styled.div`
-  height: 100%;
-  @media print {
-    height: auto;
-    overflow: visible !important;
-  }
-`
+import { container } from './index.module.css'
 
 const Layout = () => (
-  <Container>
+  <div className={container}>
     <AppBar />
     <Suspense fallback={<Spinner />}>
       <Outlet />
@@ -25,7 +18,7 @@ const Layout = () => (
       <ActiveNodeArraySetter />
       <IdParameter />
     </Suspense>
-  </Container>
+  </div>
 )
 
 export default Layout
