@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -16,39 +15,15 @@ import { storeContext } from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 
-const PropertiesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  background-color: #fff3e0;
-  border-bottom: 1px solid #ebebeb;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  height: auto !important;
-  display: flex;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCollapse = styled(Collapse)`
-  padding: 8px 20px;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
-const SpinnerContainer = styled.div`
-  padding-top: 15px;
-`
+import {
+  propertiesContainer,
+  card,
+  cardActions,
+  cardActionTitle,
+  collapse,
+  countClass,
+  spinnerContainer,
+} from './index.module.css'
 
 const query = gql`
   query exportRcoPerRcoRelationQuery(
@@ -71,9 +46,9 @@ const query = gql`
 `
 
 const fallback = (
-  <SpinnerContainer>
+  <div className={spinnerContainer}>
     <Spinner message="" />
-  </SpinnerContainer>
+  </div>
 )
 
 export const RCO = observer(({ pcname, relationtype, count }) => {
@@ -109,17 +84,18 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
 
   return (
     <ErrorBoundary>
-      <StyledCard>
-        <StyledCardActions
+      <Card className={card}>
+        <CardActions
           disableSpacing
           onClick={onClickActions}
+          className={cardActions}
         >
-          <CardActionTitle>
+          <div className={cardActionTitle}>
             {`${pcname}: ${relationtype}`}
-            <Count>{`(${count ?? 0} ${
+            <span className={countClass}>{`(${count ?? 0} ${
               count === 1 ? 'Feld' : 'Felder'
-            })`}</Count>
-          </CardActionTitle>
+            })`}</span>
+          </div>
           <IconButton
             aria-expanded={expanded}
             aria-label="Show more"
@@ -129,11 +105,12 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
               <ExpandMoreIcon />
             </Icon>
           </IconButton>
-        </StyledCardActions>
-        <StyledCollapse
+        </CardActions>
+        <Collapse
           in={expanded}
           timeout="auto"
           unmountOnExit
+          className={collapse}
         >
           <Suspense fallback={fallback}>
             {count > 1 && (
@@ -142,15 +119,15 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
                 relationtype={relationtype}
               />
             )}
-            <PropertiesContainer>
+            <div className={propertiesContainer}>
               <Properties
                 properties={nodes}
                 relationtype={relationtype}
               />
-            </PropertiesContainer>
+            </div>
           </Suspense>
-        </StyledCollapse>
-      </StyledCard>
+        </Collapse>
+      </Card>
     </ErrorBoundary>
   )
 })
