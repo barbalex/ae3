@@ -1,22 +1,10 @@
 import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../storeContext.js'
-
-const Container = styled.div`
-  margin-bottom: 16px;
-`
-const Label = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { container, label } from './AllChooser.module.css'
 
 export const AllChooser = observer(({ properties }) => {
   const store = useContext(storeContext)
@@ -46,8 +34,8 @@ export const AllChooser = observer(({ properties }) => {
   const checked = checkedArray.length > 0 && !checkedArray.includes(false)
 
   return (
-    <Container>
-      <Label
+    <div className={container}>
+      <FormControlLabel
         control={
           <Checkbox
             color="primary"
@@ -56,7 +44,8 @@ export const AllChooser = observer(({ properties }) => {
           />
         }
         label="alle"
+        className={label}
       />
-    </Container>
+    </div>
   )
 })
