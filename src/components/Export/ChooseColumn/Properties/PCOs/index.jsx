@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -15,27 +14,13 @@ import { PcoList as List } from './PCOs.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  margin: 10px 0;
-`
-const StyledCard = styled(Card)`
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const Count = styled.span`
-  font-size: x-small;
-  padding-left: 5px;
-`
+import {
+  container,
+  card,
+  cardActions,
+  cardActionTitle,
+  count,
+} from './index.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterRCOs($exportTaxonomies: [String!]) {
@@ -83,18 +68,21 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledCard>
-          <StyledCardActions
+      <div className={container}>
+        <Card className={card}>
+          <CardActions
             disableSpacing
             onClick={onTogglePco}
+            className={cardActions}
           >
-            <CardActionTitle>
+            <div className={cardActionTitle}>
               Eigenschaftensammlungen
-              <Count>{`(${isLoading ? '...' : pcCount} Sammlungen, ${
+              <span
+                className={count}
+              >{`(${isLoading ? '...' : pcCount} Sammlungen, ${
                 isLoading ? '...' : propertyCount
-              } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</Count>
-            </CardActionTitle>
+              } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</span>
+            </div>
             <IconButton
               aria-expanded={pcoExpanded}
               aria-label="Show more"
@@ -104,7 +92,7 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
                 <ExpandMoreIcon />
               </Icon>
             </IconButton>
-          </StyledCardActions>
+          </CardActions>
           <Collapse
             in={pcoExpanded}
             timeout="auto"
@@ -112,8 +100,8 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
           >
             <List />
           </Collapse>
-        </StyledCard>
-      </Container>
+        </Card>
+      </div>
     </ErrorBoundary>
   )
 })
