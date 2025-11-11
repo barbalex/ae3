@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
@@ -11,21 +10,13 @@ import { Taxonomies } from './Taxonomies.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
+import { label } from './index.module.css'
+
 const exportTypes = ['Arten', 'Lebensräume']
 const exportTypeTAXToReadable = {
   ART: 'Arten',
   LEBENSRAUM: 'Lebensräume',
 }
-
-const TypeContainer = styled.div``
-const TypeLabel = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
 
 export const ExportType = observer(({ type }) => {
   const apolloClient = useApolloClient()
@@ -62,7 +53,7 @@ export const ExportType = observer(({ type }) => {
         const taxonomyName = taxonomies[0]?.taxonomyName
         setTaxonomies([...exportTaxonomies, taxonomyName])
       }
-      // check if taxonomy(s) of other type was choosen
+      // check if taxonomy(s) of other type was chosen
       // if so: uncheck
       const exportTaxonomiesWithoutOtherType = exportTaxonomies.filter(
         (t) => exportTypeTAXToReadable[t.type] === name,
@@ -83,8 +74,8 @@ export const ExportType = observer(({ type }) => {
 
   return (
     <ErrorBoundary>
-      <TypeContainer>
-        <TypeLabel
+      <div>
+        <FormControlLabel
           control={
             <Checkbox
               color="primary"
@@ -94,9 +85,10 @@ export const ExportType = observer(({ type }) => {
             />
           }
           label={type}
+          className={label}
         />
         {exportType === type && <Taxonomies type={type} />}
-      </TypeContainer>
+      </div>
     </ErrorBoundary>
   )
 })
