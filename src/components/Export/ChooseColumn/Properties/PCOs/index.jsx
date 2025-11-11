@@ -27,9 +27,6 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
   background-color: #ffcc80;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -98,15 +95,15 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
                 isLoading ? '...' : propertyCount
               } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</Count>
             </CardActionTitle>
-            <CardActionIconButton
-              data-expanded={pcoExpanded}
+            <IconButton
               aria-expanded={pcoExpanded}
               aria-label="Show more"
+              style={{ transform: pcoExpanded ? 'rotate(180deg)' : 'none' }}
             >
               <Icon>
                 <ExpandMoreIcon />
               </Icon>
-            </CardActionIconButton>
+            </IconButton>
           </StyledCardActions>
           <Collapse
             in={pcoExpanded}
