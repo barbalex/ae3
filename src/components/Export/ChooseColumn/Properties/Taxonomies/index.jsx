@@ -16,6 +16,8 @@ import { JointTaxonomy } from './JointTaxonomy.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
+import {} from './index.module.css'
+
 const Container = styled.div`
   margin: 10px 0;
 `
@@ -27,9 +29,6 @@ const StyledCardActions = styled(CardActions)`
   cursor: pointer;
   height: auto !important;
   background-color: #ffcc80;
-`
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -121,15 +120,17 @@ export const Taxonomies = observer(
                   })`}</Count>
                 )}
               </CardActionTitle>
-              <CardActionIconButton
-                data-expanded={taxonomiesExpanded}
+              <IconButton
                 aria-expanded={taxonomiesExpanded}
                 aria-label="Show more"
+                style={{
+                  transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
+                }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
+              </IconButton>
             </StyledCardActions>
             <Collapse
               in={taxonomiesExpanded}
