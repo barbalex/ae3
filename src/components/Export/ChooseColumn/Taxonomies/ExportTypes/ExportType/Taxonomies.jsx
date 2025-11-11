@@ -1,32 +1,13 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
 import { useQuery } from '@apollo/client/react'
 
 import { storeContext } from '../../../../../../storeContext.js'
-
-const TaxContainer = styled.div`
-  margin-left: 39px;
-  margin-bottom: 10px;
-  margin-top: 3px;
-`
-const TaxTitle = styled.div`
-  margin-left: -5px;
-`
-const TaxonomyLabel = styled(FormControlLabel)`
-  height: 33px;
-  min-height: 33px;
-  margin-left: -20px !important;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { container, title, label } from './Taxonomies.module.css'
 
 export const Taxonomies = observer(({ type }) => {
   const store = useContext(storeContext)
@@ -69,13 +50,13 @@ export const Taxonomies = observer(({ type }) => {
   if (error) return `Fehler beim Laden der Taxonomien: ${error.message}`
 
   return (
-    <TaxContainer>
-      <TaxTitle>
+    <div className={container}>
+      <div className={title}>
         {(taxonomies ?? []).length === 1 ? 'Taxonomie:' : 'Taxonomien:'}
-      </TaxTitle>
+      </div>
       <FormGroup>
         {(taxonomies ?? []).map((tax) => (
-          <TaxonomyLabel
+          <FormControlLabel
             key={tax.name}
             control={
               <Checkbox
@@ -86,9 +67,10 @@ export const Taxonomies = observer(({ type }) => {
               />
             }
             label={tax.name}
+            className={label}
           />
         ))}
       </FormGroup>
-    </TaxContainer>
+    </div>
   )
 })
