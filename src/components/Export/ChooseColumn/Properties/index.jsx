@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { HowTo } from './HowTo.jsx'
@@ -8,9 +7,7 @@ import { PcoList } from './PCOs/index.jsx'
 import { RCOs } from './RCOs/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  padding: 0 5px;
-`
+import { container } from './index.module.css'
 
 export const Properties = observer(() => {
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(false)
@@ -52,7 +49,7 @@ export const Properties = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <HowTo />
         <Taxonomies
           taxonomiesExpanded={taxonomiesExpanded}
@@ -66,7 +63,7 @@ export const Properties = observer(() => {
           rcoExpanded={rcoExpanded}
           onToggleRco={onToggleRco}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
