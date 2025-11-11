@@ -1,16 +1,8 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../storeContext.js'
-
-const ResetSpan = styled.span`
-  margin-left: 8px;
-  font-weight: 100;
-  font-style: italic;
-  cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
-`
+import { reset } from './Item.module.css'
 
 export const Item = observer(({ properties }) => {
   const { pcname, relationtype, pname } = properties
@@ -27,7 +19,12 @@ export const Item = observer(({ properties }) => {
   return (
     <li>
       {`${pcname} - ${relationtype}: ${pname}`}
-      <ResetSpan onClick={onClick}>zurücksetzen</ResetSpan>
+      <span
+        onClick={onClick}
+        className={reset}
+      >
+        zurücksetzen
+      </span>
     </li>
   )
 })
