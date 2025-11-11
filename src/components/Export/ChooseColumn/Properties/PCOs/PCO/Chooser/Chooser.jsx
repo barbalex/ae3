@@ -1,32 +1,12 @@
 import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
-const Container = styled.div`
-  width: 100%;
-  @container (min-width: ${2 * constants.export.properties.columnWidth}px) {
-    width: 50cqw;
-  }
-  @container (min-width: ${3 * constants.export.properties.columnWidth}px) {
-    width: 33cqw;
-  }
-  @container (min-width: ${4 * constants.export.properties.columnWidth}px) {
-    width: 25cqw;
-  }
-`
-const Label = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
+import { container, label } from './Chooser.module.css'
 
 export const Chooser = observer(({ pcname, pname }) => {
   const store = useContext(storeContext)
@@ -44,8 +24,8 @@ export const Chooser = observer(({ pcname, pname }) => {
       .length > 0
 
   return (
-    <Container>
-      <Label
+    <div className={container}>
+      <FormControlLabel
         control={
           <Checkbox
             color="primary"
@@ -54,7 +34,8 @@ export const Chooser = observer(({ pcname, pname }) => {
           />
         }
         label={<div>{pname}</div>}
+        className={label}
       />
-    </Container>
+    </div>
   )
 })
