@@ -1,7 +1,6 @@
 import { useState, useContext } from 'react'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -13,43 +12,17 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { CountInput } from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 
-const Container = styled.div`
-  padding-top: 5px;
-`
-const ErrorContainer = styled.div`
-  padding: 9px;
-`
-const SpreadsheetContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const TopButtonsContainer = styled.div`
-  padding: 10px 8px 2px 8px;
-  > button:not(:first-of-type) {
-    margin-left: 10px;
-  }
-`
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 8px;
-`
-const TotalDiv = styled.div`
-  font-size: small;
-  padding-left: 9px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-  user-select: none;
-`
-const StyledButton = styled(Button)`
-  border: 1px solid !important;
-`
-const StyledSnackbar = styled(Snackbar)`
-  div {
-    min-width: auto;
-    background-color: #2e7d32 !important;
-  }
-`
+import {
+  container,
+  errorContainer,
+  spreadsheetContainer,
+  topButtonsContainer,
+  buttonsContainer,
+  total,
+  button,
+  snackbar,
+} from './Preview.module.css'
+
 const exportMutation = gql`
   mutation exportDataMutation(
     $typ: String!
@@ -287,34 +260,36 @@ export const Preview = observer(() => {
 
   if (exportError) {
     return (
-      <ErrorContainer>
+      <div className={errorContainer}>
         `Error fetching data: ${exportError.message}`
-      </ErrorContainer>
+      </div>
     )
   }
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         {rowCount > 0 && (
-          <TopButtonsContainer>
-            <StyledButton
+          <div className={topButtonsContainer}>
+            <Button
+              className={button}
               onClick={onClickXlsx}
               color="inherit"
             >
               .xlsx herunterladen
-            </StyledButton>
-            <StyledButton
+            </Button>
+            <Button
+              className={button}
               onClick={onClickCsv}
               color="inherit"
             >
               .csv herunterladen
-            </StyledButton>
-          </TopButtonsContainer>
+            </Button>
+          </div>
         )}
         {rowCount > 0 && (
-          <SpreadsheetContainer>
-            <TotalDiv>
+          <div className={spreadsheetContainer}>
+            <div className={total}>
               {`${rowCount.toLocaleString(
                 'de-CH',
               )} Datensätze, ${anzFelder.toLocaleString('de-CH')} ${
@@ -325,47 +300,51 @@ export const Preview = observer(() => {
                 setCount={setCount}
               />
               {' :'}
-            </TotalDiv>
+            </div>
             <DataTable
               data={rows}
               order={sortField?.direction ?? 'ASC'}
               orderBy={sortField?.columnName ?? 'id'}
               setOrder={setOrder}
             />
-          </SpreadsheetContainer>
+          </div>
         )}
         {rowCount === 0 && (
-          <SpreadsheetContainer>
-            <TotalDiv>{`${rowCount.toLocaleString(
+          <div className={spreadsheetContainer}>
+            <div className={total}>{`${rowCount.toLocaleString(
               'de-CH',
-            )} Datensätze`}</TotalDiv>
-          </SpreadsheetContainer>
+            )} Datensätze`}</div>
+          </div>
         )}
         {rowCount > 0 && (
-          <ButtonsContainer>
-            <StyledButton
+          <div className={buttonsContainer}>
+            <Button
+              className={button}
               onClick={onClickXlsx}
               color="inherit"
             >
               .xlsx herunterladen
-            </StyledButton>
-            <StyledButton
+            </Button>
+            <Button
+              className={button}
               onClick={onClickCsv}
               color="inherit"
             >
               .csv herunterladen
-            </StyledButton>
-          </ButtonsContainer>
+            </Button>
+          </div>
         )}
-        <StyledSnackbar
+        <Snackbar
+          className={snackbar}
           open={!!message}
           message={message}
         />
-        <StyledSnackbar
+        <Snackbar
+          className={snackbar}
           open={exportLoading}
           message="Lade Daten..."
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })

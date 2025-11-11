@@ -1,0 +1,46 @@
+.container {
+  padding-top: 5px;
+}
+
+.errorContainer {
+  padding: 9px;
+}
+
+.spreadsheetContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.topButtonsContainer {
+  padding: 10px 8px 2px 8px;
+  display: flex;
+  justify-content: space-between;
+  > button:not(:first-of-type) {
+    margin-left: 10px;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 8px;
+}
+
+.total {
+  font-size: small;
+  padding-left: 9px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  user-select: none;
+}
+
+.button {
+  border: 1px solid !important;
+}
+
+.snackbar {
+  div {
+    min-width: auto;
+    background-color: #2e7d32 !important;
+  }
+}
