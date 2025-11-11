@@ -6,40 +6,25 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const StyledCardContent = styled(CardContent)`
-  padding: 0 16px 0 0 !important;
-  margin: -10px 0 5px 0;
-  li {
-    margin-top: 4px;
-  }
-`
+import {
+  card,
+  cardActions,
+  cardActionTitle,
+  cardContent,
+} from './HowTo.module.css'
 
 export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
-      <StyledCardActions
+    <Card className={card}>
+      <CardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
+        className={cardActions}
       >
-        <CardActionTitle>So geht's</CardActionTitle>
+        <div className={cardActionTitle}>So geht's</div>
         <IconButton
           aria-expanded={expanded}
           aria-label="Show more"
@@ -49,13 +34,13 @@ export const HowTo = () => {
             <ExpandMoreIcon />
           </Icon>
         </IconButton>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           <ul>
             <li>
               Nachfolgend sind alle Eigenschaften aufgelistet, die in den
@@ -66,8 +51,8 @@ export const HowTo = () => {
             </li>
             <li>...und laden Sie danach die Daten herunter</li>
           </ul>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

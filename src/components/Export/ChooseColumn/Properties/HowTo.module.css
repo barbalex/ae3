@@ -1,0 +1,24 @@
+.card {
+  margin: 10px 0;
+  background-color: rgb(255, 243, 224) !important;
+}
+
+.cardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  height: auto !important;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.cardContent {
+  padding: 0 16px 0 0 !important;
+  margin: -10px 0 5px 0;
+  li {
+    margin-top: 4px;
+  }
+}
