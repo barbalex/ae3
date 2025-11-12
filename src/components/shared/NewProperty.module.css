@@ -1,0 +1,8 @@
+.container {
+  margin: 20px 10px 12px 0;
+}
+
+.fieldContainer {
+  width: 100%;
+  display: flex;
+}

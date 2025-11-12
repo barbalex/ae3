@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
-import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -10,13 +9,7 @@ import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  margin: 20px 10px 12px 0;
-`
-const FieldContainer = styled.div`
-  width: 100%;
-  display: flex;
-`
+import { container, fieldContainer } from './NewProperty.module.css'
 
 export const NewProperty = observer(
   ({ id, properties: propertiesPrevious }) => {
@@ -53,9 +46,9 @@ export const NewProperty = observer(
 
     return (
       <ErrorBoundary>
-        <Container>
+        <div className={container}>
           <InputLabel>Neues Feld:</InputLabel>
-          <FieldContainer>
+          <div className={fieldContainer}>
             <TextField
               label="Feld-Name"
               value={label}
@@ -83,8 +76,8 @@ export const NewProperty = observer(
                 variant="standard"
               />
             )}
-          </FieldContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   },
