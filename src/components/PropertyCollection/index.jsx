@@ -143,7 +143,7 @@ export const PropertyCollection = observer(() => {
   }
   const onChangeCombining = (event, isChecked) =>
     onBlurDo({
-      client: apolloClient,
+      apolloClient,
       field: 'combining',
       pC,
       value: isChecked,
@@ -152,7 +152,7 @@ export const PropertyCollection = observer(() => {
     })
   const onChangeOrganization = (event) =>
     onBlurDo({
-      client: apolloClient,
+      apolloClient,
       field: 'organizationId',
       pC,
       value: event.target.value,
@@ -161,7 +161,7 @@ export const PropertyCollection = observer(() => {
     })
   const onChangeImportedBy = (event) =>
     onBlurDo({
-      client: apolloClient,
+      apolloClient,
       field: 'importedBy',
       pC,
       value: event.target.value,
@@ -170,7 +170,7 @@ export const PropertyCollection = observer(() => {
     })
   const onChangeLastUpdated = (event) =>
     onBlurDo({
-      client: apolloClient,
+      apolloClient,
       field: 'lastUpdated',
       pC,
       value: event.target.value,
