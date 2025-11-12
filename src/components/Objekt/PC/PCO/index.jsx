@@ -29,9 +29,6 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
   background-color: #ffcc80;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -102,15 +99,15 @@ export const PcPresentation = ({ pC, stacked }) => {
                   {pCDescriptionExpanded && <InfoIcon />}
                 </Icon>
               </IconButton>
-              <CardActionIconButton
-                data-expanded={expanded}
+              <IconButton
                 aria-expanded={expanded}
                 aria-label="Show more"
+                style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
               >
                 <Icon>
                   <ExpandMoreIcon />
                 </Icon>
-              </CardActionIconButton>
+              </IconButton>
             </CardActionsButtons>
           </StyledCardActions>
           <Collapse
