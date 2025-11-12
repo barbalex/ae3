@@ -1,5 +1,4 @@
 import { useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
@@ -15,23 +14,8 @@ import { storeContext } from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-`
-const AddNewButton = styled(IconButton)`
-  top: 10px !important;
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
-`
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`
+import { container, addNewButton, buttonContainer } from './index.module.css'
+
 
 const orgUsersQuery = gql`
   query orgUsersQuery($id: UUID!) {
@@ -102,29 +86,30 @@ export const OrgUsers = observer(() => {
   }
 
   if (error) {
-    return <Container>{`Fehler: ${error.message}`}</Container>
+    return <div className={container}>{`Fehler: ${error.message}`}</div>
   }
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <Container>
+        <div className={container}>
           <OrgUsersList
             orgUsers={orgUserSorted}
             orgUsersRefetch={refetch}
           />
-          <ButtonContainer>
-            <AddNewButton
+          <div className={buttonContainer}>
+            <IconButton
               title="Neuen Benutzer mit Rolle erstellen"
               aria-label="Neue Rolle vergeben"
               onClick={onClickNew}
+              className={addNewButton}
             >
               <Icon>
                 <AddIcon color="error" />
               </Icon>
-            </AddNewButton>
-          </ButtonContainer>
-        </Container>
+            </IconButton>
+          </div>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
