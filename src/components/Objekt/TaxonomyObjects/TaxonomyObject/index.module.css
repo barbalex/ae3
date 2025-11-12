@@ -37,10 +37,3 @@
   column-width: 500px;
 }
 
-.button {
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
-}

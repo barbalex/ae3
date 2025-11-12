@@ -12,7 +12,6 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import {
   MdExpandMore as ExpandMoreIcon,
   MdEdit as EditIcon,
@@ -21,7 +20,6 @@ import {
   MdInfoOutline as InfoOutlineIcon,
   MdInfo as InfoIcon,
 } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -49,14 +47,6 @@ import {
   cardContent,
   button,
 } from './index.module.css'
-
-const StyledButton = styled(IconButton)`
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
-`
 
 const organizationUsersQuery = gql`
   query AllOrganizationUsersQuery {
@@ -154,35 +144,31 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
               <div className={cardActionsButtons}>
                 <LinkMenu objekt={objekt} />
                 {showLink && (
-                  <StyledButton
+                  <IconButton
                     aria-label={linkText}
                     title={linkText}
                     onClick={onClickLink}
                   >
                     <SynonymIcon />
-                  </StyledButton>
+                  </IconButton>
                 )}
                 {userMayWrite && editing && expanded && (
-                  <StyledButton
+                  <IconButton
                     aria-label="Daten anzeigen"
                     title="Daten anzeigen"
                     onClick={onClickStopEditing}
                   >
-                    <Icon>
-                      <ViewIcon />
-                    </Icon>
-                  </StyledButton>
+                    <ViewIcon />
+                  </IconButton>
                 )}
                 {userMayWrite && !editing && expanded && (
-                  <StyledButton
+                  <IconButton
                     aria-label="Daten bearbeiten"
                     title="Daten bearbeiten"
                     onClick={onClickStartEditing}
                   >
-                    <Icon>
-                      <EditIcon />
-                    </Icon>
-                  </StyledButton>
+                    <EditIcon />
+                  </IconButton>
                 )}
                 <IconButton
                   aria-expanded={taxExpanded}
@@ -195,10 +181,8 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                   onClick={onClickToggleTaxDescription}
                   size="large"
                 >
-                  <Icon>
-                    {!taxExpanded && <InfoOutlineIcon />}
-                    {taxExpanded && <InfoIcon />}
-                  </Icon>
+                  {!taxExpanded && <InfoOutlineIcon />}
+                  {taxExpanded && <InfoIcon />}
                 </IconButton>
                 <IconButton
                   aria-expanded={expanded}
@@ -206,9 +190,7 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                   title={expanded ? 'Taxonomie schliessen' : 'Taxonomie öffnen'}
                   style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
                 >
-                  <Icon>
-                    <ExpandMoreIcon />
-                  </Icon>
+                  <ExpandMoreIcon />
                 </IconButton>
               </div>
             </CardActions>
