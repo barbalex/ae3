@@ -17,41 +17,16 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 import { exists } from '../../../modules/exists.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .react-grid-Container {
-    font-size: small;
-  }
-  .react-grid-HeaderCell:not(:first-of-type) {
-    border-left: #c7c7c7 solid 1px !important;
-  }
-  .react-grid-Cell {
-    border: #ddd solid 1px !important;
-  }
-  .react-grid-Canvas {
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px !important;
-    }
-    ::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      box-shadow: inset 0 0 7px #e65100;
-    }
-    ::-webkit-scrollbar-track {
-      border-radius: 1rem;
-      box-shadow: none;
-    }
-  }
-`
-const TotalDiv = styled.div`
-  font-size: small;
-  padding-left: 9px;
-  margin-top: 8px;
-  user-select: none;
-`
+import {
+  container,
+  total,
+  buttonsContainer,
+  exportButtons,
+  mutationButtons,
+  button,
+  buttonLoading,
+} from './index.module.css'
+
 const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -186,13 +161,15 @@ const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
     nP['Art der Beziehung'] = p.relationType
     if (p.properties) {
       const props = JSON.parse(p.properties)
-      Object.defineProperties(props).forEach(([key, value]) => {
-        if (typeof value === 'boolean') {
-          nP[key] = booleanToJaNein(value)
-        } else {
-          nP[key] = value
-        }
-      })
+      if (Object.keys(props).length) {
+        Object.defineProperties(props).forEach(([key, value]) => {
+          if (typeof value === 'boolean') {
+            nP[key] = booleanToJaNein(value)
+          } else {
+            nP[key] = value
+          }
+        })
+      }
     }
     // add keys that may be missing
     for (const key of propKeys) {
@@ -360,14 +337,16 @@ export const RCO = observer(() => {
   const onClickImport = () => setImport(true)
 
   if (error) {
-    return <Container>{`Error fetching data: ${error.message}`}</Container>
+    return (
+      <div className={container}>{`Error fetching data: ${error.message}`}</div>
+    )
   }
 
   return (
-    <Container>
+    <div className={container}>
       <Suspense fallback={<Spinner />}>
         {!showImportRco && (
-          <TotalDiv>
+          <div className={total}>
             {`${totalCount?.toLocaleString?.(
               'de-CH',
             )} Datensätze, ${propKeys?.length?.toLocaleString?.('de-CH')} Feld${
@@ -378,7 +357,7 @@ export const RCO = observer(() => {
               setCount={setCount}
             />
             {' :'}
-          </TotalDiv>
+          </div>
         )}
         {!importing && rCO?.length > 0 && (
           <>
@@ -434,6 +413,6 @@ export const RCO = observer(() => {
         )}
         {showImportRco && <ImportRco setImport={setImport} />}
       </Suspense>
-    </Container>
+    </div>
   )
 })
