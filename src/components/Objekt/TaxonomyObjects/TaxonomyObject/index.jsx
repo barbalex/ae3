@@ -39,12 +39,17 @@ import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
 import { storeContext } from '../../../../storeContext.js'
 
-const LoadingContainer = styled.div`
-  margin: 10px;
-`
-const Container = styled.div`
-  margin: 10px 0;
-`
+import {
+  errorContainer,
+  container,
+  card,
+  cardActions,
+  cardActionsButtons,
+  cardActionTitle,
+  cardContent,
+  button,
+} from './index.module.css'
+
 const StyledCard = styled(Card)`
   margin: 0;
   background-color: #fff3e0 !important;
@@ -158,13 +163,13 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
   }
 
   if (error) {
-    return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
+    return <div className={errorContainer}>{`Fehler: ${error.message}`}</div>
   }
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <Container>
+        <div className={container}>
           <StyledCard>
             <StyledCardActions
               disableSpacing
@@ -296,7 +301,7 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
               </StyledCardContent>
             </Collapse>
           </StyledCard>
-        </Container>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )

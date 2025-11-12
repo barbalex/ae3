@@ -1,0 +1,46 @@
+.errorContainer {
+  margin: 10px;
+}
+
+.container {
+  margin: 10px 0;
+}
+
+.card {
+  margin: 0;
+  background-color: #fff3e0 !important;
+}
+
+.cardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  height: auto !important;
+  background-color: #ffcc80 !important;
+}
+
+.cardActionsButtons {
+  display: flex;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.cardContent {
+  padding: 0 16px 0 16px !important;
+  margin: 5px 0;
+  column-width: 500px;
+}
+
+.button {
+  :hover {
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+  }
+}
