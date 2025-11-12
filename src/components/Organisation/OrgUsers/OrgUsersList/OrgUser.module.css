@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.formControl {
+  margin: 10px 0 5px 0 !important;
+  width: calc(50% - 24px);
+}

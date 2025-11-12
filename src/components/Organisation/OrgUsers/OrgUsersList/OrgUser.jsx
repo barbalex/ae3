@@ -1,5 +1,4 @@
 import { useState, useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 import { MdClear } from 'react-icons/md'
@@ -20,24 +19,7 @@ import { deleteOrgUserMutation } from './deleteOrgUserMutation.js'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const OrgUserDiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-`
-const DeleteButton = styled(IconButton)`
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
-`
-const StyledFormControl = styled(FormControl)`
-  margin: 10px 0 5px 0 !important;
-  width: calc(50% - 24px);
-`
+import { container, formControl } from './OrgUser.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -231,17 +213,22 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   }
 
   if (orgUsersError) {
-    return <OrgUserDiv>{`Fehler: ${orgUsersError.message}`}</OrgUserDiv>
+    return <div className={container}>{`Fehler: ${orgUsersError.message}`}</div>
   }
   if (allUsersError) {
-    return <OrgUserDiv>{`Fehler: ${allUsersError.message}`}</OrgUserDiv>
+    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
   }
+
+  console.log('OrgUser', { roles, role })
 
   return (
     <ErrorBoundary>
       <Suspense fallback={null}>
-        <OrgUserDiv>
-          <StyledFormControl variant="standard">
+        <div className={container}>
+          <FormControl
+            className={formControl}
+            variant="standard"
+          >
             <InputLabel htmlFor="Benutzer">Benutzer</InputLabel>
             <Select
               value={userName}
@@ -260,8 +247,11 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
             {!!nameError && (
               <FormHelperText id={`RolleErrorText`}>{nameError}</FormHelperText>
             )}
-          </StyledFormControl>
-          <StyledFormControl variant="standard">
+          </FormControl>
+          <FormControl
+            className={formControl}
+            variant="standard"
+          >
             <InputLabel htmlFor="Rolle">Rolle</InputLabel>
             <Select
               value={role || ''}
@@ -280,8 +270,8 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
             {!!roleError && (
               <FormHelperText id={`RolleErrorText`}>{roleError}</FormHelperText>
             )}
-          </StyledFormControl>
-          <DeleteButton
+          </FormControl>
+          <IconButton
             title="löschen"
             aria-label="löschen"
             onClick={onClickDelete}
@@ -289,8 +279,8 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
             <Icon>
               <MdClear color="error" />
             </Icon>
-          </DeleteButton>
-        </OrgUserDiv>
+          </IconButton>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
