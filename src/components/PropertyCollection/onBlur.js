@@ -9,8 +9,9 @@ export const onBlurDo = async ({
   prevValue,
   navigate,
   scrollIntoView,
+  setError,
 }) => {
-  //setError(null)
+  setError(null)
   if (value !== prevValue) {
     const variables = {
       oldId: pC.id,
@@ -35,7 +36,8 @@ export const onBlurDo = async ({
         queryKey: ['pc'],
       })
     } catch (error) {
-      return console.log('error:', error.message) //setError(error.message)
+      console.log('error:', error.message)
+      return setError(error.message)
     }
     // if id was updated, need to update url
     if (field === 'id') {

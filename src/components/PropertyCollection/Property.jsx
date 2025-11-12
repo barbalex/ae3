@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -12,17 +11,7 @@ import { onBlurDo } from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  margin: 5px 0;
-`
-const StyledFormControl = styled(FormControl)`
-  width: 100%;
-`
-const StyledTextField = styled(TextField)`
-  p {
-    color: ${(props) => (props.error ? 'red' : 'rgba(0,0,0,0.54)')};
-  }
-`
+import { container, formControl } from './Property.module.css'
 
 export const Property = observer(
   ({ field, label, pC, helperText, type = 'text', disabled }) => {
@@ -52,12 +41,13 @@ export const Property = observer(
 
     return (
       <ErrorBoundary>
-        <Container>
-          <StyledFormControl
+        <div className={container}>
+          <FormControl
             error={!!error}
             variant="standard"
+            className={formControl}
           >
-            <StyledTextField
+            <TextField
               autoFocus={label === 'Name' && !value}
               label={label}
               value={
@@ -75,6 +65,7 @@ export const Property = observer(
               spellCheck="false"
               disabled={!!disabled}
               type={type}
+              error={error}
               helperText={
                 error ? error
                 : helperText ?
@@ -84,8 +75,8 @@ export const Property = observer(
               error={!!error}
               variant="standard"
             />
-          </StyledFormControl>
-        </Container>
+          </FormControl>
+        </div>
       </ErrorBoundary>
     )
   },
