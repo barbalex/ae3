@@ -9,7 +9,7 @@ export const onBlurDo = async ({
   prevValue,
   navigate,
   scrollIntoView,
-  setError,
+  setError = () => {},
 }) => {
   setError(null)
   if (value !== prevValue) {
