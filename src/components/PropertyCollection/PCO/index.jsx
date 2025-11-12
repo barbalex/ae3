@@ -1,5 +1,4 @@
 import { useState, useContext, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
@@ -18,77 +17,15 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .react-grid-Container {
-    font-size: small;
-  }
-  .react-grid-HeaderCell:not(:first-of-type) {
-    border-left: #c7c7c7 solid 1px !important;
-  }
-  .react-grid-Cell {
-    border: #ddd solid 1px !important;
-  }
-  .react-grid-Canvas {
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px !important;
-    }
-    ::-webkit-scrollbar-thumb {
-      border-radius: 3px;
-      box-shadow: inset 0 0 7px #e65100;
-    }
-    ::-webkit-scrollbar-track {
-      border-radius: 1rem;
-      box-shadow: none;
-    }
-  }
-`
-const TotalDiv = styled.div`
-  font-size: small;
-  padding-left: 9px;
-  margin-top: 8px;
-  user-select: none;
-`
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const ExportButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const MutationButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const StyledButton = styled(Button)`
-  margin: 5px !important;
-  ${(props) => props['data-loading'] && `font-style: italic;`}
-  ${(props) =>
-    props['data-loading'] && `animation: blinker 1s linear infinite;`}
-  ${(props) =>
-    props['data-loading'] && `animation: blinker 1s linear infinite;`}
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
-export const StyledProgressText = styled.span`
-  margin-left: 10px;
-  font-style: italic;
-  animation: blinker 1s linear infinite;
-  white-space: nowrap;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
+import {
+  container,
+  total,
+  buttonsContainer,
+  exportButtons,
+  mutationButtons,
+  button,
+  buttonLoading,
+} from './index.module.css'
 
 export const pcoQuery = gql`
   query pCOQuery($pCId: UUID!) {
@@ -357,14 +294,16 @@ export const PCO = observer(() => {
   const onClickImport = () => setImport(true)
 
   if (error) {
-    return <Container>{`Error fetching data: ${error.message}`}</Container>
+    return (
+      <div className={container}>{`Error fetching data: ${error.message}`}</div>
+    )
   }
 
   return (
-    <Container>
+    <div className={container}>
       <Suspense fallback={<Spinner />}>
         {!showImportPco && (
-          <TotalDiv>
+          <div className={total}>
             {`${totalCount?.toLocaleString?.(
               'de-CH',
             )} Datensätze, ${propKeys?.length?.toLocaleString?.('de-CH')} Feld${
@@ -375,7 +314,7 @@ export const PCO = observer(() => {
               setCount={setCount}
             />
             {' :'}
-          </TotalDiv>
+          </div>
         )}
         {!importing && pCO.length > 0 && (
           <>
@@ -387,49 +326,49 @@ export const PCO = observer(() => {
               orderBy={orderBy}
               order={sortDirection}
             />
-            <ButtonsContainer>
-              <ExportButtons>
-                <StyledButton
+            <div className={buttonsContainer}>
+              <div className={exportButtons}>
+                <Button
                   onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
-                  data-loading={xlsxExportLoading}
+                  className={`button ${xlsxExportLoading ? buttonLoading : ''}`}
                 >
                   xlsx exportieren
-                </StyledButton>
-                <StyledButton
+                </Button>
+                <Button
                   onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  data-loading={csvExportLoading}
+                  className={`button ${csvExportLoading ? buttonLoading : ''}`}
                 >
                   csv exportieren
-                </StyledButton>
-              </ExportButtons>
+                </Button>
+              </div>
               {userIsWriter && (
-                <MutationButtons>
-                  <StyledButton
+                <div className={mutationButtons}>
+                  <Button
                     onClick={onClickImport}
                     variant="outlined"
                     color="inherit"
                   >
                     importieren
-                  </StyledButton>
-                  <StyledButton
+                  </Button>
+                  <Button
                     onClick={onClickDelete}
                     variant="outlined"
                     color="inherit"
-                    data-loading={deleteLoading}
+                    className={`button ${deleteLoading ? buttonLoading : ''}`}
                   >
                     Daten löschen
-                  </StyledButton>
-                </MutationButtons>
+                  </Button>
+                </div>
               )}
-            </ButtonsContainer>
+            </div>
           </>
         )}
         {showImportPco && <ImportPco setImport={setImport} />}
       </Suspense>
-    </Container>
+    </div>
   )
 })

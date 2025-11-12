@@ -1,0 +1,66 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  .react-grid-Container {
+    font-size: small;
+  }
+  .react-grid-HeaderCell:not(:first-of-type) {
+    border-left: #c7c7c7 solid 1px !important;
+  }
+  .react-grid-Cell {
+    border: #ddd solid 1px !important;
+  }
+  .react-grid-Canvas {
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px !important;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      box-shadow: inset 0 0 7px #e65100;
+    }
+    ::-webkit-scrollbar-track {
+      border-radius: 1rem;
+      box-shadow: none;
+    }
+  }
+}
+
+.total {
+  font-size: small;
+  padding-left: 9px;
+  margin-top: 8px;
+  user-select: none;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.exportButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mutationButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  margin: 5px !important;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+.buttonLoading {
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  animation: blinker 1s linear infinite;
+}
