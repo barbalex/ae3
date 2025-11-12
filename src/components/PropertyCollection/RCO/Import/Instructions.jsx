@@ -23,14 +23,6 @@ import {
   p,
 } from './Instructions.module.css'
 
-const StyledH4 = styled.h4`
-  margin: 0;
-`
-const EmSpan = styled.span`
-  background-color: #8d8c8c40;
-  padding: 1px 3px;
-  border-radius: 4px;
-`
 const InlineIcon = styled(Icon)`
   margin-left: 8px;
 `
@@ -72,7 +64,7 @@ export const RcoInstructions = ({
       Anforderungen an zu importierende Beziehungen
     </h3>
     <div className={howToImportContainer}>
-      <StyledH4>Autorenrechte</StyledH4>
+      <h4 className={h4}>Autorenrechte</h4>
       <ul className={ul}>
         <li>
           <div className={liContainer}>
@@ -87,7 +79,7 @@ export const RcoInstructions = ({
           </div>
         </li>
       </ul>
-      <StyledH4>Tabelle</StyledH4>
+      <h4 className={h4}>Tabelle</h4>
       <ul className={ul}>
         <li>
           <div className={liContainer}>
@@ -118,12 +110,13 @@ export const RcoInstructions = ({
           </div>
         </li>
       </ul>
-      <StyledH4>Zuordnungs-Felder</StyledH4>
+      <h4 className={h4}>Zuordnungs-Felder</h4>
       <ul className={ul}>
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>id</EmSpan> kann enthalten sein.
+              Ein Feld namens <span className={emSpan}>id</span> kann enthalten
+              sein.
             </div>
             {idsExist && (
               <div>
@@ -152,7 +145,7 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>id</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>id</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -181,7 +174,7 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>id</EmSpan> muss eindeutig sein
+                  <span className={emSpan}>id</span> muss eindeutig sein
                 </div>
                 {idsAreUnique && (
                   <div>
@@ -204,7 +197,8 @@ export const RcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>objectId</EmSpan> muss enthalten sein
+              Ein Feld namens <span className={emSpan}>objectId</span> muss
+              enthalten sein
             </div>
             {objectIdsExist && (
               <div>
@@ -225,7 +219,7 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectId</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>objectId</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -254,8 +248,9 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectId</EmSpan> muss <EmSpan>id</EmSpan> eines
-                  Objekts aus arteigenschaften.ch sein
+                  <span className={emSpan}>objectId</span> muss{' '}
+                  <span className={emSpan}>id</span> eines Objekts aus
+                  arteigenschaften.ch sein
                 </div>
                 {objectIdsAreReal && (
                   <div>
@@ -289,8 +284,8 @@ export const RcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>objectIdRelation</EmSpan> muss enthalten
-              sein
+              Ein Feld namens <span className={emSpan}>objectIdRelation</span>{' '}
+              muss enthalten sein
             </div>
             {objectRelationIdsExist && (
               <div>
@@ -310,15 +305,15 @@ export const RcoInstructions = ({
           <div className={liContainer}>
             <div>
               Zweck: Der Datensatz beschreibt die Beziehung des Objekts mit id{' '}
-              <EmSpan>objectId</EmSpan> zum Objekt mit id{' '}
-              <EmSpan>objectIdRelation</EmSpan>
+              <span className={emSpan}>objectId</span> zum Objekt mit id{' '}
+              <span className={emSpan}>objectIdRelation</span>
             </div>
           </div>
           <ul>
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectIdRelation</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>objectIdRelation</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -347,8 +342,9 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectIdRelation</EmSpan> muss <EmSpan>id</EmSpan>{' '}
-                  eines Objekts aus arteigenschaften.ch sein
+                  <span className={emSpan}>objectIdRelation</span> muss{' '}
+                  <span className={emSpan}>id</span> eines Objekts aus
+                  arteigenschaften.ch sein
                 </div>
                 {objectRelationIdsAreReal && (
                   <div>
@@ -383,7 +379,8 @@ export const RcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>relationType</EmSpan> muss enthalten sein
+              Ein Feld namens <span className={emSpan}>relationType</span> muss
+              enthalten sein
             </div>
             {relationTypeExist && (
               <div>
@@ -403,8 +400,8 @@ export const RcoInstructions = ({
           <div className={liContainer}>
             <div>
               Zweck: Beschreibt <em>die Art der Beziehung</em> des Objekts mit
-              id <EmSpan>objectId</EmSpan> zum Objekt mit id{' '}
-              <EmSpan>objectIdRelation</EmSpan>.<br />
+              id <span className={emSpan}>objectId</span> zum Objekt mit id{' '}
+              <span className={emSpan}>objectIdRelation</span>.<br />
               Beispiel: Hund beisst Briefträger :-)
               <br />
               Mögliche Werte: frisst, parasitiert, meidet...
@@ -414,7 +411,8 @@ export const RcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>propertyCollectionOfOrigin</EmSpan> kann
+              Ein Feld namens{' '}
+              <span className={emSpan}>propertyCollectionOfOrigin</span> kann
               enthalten sein
             </div>
             {pCOfOriginIdsExist && (
@@ -447,7 +445,8 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>propertyCollectionOfOrigin</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -476,9 +475,9 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>propertyCollectionOfOrigin</EmSpan> muss{' '}
-                  <EmSpan>id</EmSpan> einer Eigenschaften-Sammlung aus
-                  arteigenschaften.ch sein
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  muss <span className={emSpan}>id</span> einer
+                  Eigenschaften-Sammlung aus arteigenschaften.ch sein
                 </div>
                 {pCOfOriginIdsAreReal && (
                   <div>
@@ -514,7 +513,7 @@ export const RcoInstructions = ({
       <p className={p}>
         Alle weiteren Felder sind Eigenschaften der Beziehung:
       </p>
-      <StyledH4>Eigenschaften</StyledH4>
+      <h4 className={h4}>Eigenschaften</h4>
       <ul className={ul}>
         <li>
           <div className={liContainer}>
