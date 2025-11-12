@@ -1,14 +1,11 @@
 import { Suspense } from 'react'
-import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client/react'
 
 import { PcPresentation } from './PCO/index.jsx'
 import query from './query.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container2 = styled.div`
-  padding: 10px;
-`
+import { errorContainer } from './index.module.css'
 
 export const PC = ({ pcId, objId, stacked = false }) => {
   const { data, error } = useQuery(query, {
@@ -21,7 +18,7 @@ export const PC = ({ pcId, objId, stacked = false }) => {
   const pC = data?.propertyCollectionById
 
   if (error) {
-    return <Container2>{`Fehler: ${error.message}`}</Container2>
+    return <div className={errorContainer}>{`Fehler: ${error.message}`}</div>
   }
 
   // don't want too many spinners
