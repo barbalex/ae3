@@ -50,32 +50,6 @@ import {
   button,
 } from './index.module.css'
 
-const StyledCard = styled(Card)`
-  margin: 0;
-  background-color: #fff3e0 !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80 !important;
-`
-const CardActionsButtons = styled.div`
-  display: flex;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-`
-const StyledCardContent = styled(CardContent)`
-  padding: 0 16px 0 16px !important;
-  margin: 5px 0;
-  column-width: 500px;
-`
 const StyledButton = styled(IconButton)`
   :hover {
     font-weight: 700;
@@ -170,13 +144,14 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
         <div className={container}>
-          <StyledCard>
-            <StyledCardActions
+          <Card className={card}>
+            <CardActions
               disableSpacing
               onClick={onClickActions}
+              className={cardActions}
             >
-              <CardActionTitle>{taxname}</CardActionTitle>
-              <CardActionsButtons>
+              <div className={cardActionTitle}>{taxname}</div>
+              <div className={cardActionsButtons}>
                 <LinkMenu objekt={objekt} />
                 {showLink && (
                   <StyledButton
@@ -210,7 +185,6 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                   </StyledButton>
                 )}
                 <IconButton
-                  data-expanded={taxExpanded}
                   aria-expanded={taxExpanded}
                   aria-label="über diese Taxonomie"
                   title={
@@ -236,8 +210,8 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                     <ExpandMoreIcon />
                   </Icon>
                 </IconButton>
-              </CardActionsButtons>
-            </StyledCardActions>
+              </div>
+            </CardActions>
             <Collapse
               in={expanded}
               timeout="auto"
@@ -250,7 +224,7 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
               >
                 <TaxonomyDescription taxonomy={taxonomy} />
               </Collapse>
-              <StyledCardContent>
+              <CardContent className={cardContent}>
                 {editing ?
                   <>
                     <Property
@@ -298,9 +272,9 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                   properties={properties}
                   stacked={stacked}
                 />
-              </StyledCardContent>
+              </CardContent>
             </Collapse>
-          </StyledCard>
+          </Card>
         </div>
       </Suspense>
     </ErrorBoundary>
