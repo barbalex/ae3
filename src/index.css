@@ -25,6 +25,10 @@ html {
   scrollbar-width: thin;
 }
 
+.reflex-element {
+  scrollbar-width: thin;
+}
+
 /* own syntax for webkit */
 
 ::-webkit-scrollbar {
