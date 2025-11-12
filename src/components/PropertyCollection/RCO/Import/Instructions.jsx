@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import Icon from '@mui/material/Icon'
 import {
   MdDone as DoneIcon,
@@ -22,16 +21,6 @@ import {
   infoOutlineIcon,
   p,
 } from './Instructions.module.css'
-
-const StyledDoneIcon = styled(DoneIcon)`
-  color: green !important;
-`
-const StyledErrorIcon = styled(ErrorIcon)`
-  color: red !important;
-`
-const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
-  color: orange !important;
-`
 
 export const RcoInstructions = ({
   existsNoDataWithoutKey,
@@ -93,14 +82,14 @@ export const RcoInstructions = ({
             {existsNoDataWithoutKey && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
             {existsNoDataWithoutKey === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -118,7 +107,7 @@ export const RcoInstructions = ({
             {idsExist && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
@@ -133,7 +122,7 @@ export const RcoInstructions = ({
             {idsExist === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
@@ -155,14 +144,14 @@ export const RcoInstructions = ({
                 {idsAreUuids && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {idsAreUuids === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -176,14 +165,14 @@ export const RcoInstructions = ({
                 {idsAreUnique && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {idsAreUnique === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -200,14 +189,14 @@ export const RcoInstructions = ({
             {objectIdsExist && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
             {objectIdsExist === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -229,14 +218,14 @@ export const RcoInstructions = ({
                 {objectIdsAreUuid && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {objectIdsAreUuid === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -252,21 +241,21 @@ export const RcoInstructions = ({
                 {objectIdsAreReal && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {objectIdsAreReal === false && !objectIdsAreRealNotTested && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
                 {objectIdsAreRealNotTested && (
                   <>
                     <Icon className={inlineIcon}>
-                      <StyledInfoOutlineIcon />
+                      <InfoOutlineIcon className={infoOutlineIcon} />
                     </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
@@ -287,14 +276,14 @@ export const RcoInstructions = ({
             {objectRelationIdsExist && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
             {objectRelationIdsExist === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -323,14 +312,14 @@ export const RcoInstructions = ({
                 {objectRelationIdsAreUuid && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {objectRelationIdsAreUuid === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -346,7 +335,7 @@ export const RcoInstructions = ({
                 {objectRelationIdsAreReal && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
@@ -354,14 +343,14 @@ export const RcoInstructions = ({
                   !objectIdsAreRealNotTested && (
                     <div>
                       <Icon className={inlineIcon}>
-                        <StyledErrorIcon />
+                        <ErrorIcon className={errorIcon} />
                       </Icon>
                     </div>
                   )}
                 {objectRelationIdsAreRealNotTested && (
                   <>
                     <Icon className={inlineIcon}>
-                      <StyledInfoOutlineIcon />
+                      <InfoOutlineIcon className={infoOutlineIcon} />
                     </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
@@ -382,14 +371,14 @@ export const RcoInstructions = ({
             {relationTypeExist && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
             {relationTypeExist === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -415,7 +404,7 @@ export const RcoInstructions = ({
             {pCOfOriginIdsExist && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledDoneIcon />
+                  <DoneIcon className={doneIcon} />
                 </Icon>
               </div>
             )}
@@ -456,14 +445,14 @@ export const RcoInstructions = ({
                 {pCOfOriginIdsAreUuid && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {pCOfOriginIdsAreUuid === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -479,7 +468,7 @@ export const RcoInstructions = ({
                 {pCOfOriginIdsAreReal && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
@@ -487,14 +476,14 @@ export const RcoInstructions = ({
                   !pCOfOriginIdsAreRealNotTested && (
                     <div>
                       <Icon className={inlineIcon}>
-                        <StyledErrorIcon />
+                        <ErrorIcon className={errorIcon} />
                       </Icon>
                     </div>
                   )}
                 {pCOfOriginIdsAreRealNotTested && (
                   <>
                     <Icon className={inlineIcon}>
-                      <StyledInfoOutlineIcon />
+                      <InfoOutlineIcon className={infoOutlineIcon} />
                     </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
@@ -529,14 +518,14 @@ export const RcoInstructions = ({
                 {propertyKeysDontContainApostroph && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {propertyKeysDontContainApostroph === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -548,14 +537,14 @@ export const RcoInstructions = ({
                 {propertyKeysDontContainBackslash && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {propertyKeysDontContainBackslash === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -572,14 +561,14 @@ export const RcoInstructions = ({
                 {propertyValuesDontContainApostroph && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {propertyValuesDontContainApostroph === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -591,14 +580,14 @@ export const RcoInstructions = ({
                 {propertyValuesDontContainBackslash && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledDoneIcon />
+                      <DoneIcon className={doneIcon} />
                     </Icon>
                   </div>
                 )}
                 {propertyValuesDontContainBackslash === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
