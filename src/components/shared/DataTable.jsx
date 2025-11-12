@@ -6,16 +6,9 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
-import styled from '@emotion/styled'
 import SimpleBar from 'simplebar-react'
 
-const Container = styled.div`
-  width: 100%;
-  overflow-x: auto;
-`
-const StyledTableRow = styled(TableRow)`
-  padding: 0 5px;
-`
+import { container, tableRow } from './DataTable.module.css'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,7 +46,7 @@ export const DataTable = ({
   // console.log('DataTable, data: ', data)
 
   return (
-    <Container>
+    <div className={container}>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <Table
           sx={{
@@ -67,7 +60,7 @@ export const DataTable = ({
           stickyHeader={true}
         >
           <TableHead>
-            <StyledTableRow>
+            <TableRow className={tableRow}>
               {columnNames.map((name) => {
                 const active = orderBy === name
                 // console.log('DataTable ', { name, orderBy, active })
@@ -129,11 +122,12 @@ export const DataTable = ({
                   </TableCell>
                 )
               })}
-            </StyledTableRow>
+            </TableRow>
           </TableHead>
           <TableBody>
             {data.sort(getComparator(order, orderBy)).map((row) => (
-              <StyledTableRow
+              <TableRow
+                className={tableRow}
                 key={
                   uniqueKeyCombo ?
                     uniqueKeyCombo.map((key) => row[key]).join('/')
@@ -164,11 +158,11 @@ export const DataTable = ({
                     </TableCell>
                   )
                 })}
-              </StyledTableRow>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
       </SimpleBar>
-    </Container>
+    </div>
   )
 }
