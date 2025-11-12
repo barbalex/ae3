@@ -14,7 +14,6 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   }, [src])
 
   const isLoading = placeholderSrc && imgSrc === placeholderSrc
-  const customClass = isLoading ? 'loading' : 'loaded'
 
   /**
    * TODO:
@@ -26,7 +25,7 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
     <img
       {...{ src: imgSrc, ...props }}
       alt={props.alt || ''}
-      className={`image ${customClass} ${img} ${isLoading ? imgLoading : ''}`}
+      className={`${img} ${isLoading ? imgLoading : ''}`}
     />
   )
 }
