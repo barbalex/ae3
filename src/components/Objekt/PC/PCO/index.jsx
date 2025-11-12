@@ -10,37 +10,20 @@ import {
   MdInfoOutline as InfoOutlineIcon,
 } from 'react-icons/md'
 import { sortBy } from 'es-toolkit'
-import styled from '@emotion/styled'
 
 import { PCDescription } from '../../../shared/PCDescription.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { RelationList } from './RelationList/index.jsx'
 import { PropertyList } from './PropertyList.jsx'
 
-const Container = styled.div`
-  margin: 10px 0;
-`
-const StyledCard = styled(Card)`
-  background-color: rgb(255, 243, 224) !important;
-`
-const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-  background-color: #ffcc80;
-`
-const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-`
-const CardActionsButtons = styled.div`
-  display: flex;
-`
-const CardText = styled.div`
-  padding: 5px 16px;
-  column-width: 500px;
-`
+import {
+  container,
+  card,
+  cardActions,
+  cardActionTitle,
+  cardActionsButtons,
+  cardText,
+} from './index.module.css'
 
 export const PcPresentation = ({ pC, stacked }) => {
   const [expanded, setExpanded] = useState(false)
@@ -78,14 +61,15 @@ export const PcPresentation = ({ pC, stacked }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledCard>
-          <StyledCardActions
+      <div className={container}>
+        <Card className={card}>
+          <CardActions
             disableSpacing
             onClick={onClickActions}
+            className={cardActions}
           >
-            <CardActionTitle>{pcname}</CardActionTitle>
-            <CardActionsButtons>
+            <div className={cardActionTitle}>{pcname}</div>
+            <div className={cardActionsButtons}>
               <IconButton
                 data-expanded={pCDescriptionExpanded}
                 aria-expanded={pCDescriptionExpanded}
@@ -108,8 +92,8 @@ export const PcPresentation = ({ pC, stacked }) => {
                   <ExpandMoreIcon />
                 </Icon>
               </IconButton>
-            </CardActionsButtons>
-          </StyledCardActions>
+            </div>
+          </CardActions>
           <Collapse
             in={expanded}
             timeout="auto"
@@ -122,16 +106,16 @@ export const PcPresentation = ({ pC, stacked }) => {
             >
               <PCDescription pC={pC} />
             </Collapse>
-            <CardText>
+            <div className={cardText}>
               <PropertyList
                 propertiesArray={propertiesArray}
                 stacked={stacked}
               />
               {relations?.length > 0 && <RelationList relations={relations} />}
-            </CardText>
+            </div>
           </Collapse>
-        </StyledCard>
-      </Container>
+        </Card>
+      </div>
     </ErrorBoundary>
   )
 }

@@ -1,0 +1,29 @@
+.container {
+  margin: 10px 0;
+}
+
+.card {
+  background-color: rgb(255, 243, 224) !important;
+}
+
+.cardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  height: auto !important;
+  background-color: #ffcc80;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.cardActionsButtons {
+  display: flex;
+}
+
+.cardText {
+  padding: 5px 16px;
+  column-width: 500px;
+}
