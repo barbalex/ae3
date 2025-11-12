@@ -13,6 +13,8 @@ import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
+import {} from './Property.module.css'
+
 const Container = styled.div`
   margin: 12px 10px 12px 2px;
   display: flex;
@@ -22,11 +24,11 @@ const Container = styled.div`
   width: 100%;
 `
 const DeleteButton = styled(IconButton)`
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
+  // :hover {
+  //   font-weight: 700;
+  //   background-color: rgba(0, 0, 0, 0.12);
+  //   text-decoration: none;
+  // }
 `
 
 export const Property = observer(
@@ -97,7 +99,7 @@ export const Property = observer(
             spellCheck="false"
             variant="standard"
           />
-          <DeleteButton
+          <IconButton
             title="Feld löschen"
             aria-label="Feld löschen"
             onClick={onDelete}
@@ -105,7 +107,7 @@ export const Property = observer(
             <Icon>
               <MdClear color="error" />
             </Icon>
-          </DeleteButton>
+          </IconButton>
         </Container>
       </ErrorBoundary>
     )

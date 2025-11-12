@@ -26,16 +26,13 @@ import { Spinner } from '../shared/Spinner.jsx'
 import { constants } from '../../modules/constants.js'
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 10px;
   column-width: ${constants.columnWidth}px;
 `
 const CardEditButton = styled(IconButton)`
   align-self: flex-end;
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
 `
 const StyledFormControl = styled(FormControl)`
   margin: 5px 0 5px 0 !important;
