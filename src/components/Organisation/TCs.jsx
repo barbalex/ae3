@@ -1,6 +1,5 @@
 import { useContext, Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -11,24 +10,7 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-`
-const List = styled.div`
-  column-width: 400px;
-  margin-bottom: 10px;
-  ul {
-    -webkit-margin-before: 0px;
-  }
-`
-const StyledA = styled.a`
-  color: inherit;
-  cursor: pointer;
-  text-decoration-color: rgba(0, 0, 0, 0.3);
-  text-decoration-style: dotted;
-`
+import { container, list, a } from './TCs.module.css'
 
 const tcsQuery = gql`
   query orgTCsQuery($id: UUID!) {
@@ -62,13 +44,14 @@ export const TCs = observer(() => {
     ['name'],
   )
 
-  if (error) return <Container>{`Fehler: ${error.message}`}</Container>
+  if (error)
+    return <div className={container}>{`Fehler: ${error.message}`}</div>
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <Container>
-          <List>
+        <div className={container}>
+          <div className={list}>
             <ul>
               {tcs.map((u) => {
                 const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
@@ -76,18 +59,19 @@ export const TCs = observer(() => {
 
                 return (
                   <li key={u.name}>
-                    <StyledA
+                    <a
                       href={link}
                       target="_blank"
+                      className={a}
                     >
                       {u.name}
-                    </StyledA>
+                    </a>
                   </li>
                 )
               })}
             </ul>
-          </List>
-        </Container>
+          </div>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
