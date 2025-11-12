@@ -3,26 +3,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import { MdLink as LinkIcon } from 'react-icons/md'
-import Icon from '@mui/material/Icon'
-import styled from '@emotion/styled'
 
-const StyledButton = styled(Button)`
-  min-width: 54px !important;
-  max-width: 54px !important;
-  min-height: 48px !important;
-  margin-right: -8px !important;
-  border-radius: 80px !important;
-  :hover {
-    background-color: rgba(0, 0, 0, 0.12);
-  }
-  /*2019 08 20: no idea why suddenly svg is too low*/
-  > span {
-    margin-top: -10px;
-  }
-`
-const StyledLinkIcon = styled(LinkIcon)`
-  color: rgba(0, 0, 0, 0.54);
-`
+import { button, linkIcon } from './LinkMenu.module.css'
 
 const ITEM_HEIGHT = 48
 
@@ -103,18 +85,17 @@ const LinkMenu = ({ objekt }) => {
 
   return (
     <div>
-      <StyledButton
+      <Button
         aria-label="Externe Links"
         title="Externe Links"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIcon}
         color="inherit"
+        className={button}
       >
-        <Icon>
-          <StyledLinkIcon />
-        </Icon>
-      </StyledButton>
+        <LinkIcon className={linkIcon} />
+      </Button>
       <Menu
         id="menu"
         anchorEl={anchorEl}
