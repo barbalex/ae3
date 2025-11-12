@@ -23,25 +23,11 @@ import {
   ul,
 } from './Instructions.module.css'
 
-const EmSpan = styled.span`
-  background-color: #8d8c8c40;
-  padding: 1px 3px;
-  border-radius: 4px;
-`
-const InlineIcon = styled(Icon)`
-  margin-left: 8px;
-`
-const StyledDoneIcon = styled(DoneIcon)`
-  color: green !important;
-`
 const StyledErrorIcon = styled(ErrorIcon)`
   color: red !important;
 `
 const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
   color: orange !important;
-`
-const StyledP = styled.p`
-  margin-top: -5px;
 `
 
 export const PcoInstructions = ({
@@ -99,16 +85,16 @@ export const PcoInstructions = ({
             </div>
             {existsNoDataWithoutKey && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
             {existsNoDataWithoutKey === false && (
               <div>
-                <InlineIcon>
+                <Icon className={inlineIcon}>
                   <StyledErrorIcon />
-                </InlineIcon>
+                </Icon>
               </div>
             )}
           </div>
@@ -119,13 +105,14 @@ export const PcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>id</EmSpan> kann enthalten sein.
+              Ein Feld namens <span className={emSpan}>id</span> kann enthalten
+              sein.
             </div>
             {idsExist && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
             {idsExist === false && (
@@ -138,9 +125,9 @@ export const PcoInstructions = ({
             <div>Wenn nicht, wird eine id erzeugt</div>
             {idsExist === false && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
           </div>
@@ -148,7 +135,7 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>id</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>id</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -160,16 +147,16 @@ export const PcoInstructions = ({
                 </div>
                 {idsAreUuids && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {idsAreUuids === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -177,20 +164,20 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>id</EmSpan> muss eindeutig sein
+                  <span className={emSpan}>id</span> muss eindeutig sein
                 </div>
                 {idsAreUnique && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {idsAreUnique === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -200,20 +187,21 @@ export const PcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>objectId</EmSpan> muss enthalten sein
+              Ein Feld namens <span className={emSpan}>objectId</span> muss
+              enthalten sein
             </div>
             {objectIdsExist && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
             {objectIdsExist === false && (
               <div>
-                <InlineIcon>
+                <Icon className={inlineIcon}>
                   <StyledErrorIcon />
-                </InlineIcon>
+                </Icon>
               </div>
             )}
           </div>
@@ -221,7 +209,7 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectId</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>objectId</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -233,16 +221,16 @@ export const PcoInstructions = ({
                 </div>
                 {objectIdsAreUuid && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {objectIdsAreUuid === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -250,28 +238,29 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>objectId</EmSpan> muss <EmSpan>id</EmSpan> eines
-                  Objekts aus arteigenschaften.ch sein
+                  <span className={emSpan}>objectId</span> muss{' '}
+                  <span className={emSpan}>id</span> eines Objekts aus
+                  arteigenschaften.ch sein
                 </div>
                 {objectIdsAreReal && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {objectIdsAreReal === false && !objectIdsAreRealNotTested && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
                 {objectIdsAreRealNotTested && (
                   <>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledInfoOutlineIcon />
-                    </InlineIcon>
+                    </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
@@ -285,14 +274,15 @@ export const PcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens <EmSpan>propertyCollectionOfOrigin</EmSpan> kann
+              Ein Feld namens{' '}
+              <span className={emSpan}>propertyCollectionOfOrigin</span> kann
               enthalten sein.
             </div>
             {pCOfOriginIdsExist && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
             {pCOfOriginIdsExist === false && (
@@ -318,7 +308,8 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>propertyCollectionOfOrigin</EmSpan> muss gültige{' '}
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -330,16 +321,16 @@ export const PcoInstructions = ({
                 </div>
                 {pCOfOriginIdsAreUuid && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {pCOfOriginIdsAreUuid === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -347,30 +338,30 @@ export const PcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <EmSpan>propertyCollectionOfOrigin</EmSpan> muss{' '}
-                  <EmSpan>id</EmSpan> einer Eigenschaften-Sammlung aus
-                  arteigenschaften.ch sein
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  muss <span className={emSpan}>id</span> einer
+                  Eigenschaften-Sammlung aus arteigenschaften.ch sein
                 </div>
                 {pCOfOriginIdsAreReal && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {pCOfOriginIdsAreReal === false &&
                   !pCOfOriginIdsAreRealNotTested && (
                     <div>
-                      <InlineIcon>
+                      <Icon className={inlineIcon}>
                         <StyledErrorIcon />
-                      </InlineIcon>
+                      </Icon>
                     </div>
                   )}
                 {pCOfOriginIdsAreRealNotTested && (
                   <>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledInfoOutlineIcon />
-                    </InlineIcon>
+                    </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
@@ -382,7 +373,7 @@ export const PcoInstructions = ({
           </ul>
         </li>
       </ul>
-      <StyledP>Alle weiteren Felder sind Eigenschaften des Objekts:</StyledP>
+      <p className={p}>Alle weiteren Felder sind Eigenschaften des Objekts:</p>
       <h4 className={h4}>Eigenschaften</h4>
       <ul className={ul}>
         <li>
@@ -390,16 +381,16 @@ export const PcoInstructions = ({
             <div>Es gibt mindestens eine Eigenschaft</div>
             {existsPropertyKey && (
               <div>
-                <InlineIcon>
-                  <StyledDoneIcon />
-                </InlineIcon>
+                <Icon className={inlineIcon}>
+                  <DoneIcon className={doneIcon} />
+                </Icon>
               </div>
             )}
             {existsPropertyKey === false && (
               <div>
-                <InlineIcon>
+                <Icon className={inlineIcon}>
                   <StyledErrorIcon />
-                </InlineIcon>
+                </Icon>
               </div>
             )}
           </div>
@@ -412,16 +403,16 @@ export const PcoInstructions = ({
                 <div>{'"'}</div>
                 {propertyKeysDontContainApostroph && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {propertyKeysDontContainApostroph === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -431,16 +422,16 @@ export const PcoInstructions = ({
                 <div>\</div>
                 {propertyKeysDontContainBackslash && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {propertyKeysDontContainBackslash === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -455,16 +446,16 @@ export const PcoInstructions = ({
                 <div>{'"'}</div>
                 {propertyValuesDontContainApostroph && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {propertyValuesDontContainApostroph === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
@@ -474,16 +465,16 @@ export const PcoInstructions = ({
                 <div>\</div>
                 {propertyValuesDontContainBackslash && (
                   <div>
-                    <InlineIcon>
-                      <StyledDoneIcon />
-                    </InlineIcon>
+                    <Icon className={inlineIcon}>
+                      <DoneIcon className={doneIcon} />
+                    </Icon>
                   </div>
                 )}
                 {propertyValuesDontContainBackslash === false && (
                   <div>
-                    <InlineIcon>
+                    <Icon className={inlineIcon}>
                       <StyledErrorIcon />
-                    </InlineIcon>
+                    </Icon>
                   </div>
                 )}
               </div>
