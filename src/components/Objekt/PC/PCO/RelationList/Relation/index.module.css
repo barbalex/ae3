@@ -1,0 +1,9 @@
+.container {
+  padding-bottom: 7px;
+  column-width: 500px;
+
+  .property p {
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
+}

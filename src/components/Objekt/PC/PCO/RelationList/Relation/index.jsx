@@ -1,18 +1,9 @@
-import styled from '@emotion/styled'
-
 import { PropertyReadOnly } from '../../../../../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { PropertyList } from './PropertyList.jsx'
 import { getUrlForObject } from '../../../../../../modules/getUrlForObject.js'
 
-const Container = styled.div`
-  padding-bottom: 7px;
-  column-width: 500px;
-  .property p {
-    margin-top: 1px;
-    margin-bottom: 1px;
-  }
-`
+import { container } from './index.module.css'
 
 export const Relation = ({ relation, intermediateRelation }) => {
   // never pass null to Object.entries!!!
@@ -24,7 +15,8 @@ export const Relation = ({ relation, intermediateRelation }) => {
     .replace('LEBENSRAUM', 'Lebensraum')
 
   return (
-    <Container
+    <div
+      className={container}
       style={{
         borderBottom: intermediateRelation ? '1px solid #c6c6c6' : 'none',
         paddingTop: intermediateRelation ? 0 : 7,
@@ -46,6 +38,6 @@ export const Relation = ({ relation, intermediateRelation }) => {
         )}
         {properties && <PropertyList properties={properties} />}
       </ErrorBoundary>
-    </Container>
+    </div>
   )
 }
