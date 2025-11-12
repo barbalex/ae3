@@ -149,6 +149,7 @@ export const AppBar = observer(() => {
                 <div className={titleContainer}>
                   <Button
                     className={siteTitle}
+                    color="inherit"
                     variant="text"
                     component={Link}
                     to="/"
@@ -163,6 +164,7 @@ export const AppBar = observer(() => {
                   <Button
                     className={button}
                     onClick={onClickColumnButtonData}
+                    color="inherit"
                     style={{
                       border:
                         pathArray[0] === 'Daten' || pathArray.length === 0 ?
@@ -177,6 +179,7 @@ export const AppBar = observer(() => {
                   <Button
                     className={button}
                     onClick={onClickColumnButtonExport}
+                    color="inherit"
                     style={{
                       border: pathname === '/Export' ? '1px solid' : 'none',
                     }}
@@ -203,6 +206,7 @@ export const AppBar = observer(() => {
                   <Button
                     className={button}
                     onClick={onClickColumnButtonDocs}
+                    color="inherit"
                     style={{
                       border:
                         pathname.includes('/Dokumentation') ? '1px solid' : (

@@ -4,34 +4,18 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import { MdMoreVert as MoreVertIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router'
 
 import relations from '../../../modules/relations.png'
+import { moreVertIcon, button, version } from './MoreMenu.module.css'
 
-const StyledMoreVertIcon = styled(MoreVertIcon)`
-  color: white !important;
-`
-const StyledButton = styled(Button)`
-  min-width: 50px !important;
-  margin-right: -8px !important;
-  min-height: 36px;
-  :hover {
-    background-color: rgba(0, 0, 0, 0.12);
-  }
-  /*2019 08 20: no idea why height suddenly is too small*/
-  span {
-    height: 36px;
-  }
-`
-const Version = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.5);
-  user-select: none;
-`
-// const TwoLineMenuItem = styled(MenuItem)`
-//   line-height: 1.3 !important;
-// `
+// https://mui.com/material-ui/react-menu/#customization
+const StyledButton = styled((props) => <Button {...props} />)(() => ({
+  '& .MuiButton-root': {
+    '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.12)' },
+  },
+}))
 
 const ITEM_HEIGHT = 48
 const paperProps = { style: { maxHeight: ITEM_HEIGHT * 7 } }
@@ -86,9 +70,11 @@ export const MoreMenu = () => {
         aria-haspopup="true"
         onClick={onClickButton}
         title="Mehr..."
+        className={button}
+        color="inherit"
       >
         <Icon>
-          <StyledMoreVertIcon />
+          <MoreVertIcon className={moreVertIcon} />
         </Icon>
       </StyledButton>
       <Menu
@@ -119,7 +105,7 @@ export const MoreMenu = () => {
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <Version>Version: 3.1.33 vom 9.11.2025</Version>
+        <div className={version}>Version: 3.1.33 vom 9.11.2025</div>
       </Menu>
     </div>
   )

@@ -39,9 +39,6 @@
   min-width: 40px !important;
   max-width: 40px;
   padding-top: 0 !important;
-  .MuiIcon-root {
-    height: 30px;
-  }
 }
 
 .shareIcon {
