@@ -7,29 +7,22 @@ import {
 } from 'react-icons/md'
 
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import {
+  h3,
+  firstTitle,
+  howToImportContainer,
+  h4,
+  liContainer,
+  emSpan,
+  inlineIcon,
+  inlineDiv,
+  doneIcon,
+  errorIcon,
+  infoOutlineIcon,
+  p,
+  ul,
+} from './Instructions.module.css'
 
-const StyledH3 = styled.h3`
-  margin-left: 8px;
-  margin-bottom: 10px;
-`
-const FirstTitle = styled(StyledH3)`
-  padding-top: 10px;
-`
-const HowToImportContainer = styled.div`
-  column-width: 500px;
-  padding: 0 8px 0 8px;
-  ul {
-    padding-left: 20px;
-  }
-`
-const StyledH4 = styled.h4`
-  margin: 0;
-`
-const LiContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  break-inside: avoid;
-`
 const EmSpan = styled.span`
   background-color: #8d8c8c40;
   padding: 1px 3px;
@@ -37,10 +30,6 @@ const EmSpan = styled.span`
 `
 const InlineIcon = styled(Icon)`
   margin-left: 8px;
-`
-const InlineDiv = styled.div`
-  margin-left: 8px;
-  font-style: italic;
 `
 const StyledDoneIcon = styled(DoneIcon)`
   color: green !important;
@@ -53,17 +42,6 @@ const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
 `
 const StyledP = styled.p`
   margin-top: -5px;
-`
-const StyledUl = styled.ul`
-  ul {
-    margin-top: 0;
-  }
-  li {
-    margin-bottom: 0;
-  }
-  li:last-of-type {
-    margin-bottom: 5px;
-  }
 `
 
 export const PcoInstructions = ({
@@ -86,32 +64,34 @@ export const PcoInstructions = ({
   propertyValuesDontContainBackslash,
 }) => (
   <>
-    <FirstTitle>Anforderungen an zu importierende Eigenschaften</FirstTitle>
-    <HowToImportContainer>
-      <StyledH4>Autorenrechte</StyledH4>
-      <StyledUl>
+    <h3 className={firstTitle}>
+      Anforderungen an zu importierende Eigenschaften
+    </h3>
+    <div className={howToImportContainer}>
+      <h4 className={h4}>Autorenrechte</h4>
+      <ul className={ul}>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>
               Die Autoren müssen mit der Veröffentlichung einverstanden sein
             </div>
-          </LiContainer>
+          </div>
         </li>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>Dafür verantwortlich ist, wer Daten importiert</div>
-          </LiContainer>
+          </div>
         </li>
-      </StyledUl>
-      <StyledH4>Tabelle</StyledH4>
-      <StyledUl>
+      </ul>
+      <h4 className={h4}>Tabelle</h4>
+      <ul className={ul}>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>Die erste Zeile enthält Feld-Namen (= Spalten-Titel)</div>
-          </LiContainer>
+          </div>
         </li>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>
               Jeder Wert hat einen Feld-Namen.
               <br />
@@ -131,13 +111,13 @@ export const PcoInstructions = ({
                 </InlineIcon>
               </div>
             )}
-          </LiContainer>
+          </div>
         </li>
-      </StyledUl>
-      <StyledH4>Zuordnungs-Felder</StyledH4>
-      <StyledUl>
+      </ul>
+      <h4 className={h4}>Zuordnungs-Felder</h4>
+      <ul className={ul}>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>
               Ein Feld namens <EmSpan>id</EmSpan> kann enthalten sein.
             </div>
@@ -150,11 +130,11 @@ export const PcoInstructions = ({
             )}
             {idsExist === false && (
               <div>
-                <InlineDiv>(ist nicht)</InlineDiv>
+                <div className={inlineDiv}>(ist nicht)</div>
               </div>
             )}
-          </LiContainer>
-          <LiContainer>
+          </div>
+          <div className={liContainer}>
             <div>Wenn nicht, wird eine id erzeugt</div>
             {idsExist === false && (
               <div>
@@ -163,10 +143,10 @@ export const PcoInstructions = ({
                 </InlineIcon>
               </div>
             )}
-          </LiContainer>
+          </div>
           <ul>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>id</EmSpan> muss gültige{' '}
                   <a
@@ -192,10 +172,10 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>id</EmSpan> muss eindeutig sein
                 </div>
@@ -213,12 +193,12 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
           </ul>
         </li>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>
               Ein Feld namens <EmSpan>objectId</EmSpan> muss enthalten sein
             </div>
@@ -236,10 +216,10 @@ export const PcoInstructions = ({
                 </InlineIcon>
               </div>
             )}
-          </LiContainer>
+          </div>
           <ul>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>objectId</EmSpan> muss gültige{' '}
                   <a
@@ -265,10 +245,10 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>objectId</EmSpan> muss <EmSpan>id</EmSpan> eines
                   Objekts aus arteigenschaften.ch sein
@@ -292,18 +272,18 @@ export const PcoInstructions = ({
                     <InlineIcon>
                       <StyledInfoOutlineIcon />
                     </InlineIcon>
-                    <InlineDiv>
+                    <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
-                    </InlineDiv>
+                    </div>
                   </>
                 )}
-              </LiContainer>
+              </div>
             </li>
           </ul>
         </li>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>
               Ein Feld namens <EmSpan>propertyCollectionOfOrigin</EmSpan> kann
               enthalten sein.
@@ -317,11 +297,11 @@ export const PcoInstructions = ({
             )}
             {pCOfOriginIdsExist === false && (
               <div>
-                <InlineDiv>(ist nicht)</InlineDiv>
+                <div className={inlineDiv}>(ist nicht)</div>
               </div>
             )}
-          </LiContainer>
-          <LiContainer>
+          </div>
+          <div className={liContainer}>
             <div>
               Zweck: In zusammenfassenden Eigenschaften-Sammlungen markieren,
               aus welcher Eigenschaften-Sammlung diese Eigenschaften stammen.{' '}
@@ -333,10 +313,10 @@ export const PcoInstructions = ({
                 Mehr Infos
               </a>
             </div>
-          </LiContainer>
+          </div>
           <ul>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>propertyCollectionOfOrigin</EmSpan> muss gültige{' '}
                   <a
@@ -362,10 +342,10 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>
                   <EmSpan>propertyCollectionOfOrigin</EmSpan> muss{' '}
                   <EmSpan>id</EmSpan> einer Eigenschaften-Sammlung aus
@@ -391,22 +371,22 @@ export const PcoInstructions = ({
                     <InlineIcon>
                       <StyledInfoOutlineIcon />
                     </InlineIcon>
-                    <InlineDiv>
+                    <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
-                    </InlineDiv>
+                    </div>
                   </>
                 )}
-              </LiContainer>
+              </div>
             </li>
           </ul>
         </li>
-      </StyledUl>
+      </ul>
       <StyledP>Alle weiteren Felder sind Eigenschaften des Objekts:</StyledP>
-      <StyledH4>Eigenschaften</StyledH4>
-      <StyledUl>
+      <h4 className={h4}>Eigenschaften</h4>
+      <ul className={ul}>
         <li>
-          <LiContainer>
+          <div className={liContainer}>
             <div>Es gibt mindestens eine Eigenschaft</div>
             {existsPropertyKey && (
               <div>
@@ -422,13 +402,13 @@ export const PcoInstructions = ({
                 </InlineIcon>
               </div>
             )}
-          </LiContainer>
+          </div>
         </li>
         <li>
           Feld-Namen dürfen die folgenden Zeichen nicht enthalten:
           <ul>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>{'"'}</div>
                 {propertyKeysDontContainApostroph && (
                   <div>
@@ -444,10 +424,10 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>\</div>
                 {propertyKeysDontContainBackslash && (
                   <div>
@@ -463,7 +443,7 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
           </ul>
         </li>
@@ -471,7 +451,7 @@ export const PcoInstructions = ({
           Feld-Werte dürfen die folgenden Zeichen nicht enthalten:
           <ul>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>{'"'}</div>
                 {propertyValuesDontContainApostroph && (
                   <div>
@@ -487,10 +467,10 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
             <li>
-              <LiContainer>
+              <div className={liContainer}>
                 <div>\</div>
                 {propertyValuesDontContainBackslash && (
                   <div>
@@ -506,12 +486,12 @@ export const PcoInstructions = ({
                     </InlineIcon>
                   </div>
                 )}
-              </LiContainer>
+              </div>
             </li>
           </ul>
         </li>
-      </StyledUl>
-      <StyledH3>Wirkung des Imports auf bereits vorhandene Daten</StyledH3>
+      </ul>
+      <h3 className={h3}>Wirkung des Imports auf bereits vorhandene Daten</h3>
       <ul>
         <li>
           Enthält die Eigenschaften-Sammlung bereits einen Datensatz für ein
@@ -523,6 +503,6 @@ export const PcoInstructions = ({
           Datensatz, wird er neu importiert.
         </li>
       </ul>
-    </HowToImportContainer>
+    </div>
   </>
 )
