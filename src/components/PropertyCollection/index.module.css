@@ -1,0 +1,26 @@
+.container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardEditButton {
+  align-self: flex-end;
+}
+
+.formControl {
+  margin: 10px 0 5px 0 !important;
+}
+
+.labelClass {
+  height: 30px;
+  min-height: 30px;
+  > span {
+    font-weight: 500;
+    line-height: 1em;
+  }
+}
+
+.a {
+  color: rgba(0, 0, 0, 0.54);
+}

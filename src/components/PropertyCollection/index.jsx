@@ -1,7 +1,6 @@
 import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -11,7 +10,6 @@ import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -25,33 +23,13 @@ import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-`
-const CardEditButton = styled(IconButton)`
-  align-self: flex-end;
-  :hover {
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-  }
-`
-const StyledFormControl = styled(FormControl)`
-  margin: 10px 0 5px 0 !important;
-`
-const StyledLabel = styled(FormControlLabel)`
-  height: 30px;
-  min-height: 30px;
-  > span {
-    font-weight: 500;
-    line-height: 1em;
-  }
-`
-const StyledA = styled.a`
-  color: rgba(0, 0, 0, 0.54);
-`
+import {
+  container,
+  cardEditButton,
+  formControl,
+  labelClass,
+  a,
+} from './index.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -201,37 +179,35 @@ export const PropertyCollection = observer(() => {
     })
 
   if (pcError) {
-    return <Container>{`Fehler: ${pcError.message}`}</Container>
+    return <div className={container}>{`Fehler: ${pcError.message}`}</div>
   }
   if (allUsersError) {
-    return <Container>{`Fehler: ${allUsersError.message}`}</Container>
+    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
   }
 
   return (
     <ErrorBoundary>
-      <Container>
-        <Suspense fallback={<Container>Lade Daten...</Container>}>
+      <div className={container}>
+        <Suspense fallback={<div className={container}>Lade Daten...</div>}>
           {userIsThisPCWriter && editingPCs && (
-            <CardEditButton
+            <IconButton
+              className={cardEditButton}
               aria-label="Daten anzeigen"
               title="Daten anzeigen"
               onClick={onClickStopEditing}
             >
-              <Icon>
-                <ViewIcon />
-              </Icon>
-            </CardEditButton>
+              <ViewIcon />
+            </IconButton>
           )}
           {userIsThisPCWriter && !editingPCs && (
-            <CardEditButton
+            <IconButton
+              className={cardEditButton}
               aria-label="Daten bearbeiten"
               title="Daten bearbeiten"
               onClick={onClickStartEditing}
             >
-              <Icon>
-                <EditIcon />
-              </Icon>
-            </CardEditButton>
+              <EditIcon />
+            </IconButton>
           )}
           {!editingPCs && (
             <>
@@ -378,8 +354,12 @@ export const PropertyCollection = observer(() => {
                   </>
                 }
               />
-              <StyledFormControl variant="standard">
-                <StyledLabel
+              <FormControl
+                className={formControl}
+                variant="standard"
+              >
+                <FormControlLabel
+                  className={labelClass}
                   control={
                     <Checkbox
                       color="primary"
@@ -404,17 +384,18 @@ export const PropertyCollection = observer(() => {
                   <br />
                   <span>
                     Mehr infos{' '}
-                    <StyledA
+                    <a
+                      className={a}
                       href="https://github.com/barbalex/ae3#zusammenfassende-eigenschaften-sammlungen"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       hier
-                    </StyledA>
+                    </a>
                     .
                   </span>
                 </FormHelperText>
-              </StyledFormControl>
+              </FormControl>
               <DateField
                 key={`${pC.id}/lastUpdated`}
                 name="lastUpdated"
@@ -441,7 +422,10 @@ export const PropertyCollection = observer(() => {
                   </>
                 }
               />
-              <StyledFormControl variant="standard">
+              <FormControl
+                className={formControl}
+                variant="standard"
+              >
                 <InputLabel htmlFor="organizationIdArten">
                   Zuständige Organisation
                 </InputLabel>
@@ -460,8 +444,11 @@ export const PropertyCollection = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
-              <StyledFormControl variant="standard">
+              </FormControl>
+              <FormControl
+                className={formControl}
+                variant="standard"
+              >
                 <InputLabel htmlFor="importedByArten">
                   Importiert von
                 </InputLabel>
@@ -480,7 +467,7 @@ export const PropertyCollection = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
+              </FormControl>
               <Property
                 key={`${pC.id}/termsOfUse`}
                 label="Nutzungs-Bedingungen"
@@ -513,7 +500,7 @@ export const PropertyCollection = observer(() => {
             </>
           )}
         </Suspense>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
