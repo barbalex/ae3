@@ -7,6 +7,7 @@ import {
 } from 'react-icons/md'
 
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import {} from './Instructions.module.css'
 
 const StyledUl = styled.ul`
   ul {
@@ -23,7 +24,9 @@ const StyledH3 = styled.h3`
   margin-left: 8px;
   margin-bottom: 10px;
 `
-const FirstTitle = styled(StyledH3)`
+const FirstTitle = styled.h3`
+  margin-left: 8px;
+  margin-bottom: 10px;
   padding-top: 10px;
 `
 const HowToImportContainer = styled.div`

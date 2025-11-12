@@ -1,0 +1,72 @@
+.ul {
+  ul {
+    margin-top: 0;
+  }
+  li {
+    margin-bottom: 0;
+  }
+  li:last-of-type {
+    margin-bottom: 5px;
+  }
+}
+
+.h3 {
+  margin-left: 8px;
+  margin-bottom: 10px;
+}
+
+.firstTitle {
+  margin-left: 8px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+}
+
+.howToImportContainer {
+  column-width: 500px;
+  padding: 0 8px 0 8px;
+  > ul {
+    padding-left: 20px;
+  }
+}
+
+.h4 {
+  margin: 0;
+}
+
+.liContainer {
+  display: flex;
+  flex-wrap: wrap;
+  break-inside: avoid;
+}
+
+.emSpan {
+  background-color: #8d8c8c40;
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+
+.inlineIcon {
+  margin-left: 8px;
+}
+
+.inlineDiv {
+  margin-left: 8px;
+  font-style: italic;
+}
+
+.doneIcon {
+  color: green !important;
+}
+
+.errorIcon {
+  color: red !important;
+}
+
+.infoOutlineIcon {
+  color: orange !important;
+}
+
+.p {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
