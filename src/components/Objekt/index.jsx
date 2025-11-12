@@ -64,20 +64,11 @@ export const Objekt = observer(({ stacked = false }) => {
   const propertyCollectionObjectsOfSynonyms =
     getPropertyCollectionObjectsOfSynonyms({ synonymObjects, pcsIds })
 
-  // if (!objekt) return <div />
-
   if (objectError) {
     return (
       <div className={errorContainer}>{`Fehler: ${objectError.message}`}</div>
     )
   }
-
-  // console.log('hello Objekt', {
-  //   objekt,
-  //   pcs,
-  //   synonymPcs,
-  //   synonyms,
-  // })
 
   return (
     <ErrorBoundary>
