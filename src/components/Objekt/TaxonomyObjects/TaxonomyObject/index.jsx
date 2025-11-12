@@ -45,7 +45,6 @@ import {
   cardActionsButtons,
   cardActionTitle,
   cardContent,
-  button,
 } from './index.module.css'
 
 const organizationUsersQuery = gql`
