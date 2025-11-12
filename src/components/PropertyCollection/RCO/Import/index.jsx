@@ -1,5 +1,4 @@
 import { useState, useReducer, useContext, useMemo } from 'react'
-import styled from '@emotion/styled'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
@@ -20,66 +19,15 @@ import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  .react-grid-Container {
-    font-size: small;
-  }
-  .react-grid-Header {
-  }
-  .react-grid-HeaderRow {
-    overflow: hidden;
-  }
-  .react-grid-HeaderCell:not(:first-of-type) {
-    border-left: #c7c7c7 solid 1px !important;
-  }
-  .react-grid-HeaderCell__draggable {
-    right: 16px !important;
-  }
-  .react-grid-Cell {
-    border: #ddd solid 1px !important;
-  }
-`
-const DropzoneContainer = styled.div`
-  padding: 10px 8px;
-  div {
-    width: 100% !important;
-    height: 124px !important;
-    cursor: pointer;
-  }
-`
-const DropzoneDiv = styled.div`
-  padding: 8px;
-  border-width: 2px;
-  border-color: rgb(102, 102, 102);
-  border-style: dashed;
-  border-radius: 5px;
-`
-const DropzoneDivActive = styled(DropzoneDiv)`
-  background-color: rgba(255, 224, 178, 0.2);
-`
-const StyledButton = styled(Button)`
-  border: 1px solid !important;
-  margin: 8px 8px 16px 8px !important;
-  background-image: ${(props) =>
-    `linear-gradient(to right, #4caf50 ${props.completed * 100}%, transparent ${
-      props.completed * 100
-    }% ${100 - props.completed * 100}%)`} !important;
-`
-const TotalDiv = styled.div`
-  font-size: small;
-  padding-left: 9px;
-  margin-top: 8px;
-`
-const StyledSnackbar = styled(Snackbar)`
-  div {
-    min-width: auto;
-    background-color: #2e7d32 !important;
-  }
-`
+import {
+  container,
+  dropzoneContainer,
+  dropzone,
+  dropzoneActive,
+  button,
+  total,
+  snackbar,
+} from './index.module.css'
 
 const importRcoQuery = gql`
   query rCOQuery(
@@ -452,16 +400,18 @@ export const ImportRco = observer(({ setImport }) => {
     setImporting(false)
   }
 
+  const completedFraction = imported / importData.length
+
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <Container>
+      <div className={container}>
         <RcoInstructions
           objectIdsAreReal={objectIdsAreReal}
           objectRelationIdsAreReal={objectRelationIdsAreReal}
           {...checkState}
         />
         {!importing && (
-          <DropzoneContainer>
+          <div className={dropzoneContainer}>
             <Dropzone
               onDrop={onDrop}
               types={[
@@ -489,18 +439,27 @@ export const ImportRco = observer(({ setImport }) => {
               }) => {
                 if (isDragActive)
                   return (
-                    <DropzoneDivActive {...getRootProps()}>
+                    <div
+                      className={dropzoneActive}
+                      {...getRootProps()}
+                    >
                       Hier fallen lassen
-                    </DropzoneDivActive>
+                    </div>
                   )
                 if (isDragReject)
                   return (
-                    <DropzoneDivActive {...getRootProps()}>
+                    <div
+                      className={dropzoneActive}
+                      {...getRootProps()}
+                    >
                       njet!
-                    </DropzoneDivActive>
+                    </div>
                   )
                 return (
-                  <DropzoneDiv {...getRootProps()}>
+                  <div
+                    className={dropzone}
+                    {...getRootProps()}
+                  >
                     <input {...getInputProps()} />
                     Datei hierhin ziehen.
                     <br />
@@ -508,25 +467,31 @@ export const ImportRco = observer(({ setImport }) => {
                     <br />
                     <br />
                     Akzeptierte Formate: xlsx, xls, csv, ods, dbf, dif
-                  </DropzoneDiv>
+                  </div>
                 )
               }}
             </Dropzone>
-          </DropzoneContainer>
+          </div>
         )}
         {showImportButton && (
-          <StyledButton
+          <Button
             onClick={onClickImport}
             completed={imported / importData.length}
             disabled={importing}
             color="inherit"
+            style={{
+              backgroundImage: `linear-gradient(to right, #4caf50 ${completedFraction * 100}%, transparent ${
+                completedFraction * 100
+              }% ${100 - completedFraction * 100}%)`,
+            }}
+            className={button}
           >
             {importing ? `${imported} importiert` : 'importieren'}
-          </StyledButton>
+          </Button>
         )}
         {showPreview && (
           <>
-            <TotalDiv>
+            <div className={total}>
               {`${importData.length.toLocaleString(
                 'de-CH',
               )} Datensätze, ${propertyFields.length.toLocaleString(
@@ -539,7 +504,7 @@ export const ImportRco = observer(({ setImport }) => {
                 setCount={setCount}
               />
               {' :'}
-            </TotalDiv>
+            </div>
             <DataTable
               data={importData.slice(0, count)}
               idKey="objectId"
@@ -555,11 +520,12 @@ export const ImportRco = observer(({ setImport }) => {
             />
           </>
         )}
-        <StyledSnackbar
+        <Snackbar
           open={isLoading}
           message="lade Daten..."
+          className={snackbar}
         />
-      </Container>
+      </div>
     </SimpleBar>
   )
 })
