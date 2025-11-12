@@ -2,9 +2,7 @@ import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdClear } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { omit } from 'es-toolkit'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -13,23 +11,7 @@ import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import {} from './Property.module.css'
-
-const Container = styled.div`
-  margin: 12px 10px 12px 2px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-`
-const DeleteButton = styled(IconButton)`
-  // :hover {
-  //   font-weight: 700;
-  //   background-color: rgba(0, 0, 0, 0.12);
-  //   text-decoration: none;
-  // }
-`
+import { container } from './Property.module.css'
 
 export const Property = observer(
   ({ id, properties: propertiesPrevious, field: key }) => {
@@ -85,7 +67,7 @@ export const Property = observer(
 
     return (
       <ErrorBoundary>
-        <Container>
+        <div className={container}>
           <TextField
             label={key}
             value={value}
@@ -106,7 +88,7 @@ export const Property = observer(
           >
             <MdClear color="error" />
           </IconButton>
-        </Container>
+        </div>
       </ErrorBoundary>
     )
   },
