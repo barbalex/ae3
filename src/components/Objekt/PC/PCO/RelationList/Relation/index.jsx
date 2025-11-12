@@ -6,10 +6,6 @@ import { PropertyList } from './PropertyList.jsx'
 import { getUrlForObject } from '../../../../../../modules/getUrlForObject.js'
 
 const Container = styled.div`
-  border-bottom: ${(props) =>
-    `${props['data-intermediaterelation'] ? '1px solid #c6c6c6' : 'none'}`};
-  padding-top: ${(props) =>
-    `${props['data-intermediaterelation'] ? 0 : '7px'}`};
   padding-bottom: 7px;
   column-width: 500px;
   .property p {
@@ -28,7 +24,12 @@ export const Relation = ({ relation, intermediateRelation }) => {
     .replace('LEBENSRAUM', 'Lebensraum')
 
   return (
-    <Container data-intermediaterelation={intermediateRelation}>
+    <Container
+      style={{
+        borderBottom: intermediateRelation ? '1px solid #c6c6c6' : 'none',
+        paddingTop: intermediateRelation ? 0 : 7,
+      }}
+    >
       <ErrorBoundary>
         <PropertyReadOnly
           value={`${
