@@ -1,16 +1,10 @@
-import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
 import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 0.9em;
-  padding: 13px 16px;
-  background-color: #ffe0b2;
-`
+import { container } from './PCDescription.module.css'
+
 const linkifyProperties = {
   target: '_blank',
   style: {
@@ -30,7 +24,7 @@ export const PCDescription = ({ pC }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <Container>
+        <div className={container}>
           {pC.description && (
             <PropertyReadOnly
               label="Beschreibung"
@@ -75,7 +69,7 @@ export const PCDescription = ({ pC }) => {
               value={organizationName}
             />
           )}
-        </Container>
+        </div>
       </Linkify>
     </ErrorBoundary>
   )
