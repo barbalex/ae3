@@ -58,9 +58,6 @@ const StyledCardActions = styled(CardActions)`
 const CardActionsButtons = styled.div`
   display: flex;
 `
-const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
 const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -224,16 +221,16 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                     {taxExpanded && <InfoIcon />}
                   </Icon>
                 </IconButton>
-                <CardActionIconButton
-                  data-expanded={expanded}
+                <IconButton
                   aria-expanded={expanded}
                   aria-label="Show more"
                   title={expanded ? 'Taxonomie schliessen' : 'Taxonomie öffnen'}
+                  style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
                 >
                   <Icon>
                     <ExpandMoreIcon />
                   </Icon>
-                </CardActionIconButton>
+                </IconButton>
               </CardActionsButtons>
             </StyledCardActions>
             <Collapse
