@@ -27,18 +27,6 @@ import {
   buttonLoading,
 } from './index.module.css'
 
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const ExportButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const MutationButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
 const StyledButton = styled(Button)`
   margin: 5px !important;
   ${(props) => props['data-loading'] && `font-style: italic;`}
@@ -370,8 +358,8 @@ export const RCO = observer(() => {
               order={sortDirection}
               uniqueKeyCombo={['Objekt ID', 'Beziehung ID']}
             />
-            <ButtonsContainer>
-              <ExportButtons>
+            <div className={buttonsContainer}>
+              <div className={exportButtons}>
                 <StyledButton
                   onClick={onClickXlsx}
                   variant="outlined"
@@ -388,9 +376,9 @@ export const RCO = observer(() => {
                 >
                   csv exportieren
                 </StyledButton>
-              </ExportButtons>
+              </div>
               {userIsWriter && (
-                <MutationButtons>
+                <div className={mutationButtons}>
                   <StyledButton
                     onClick={onClickImport}
                     variant="outlined"
@@ -406,9 +394,9 @@ export const RCO = observer(() => {
                   >
                     Daten löschen
                   </StyledButton>
-                </MutationButtons>
+                </div>
               )}
-            </ButtonsContainer>
+            </div>
           </>
         )}
         {showImportRco && <ImportRco setImport={setImport} />}
