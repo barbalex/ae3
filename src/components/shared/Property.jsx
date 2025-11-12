@@ -73,7 +73,7 @@ export const Property = observer(
     }
 
     const onDelete = async () => {
-      const properties = omit(propertiesPrevious, key)
+      const properties = omit(propertiesPrevious, [key])
       await apolloClient.mutate({
         mutation: updatePropertyMutation,
         variables: { properties: JSON.stringify(properties), id },
@@ -104,9 +104,7 @@ export const Property = observer(
             aria-label="Feld löschen"
             onClick={onDelete}
           >
-            <Icon>
-              <MdClear color="error" />
-            </Icon>
+            <MdClear color="error" />
           </IconButton>
         </Container>
       </ErrorBoundary>
