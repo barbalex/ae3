@@ -1,5 +1,4 @@
 import { useState, useContext, useMemo, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
@@ -26,20 +25,6 @@ import {
   button,
   buttonLoading,
 } from './index.module.css'
-
-const StyledButton = styled(Button)`
-  margin: 5px !important;
-  ${(props) => props['data-loading'] && `font-style: italic;`}
-  ${(props) =>
-    props['data-loading'] && `animation: blinker 1s linear infinite;`}
-  ${(props) =>
-    props['data-loading'] && `animation: blinker 1s linear infinite;`}
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
 
 export const rcoQuery = gql`
   query rCOQuery($pCId: UUID!) {
@@ -360,40 +345,40 @@ export const RCO = observer(() => {
             />
             <div className={buttonsContainer}>
               <div className={exportButtons}>
-                <StyledButton
+                <Button
                   onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
-                  data-loading={xlsxExportLoading}
+                  className={`button ${xlsxExportLoading ? buttonLoading : ''}`}
                 >
                   xlsx exportieren
-                </StyledButton>
-                <StyledButton
+                </Button>
+                <Button
                   onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  data-loading={csvExportLoading}
+                  className={`button ${csvExportLoading ? buttonLoading : ''}`}
                 >
                   csv exportieren
-                </StyledButton>
+                </Button>
               </div>
               {userIsWriter && (
                 <div className={mutationButtons}>
-                  <StyledButton
+                  <Button
                     onClick={onClickImport}
                     variant="outlined"
                     color="inherit"
                   >
                     importieren
-                  </StyledButton>
-                  <StyledButton
+                  </Button>
+                  <Button
                     onClick={onClickDelete}
                     variant="outlined"
                     color="inherit"
-                    data-loading={deleteLoading}
+                    className={`button ${deleteLoading ? buttonLoading : ''}`}
                   >
                     Daten löschen
-                  </StyledButton>
+                  </Button>
                 </div>
               )}
             </div>
