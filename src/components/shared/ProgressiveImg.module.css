@@ -1,0 +1,12 @@
+.img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.imgLoading {
+  filter: blur(0px);
+  clip-path: inset(0);
+  transition: filter 0.5s linear;
+}

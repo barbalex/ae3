@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 
-const Img = styled.img`
-  display: block;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  filter: ${(props) => (props.loading ? 'blur(10px)' : 'blur(0px)')};
-  ${(props) => props.loading && 'clip-path: inset(0);'}
-  ${(props) => props.loaded && 'transition: filter 0.5s linear;'}
-`
+import { img, imgLoading } from './ProgressiveImg.module.css'
 
 export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
@@ -22,8 +13,8 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
     }
   }, [src])
 
-  const customClass =
-    placeholderSrc && imgSrc === placeholderSrc ? 'loading' : 'loaded'
+  const isLoading = placeholderSrc && imgSrc === placeholderSrc
+  const customClass = isLoading ? 'loading' : 'loaded'
 
   /**
    * TODO:
@@ -32,11 +23,10 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
    * https://uploadcare.com/docs/delivery/adaptive-delivery/#adaptive-delivery
    */
   return (
-    <Img
+    <img
       {...{ src: imgSrc, ...props }}
       alt={props.alt || ''}
-      className={`image ${customClass}`}
+      className={`image ${customClass} ${img} ${isLoading ? imgLoading : ''}`}
     />
   )
 }
-export default ProgressiveImg
