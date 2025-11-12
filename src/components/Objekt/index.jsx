@@ -1,6 +1,5 @@
 import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import { uniqBy } from 'es-toolkit'
 import { useQuery } from '@apollo/client/react'
 import SimpleBar from 'simplebar-react'
@@ -16,28 +15,13 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  overflow: hidden;
-`
-const Container2 = styled.div`
-  padding: 10px;
-`
-const Title = styled.h3`
-  margin: 15px 0 -5px 0;
-  padding-left: 12px;
-`
-const TitleSpan = styled.span`
-  font-weight: normal;
-  font-size: small;
-  margin-left: 4px;
-`
-const FirstTitle = styled(Title)`
-  margin: 10px 0 5px 0;
-`
-const SynonymTitle = styled(Title)`
-  margin-bottom: 5px;
-`
+import {
+  container,
+  errorContainer,
+  title,
+  titleSpan,
+  firstTitle,
+} from './index.module.css'
 
 const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
   let pCOs = []
@@ -83,7 +67,9 @@ export const Objekt = observer(({ stacked = false }) => {
   // if (!objekt) return <div />
 
   if (objectError) {
-    return <Container2>{`Fehler: ${objectError.message}`}</Container2>
+    return (
+      <div className={errorContainer}>{`Fehler: ${objectError.message}`}</div>
+    )
   }
 
   // console.log('hello Objekt', {
@@ -95,35 +81,35 @@ export const Objekt = observer(({ stacked = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <SimpleBar style={{ maxHeight: '100%' }}>
-          <FirstTitle>Taxonomie</FirstTitle>
+          <h3 className={firstTitle}>Taxonomie</h3>
           <Suspense fallback={<Spinner />}>
             <TaxonomyObject
               objekt={objekt}
               stacked={stacked}
             />
             {synonymObjects.length > 0 && (
-              <SynonymTitle>
+              <h3 className={title}>
                 {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
-                <TitleSpan>
+                <span className={titleSpan}>
                   {synonymObjects.length > 1 ?
                     ` (${synonymObjects.length})`
                   : ''}
-                </TitleSpan>
-              </SynonymTitle>
+                </span>
+              </h3>
             )}
             <TaxonomyObjects
               objects={synonymObjects}
               stacked={stacked}
             />
             {pcs.length > 0 && (
-              <Title>
+              <h3 className={title}>
                 Eigenschaften
-                <TitleSpan>{` (${pcs.length} ${
+                <span className={titleSpan}>{` (${pcs.length} ${
                   pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-                })`}</TitleSpan>
-              </Title>
+                })`}</span>
+              </h3>
             )}
             {pcs.map((pc) => (
               <PC
@@ -135,14 +121,14 @@ export const Objekt = observer(({ stacked = false }) => {
               />
             ))}
             {synonymPcs.length > 0 && (
-              <Title>
+              <h3 className={title}>
                 Eigenschaften von Synonymen
-                <TitleSpan>
+                <span className={titleSpan}>
                   {` (${synonymPcs.length} ${
                     synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
                   })`}
-                </TitleSpan>
-              </Title>
+                </span>
+              </h3>
             )}
             {synonymPcs.map((pc) => (
               <PC
@@ -154,7 +140,7 @@ export const Objekt = observer(({ stacked = false }) => {
             ))}
           </Suspense>
         </SimpleBar>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
