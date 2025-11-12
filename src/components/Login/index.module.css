@@ -1,0 +1,15 @@
+.container {
+  padding: 10px;
+}
+
+.button {
+  border: 1px solid !important;
+  margin-top: 5px;
+}
+
+.snackbar {
+  div {
+    min-width: auto;
+    background-color: #2e7d32 !important;
+  }
+}

@@ -12,7 +12,6 @@ import {
   MdVisibility as VisibilityIcon,
   MdVisibilityOff as VisibilityOffIcon,
 } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
@@ -22,19 +21,7 @@ import { idbContext } from '../../idbContext.js'
 import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  padding: 10px;
-`
-const StyledButton = styled(Button)`
-  border: 1px solid !important;
-  margin-top: 5px;
-`
-const StyledSnackbar = styled(Snackbar)`
-  div {
-    min-width: auto;
-    background-color: #2e7d32 !important;
-  }
-`
+import { container, button, snackbar } from './index.module.css'
 
 const Login = observer(() => {
   const apolloClient = useApolloClient()
@@ -107,7 +94,7 @@ const Login = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         {!token && (
           <FormControl
             fullWidth
@@ -168,20 +155,29 @@ const Login = observer(() => {
             </FormHelperText>
           </FormControl>
         )}
-        {!token && <StyledButton color="inherit">anmelden</StyledButton>}
+        {!token && (
+          <Button
+            className={button}
+            color="inherit"
+          >
+            anmelden
+          </Button>
+        )}
         {!!token && (
-          <StyledButton
+          <Button
+            className={button}
             onClick={onLogout}
             color="inherit"
           >
             abmelden
-          </StyledButton>
+          </Button>
         )}
-        <StyledSnackbar
+        <Snackbar
           open={loginSuccessfull}
           message={`Willkommen ${name}`}
+          className={snackbar}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
