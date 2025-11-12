@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import Icon from '@mui/material/Icon'
 import {
   MdDone as DoneIcon,
@@ -22,13 +21,6 @@ import {
   p,
   ul,
 } from './Instructions.module.css'
-
-const StyledErrorIcon = styled(ErrorIcon)`
-  color: red !important;
-`
-const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
-  color: orange !important;
-`
 
 export const PcoInstructions = ({
   idsExist,
@@ -93,7 +85,7 @@ export const PcoInstructions = ({
             {existsNoDataWithoutKey === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -155,7 +147,7 @@ export const PcoInstructions = ({
                 {idsAreUuids === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -176,7 +168,7 @@ export const PcoInstructions = ({
                 {idsAreUnique === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -200,7 +192,7 @@ export const PcoInstructions = ({
             {objectIdsExist === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -229,7 +221,7 @@ export const PcoInstructions = ({
                 {objectIdsAreUuid === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -252,14 +244,14 @@ export const PcoInstructions = ({
                 {objectIdsAreReal === false && !objectIdsAreRealNotTested && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
                 {objectIdsAreRealNotTested && (
                   <>
                     <Icon className={inlineIcon}>
-                      <StyledInfoOutlineIcon />
+                      <InfoOutlineIcon className={infoOutlineIcon} />
                     </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
@@ -329,7 +321,7 @@ export const PcoInstructions = ({
                 {pCOfOriginIdsAreUuid === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -353,14 +345,14 @@ export const PcoInstructions = ({
                   !pCOfOriginIdsAreRealNotTested && (
                     <div>
                       <Icon className={inlineIcon}>
-                        <StyledErrorIcon />
+                        <ErrorIcon className={errorIcon} />
                       </Icon>
                     </div>
                   )}
                 {pCOfOriginIdsAreRealNotTested && (
                   <>
                     <Icon className={inlineIcon}>
-                      <StyledInfoOutlineIcon />
+                      <InfoOutlineIcon className={infoOutlineIcon} />
                     </Icon>
                     <div className={inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
@@ -389,7 +381,7 @@ export const PcoInstructions = ({
             {existsPropertyKey === false && (
               <div>
                 <Icon className={inlineIcon}>
-                  <StyledErrorIcon />
+                  <ErrorIcon className={errorIcon} />
                 </Icon>
               </div>
             )}
@@ -411,7 +403,7 @@ export const PcoInstructions = ({
                 {propertyKeysDontContainApostroph === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -430,7 +422,7 @@ export const PcoInstructions = ({
                 {propertyKeysDontContainBackslash === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -454,7 +446,7 @@ export const PcoInstructions = ({
                 {propertyValuesDontContainApostroph === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
@@ -473,7 +465,7 @@ export const PcoInstructions = ({
                 {propertyValuesDontContainBackslash === false && (
                   <div>
                     <Icon className={inlineIcon}>
-                      <StyledErrorIcon />
+                      <ErrorIcon className={errorIcon} />
                     </Icon>
                   </div>
                 )}
