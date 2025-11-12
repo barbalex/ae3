@@ -1,9 +1,5 @@
-import styled from '@emotion/styled'
+import { container } from './LazyImportFallback.module.css'
 
-const Container = styled.div`
-  padding: 10px;
-`
-
-const LazyImportFallback = () => <Container>Lade...</Container>
+const LazyImportFallback = () => <div className={container}>Lade...</div>
 
 export default LazyImportFallback
