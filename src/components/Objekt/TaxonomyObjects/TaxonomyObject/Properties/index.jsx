@@ -3,43 +3,23 @@
  * if user is logged in and is orgAdmin or orgTaxonomyWriter
  * and object is not synonym
  * show editing symbol
- * if user klicks it, toggle store > editingTaxonomies
+ * if user clicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { PropertyList } from './PropertyList.jsx'
 import { NewProperty } from '../../../../shared/NewProperty.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 
-const PropertiesTitleContainer = styled.div`
-  display: flex;
-  padding-top: 10px;
-`
-const PropertiesTitleLabel = styled.p`
-  flex-basis: 250px;
-  text-align: right;
-  padding-right: 5px;
-  margin: 3px 0;
-  padding: 2px;
-  color: grey;
-`
-const PropertiesTitleLabelEditing = styled.p`
-  margin: 3px 0;
-  padding-bottom: 2px;
-`
-const PropertiesTitleLabelStacked = styled.p`
-  margin: 3px 0;
-  padding-bottom: 2px;
-  color: grey;
-`
-const PropertiesTitleValue = styled.p`
-  margin: 3px 0;
-  padding: 2px;
-  width: 100%;
-`
+import {
+  titleContainer,
+  titleLabel,
+  titleLabelEditing,
+  titleLabelStacked,
+  titleValue,
+} from './index.module.css'
 
 const Properties = observer(({ id, properties, stacked }) => {
   const store = useContext(storeContext)
@@ -50,18 +30,14 @@ const Properties = observer(({ id, properties, stacked }) => {
   return (
     <>
       {propertiesArray.length > 0 && (
-        <PropertiesTitleContainer>
+        <div className={titleContainer}>
           {editingTaxonomies ?
-            <PropertiesTitleLabelEditing>
-              Eigenschaften:
-            </PropertiesTitleLabelEditing>
+            <p className={titleLabelEditing}>Eigenschaften:</p>
           : stacked ?
-            <PropertiesTitleLabelStacked>
-              Eigenschaften:
-            </PropertiesTitleLabelStacked>
-          : <PropertiesTitleLabel>Eigenschaften:</PropertiesTitleLabel>}
-          <PropertiesTitleValue />
-        </PropertiesTitleContainer>
+            <p className={titleLabelStacked}>Eigenschaften:</p>
+          : <p className={titleLabel}>Eigenschaften:</p>}
+          <p className={titleValue} />
+        </div>
       )}
       <PropertyList
         propertiesArray={propertiesArray}
