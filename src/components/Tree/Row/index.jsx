@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import {
   MdExpandMore as ExpandMoreIcon,
   MdMoreHoriz as MoreHorizIcon,
@@ -30,39 +29,6 @@ import {
   textSpan,
   infoSpan,
 } from './index.module.css'
-
-const Spacer = styled.div`
-  grid-area: spacer;
-`
-const Toggle = styled.div`
-  grid-area: toggle;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 23px;
-`
-const SymbolIcon = styled(Icon)`
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
-const SymbolSpan = styled.span`
-  font-size: 28px !important;
-  // somehow this is needed to align vertically
-  margin-top: -3px;
-`
-const Content = styled.div`
-  grid-area: content;
-  line-height: 23px;
-  display: flex;
-  column-gap: 5px;
-`
-const TextSpan = styled.span`
-  font-size: 16px !important;
-`
-const InfoSpan = styled.span`
-  font-size: 12px !important;
-`
 
 function collect(props) {
   return props
@@ -155,12 +121,12 @@ export const Row = observer(({ data }) => {
           color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
         }}
       >
-        <Spacer />
-        <Toggle>
+        <div className={spacer} />
+        <div className={toggle}>
           {useSymbolIcon && (
-            <SymbolIcon
+            <Icon
               id="symbol"
-              className="material-icons"
+              className={`material-icons ${symbolIcon}`}
               style={{
                 fontSize: nodeIsInActiveNodePath ? 26 : 23,
                 fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -173,31 +139,36 @@ export const Row = observer(({ data }) => {
               )}
               {symbol === 'ChevronRight' && <ChevronRightIcon />}
               {symbol === 'MoreHoriz' && <MoreHorizIcon />}
-            </SymbolIcon>
+            </Icon>
           )}
           {useSymbolSpan && (
-            <SymbolSpan
+            <span
+              className={symbolSpan}
               style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
             >
               {'-'}
-            </SymbolSpan>
+            </span>
           )}
           {useLoadingSpan && (
-            <SymbolSpan
+            <span
+              className={symbolSpan}
               style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
             >
               {' '}
-            </SymbolSpan>
+            </span>
           )}
-        </Toggle>
-        <Content>
-          <TextSpan
+        </div>
+        <div className={content}>
+          <span
+            className={textSpan}
             style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
           >
             {data.label ?? data.id}
-          </TextSpan>
-          {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
-        </Content>
+          </span>
+          {data.info !== undefined && (
+            <span className={infoSpan}>{`(${data.info})`}</span>
+          )}
+        </div>
       </div>
     </ContextMenuTrigger>
   )
