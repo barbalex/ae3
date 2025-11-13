@@ -1,25 +1,17 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useRouteError } from 'react-router'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import { idbContext } from '../../idbContext.js'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  padding: 15px;
-`
-const ButtonContainer = styled.div`
-  margin-right: 10px;
-  margin-bottom: 10px;
-`
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-`
-const PreWrapping = styled.pre`
-  white-space: normal;
-`
+import {
+  container,
+  buttonContainer,
+  button,
+  preWrapping,
+} from './RouterErrorBoundary.module.css'
 
 export const RouterErrorBoundary = observer(({ children }) => {
   const error = useRouteError()
@@ -47,27 +39,29 @@ export const RouterErrorBoundary = observer(({ children }) => {
   }
 
   return (
-    <Container>
+    <div className={container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <PreWrapping>{error.message}</PreWrapping>
-      <ButtonContainer>
-        <StyledButton
+      <pre className={preWrapping}>{error.message}</pre>
+      <div className={buttonContainer}>
+        <Button
+          className={button}
           variant="outlined"
           onClick={onReload}
           color="inherit"
         >
           neu starten
-        </StyledButton>
-      </ButtonContainer>
-      <ButtonContainer>
-        <StyledButton
+        </Button>
+      </div>
+      <div className={buttonContainer}>
+        <Button
+          className={button}
           variant="outlined"
           onClick={onReset}
           color="inherit"
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
-        </StyledButton>
-      </ButtonContainer>
-    </Container>
+        </Button>
+      </div>
+    </div>
   )
 })
