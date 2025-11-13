@@ -1,9 +1,8 @@
 import TextField from '@mui/material/TextField'
 import Linkify from 'react-linkify'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-import {} from './PropertyReadOnlyStacked.module.css'
+import { container } from './PropertyReadOnlyStacked.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -15,23 +14,15 @@ const linkifyProperties = {
     textDecorationStyle: 'dotted',
   },
 }
-const Container = styled.div`
-  padding: 0 0 5px 0;
-  > span > div > div:after {
-    height: 1px !important;
-  }
-`
 
 export const PropertyReadOnlyStacked = ({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
 
-  console.log('PropertyReadOnlyStacked', { label, value })
-
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Linkify properties={linkifyProperties}>
           <TextField
             label={label}
@@ -45,7 +36,7 @@ export const PropertyReadOnlyStacked = ({ label, value }) => {
             variant="standard"
           />
         </Linkify>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
