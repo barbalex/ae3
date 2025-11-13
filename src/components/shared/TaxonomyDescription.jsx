@@ -1,18 +1,10 @@
-import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
 import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 0.9em;
-  background-color: #ffe0b2 !important;
-  padding: 8px 16px !important;
-  margin: 0;
-  column-width: 500px;
-`
+import { container } from './TaxonomyDescription.module.css'
+
 const linkifyProperties = {
   target: '_blank',
   style: {
@@ -30,7 +22,7 @@ export const TaxonomyDescription = ({ taxonomy }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <Container>
+        <div className={container}>
           {taxonomy.description && (
             <PropertyReadOnly
               label="Beschreibung"
@@ -55,7 +47,7 @@ export const TaxonomyDescription = ({ taxonomy }) => {
               value={organizationName}
             />
           )}
-        </Container>
+        </div>
       </Linkify>
     </ErrorBoundary>
   )
