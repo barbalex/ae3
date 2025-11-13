@@ -48,7 +48,7 @@ export const UserReadOnly = ({ label, user }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <Container className="property">
+        <Container>
           <Label>{`${label}:`}</Label>
           <UserContainer>
             <StyledA
