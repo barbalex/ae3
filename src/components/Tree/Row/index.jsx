@@ -20,19 +20,16 @@ import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js
 import { onClickContextMenu } from './onClickContextMenu.js'
 import { storeContext } from '../../../storeContext.js'
 
-const rowHeight = 23
 const StyledNode = styled.div`
   display: grid;
   grid-template-areas: 'spacer toggle content';
-  grid-template-columns: ${(props) =>
-    `${Number(props['data-level']) * rowHeight - rowHeight}px ${rowHeight}px 1fr`};
-  grid-template-rows: ${rowHeight}px;
+  grid-template-rows: 23px;
   align-items: center;
   box-sizing: border-box;
   margin: 0;
   white-space: nowrap;
   content-visibility: auto;
-  contain-intrinsic-size: auto ${rowHeight}px;
+  contain-intrinsic-size: auto 23px;
   // ellipsis for overflow
   // TODO: not working
   overflow: hidden;
@@ -45,9 +42,7 @@ const StyledNode = styled.div`
   // see: https://stackoverflow.com/a/76597041/712005
   // using contain on parent also
   content-visibility: auto;
-  contain-intrinsic-size: auto ${rowHeight}px;
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
+  contain-intrinsic-size: auto 23px;
   &:hover {
     color: #f57c00 !important;
   }
@@ -60,7 +55,7 @@ const Toggle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: ${rowHeight}px;
+  line-height: 23px;
 `
 const SymbolIcon = styled(Icon)`
   font-size: ${(props) =>
@@ -84,7 +79,7 @@ const SymbolSpan = styled.span`
 `
 const Content = styled.div`
   grid-area: content;
-  line-height: ${rowHeight}px;
+  line-height: 23px;
   display: flex;
   column-gap: 5px;
 `
@@ -177,13 +172,16 @@ export const Row = observer(({ data }) => {
       onItemClick={onClickContextCallback}
     >
       <StyledNode
-        data-level={level}
         data-nodeisinactivenodepath={nodeIsInActiveNodePath}
         data-id={data.id}
         data-url={data.url}
         onClick={onClickNode}
         // need this id to scroll elements into view
         id={data.id}
+        style={{
+          gridTemplateColumns: `${level * 23 - 23}px 23px 1fr`,
+          color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+        }}
       >
         <Spacer />
         <Toggle>
