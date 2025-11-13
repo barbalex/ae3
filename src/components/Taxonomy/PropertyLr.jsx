@@ -1,7 +1,6 @@
 import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -10,9 +9,7 @@ import { onBlurLr } from './onBlurLr.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  margin: 5px 0;
-`
+import { container } from './PropertyLr.module.css'
 
 export const PropertyLr = observer(
   ({ taxonomy, field, label, type = 'text', disabled }) => {
@@ -37,7 +34,7 @@ export const PropertyLr = observer(
 
     return (
       <ErrorBoundary>
-        <Container>
+        <div className={container}>
           <TextField
             autoFocus={label === 'Name' && !value}
             label={label}
@@ -58,7 +55,7 @@ export const PropertyLr = observer(
             type={type}
             variant="standard"
           />
-        </Container>
+        </div>
       </ErrorBoundary>
     )
   },
