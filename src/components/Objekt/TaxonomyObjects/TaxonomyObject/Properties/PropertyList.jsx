@@ -1,17 +1,17 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import { sortBy } from 'es-toolkit'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PropertyReadOnly } from '../../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../../shared/PropertyReadOnlyStacked.jsx'
 import { Property } from '../../../../shared/Property.jsx'
+import { storeContext } from '../../../../../storeContext.js'
 
-export const PropertyList = ({
-  propertiesArray,
-  properties,
-  editing,
-  stacked,
-  id,
-}) => {
+export const PropertyList = ({ propertiesArray, properties, editing, id }) => {
+  const store = useContext(storeContext)
+  const { stacked } = store
+
   const queryClient = useQueryClient()
 
   return sortBy(

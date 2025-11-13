@@ -1,0 +1,7 @@
+.container {
+  padding: 0 0 5px 0;
+
+  > span > div > div:after {
+    height: 1px !important;
+  }
+}

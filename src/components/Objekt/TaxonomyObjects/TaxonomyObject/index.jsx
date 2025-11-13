@@ -65,11 +65,16 @@ const organizationUsersQuery = gql`
   }
 `
 
-export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
+export const TaxonomyObject = observer(({ objekt, showLink }) => {
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
-    store
+  const {
+    editingTaxonomies,
+    setEditingTaxonomies,
+    login,
+    scrollIntoView,
+    stacked,
+  } = store
 
   const navigate = useNavigate()
 
@@ -251,7 +256,6 @@ export const TaxonomyObject = observer(({ objekt, showLink, stacked }) => {
                 <Properties
                   id={objekt?.id}
                   properties={properties}
-                  stacked={stacked}
                 />
               </CardContent>
             </Collapse>

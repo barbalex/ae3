@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 import { errorContainer } from './index.module.css'
 
-export const PC = ({ pcId, objId, stacked = false }) => {
+export const PC = ({ pcId, objId }) => {
   const { data, error } = useQuery(query, {
     variables: {
       pcId,
@@ -25,10 +25,7 @@ export const PC = ({ pcId, objId, stacked = false }) => {
   return (
     <ErrorBoundary>
       <Suspense fallback={null}>
-        <PcPresentation
-          pC={pC}
-          stacked={stacked}
-        />
+        <PcPresentation pC={pC} />
       </Suspense>
     </ErrorBoundary>
   )

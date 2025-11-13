@@ -25,7 +25,7 @@ import {
   cardText,
 } from './index.module.css'
 
-export const PcPresentation = ({ pC, stacked }) => {
+export const PcPresentation = ({ pC }) => {
   const [expanded, setExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
 
@@ -56,8 +56,6 @@ export const PcPresentation = ({ pC, stacked }) => {
     setPCDescriptionExpanded(!pCDescriptionExpanded)
     setExpanded(true)
   }
-
-  // console.log('PcPresentation, relations:', relations)
 
   return (
     <ErrorBoundary>
@@ -107,10 +105,7 @@ export const PcPresentation = ({ pC, stacked }) => {
               <PCDescription pC={pC} />
             </Collapse>
             <div className={cardText}>
-              <PropertyList
-                propertiesArray={propertiesArray}
-                stacked={stacked}
-              />
+              <PropertyList propertiesArray={propertiesArray} />
               {relations?.length > 0 && <RelationList relations={relations} />}
             </div>
           </Collapse>

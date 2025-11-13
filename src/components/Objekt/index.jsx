@@ -36,7 +36,7 @@ const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
   return pCOs
 }
 
-export const Objekt = observer(({ stacked = false }) => {
+export const Objekt = observer(() => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
 
@@ -76,10 +76,7 @@ export const Objekt = observer(({ stacked = false }) => {
         <SimpleBar style={{ maxHeight: '100%' }}>
           <h3 className={firstTitle}>Taxonomie</h3>
           <Suspense fallback={<Spinner />}>
-            <TaxonomyObject
-              objekt={objekt}
-              stacked={stacked}
-            />
+            <TaxonomyObject objekt={objekt} />
             {synonymObjects.length > 0 && (
               <h3 className={title}>
                 {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
@@ -90,10 +87,7 @@ export const Objekt = observer(({ stacked = false }) => {
                 </span>
               </h3>
             )}
-            <TaxonomyObjects
-              objects={synonymObjects}
-              stacked={stacked}
-            />
+            <TaxonomyObjects objects={synonymObjects} />
             {pcs.length > 0 && (
               <h3 className={title}>
                 Eigenschaften
@@ -107,7 +101,6 @@ export const Objekt = observer(({ stacked = false }) => {
                 key={pc.id}
                 pcId={pc.id}
                 objId={objekt?.id}
-                stacked={stacked}
                 isSynonym={false}
               />
             ))}
@@ -126,7 +119,6 @@ export const Objekt = observer(({ stacked = false }) => {
                 key={pc.id}
                 pcId={pc.id}
                 objId={objekt?.synonymsByObjectId?.nodes?.[0]?.objectIdSynonym}
-                stacked={stacked}
               />
             ))}
           </Suspense>

@@ -1,8 +1,15 @@
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
+
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
+import { storeContext } from '../../../../storeContext.js'
 
-export const PropertyList = ({ propertiesArray, stacked }) =>
-  propertiesArray.map(([key, value]) =>
+export const PropertyList = ({ propertiesArray }) => {
+  const store = useContext(storeContext)
+  const { stacked } = store
+
+  return propertiesArray.map(([key, value]) =>
     stacked ?
       <PropertyReadOnlyStacked
         key={key}
@@ -15,3 +22,4 @@ export const PropertyList = ({ propertiesArray, stacked }) =>
         label={key}
       />,
   )
+}

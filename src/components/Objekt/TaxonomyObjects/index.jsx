@@ -2,7 +2,7 @@ import { sortBy } from 'es-toolkit'
 
 import { TaxonomyObject } from './TaxonomyObject/index.jsx'
 
-export const TaxonomyObjects = ({ objects, stacked = false }) =>
+export const TaxonomyObjects = ({ objects }) =>
   sortBy(objects, [
     (tO) => tO?.taxonomyByTaxonomyId?.name ?? '(Name fehlt)',
   ]).map((o) => (
@@ -10,6 +10,5 @@ export const TaxonomyObjects = ({ objects, stacked = false }) =>
       key={o.id}
       objekt={o}
       showLink
-      stacked={stacked}
     />
   ))

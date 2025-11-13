@@ -21,9 +21,9 @@ import {
   titleValue,
 } from './index.module.css'
 
-const Properties = observer(({ id, properties, stacked }) => {
+const Properties = observer(({ id, properties }) => {
   const store = useContext(storeContext)
-  const { editingTaxonomies } = store
+  const { editingTaxonomies, stacked } = store
 
   const propertiesArray = Object.entries(properties)
 
@@ -43,7 +43,6 @@ const Properties = observer(({ id, properties, stacked }) => {
         propertiesArray={propertiesArray}
         properties={properties}
         editing={editingTaxonomies}
-        stacked={stacked}
         id={id}
       />
       {editingTaxonomies && (

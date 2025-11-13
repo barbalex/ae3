@@ -3,6 +3,7 @@ import Linkify from 'react-linkify'
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
+import {} from './PropertyReadOnlyStacked.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -25,6 +26,8 @@ export const PropertyReadOnlyStacked = ({ label, value }) => {
   let val = value
   if (val === true) val = 'ja'
   if (val === false) val = 'nein'
+
+  console.log('PropertyReadOnlyStacked', { label, value })
 
   return (
     <ErrorBoundary>
