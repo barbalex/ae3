@@ -2,6 +2,11 @@ import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
+import {
+  container,
+  labelClass,
+  valueClass,
+} from './PropertyReadOnly.module.css'
 
 const Container = styled.div`
   display: flex;
@@ -21,6 +26,7 @@ const Value = styled.p`
   width: 100%;
   word-break: break-word;
 `
+
 const linkifyProperties = {
   target: '_blank',
   style: {
@@ -42,7 +48,7 @@ export const PropertyReadOnly = ({ label, value, url }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <Container className="property">
+        <Container>
           <Label>{`${label}:`}</Label>
           <Value>
             {url ?

@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+}
+
+.labelClass {
+  flex-basis: 250px;
+  text-align: right;
+  padding-right: 5px;
+  margin: 3px 0;
+  padding: 2px;
+  color: grey;
+  word-break: break-word;
+}
+
+.valueClass {
+  margin: 3px 0;
+  padding: 2px;
+  width: 100%;
+  word-break: break-word;
+}
