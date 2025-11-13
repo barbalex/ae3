@@ -1,32 +1,15 @@
-import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-`
-const Label = styled.p`
-  flex-basis: 250px;
-  text-align: right;
-  padding-right: 5px;
-  margin: 3px 0;
-  padding: 2px;
-  color: grey;
-`
-const UserContainer = styled.div`
-  margin: 3px 0;
-  padding: 2px;
-  width: 100%;
-`
-const StyledA = styled.a`
-  color: inherit;
-  font-weight: 100;
-  cursor: pointer;
-  text-decoration-color: rgba(0, 0, 0, 0.3);
-  text-decoration-style: dotted;
-`
+import {
+  container,
+  labelClass,
+  userContainer,
+  a,
+} from './UserReadOnly.module.css'
+
 const linkifyProperties = {
   target: '_blank',
   style: {
@@ -48,18 +31,19 @@ export const UserReadOnly = ({ label, user }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <Container>
-          <Label>{`${label}:`}</Label>
-          <UserContainer>
-            <StyledA
+        <div className={container}>
+          <p className={labelClass}>{`${label}:`}</p>
+          <div className={userContainer}>
+            <a
               href={link}
               target="_blank"
+              className={a}
             >
               {name}
-            </StyledA>
+            </a>
             <span>{` (${email})`}</span>
-          </UserContainer>
-        </Container>
+          </div>
+        </div>
       </Linkify>
     </ErrorBoundary>
   )
