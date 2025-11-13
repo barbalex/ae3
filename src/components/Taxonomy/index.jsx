@@ -7,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -23,24 +22,8 @@ import { onBlurArten } from './onBlurArten.js'
 import { onBlurLr } from './onBlurLr.js'
 import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
-import { constants } from '../../modules/constants.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  column-width: ${constants.columnWidth}px;
-`
-const CardEditButton = styled(IconButton)`
-  align-self: flex-end;
-`
-const StyledFormControl = styled(FormControl)`
-  margin: 5px 0 5px 0 !important;
-  display: block;
-  > div {
-    width: 100%;
-  }
-`
+import { container, cardEditButton, formControl } from './index.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -196,10 +179,10 @@ export const Taxonomy = observer(() => {
     })
 
   if (taxError) {
-    return <Container>{`Fehler: ${taxError.message}`}</Container>
+    return <div className={container}>{`Fehler: ${taxError.message}`}</div>
   }
   if (allUsersError) {
-    return <Container>{`Fehler: ${allUsersError.message}`}</Container>
+    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
   }
 
   if (!tax?.id) return null
@@ -207,9 +190,10 @@ export const Taxonomy = observer(() => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <Container>
+        <div className={container}>
           {userIsThisTaxWriter && editing && (
-            <CardEditButton
+            <IconButton
+              className={cardEditButton}
               aria-label="Daten anzeigen"
               title="Daten anzeigen"
               onClick={onClickStopEditing}
@@ -217,10 +201,11 @@ export const Taxonomy = observer(() => {
               <Icon>
                 <ViewIcon />
               </Icon>
-            </CardEditButton>
+            </IconButton>
           )}
           {userIsThisTaxWriter && !editing && (
-            <CardEditButton
+            <IconButton
+              className={cardEditButton}
               aria-label="Daten bearbeiten"
               title="Daten bearbeiten"
               onClick={onClickStartEditing}
@@ -228,7 +213,7 @@ export const Taxonomy = observer(() => {
               <Icon>
                 <EditIcon />
               </Icon>
-            </CardEditButton>
+            </IconButton>
           )}
           {!editing && (
             <>
@@ -341,7 +326,8 @@ export const Taxonomy = observer(() => {
                 field="description"
                 taxonomy={tax}
               />
-              <StyledFormControl
+              <FormControl
+                className={formControl}
                 variant="standard"
                 fullWidth
               >
@@ -369,8 +355,9 @@ export const Taxonomy = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
-              <StyledFormControl
+              </FormControl>
+              <FormControl
+                className={formControl}
                 variant="standard"
                 fullWidth
               >
@@ -397,7 +384,7 @@ export const Taxonomy = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
+              </FormControl>
               <Property
                 key={`${tax?.id}/lastUpdated`}
                 label="Zuletzt aktualisiert"
@@ -434,7 +421,10 @@ export const Taxonomy = observer(() => {
                 field="description"
                 taxonomy={tax}
               />
-              <StyledFormControl variant="standard">
+              <FormControl
+                className={formControl}
+                variant="standard"
+              >
                 <InputLabel htmlFor="importedByLr">Importiert von</InputLabel>
                 <Select
                   key={`${tax?.id}/importedBy`}
@@ -451,8 +441,11 @@ export const Taxonomy = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
-              <StyledFormControl variant="standard">
+              </FormControl>
+              <FormControl
+                className={formControl}
+                variant="standard"
+              >
                 <InputLabel htmlFor="organizationIdLr">
                   Zuständige Organisation
                 </InputLabel>
@@ -471,7 +464,7 @@ export const Taxonomy = observer(() => {
                     </MenuItem>
                   ))}
                 </Select>
-              </StyledFormControl>
+              </FormControl>
               <PropertyLr
                 key={`${tax?.id}/lastUpdated`}
                 label="Zuletzt aktualisiert"
@@ -513,7 +506,7 @@ export const Taxonomy = observer(() => {
               />
             </>
           )}
-        </Container>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
