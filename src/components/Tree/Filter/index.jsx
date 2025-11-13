@@ -1,5 +1,4 @@
 import { useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
 import Select from 'react-select/async'
@@ -15,23 +14,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
 
-const Container = styled.div`
-  flex: 0 1 auto;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
-`
-const StyledSelect = styled(Select)`
-  width: 100%;
-`
-
-const SearchIcon = styled(FaSearch)`
-  margin: auto 5px;
-  margin-right: -25px;
-  z-index: 1;
-  color: rgba(0, 0, 0, 0.8);
-  font-weight: 300;
-`
+import { container, select, searchIcon } from './index.module.css'
 
 const noOptionsMessage = () => null
 const loadingMessage = () => null
@@ -249,9 +232,9 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <SearchIcon />
-        <StyledSelect
+      <div className={container}>
+        <FaSearch className={searchIcon} />
+        <Select
           aria-label="treeFilter"
           styles={customStyles}
           onInputChange={onInputChange}
@@ -265,11 +248,11 @@ export const Filter = observer(() => {
           loadOptions={loadOptions}
           isClearable
           spellCheck={false}
-          className={`pad-left-25`}
+          className={`pad-left-25 ${select}`}
           // ensure the menu always is on top
           menuPortalTarget={document.body}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })

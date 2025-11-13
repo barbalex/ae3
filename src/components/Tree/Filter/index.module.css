@@ -1,0 +1,17 @@
+.container {
+  flex: 0 1 auto;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+.select {
+  width: 100%;
+}
+
+.searchIcon {
+  margin: auto 5px;
+  margin-right: -25px;
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 300;
+}
