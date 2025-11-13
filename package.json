@@ -56,7 +56,6 @@
     "xlsx": "0.18.5"
   },
   "devDependencies": {
-    "@emotion/babel-plugin": "11.13.5",
     "@eslint/compat": "1.4.1",
     "@eslint/eslintrc": "3.3.1",
     "@eslint/js": "9.39.1",

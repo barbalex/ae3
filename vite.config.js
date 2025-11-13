@@ -66,7 +66,7 @@ export default defineConfig({
     react({
       jsxImportSource: '@emotion/react',
       babel: {
-        plugins: ['babel-plugin-react-compiler', '@emotion/babel-plugin'],
+        plugins: ['babel-plugin-react-compiler'],
       },
     }),
   ],
