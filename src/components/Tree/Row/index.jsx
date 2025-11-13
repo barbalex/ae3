@@ -58,21 +58,11 @@ const Toggle = styled.div`
   line-height: 23px;
 `
 const SymbolIcon = styled(Icon)`
-  font-size: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '26px !important' : (
-      '23px !important'
-    )};
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   &:hover {
     color: #f57c00 !important;
   }
 `
 const SymbolSpan = styled.span`
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   font-size: 28px !important;
   // somehow this is needed to align vertically
   margin-top: -3px;
@@ -85,8 +75,6 @@ const Content = styled.div`
 `
 const TextSpan = styled.span`
   font-size: 16px !important;
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
 `
 const InfoSpan = styled.span`
   font-size: 12px !important;
@@ -172,7 +160,6 @@ export const Row = observer(({ data }) => {
       onItemClick={onClickContextCallback}
     >
       <StyledNode
-        data-nodeisinactivenodepath={nodeIsInActiveNodePath}
         data-id={data.id}
         data-url={data.url}
         onClick={onClickNode}
@@ -188,8 +175,12 @@ export const Row = observer(({ data }) => {
           {useSymbolIcon && (
             <SymbolIcon
               id="symbol"
-              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
               className="material-icons"
+              style={{
+                fontSize: nodeIsInActiveNodePath ? 26 : 23,
+                fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
+                color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+              }}
             >
               {symbol === 'Loading' && <LoadingIcon />}
               {symbol === 'ExpandMore' && (
@@ -200,18 +191,24 @@ export const Row = observer(({ data }) => {
             </SymbolIcon>
           )}
           {useSymbolSpan && (
-            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            <SymbolSpan
+              style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
+            >
               {'-'}
             </SymbolSpan>
           )}
           {useLoadingSpan && (
-            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            <SymbolSpan
+              style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
+            >
               {' '}
             </SymbolSpan>
           )}
         </Toggle>
         <Content>
-          <TextSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+          <TextSpan
+            style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
+          >
             {data.label ?? data.id}
           </TextSpan>
           {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
