@@ -20,33 +20,17 @@ import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js
 import { onClickContextMenu } from './onClickContextMenu.js'
 import { storeContext } from '../../../storeContext.js'
 
-const StyledNode = styled.div`
-  display: grid;
-  grid-template-areas: 'spacer toggle content';
-  grid-template-rows: 23px;
-  align-items: center;
-  box-sizing: border-box;
-  margin: 0;
-  white-space: nowrap;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 23px;
-  // ellipsis for overflow
-  // TODO: not working
-  overflow: hidden;
-  text-overflow: ellipsis;
-  user-select: none;
-  cursor: pointer;
-  // do not layout offscreen content while allowing search
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility
-  // UUPS: this prevents horizontal scrolling!
-  // see: https://stackoverflow.com/a/76597041/712005
-  // using contain on parent also
-  content-visibility: auto;
-  contain-intrinsic-size: auto 23px;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
+import {
+  node,
+  spacer,
+  toggle,
+  symbolIcon,
+  symbolSpan,
+  content,
+  textSpan,
+  infoSpan,
+} from './index.module.css'
+
 const Spacer = styled.div`
   grid-area: spacer;
 `
@@ -159,7 +143,8 @@ export const Row = observer(({ data }) => {
       key={data.id}
       onItemClick={onClickContextCallback}
     >
-      <StyledNode
+      <div
+        className={node}
         data-id={data.id}
         data-url={data.url}
         onClick={onClickNode}
@@ -213,7 +198,7 @@ export const Row = observer(({ data }) => {
           </TextSpan>
           {data.info !== undefined && <InfoSpan>{`(${data.info})`}</InfoSpan>}
         </Content>
-      </StyledNode>
+      </div>
     </ContextMenuTrigger>
   )
 })

@@ -1,0 +1,66 @@
+.node {
+  display: grid;
+  grid-template-areas: 'spacer toggle content';
+  grid-template-rows: 23px;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  white-space: nowrap;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 23px;
+  /* ellipsis for overflow */
+  /* TODO: not working */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  cursor: pointer;
+  /* do not layout offscreen content while allowing search */
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility */
+  /* UUPS: this prevents horizontal scrolling! */
+  /* see: https://stackoverflow.com/a/76597041/712005 */
+  /* using contain on parent also */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 23px;
+  &:hover {
+    color: #f57c00 !important;
+  }
+}
+
+.spacer {
+  grid-area: spacer;
+}
+
+.toggle {
+  grid-area: toggle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 23px;
+}
+
+.symbolIcon {
+  &:hover {
+    color: #f57c00 !important;
+  }
+}
+
+.symbolSpan {
+  font-size: 28px !important;
+  /* somehow this is needed to align vertically */
+  margin-top: -3px;
+}
+
+.content {
+  grid-area: content;
+  line-height: 23px;
+  display: flex;
+  column-gap: 5px;
+}
+
+.textSpan {
+  font-size: 16px !important;
+}
+
+.infoSpan {
+  font-size: 12px !important;
+}
