@@ -219,8 +219,6 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
     return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
   }
 
-  console.log('OrgUser', { roles, role })
-
   return (
     <ErrorBoundary>
       <Suspense fallback={null}>
