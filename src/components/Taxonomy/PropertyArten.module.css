@@ -1,0 +1,11 @@
+.container {
+  margin: 5px 0;
+}
+
+.formControl {
+  padding-bottom: 19px !important;
+
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}

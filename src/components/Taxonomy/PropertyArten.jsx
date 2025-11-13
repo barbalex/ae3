@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -11,15 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { onBlurArten } from './onBlurArten.js'
 import { storeContext } from '../../storeContext.js'
 
-const Container = styled.div`
-  margin: 5px 0;
-`
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import { container, formControl } from './PropertyArten.module.css'
 
 export const Property = observer(
   ({ taxonomy, field, label, type = 'text', disabled }) => {
@@ -46,8 +37,9 @@ export const Property = observer(
       })
 
     return (
-      <Container>
-        <StyledFormControl
+      <div className={container}>
+        <FormControl
+          className={formControl}
           fullWidth
           disabled={disabled}
           error={fieldError}
@@ -79,8 +71,8 @@ export const Property = observer(
               {fieldError?.message}
             </FormHelperText>
           )}
-        </StyledFormControl>
-      </Container>
+        </FormControl>
+      </div>
     )
   },
 )
