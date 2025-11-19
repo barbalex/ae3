@@ -3,7 +3,6 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
@@ -67,9 +66,7 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
               aria-label="Show more"
               style={{ transform: rcoExpanded ? 'rotate(180deg)' : 'none' }}
             >
-              <Icon>
-                <ExpandMoreIcon />
-              </Icon>
+              <ExpandMoreIcon />
             </IconButton>
           </CardActions>
           <Collapse
