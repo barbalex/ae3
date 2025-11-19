@@ -219,18 +219,16 @@ export const AppBar = observer(() => {
                 </div>
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
-                    <>
-                      <ShareButton
-                        className={shareButton}
-                        aria-label="teilen"
-                        onClick={onClickShare}
-                        color="inherit"
-                      >
-                        <Icon>
-                          <ShareIcon className={shareIcon} />
-                        </Icon>
-                      </ShareButton>
-                    </>
+                    <ShareButton
+                      className={shareButton}
+                      aria-label="teilen"
+                      onClick={onClickShare}
+                      color="inherit"
+                    >
+                      <Icon>
+                        <ShareIcon className={shareIcon} />
+                      </Icon>
+                    </ShareButton>
                   )}
                 <div>
                   <MoreMenu />
