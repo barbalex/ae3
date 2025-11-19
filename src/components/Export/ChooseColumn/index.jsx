@@ -3,7 +3,6 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import Snackbar from '@mui/material/Snackbar'
 import { observer } from 'mobx-react-lite'
@@ -67,6 +66,8 @@ export const ChooseColumn = observer(() => {
     }
   }
 
+  console.log('Export.ChooseColumn')
+
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
@@ -85,9 +86,7 @@ export const ChooseColumn = observer(() => {
                   transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
                 }}
               >
-                <Icon>
-                  <ExpandMoreIcon />
-                </Icon>
+                <ExpandMoreIcon />
               </IconButton>
             </CardActions>
             <Collapse
@@ -112,9 +111,7 @@ export const ChooseColumn = observer(() => {
                   transform: filterExpanded ? 'rotate(180deg)' : 'none',
                 }}
               >
-                <Icon>
-                  <ExpandMoreIcon />
-                </Icon>
+                <ExpandMoreIcon />
               </IconButton>
             </CardActions>
             <Collapse
@@ -139,9 +136,7 @@ export const ChooseColumn = observer(() => {
                   transform: propertiesExpanded ? 'rotate(180deg)' : 'none',
                 }}
               >
-                <Icon>
-                  <ExpandMoreIcon />
-                </Icon>
+                <ExpandMoreIcon />
               </IconButton>
             </CardActions>
             <Collapse
