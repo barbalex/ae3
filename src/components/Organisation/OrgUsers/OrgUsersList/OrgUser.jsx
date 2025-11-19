@@ -1,6 +1,5 @@
 import { useState, useContext, Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdClear } from 'react-icons/md'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -274,9 +273,7 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
             aria-label="löschen"
             onClick={onClickDelete}
           >
-            <Icon>
-              <MdClear color="error" />
-            </Icon>
+            <MdClear color="error" />
           </IconButton>
         </div>
       </Suspense>
