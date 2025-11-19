@@ -1,7 +1,6 @@
 import { useContext, Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdAdd as AddIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -15,7 +14,6 @@ import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 import { container, addNewButton, buttonContainer } from './index.module.css'
-
 
 const orgUsersQuery = gql`
   query orgUsersQuery($id: UUID!) {
@@ -104,9 +102,7 @@ export const OrgUsers = observer(() => {
               onClick={onClickNew}
               className={addNewButton}
             >
-              <Icon>
-                <AddIcon color="error" />
-              </Icon>
+              <AddIcon color="error" />
             </IconButton>
           </div>
         </div>
