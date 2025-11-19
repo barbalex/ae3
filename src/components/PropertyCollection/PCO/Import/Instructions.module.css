@@ -33,24 +33,26 @@
   border-radius: 4px;
 }
 
-.inlineIcon {
-  margin-left: 8px;
-}
-
 .inlineDiv {
   margin-left: 8px;
   font-style: italic;
 }
 
 .doneIcon {
+  margin-left: 8px;
+  font-size: 1.5em;
   color: green !important;
 }
 
 .errorIcon {
+  margin-left: 8px;
+  font-size: 1.5em;
   color: red !important;
 }
 
 .infoOutlineIcon {
+  margin-left: 8px;
+  font-size: 1.5em;
   color: orange !important;
 }
 
