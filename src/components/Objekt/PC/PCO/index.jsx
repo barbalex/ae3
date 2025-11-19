@@ -3,7 +3,6 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import {
   MdExpandMore as ExpandMoreIcon,
   MdInfo as InfoIcon,
@@ -76,19 +75,15 @@ export const PcPresentation = ({ pC }) => {
                 onClick={onClickIcon}
                 size="large"
               >
-                <Icon>
-                  {!pCDescriptionExpanded && <InfoOutlineIcon />}
-                  {pCDescriptionExpanded && <InfoIcon />}
-                </Icon>
+                {!pCDescriptionExpanded && <InfoOutlineIcon />}
+                {pCDescriptionExpanded && <InfoIcon />}
               </IconButton>
               <IconButton
                 aria-expanded={expanded}
                 aria-label="Show more"
                 style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
               >
-                <Icon>
-                  <ExpandMoreIcon />
-                </Icon>
+                <ExpandMoreIcon />
               </IconButton>
             </div>
           </CardActions>
