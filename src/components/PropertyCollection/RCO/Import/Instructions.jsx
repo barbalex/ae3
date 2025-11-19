@@ -1,4 +1,3 @@
-import Icon from '@mui/material/Icon'
 import {
   MdDone as DoneIcon,
   MdError as ErrorIcon,
