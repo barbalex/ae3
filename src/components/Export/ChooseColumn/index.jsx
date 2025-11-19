@@ -66,8 +66,6 @@ export const ChooseColumn = observer(() => {
     }
   }
 
-  console.log('Export.ChooseColumn')
-
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
