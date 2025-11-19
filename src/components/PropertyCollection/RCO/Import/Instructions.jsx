@@ -53,14 +53,12 @@ export const RcoInstructions = ({
       <ul className={ul}>
         <li>
           <div className={liContainer}>
-            <div>
-              Die Autoren müssen mit der Veröffentlichung einverstanden sein
-            </div>
+            Die Autoren müssen mit der Veröffentlichung einverstanden sein
           </div>
         </li>
         <li>
           <div className={liContainer}>
-            <div>Dafür verantwortlich ist, wer Daten importiert</div>
+            Dafür verantwortlich ist, wer Daten importiert
           </div>
         </li>
       </ul>
@@ -68,25 +66,17 @@ export const RcoInstructions = ({
       <ul className={ul}>
         <li>
           <div className={liContainer}>
-            <div>Die erste Zeile enthält Feld-Namen (= Spalten-Titel)</div>
+            Die erste Zeile enthält Feld-Namen (= Spalten-Titel)
           </div>
         </li>
         <li>
           <div className={liContainer}>
-            <div>
-              Jeder Wert hat einen Feld-Namen.
-              <br />
-              Anders gesagt: Jede Zelle mit einem Wert hat einen Spalten-Titel
-            </div>
-            {existsNoDataWithoutKey && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
+            Jeder Wert hat einen Feld-Namen.
+            <br />
+            Anders gesagt: Jede Zelle mit einem Wert hat einen Spalten-Titel
+            {existsNoDataWithoutKey && <DoneIcon className={doneIcon} />}
             {existsNoDataWithoutKey === false && (
-              <div>
-                <ErrorIcon className={errorIcon} />
-              </div>
+              <ErrorIcon className={errorIcon} />
             )}
           </div>
         </li>
@@ -95,133 +85,74 @@ export const RcoInstructions = ({
       <ul className={ul}>
         <li>
           <div className={liContainer}>
-            <div>
-              Ein Feld namens <span className={emSpan}>id</span> kann enthalten
-              sein.
-            </div>
-            {idsExist && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
-            {idsExist === false && (
-              <div>
-                <div className={inlineDiv}>(ist nicht)</div>
-              </div>
-            )}
+            Ein Feld namens&nbsp;<span className={emSpan}>id</span>&nbsp;kann
+            enthalten sein.
+            {idsExist && <DoneIcon className={doneIcon} />}
+            {idsExist === false && <div className={inlineDiv}>(ist nicht)</div>}
           </div>
           <div className={liContainer}>
-            <div>Wenn nicht, wird eine id erzeugt</div>
-            {idsExist === false && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
+            Wenn nicht, wird eine id erzeugt
+            {idsExist === false && <DoneIcon className={doneIcon} />}
           </div>
           <ul>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>id</span> muss gültige{' '}
-                  <a
-                    href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    UUID
-                  </a>{' '}
-                  sein
-                </div>
-                {idsAreUuids && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
-                {idsAreUuids === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>id</span>&nbsp;muss gültige&nbsp;
+                <a
+                  href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  UUID
+                </a>
+                &nbsp; sein&nbsp;
+                {idsAreUuids && <DoneIcon className={doneIcon} />}
+                {idsAreUuids === false && <ErrorIcon className={errorIcon} />}
               </div>
             </li>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>id</span> muss eindeutig sein
-                </div>
-                {idsAreUnique && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
-                {idsAreUnique === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>id</span>&nbsp;muss eindeutig
+                sein&nbsp;
+                {idsAreUnique && <DoneIcon className={doneIcon} />}
+                {idsAreUnique === false && <ErrorIcon className={errorIcon} />}
               </div>
             </li>
           </ul>
         </li>
         <li>
           <div className={liContainer}>
-            <div>
-              Ein Feld namens <span className={emSpan}>objectId</span> muss
-              enthalten sein
-            </div>
-            {objectIdsExist && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
-            {objectIdsExist === false && (
-              <div>
-                <ErrorIcon className={errorIcon} />
-              </div>
-            )}
+            Ein Feld namens&nbsp;<span className={emSpan}>objectId</span>
+            &nbsp;muss enthalten sein&nbsp;
+            {objectIdsExist && <DoneIcon className={doneIcon} />}
+            {objectIdsExist === false && <ErrorIcon className={errorIcon} />}
           </div>
           <ul>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>objectId</span> muss gültige{' '}
-                  <a
-                    href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    UUID
-                  </a>{' '}
-                  sein
-                </div>
-                {objectIdsAreUuid && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>objectId</span>&nbsp;muss gültige&nbsp;
+                <a
+                  href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  UUID
+                </a>
+                &nbsp; sein&nbsp;
+                {objectIdsAreUuid && <DoneIcon className={doneIcon} />}
                 {objectIdsAreUuid === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>objectId</span> muss{' '}
-                  <span className={emSpan}>id</span> eines Objekts aus
-                  arteigenschaften.ch sein
-                </div>
-                {objectIdsAreReal && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>objectId</span>&nbsp;muss&nbsp;
+                <span className={emSpan}>id</span>&nbsp;eines Objekts aus
+                arteigenschaften.ch sein&nbsp;
+                {objectIdsAreReal && <DoneIcon className={doneIcon} />}
                 {objectIdsAreReal === false && !objectIdsAreRealNotTested && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
                 {objectIdsAreRealNotTested && (
                   <>
@@ -238,71 +169,50 @@ export const RcoInstructions = ({
         </li>
         <li>
           <div className={liContainer}>
-            <div>
-              Ein Feld namens <span className={emSpan}>objectIdRelation</span>{' '}
-              muss enthalten sein
-            </div>
-            {objectRelationIdsExist && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
+            Ein Feld namens&nbsp;
+            <span className={emSpan}>objectIdRelation</span>
+            &nbsp; muss enthalten sein&nbsp;
+            {objectRelationIdsExist && <DoneIcon className={doneIcon} />}
             {objectRelationIdsExist === false && (
-              <div>
-                <ErrorIcon className={errorIcon} />
-              </div>
+              <ErrorIcon className={errorIcon} />
             )}
           </div>
           <div className={liContainer}>
-            <div>
-              Zweck: Der Datensatz beschreibt die Beziehung des Objekts mit id{' '}
-              <span className={emSpan}>objectId</span> zum Objekt mit id{' '}
-              <span className={emSpan}>objectIdRelation</span>
-            </div>
+            Zweck: Der Datensatz beschreibt die Beziehung des Objekts mit
+            id&nbsp;
+            <span className={emSpan}>objectId</span>&nbsp;zum Objekt mit
+            id&nbsp;
+            <span className={emSpan}>objectIdRelation</span>
           </div>
           <ul>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>objectIdRelation</span> muss gültige{' '}
-                  <a
-                    href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    UUID
-                  </a>{' '}
-                  sein
-                </div>
-                {objectRelationIdsAreUuid && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>objectIdRelation</span>&nbsp;muss
+                gültige&nbsp;
+                <a
+                  href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  UUID
+                </a>
+                &nbsp; sein&nbsp;
+                {objectRelationIdsAreUuid && <DoneIcon className={doneIcon} />}
                 {objectRelationIdsAreUuid === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
             <li>
               <div className={liContainer}>
-                <div>
-                  <span className={emSpan}>objectIdRelation</span> muss{' '}
-                  <span className={emSpan}>id</span> eines Objekts aus
-                  arteigenschaften.ch sein
-                </div>
-                {objectRelationIdsAreReal && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                <span className={emSpan}>objectIdRelation</span>
+                &nbsp;muss&nbsp;
+                <span className={emSpan}>id</span>&nbsp;eines Objekts aus
+                arteigenschaften.ch sein&nbsp;
+                {objectRelationIdsAreReal && <DoneIcon className={doneIcon} />}
                 {objectRelationIdsAreReal === false &&
                   !objectIdsAreRealNotTested && (
-                    <div>
-                      <ErrorIcon className={errorIcon} />
-                    </div>
+                    <ErrorIcon className={errorIcon} />
                   )}
                 {objectRelationIdsAreRealNotTested && (
                   <>
@@ -319,27 +229,19 @@ export const RcoInstructions = ({
         </li>
         <li>
           <div className={liContainer}>
-            <div>
-              Ein Feld namens <span className={emSpan}>relationType</span> muss
-              enthalten sein
-            </div>
-            {relationTypeExist && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
-            {relationTypeExist === false && (
-              <div>
-                <ErrorIcon className={errorIcon} />
-              </div>
-            )}
+            Ein Feld namens&nbsp;<span className={emSpan}>relationType</span>
+            &nbsp;muss enthalten sein&nbsp;
+            {relationTypeExist && <DoneIcon className={doneIcon} />}
+            {relationTypeExist === false && <ErrorIcon className={errorIcon} />}
           </div>
           <div className={liContainer}>
             <div>
-              Zweck: Beschreibt <em>die Art der Beziehung</em> des Objekts mit
-              id <span className={emSpan}>objectId</span> zum Objekt mit id{' '}
-              <span className={emSpan}>objectIdRelation</span>.<br />
-              Beispiel: Hund beisst Briefträger :-)
+              Zweck: Beschreibt&nbsp;<em>die Art der Beziehung</em>&nbsp;des
+              Objekts mit id <span className={emSpan}>objectId</span>&nbsp;zum
+              Objekt mit id&nbsp;
+              <span className={emSpan}>objectIdRelation</span>
+              <br />
+              Beispiel: "Hund beisst Briefträger"
               <br />
               Mögliche Werte: frisst, parasitiert, meidet...
             </div>
@@ -348,15 +250,11 @@ export const RcoInstructions = ({
         <li>
           <div className={liContainer}>
             <div>
-              Ein Feld namens{' '}
-              <span className={emSpan}>propertyCollectionOfOrigin</span> kann
-              enthalten sein
+              Ein Feld namens&nbsp;
+              <span className={emSpan}>propertyCollectionOfOrigin</span>
+              &nbsp;kann enthalten sein
             </div>
-            {pCOfOriginIdsExist && (
-              <div>
-                <DoneIcon className={doneIcon} />
-              </div>
-            )}
+            {pCOfOriginIdsExist && <DoneIcon className={doneIcon} />}
             {pCOfOriginIdsExist === false && (
               <div>
                 <div className={inlineDiv}>(ist nicht)</div>
@@ -366,7 +264,8 @@ export const RcoInstructions = ({
           <div className={liContainer}>
             <div>
               Zweck: In zusammenfassenden Eigenschaften-Sammlungen markieren,
-              aus welcher Eigenschaften-Sammlung diese Beziehungen stammen.{' '}
+              aus welcher Eigenschaften-Sammlung diese Beziehungen
+              stammen.&nbsp;
               <a
                 href={`${appBaseUrl}Dokumentation/projektbeschreibung#zusammenfassende-eigenschaften-sammlungen`}
                 target="_blank"
@@ -380,46 +279,34 @@ export const RcoInstructions = ({
             <li>
               <div className={liContainer}>
                 <div>
-                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
-                  muss gültige{' '}
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>
+                  &nbsp; muss gültige&nbsp;
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     UUID
-                  </a>{' '}
-                  sein
+                  </a>
+                  &nbsp; sein
                 </div>
-                {pCOfOriginIdsAreUuid && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                {pCOfOriginIdsAreUuid && <DoneIcon className={doneIcon} />}
                 {pCOfOriginIdsAreUuid === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
             <li>
               <div className={liContainer}>
                 <div>
-                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
-                  muss <span className={emSpan}>id</span> einer
+                  <span className={emSpan}>propertyCollectionOfOrigin</span>
+                  &nbsp; muss <span className={emSpan}>id</span>&nbsp;einer
                   Eigenschaften-Sammlung aus arteigenschaften.ch sein
                 </div>
-                {pCOfOriginIdsAreReal && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
-                )}
+                {pCOfOriginIdsAreReal && <DoneIcon className={doneIcon} />}
                 {pCOfOriginIdsAreReal === false &&
                   !pCOfOriginIdsAreRealNotTested && (
-                    <div>
-                      <ErrorIcon className={errorIcon} />
-                    </div>
+                    <ErrorIcon className={errorIcon} />
                   )}
                 {pCOfOriginIdsAreRealNotTested && (
                   <>
@@ -442,10 +329,8 @@ export const RcoInstructions = ({
       <ul className={ul}>
         <li>
           <div className={liContainer}>
-            <div>
-              Eigenschaften sind nicht zwingend. Die Beziehungs-Art sagt schon
-              einiges aus
-            </div>
+            Eigenschaften sind nicht zwingend. Die Beziehungs-Art sagt schon
+            einiges aus
           </div>
         </li>
         <li>
@@ -455,14 +340,10 @@ export const RcoInstructions = ({
               <div className={liContainer}>
                 <div>{'"'}</div>
                 {propertyKeysDontContainApostroph && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
+                  <DoneIcon className={doneIcon} />
                 )}
                 {propertyKeysDontContainApostroph === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
@@ -470,14 +351,10 @@ export const RcoInstructions = ({
               <div className={liContainer}>
                 <div>\</div>
                 {propertyKeysDontContainBackslash && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
+                  <DoneIcon className={doneIcon} />
                 )}
                 {propertyKeysDontContainBackslash === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
@@ -490,14 +367,10 @@ export const RcoInstructions = ({
               <div className={liContainer}>
                 <div>{'"'}</div>
                 {propertyValuesDontContainApostroph && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
+                  <DoneIcon className={doneIcon} />
                 )}
                 {propertyValuesDontContainApostroph === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
@@ -505,14 +378,10 @@ export const RcoInstructions = ({
               <div className={liContainer}>
                 <div>\</div>
                 {propertyValuesDontContainBackslash && (
-                  <div>
-                    <DoneIcon className={doneIcon} />
-                  </div>
+                  <DoneIcon className={doneIcon} />
                 )}
                 {propertyValuesDontContainBackslash === false && (
-                  <div>
-                    <ErrorIcon className={errorIcon} />
-                  </div>
+                  <ErrorIcon className={errorIcon} />
                 )}
               </div>
             </li>
