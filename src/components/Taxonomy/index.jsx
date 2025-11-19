@@ -1,6 +1,5 @@
 import { useContext, Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -198,9 +197,7 @@ export const Taxonomy = observer(() => {
               title="Daten anzeigen"
               onClick={onClickStopEditing}
             >
-              <Icon>
-                <ViewIcon />
-              </Icon>
+              <ViewIcon />
             </IconButton>
           )}
           {userIsThisTaxWriter && !editing && (
@@ -210,9 +207,7 @@ export const Taxonomy = observer(() => {
               title="Daten bearbeiten"
               onClick={onClickStartEditing}
             >
-              <Icon>
-                <EditIcon />
-              </Icon>
+              <EditIcon />
             </IconButton>
           )}
           {!editing && (
