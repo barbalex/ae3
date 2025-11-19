@@ -4,7 +4,6 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
-import Icon from '@mui/material/Icon'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
@@ -87,9 +86,7 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
               aria-label="Show more"
               style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             >
-              <Icon>
-                <ExpandMoreIcon />
-              </Icon>
+              <ExpandMoreIcon />
             </IconButton>
           </div>
         </CardActions>
