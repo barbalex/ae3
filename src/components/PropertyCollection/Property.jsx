@@ -65,7 +65,6 @@ export const Property = observer(
               spellCheck="false"
               disabled={!!disabled}
               type={type}
-              error={error}
               helperText={
                 error ? error
                 : helperText ?
