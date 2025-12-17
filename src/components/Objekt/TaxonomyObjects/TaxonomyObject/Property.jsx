@@ -13,7 +13,7 @@ import { container } from './Property.module.css'
 export const Property = observer(({ field, label, objekt, disabled }) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
-  const [value, setValue] = useState(objekt[field] || '')
+  const [value, setValue] = useState(objekt?.[field] || '')
 
   const store = useContext(storeContext)
   const { scrollIntoView } = store
