@@ -15,51 +15,60 @@ services:
     networks:
       - network
     expose:
-      - '5432'
+      - "5432"
     ports:
       # make the Postgres database accessible from outside the Docker container on port 5432
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
     platform: linux/amd64
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   graphql:
     container_name: ae_graphql
-    restart: unless-stopped
+    restart: always
     build:
       context: ./graphql
     networks:
       - network
     expose:
-      - '5000'
+      - "5000"
     ports:
-      - '5000:5000'
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     # this is on linux to connect from docker to localhost
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "host.docker.internal:host-gateway"
     env_file:
       - ./.env
     command:
       [
-        '--connection',
-        '${DATABASE_URL}',
-        '--schema',
-        'ae',
-        '--append-plugins',
-        'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,postgraphile-upsert-plugin:PgMutationUpsertPlugin',
-        '--jwt-token-identifier',
-        'auth.jwt_token',
-        '--default-role',
-        'anon',
-        '--jwt-secret',
-        '${JWT_SECRET}',
-        '--body-size-limit',
-        '300kb',
-        '--cors',
-        '--disable-query-log',
-        '--enable-query-batching',
-        '--retry-on-init-fail',
-        '--enhance-graphiql',
+        "--connection",
+        "${DATABASE_URL}",
+        "--schema",
+        "ae",
+        "--append-plugins",
+        "postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,postgraphile-upsert-plugin:PgMutationUpsertPlugin",
+        "--jwt-token-identifier",
+        "auth.jwt_token",
+        "--default-role",
+        "anon",
+        "--jwt-secret",
+        "${JWT_SECRET}",
+        "--body-size-limit",
+        "300kb",
+        "--cors",
+        "--disable-query-log",
+        "--enable-query-batching",
+        "--retry-on-init-fail",
+        "--enhance-graphiql",
       ]
 volumes:
   db_data:
