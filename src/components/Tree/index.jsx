@@ -1,4 +1,4 @@
-import { useMemo, useContext } from 'react'
+import { useMemo, useContext, Suspense } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
@@ -17,6 +17,7 @@ import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
 import { Root } from './Root/index.jsx'
+import { LoadingRow } from './LoadingRow.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import { errorContainer } from './index.module.css'
@@ -68,7 +69,9 @@ export const Tree = observer(() => {
             contain: 'paint layout style',
           }}
         >
-          <Root />
+          <Suspense fallback={<LoadingRow level={1} />}>
+            <Root />
+          </Suspense>
         </SimpleBar>
         <IntoViewScroller />
         <CmBenutzerFolder />

@@ -1,9 +1,11 @@
+import { Suspense } from 'react'
 import { useLocation } from 'react-router'
 
 import { Row } from '../../Row/index.jsx'
+import { LoadingRow } from '../../LoadingRow.jsx'
 import { Tax } from '../LR/Tax.jsx'
 
-export const Arten = ({ isLoading, count }) => {
+export const Arten = ({ count }) => {
   const { pathname } = useLocation()
   const isOpen = pathname.startsWith('/Arten')
 
@@ -12,14 +14,18 @@ export const Arten = ({ isLoading, count }) => {
     id: 'Arten',
     url: ['Arten'],
     childrenCount: count,
-    info: `${isLoading ? '...' : count} Taxonomien`,
+    info: `${count} Taxonomien`,
     menuType: 'CmType',
   }
 
   return (
     <>
       <Row data={data} />
-      {isOpen && <Tax type="Arten" />}
+      {isOpen && (
+        <Suspense fallback={<LoadingRow level={2} />}>
+          <Tax type="Arten" />
+        </Suspense>
+      )}
     </>
   )
 }

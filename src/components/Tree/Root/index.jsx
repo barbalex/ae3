@@ -10,14 +10,13 @@ import { PC } from './PC/index.jsx'
 import { UsersFolder } from './Users/index.jsx'
 import { OrganizationsFolder } from './Organizations/index.jsx'
 import { storeContext } from '../../../storeContext.js'
-import { LoadingRow } from '../LoadingRow.jsx'
 
 export const Root = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const hasToken = !!store.login.token
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['tree', 'root', hasToken],
     queryFn: () => {
       // This query is re-run under certain circumstances
@@ -50,34 +49,20 @@ export const Root = observer(() => {
         variables: { hasToken },
       })
     },
+    suspense: true,
   })
-
-  if (isLoading) return <LoadingRow level={1} />
 
   if (!data) return null
 
   return (
     <>
-      <Arten
-        isLoading={isLoading}
-        count={data?.data?.arten?.totalCount}
-      />
-      <LR
-        isLoading={isLoading}
-        count={data?.data?.lebensraeume?.totalCount}
-      />
-      <PC
-        isLoading={isLoading}
-        count={data?.data?.allPropertyCollections?.totalCount}
-      />
+      <Arten count={data?.data?.arten?.totalCount} />
+      <LR count={data?.data?.lebensraeume?.totalCount} />
+      <PC count={data?.data?.allPropertyCollections?.totalCount} />
       {hasToken && (
         <>
-          <UsersFolder
-            isLoading={isLoading}
-            count={data?.data?.allUsers?.totalCount}
-          />
+          <UsersFolder count={data?.data?.allUsers?.totalCount} />
           <OrganizationsFolder
-            isLoading={isLoading}
             count={data?.data?.allOrganizations?.totalCount}
           />
         </>
