@@ -6,7 +6,8 @@ import { MdShare as ShareIcon } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useLocation, useNavigate, Link } from 'react-router'
@@ -63,6 +64,7 @@ export const AppBar = observer(() => {
   const store = useContext(storeContext)
   const { login, singleColumnView } = store
   const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const apolloClient = useApolloClient()
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -81,15 +83,21 @@ export const AppBar = observer(() => {
     taxId = activeNodeArray[1]
   }
   const existsTaxId = taxId !== '99999999-9999-9999-9999-999999999999'
-  const { data } = useQuery(query, {
-    variables: {
-      objectId: objectId || '99999999-9999-9999-9999-999999999999',
-      existsObjectId: !!objectId,
-      pCId,
-      existsPCId,
-      taxId,
-      existsTaxId,
-    },
+  const { data } = useQuery({
+    queryKey: ['appBarData', objectId, pCId, taxId],
+    queryFn: () =>
+      apolloClient.query({
+        query: query,
+        variables: {
+          objectId: objectId || '99999999-9999-9999-9999-999999999999',
+          existsObjectId: !!objectId,
+          pCId,
+          existsPCId,
+          taxId,
+          existsTaxId,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const [wide, setWide] = useState(false)
@@ -111,9 +119,9 @@ export const AppBar = observer(() => {
     : wide ? 'Login'
     : 'n.a.'
   const loginTitle = username ? 'abmelden' : 'anmelden'
-  const objektName = data?.objectById?.name
-  const pCName = data?.propertyCollectionById?.name
-  const taxName = data?.taxonomyById?.name
+  const objektName = data?.data?.objectById?.name
+  const pCName = data?.data?.propertyCollectionById?.name
+  const taxName = data?.data?.taxonomyById?.name
 
   const onClickColumnButtonDocs = () => navigate('/Dokumentation')
   const onClickColumnButtonData = () => navigate('/')

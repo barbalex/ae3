@@ -3,7 +3,8 @@ import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import { MdAdd as AddIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -53,13 +54,18 @@ export const OrgUsers = observer(() => {
       activeNodeArray[1]
     : '99999999-9999-9999-9999-999999999999'
 
-  // use tanstack-query to enable refetching from delete?
-  const { data, error, refetch } = useQuery(orgUsersQuery, {
-    variables: { id },
+  const { data, error, refetch } = useQuery({
+    queryKey: ['organizationUsers', id],
+    queryFn: () =>
+      apolloClient.query({
+        query: orgUsersQuery,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const orgUsers =
-    data?.organizationById?.organizationUsersByOrganizationId?.nodes ?? []
+    data?.data?.organizationById?.organizationUsersByOrganizationId?.nodes ?? []
   const orgUserSorted = sortBy(orgUsers, [
     (orgUser) =>
       `${orgUser.userByUserId ? orgUser.userByUserId.name : 'zzzzz'}${
@@ -67,7 +73,7 @@ export const OrgUsers = observer(() => {
       }`,
   ])
   const organizationId =
-    data?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
+    data?.data?.organizationById?.id ?? '99999999-9999-9999-9999-999999999999'
 
   const onClickNew = async () => {
     await apolloClient.mutate({

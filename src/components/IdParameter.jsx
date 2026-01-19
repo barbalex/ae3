@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import isUuid from 'is-uuid'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
@@ -51,6 +52,7 @@ const objectQuery = gql`
 const IdParameter = observer(() => {
   const store = useContext(storeContext)
   const navigate = useNavigate()
+  const apolloClient = useApolloClient()
   /**
    * check if old url was passed that contains objectId-Param
    * for instance:
@@ -61,20 +63,27 @@ const IdParameter = observer(() => {
     idParam && isUuid.anyNonNil(idParam) ? idParam.toLowerCase() : null
 
   const hasObjectId = !!objectId
-  const { error, data } = useQuery(objectQuery, {
-    variables: { id: objectId, hasObjectId },
+  const { error, data } = useQuery({
+    queryKey: ['object', objectId],
+    queryFn: () =>
+      apolloClient.query({
+        query: objectQuery,
+        variables: { id: objectId, hasObjectId },
+        fetchPolicy: 'no-cache',
+      }),
+    enabled: hasObjectId,
   })
 
   useEffect(() => {
-    if (hasObjectId && data?.objectById) {
+    if (hasObjectId && data?.data?.objectById) {
       if (error) return null
       // if idParam was passed, open object
-      const url = getUrlForObject(data?.objectById)
+      const url = getUrlForObject(data?.data?.objectById)
       navigate(`/${url.join('/')}`)
       setTimeout(() => store.scrollIntoView())
       // remove id param from url. Nope, not needed
     }
-  }, [data?.objectById, error, hasObjectId, navigate, store])
+  }, [data?.data?.objectById, error, hasObjectId, navigate, store])
   return null
 })
 
