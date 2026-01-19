@@ -47,7 +47,6 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
         variables: {
           exportTaxonomies,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

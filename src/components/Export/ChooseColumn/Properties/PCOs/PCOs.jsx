@@ -41,7 +41,6 @@ export const PcoList = observer(() => {
         variables: {
           exportTaxonomies,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
   const nodes = data?.data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []

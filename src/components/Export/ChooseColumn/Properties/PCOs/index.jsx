@@ -56,7 +56,6 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
         variables: {
           exportTaxonomies,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 
