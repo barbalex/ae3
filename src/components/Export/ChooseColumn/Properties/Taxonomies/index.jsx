@@ -6,7 +6,8 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { groupBy, sumBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { TaxonomiesList } from './TaxonomiesList.jsx'
@@ -43,19 +44,23 @@ export const Taxonomies = observer(
   ({ taxonomiesExpanded, onToggleTaxonomies }) => {
     const store = useContext(storeContext)
     const exportTaxonomies = store.export.taxonomies.toJSON()
+    const apolloClient = useApolloClient()
 
-    const { data: propsByTaxData, error: propsByTaxError } = useQuery(
-      propsByTaxQuery,
-      {
-        variables: {
-          exportTaxonomies,
-          queryExportTaxonomies: exportTaxonomies.length > 0,
-        },
-      },
-    )
+    const { data: propsByTaxData, error: propsByTaxError } = useQuery({
+      queryKey: ['taxPropertiesByTaxonomies', exportTaxonomies],
+      queryFn: () =>
+        apolloClient.query({
+          query: propsByTaxQuery,
+          variables: {
+            exportTaxonomies,
+            queryExportTaxonomies: exportTaxonomies.length > 0,
+          },
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
     const taxProperties =
-      propsByTaxData?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+      propsByTaxData?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
     const taxPropertiesByTaxonomy = groupBy(
       taxProperties,

@@ -5,7 +5,8 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { RcList } from './RcList/index.jsx'
@@ -32,15 +33,26 @@ const query = gql`
 export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
+  const apolloClient = useApolloClient()
 
-  const { data, error, loading } = useQuery(query, {
-    variables: {
-      exportTaxonomies,
-    },
+  const {
+    data,
+    error,
+    isLoading: loading,
+  } = useQuery({
+    queryKey: ['exportRcoCount', exportTaxonomies],
+    queryFn: () =>
+      apolloClient.query({
+        query: query,
+        variables: {
+          exportTaxonomies,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const pcCount = data?.exportRcoCount?.pcReltypeCount ?? 0
-  const propertyCount = data?.exportRcoCount?.propertyCount ?? 0
+  const pcCount = data?.data?.exportRcoCount?.pcReltypeCount ?? 0
+  const propertyCount = data?.data?.exportRcoCount?.propertyCount ?? 0
 
   if (error) return `Error fetching data: ${error.message}`
 

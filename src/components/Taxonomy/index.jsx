@@ -8,8 +8,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { format } from 'date-fns'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -95,22 +95,33 @@ export const Taxonomy = observer(() => {
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
 
-  const { data: allUsersData, error: allUsersError } = useQuery(allUsersQuery)
-
-  const { data: taxData, error: taxError } = useQuery(taxQuery, {
-    variables: {
-      taxId,
-    },
+  const { data: allUsersData, error: allUsersError } = useQuery({
+    queryKey: ['allUsers'],
+    queryFn: () =>
+      apolloClient.query({
+        query: allUsersQuery,
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const tax = taxData?.taxonomyById
+  const { data: taxData, error: taxError, refetch } = useQuery({
+    queryKey: ['taxonomy', taxId],
+    queryFn: () =>
+      apolloClient.query({
+        query: taxQuery,
+        variables: { taxId },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  const tax = taxData?.data?.taxonomyById
   const importedByName = tax?.userByImportedBy?.name
   const organizationName = tax?.organizationByOrganizationId?.name
   const editing = editingTaxonomies
   const editingArten = editing && tax?.type === 'ART'
   const editingLr = editing && tax?.type === 'LEBENSRAUM'
   const { username } = login
-  const allUsers = allUsersData?.allUsers?.nodes ?? []
+  const allUsers = allUsersData?.data?.allUsers?.nodes ?? []
   const user = allUsers.find((u) => u.name === username)
   const orgsUserIsTaxWriter = (user?.organizationUsersByUserId?.nodes ?? [])
     .filter((o) => ['orgTaxonomyWriter', 'orgAdmin'].includes(o.role))
@@ -142,6 +153,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.importedBy,
+      refetch,
     })
 
   const onChangeOrganizationArten = (event) =>
@@ -153,6 +165,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.organizationId,
+      refetch,
     })
 
   const onChangeImportedByLr = (event) =>
@@ -164,6 +177,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.importedBy,
+      refetch
     })
 
   const onChangeOrganizationLr = (event) =>
@@ -175,6 +189,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.organizationId,
+      refetch
     })
 
   if (taxError) {
@@ -308,18 +323,21 @@ export const Taxonomy = observer(() => {
                 field="id"
                 taxonomy={tax}
                 disabled={true}
+                refetch={refetch}
               />
               <Property
                 key={`${tax?.id}/name`}
                 label="Name"
                 field="name"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <Property
                 key={`${tax?.id}/description`}
                 label="Beschreibung"
                 field="description"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <FormControl
                 className={formControl}
@@ -386,12 +404,14 @@ export const Taxonomy = observer(() => {
                 field="lastUpdated"
                 taxonomy={tax}
                 disabled={true}
+                refetch={refetch}
               />
               <Property
                 key={`${tax?.id}/termsOfUse`}
                 label="Nutzungs-Bedingungen"
                 field="termsOfUse"
                 taxonomy={tax}
+                refetch={refetch}
               />
             </>
           )}
@@ -403,18 +423,21 @@ export const Taxonomy = observer(() => {
                 field="id"
                 taxonomy={tax}
                 disabled={true}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/name`}
                 label="Name"
                 field="name"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/description`}
                 label="Beschreibung"
                 field="description"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <FormControl
                 className={formControl}
@@ -466,24 +489,28 @@ export const Taxonomy = observer(() => {
                 field="lastUpdated"
                 taxonomy={tax}
                 disabled={true}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/termsOfUse`}
                 label="Nutzungs-Bedingungen"
                 field="termsOfUse"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/habitatLabel`}
                 label="Einheit-Abkürzung"
                 field="habitatLabel"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/habitatComments`}
                 label="Bemerkungen"
                 field="habitatComments"
                 taxonomy={tax}
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/habitatNrFnsMin`}
@@ -491,6 +518,7 @@ export const Taxonomy = observer(() => {
                 field="habitatNrFnsMin"
                 taxonomy={tax}
                 type="number"
+                refetch={refetch}
               />
               <PropertyLr
                 key={`${tax?.id}/habitatNrFnsMax`}
@@ -498,6 +526,7 @@ export const Taxonomy = observer(() => {
                 field="habitatNrFnsMax"
                 taxonomy={tax}
                 type="number"
+                refetch={refetch}
               />
             </>
           )}
