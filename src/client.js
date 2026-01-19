@@ -67,6 +67,14 @@ export const client = ({ idb, store }) => {
   const client = new ApolloClient({
     link: ApolloLink.from([authLink, batchHttpLink]),
     cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'no-cache',
+      },
+      query: {
+        fetchPolicy: 'no-cache',
+      },
+    },
   })
   return client
 }
