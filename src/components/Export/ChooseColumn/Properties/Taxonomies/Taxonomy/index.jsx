@@ -56,7 +56,6 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
           exportTaxonomies,
           queryExportTaxonomies: exportTaxonomies.length > 0,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

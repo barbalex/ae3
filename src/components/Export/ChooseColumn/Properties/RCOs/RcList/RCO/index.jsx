@@ -71,7 +71,6 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
           pcname,
           relationtype,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

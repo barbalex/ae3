@@ -200,7 +200,6 @@ export const Preview = observer(() => {
           objectIds: exportIds,
           sortField: sortFieldForQuery,
         },
-        fetchPolicy: 'no-cache',
       })
       return data
     },
@@ -243,7 +242,6 @@ export const Preview = observer(() => {
         objectIds: exportIds,
         sortField: sortFieldForQuery,
       },
-      fetchPolicy: 'no-cache',
     })
     const rows =
       data?.data?.exportAll?.exportDatum?.exportData ?
