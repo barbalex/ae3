@@ -1,7 +1,8 @@
 import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { uniqBy } from 'es-toolkit'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import SimpleBar from 'simplebar-react'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -39,24 +40,42 @@ const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
 export const Objekt = observer(() => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const apolloClient = useApolloClient()
 
   const objectId = getActiveObjectIdFromNodeArray(activeNodeArray)
-  const { data: objectData, error: objectError } = useQuery(query, {
-    variables: {
-      objectId,
-    },
+  const {
+    data: objectData,
+    error: objectError,
+    refetch,
+  } = useQuery({
+    queryKey: ['object', objectId],
+    queryFn: () =>
+      apolloClient.query({
+        query: query,
+        variables: {
+          objectId,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const objekt = objectData?.objectById
+  const objekt = objectData?.data?.objectById
   const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
   const synonymIds = synonyms.map((s) => s.objectByObjectIdSynonym.id)
-  const { data: synonymData } = useQuery(querySynonyms, {
-    variables: {
-      objectIds: synonymIds,
-    },
+  const { data: synonymData } = useQuery({
+    queryKey: ['synonyms', synonymIds],
+    queryFn: () =>
+      apolloClient.query({
+        query: querySynonyms,
+        variables: {
+          objectIds: synonymIds,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+    enabled: synonymIds.length > 0,
   })
 
-  const pcs = objectData?.pcs?.nodes ?? []
-  const synonymPcs = synonymData?.pcs?.nodes ?? []
+  const pcs = objectData?.data?.pcs?.nodes ?? []
+  const synonymPcs = synonymData?.data?.pcs?.nodes ?? []
 
   const pcsIds = pcs.map((c) => c.id)
   const synonymObjects = synonyms.map((s) => s.objectByObjectIdSynonym)
@@ -76,7 +95,10 @@ export const Objekt = observer(() => {
         <SimpleBar style={{ maxHeight: '100%' }}>
           <h3 className={firstTitle}>Taxonomie</h3>
           <Suspense fallback={<Spinner />}>
-            <TaxonomyObject objekt={objekt} />
+            <TaxonomyObject
+              objekt={objekt}
+              refetch={refetch}
+            />
             {synonymObjects.length > 0 && (
               <h3 className={title}>
                 {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}

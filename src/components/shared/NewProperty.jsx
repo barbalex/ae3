@@ -12,7 +12,7 @@ import { storeContext } from '../../storeContext.js'
 import { container, fieldContainer } from './NewProperty.module.css'
 
 export const NewProperty = observer(
-  ({ id, properties: propertiesPrevious }) => {
+  ({ id, properties: propertiesPrevious, refetch }) => {
     const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
 
@@ -35,6 +35,7 @@ export const NewProperty = observer(
           mutation: updatePropertyMutation,
           variables: { properties: JSON.stringify(properties), id },
         })
+        refetch?.()
         setLabel('')
         setValue('')
         await queryClient.invalidateQueries({
