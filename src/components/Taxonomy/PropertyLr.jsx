@@ -12,7 +12,7 @@ import { storeContext } from '../../storeContext.js'
 import { container } from './PropertyLr.module.css'
 
 export const PropertyLr = observer(
-  ({ taxonomy, field, label, type = 'text', disabled }) => {
+  ({ taxonomy, field, label, type = 'text', disabled, refetch }) => {
     const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
     const [value, setValue] = useState(taxonomy[field] || '')
@@ -30,6 +30,7 @@ export const PropertyLr = observer(
         taxonomy,
         value: event.target.value,
         prevValue: taxonomy[field],
+        refetch,
       })
 
     return (

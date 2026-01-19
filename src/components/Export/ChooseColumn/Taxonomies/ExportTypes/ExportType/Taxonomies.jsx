@@ -4,7 +4,8 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { storeContext } from '../../../../../../storeContext.js'
 import { container, title, label } from './Taxonomies.module.css'
@@ -13,6 +14,7 @@ export const Taxonomies = observer(({ type }) => {
   const store = useContext(storeContext)
   const { setType, setTaxonomies } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
+  const apolloClient = useApolloClient()
 
   const taxonomiesQuery = gql`
   query AllTaxonomiesQuery {
@@ -27,8 +29,15 @@ export const Taxonomies = observer(({ type }) => {
     }
   }
 `
-  const { data, error } = useQuery(taxonomiesQuery)
-  const taxonomies = data?.allTaxonomies?.nodes
+  const { data, error } = useQuery({
+    queryKey: ['allTaxonomies', type],
+    queryFn: () =>
+      apolloClient.query({
+        query: taxonomiesQuery,
+        fetchPolicy: 'no-cache',
+      }),
+  })
+  const taxonomies = data?.data?.allTaxonomies?.nodes
 
   const onCheckTaxonomy = async (event, isChecked) => {
     const { name } = event.target
