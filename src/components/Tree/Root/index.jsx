@@ -48,7 +48,6 @@ export const Root = observer(() => {
           }
         `,
         variables: { hasToken },
-        fetchPolicy: 'no-cache',
       })
     },
   })

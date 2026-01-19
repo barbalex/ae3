@@ -27,7 +27,6 @@ export const Organizations = () => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
     },
   })

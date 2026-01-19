@@ -22,7 +22,6 @@ export const Users = () => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
     },
   })
