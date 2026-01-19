@@ -34,7 +34,6 @@ export const Taxonomies = observer(({ type }) => {
     queryFn: () =>
       apolloClient.query({
         query: taxonomiesQuery,
-        fetchPolicy: 'no-cache',
       }),
   })
   const taxonomies = data?.data?.allTaxonomies?.nodes

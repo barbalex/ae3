@@ -36,7 +36,6 @@ export const TopLevelObject = ({ type = 'Lebensräume' }) => {
           }
         `,
         variables: { taxId },
-        fetchPolicy: 'no-cache',
       })
     },
   })

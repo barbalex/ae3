@@ -33,7 +33,6 @@ export const Tax = ({ type = 'Lebensräume' }) => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
     },
   })

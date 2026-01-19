@@ -49,7 +49,6 @@ export const Chooser = observer(({ pcName, count }) => {
           exportTaxonomies,
           pcName,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 
