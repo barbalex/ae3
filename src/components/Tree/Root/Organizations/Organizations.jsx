@@ -3,12 +3,11 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { Row } from '../../Row/index.jsx'
-import { LoadingRow } from '../../LoadingRow.jsx'
 
 export const Organizations = () => {
   const apolloClient = useApolloClient()
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['tree', 'orgs'],
     queryFn: () => {
       // This query is re-run under certain circumstances
@@ -29,9 +28,8 @@ export const Organizations = () => {
         `,
       })
     },
+    suspense: true,
   })
-
-  if (isLoading) return <LoadingRow level={2} />
 
   if (!data) return null
 
