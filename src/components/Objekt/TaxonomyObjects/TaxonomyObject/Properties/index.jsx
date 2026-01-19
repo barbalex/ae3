@@ -21,7 +21,7 @@ import {
   titleValue,
 } from './index.module.css'
 
-const Properties = observer(({ id, properties }) => {
+const Properties = observer(({ id, properties, refetch }) => {
   const store = useContext(storeContext)
   const { editingTaxonomies, stacked } = store
 
@@ -44,12 +44,14 @@ const Properties = observer(({ id, properties }) => {
         properties={properties}
         editing={editingTaxonomies}
         id={id}
+        refetch={refetch}
       />
       {editingTaxonomies && (
         <NewProperty
           key={`${id}/newProperty`}
           id={id}
           properties={properties}
+          refetch={refetch}
         />
       )}
     </>

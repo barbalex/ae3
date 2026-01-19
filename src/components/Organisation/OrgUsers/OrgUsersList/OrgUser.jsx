@@ -9,7 +9,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import { set } from 'es-toolkit/compat'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -78,21 +79,34 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const name = activeNodeArray.length > 1 ? activeNodeArray[1] : 'none'
 
-  const { data: allUsersData, error: allUsersError } = useQuery(allUsersQuery)
+  const { data: allUsersData, error: allUsersError } = useQuery({
+    queryKey: ['allUsers'],
+    queryFn: () =>
+      apolloClient.query({
+        query: allUsersQuery,
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
-  const { data: orgUsersData, error: orgUsersError } = useQuery(orgUsersQuery, {
-    variables: { name },
+  const { data: orgUsersData, error: orgUsersError } = useQuery({
+    queryKey: ['organizationUsersByName', name],
+    queryFn: () =>
+      apolloClient.query({
+        query: orgUsersQuery,
+        variables: { name },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const [userId, setUserId] = useState(orgUser.userId)
   const [role, setRole] = useState(orgUser.role || null)
 
-  const users = allUsersData?.allUsers?.nodes ?? []
-  const orgName = orgUsersData?.organizationByName?.name ?? ''
+  const users = allUsersData?.data?.allUsers?.nodes ?? []
+  const orgName = orgUsersData?.data?.organizationByName?.name ?? ''
   const user = users.find((user) => user.id === userId)
   const userName = user ? user.name || '' : ''
   const userNames = users.map((u) => u.name).sort()
-  const roles = (orgUsersData?.allRoles?.nodes ?? [])
+  const roles = (orgUsersData?.data?.allRoles?.nodes ?? [])
     .map((role) => role.name)
     .sort()
 
@@ -132,6 +146,7 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
       }
       setUserId(user.id)
       setNameError(undefined)
+      orgUsersRefetch()
     }
   }
 
@@ -169,6 +184,7 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
     }
     setRole(newRole)
     setRoleError(undefined)
+    orgUsersRefetch()
   }
 
   const onClickDelete = async () => {

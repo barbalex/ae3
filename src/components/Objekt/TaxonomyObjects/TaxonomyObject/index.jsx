@@ -21,8 +21,8 @@ import {
   MdInfo as InfoIcon,
 } from 'react-icons/md'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 
@@ -65,7 +65,7 @@ const organizationUsersQuery = gql`
   }
 `
 
-export const TaxonomyObject = observer(({ objekt, showLink }) => {
+export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
   const {
@@ -75,16 +75,24 @@ export const TaxonomyObject = observer(({ objekt, showLink }) => {
     scrollIntoView,
     stacked,
   } = store
+  const apolloClient = useApolloClient()
 
   const navigate = useNavigate()
 
-  const { data, error } = useQuery(organizationUsersQuery)
+  const { data, error } = useQuery({
+    queryKey: ['organizationUsers'],
+    queryFn: () =>
+      apolloClient.query({
+        query: organizationUsersQuery,
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
   const [expanded, setExpanded] = useState(showLink ? false : true)
   const [taxExpanded, setTaxExpanded] = useState(false)
 
   const { username } = login
-  const organizationUsers = data?.allOrganizationUsers?.nodes ?? []
+  const organizationUsers = data?.data?.allOrganizationUsers?.nodes ?? []
   const editing = editingTaxonomies
   const userRoles = organizationUsers
     .filter((oU) => username === (oU?.userByUserId?.name ?? ''))
@@ -219,12 +227,14 @@ export const TaxonomyObject = observer(({ objekt, showLink }) => {
                       field="id"
                       objekt={objekt}
                       disabled={true}
+                      refetch={refetch}
                     />
                     <Property
                       key={`${objekt?.id}/name`}
                       label="Name"
                       field="name"
                       objekt={objekt}
+                      refetch={refetch}
                     />
                   </>
                 : stacked ?
@@ -256,6 +266,7 @@ export const TaxonomyObject = observer(({ objekt, showLink }) => {
                 <Properties
                   id={objekt?.id}
                   properties={properties}
+                  refetch={refetch}
                 />
               </CardContent>
             </Collapse>
