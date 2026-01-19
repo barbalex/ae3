@@ -1,9 +1,11 @@
+import { Suspense } from 'react'
 import { useLocation } from 'react-router'
 
 import { Row } from '../../Row/index.jsx'
+import { LoadingRow } from '../../LoadingRow.jsx'
 import { Organizations } from './Organizations.jsx'
 
-export const OrganizationsFolder = ({ count, isLoading }) => {
+export const OrganizationsFolder = ({ count }) => {
   const { pathname } = useLocation()
 
   const data = {
@@ -11,7 +13,7 @@ export const OrganizationsFolder = ({ count, isLoading }) => {
     id: 'OrganisationenFolder',
     url: ['Organisationen'],
     childrenCount: count,
-    info: isLoading ? '...' : count,
+    info: count,
     menuType: 'orgFolder',
   }
 
@@ -20,7 +22,11 @@ export const OrganizationsFolder = ({ count, isLoading }) => {
   return (
     <>
       <Row data={data} />
-      {isOpen && <Organizations />}
+      {isOpen && (
+        <Suspense fallback={<LoadingRow level={2} />}>
+          <Organizations />
+        </Suspense>
+      )}
     </>
   )
 }
