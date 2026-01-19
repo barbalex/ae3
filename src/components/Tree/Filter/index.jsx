@@ -3,7 +3,8 @@ import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
 import Select from 'react-select/async'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router'
@@ -155,11 +156,18 @@ export const Filter = observer(() => {
   const navigate = useNavigate()
 
   const treeFilterId = treeFilter.id ?? '99999999-9999-9999-9999-999999999999'
-  const { data: objectUrlData } = useQuery(objectUrlQuery, {
-    variables: {
-      treeFilterId,
-      run: !!treeFilter.id,
-    },
+  const { data: objectUrlData } = useQuery({
+    queryKey: ['objectUrl', treeFilterId],
+    queryFn: () =>
+      apolloClient.query({
+        query: objectUrlQuery,
+        variables: {
+          treeFilterId,
+          run: !!treeFilter.id,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+    enabled: !!treeFilter.id,
   })
 
   const onInputChange = (option) => {
@@ -189,10 +197,11 @@ export const Filter = observer(() => {
         setTimeout(() => scrollIntoView())
       }
     }
+    // TODO: refetch query
   }
 
   useEffect(() => {
-    const urlObject = objectUrlData?.objectById ?? {}
+    const urlObject = objectUrlData?.data?.objectById ?? {}
     /**
      * check if treeFilterId and urlObject exist
      * if true:
@@ -214,7 +223,7 @@ export const Filter = observer(() => {
   }, [
     treeFilterId,
     setTreeFilter,
-    objectUrlData?.objectById,
+    objectUrlData?.data?.objectById,
     navigate,
     scrollIntoView,
   ])

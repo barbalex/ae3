@@ -1,6 +1,7 @@
 import { useContext, Suspense } from 'react'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
@@ -37,15 +38,22 @@ const fallback = (
 export const Chooser = observer(({ pcName, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery(query, {
-    variables: {
-      exportTaxonomies,
-      pcName,
-    },
+  const { data, error } = useQuery({
+    queryKey: ['pcoPropertiesByTaxonomiesAndPc', exportTaxonomies, pcName],
+    queryFn: () =>
+      apolloClient.query({
+        query: query,
+        variables: {
+          exportTaxonomies,
+          pcName,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
-  const properties = data?.pcoPropertiesByTaxonomiesAndPc?.nodes ?? []
+  const properties = data?.data?.pcoPropertiesByTaxonomiesAndPc?.nodes ?? []
 
   if (error) return `Error fetching data: ${error.message}`
 

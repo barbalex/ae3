@@ -13,7 +13,7 @@ import { storeContext } from '../../storeContext.js'
 import { container, formControl } from './PropertyArten.module.css'
 
 export const Property = observer(
-  ({ taxonomy, field, label, type = 'text', disabled }) => {
+  ({ taxonomy, field, label, type = 'text', disabled, refetch }) => {
     const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
 
@@ -34,6 +34,7 @@ export const Property = observer(
         value,
         prevValue: taxonomy[field],
         setFieldError,
+        refetch,
       })
 
     return (
