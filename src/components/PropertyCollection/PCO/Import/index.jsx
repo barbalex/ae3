@@ -125,7 +125,6 @@ export const ImportPco = observer(({ setImport }) => {
               pCOfOriginIds
             : ['99999999-9999-9999-9999-999999999999'],
         },
-        fetchPolicy: 'no-cache',
       }),
   })
   const data = rawData?.data
