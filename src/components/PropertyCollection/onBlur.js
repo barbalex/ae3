@@ -10,6 +10,7 @@ export const onBlurDo = async ({
   navigate,
   scrollIntoView,
   setError = () => {},
+  refetch,
 }) => {
   setError(null)
   if (value !== prevValue) {
@@ -32,6 +33,7 @@ export const onBlurDo = async ({
         mutation: updatePCMutation,
         variables,
       })
+      refetch?.()
       queryClient.invalidateQueries({
         queryKey: ['pc'],
       })

@@ -98,7 +98,7 @@ export const PropertyCollection = observer(() => {
   })
   const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
 
-  const { data: dataPc, error: pcError } = useQuery({
+  const { data: dataPc, error: pcError, refetch } = useQuery({
     queryKey: ['pc', pcId],
     queryFn: () =>
       apolloClient.query({
@@ -149,6 +149,7 @@ export const PropertyCollection = observer(() => {
       value: isChecked,
       prevValue: pC.combining,
       queryClient,
+      refetch,
     })
   const onChangeOrganization = (event) =>
     onBlurDo({
@@ -158,6 +159,7 @@ export const PropertyCollection = observer(() => {
       value: event.target.value,
       prevValue: pC.organizationId,
       queryClient,
+      refetch,
     })
   const onChangeImportedBy = (event) =>
     onBlurDo({
@@ -167,6 +169,7 @@ export const PropertyCollection = observer(() => {
       value: event.target.value,
       prevValue: pC.importedBy,
       queryClient,
+      refetch,
     })
   const onChangeLastUpdated = (event) =>
     onBlurDo({
@@ -176,6 +179,7 @@ export const PropertyCollection = observer(() => {
       value: event.target.value,
       prevValue: pC.lastUpdated,
       queryClient,
+      refetch,
     })
 
   if (pcError) {
@@ -277,12 +281,14 @@ export const PropertyCollection = observer(() => {
                 field="id"
                 pC={pC}
                 disabled={idIsReferenced}
+                refetch={refetch}
               />
               <Property
                 key={`${pC.id}/name`}
                 label="Name"
                 field="name"
                 pC={pC}
+                refetch={refetch}
                 helperText={
                   <>
                     <span>
@@ -315,6 +321,7 @@ export const PropertyCollection = observer(() => {
                 label="Beschreibung"
                 field="description"
                 pC={pC}
+                refetch={refetch}
                 helperText={
                   <>
                     <span>
@@ -409,6 +416,7 @@ export const PropertyCollection = observer(() => {
                 label="Links"
                 field="links"
                 pC={pC}
+                refetch={refetch}
                 helperText={
                   <>
                     <span>
@@ -473,6 +481,7 @@ export const PropertyCollection = observer(() => {
                 label="Nutzungs-Bedingungen"
                 field="termsOfUse"
                 pC={pC}
+                refetch={refetch}
                 helperText={
                   <>
                     <span>
