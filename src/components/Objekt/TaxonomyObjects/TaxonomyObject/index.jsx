@@ -84,7 +84,6 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
     queryFn: () =>
       apolloClient.query({
         query: organizationUsersQuery,
-        fetchPolicy: 'no-cache',
       }),
   })
 

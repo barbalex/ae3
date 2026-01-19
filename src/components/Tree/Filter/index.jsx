@@ -165,7 +165,6 @@ export const Filter = observer(() => {
           treeFilterId,
           run: !!treeFilter.id,
         },
-        fetchPolicy: 'no-cache',
       }),
     enabled: !!treeFilter.id,
   })
