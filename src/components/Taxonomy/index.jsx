@@ -101,6 +101,7 @@ export const Taxonomy = observer(() => {
       apolloClient.query({
         query: allUsersQuery,
       }),
+    suspense: true,
   })
 
   const {
@@ -114,6 +115,7 @@ export const Taxonomy = observer(() => {
         query: taxQuery,
         variables: { taxId },
       }),
+    suspense: true,
   })
 
   const tax = taxData?.data?.taxonomyById

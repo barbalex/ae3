@@ -56,6 +56,7 @@ export const Objekt = observer(() => {
           objectId,
         },
       }),
+    suspense: true,
   })
   const objekt = objectData?.data?.objectById
   const synonyms = objekt?.synonymsByObjectId?.nodes ?? []
@@ -70,6 +71,7 @@ export const Objekt = observer(() => {
         },
       }),
     enabled: synonymIds.length > 0,
+    suspense: true,
   })
 
   const pcs = objectData?.data?.pcs?.nodes ?? []
