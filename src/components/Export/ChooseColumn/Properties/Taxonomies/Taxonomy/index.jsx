@@ -7,7 +7,8 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { AllChooser } from './AllChooser.jsx'
@@ -44,22 +45,26 @@ const propsByTaxQuery = gql`
 export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
+  const apolloClient = useApolloClient()
 
-  const { data: propsByTaxData, error: propsByTaxError } = useQuery(
-    propsByTaxQuery,
-    {
-      variables: {
-        exportTaxonomies,
-        queryExportTaxonomies: exportTaxonomies.length > 0,
-      },
-    },
-  )
+  const { data: propsByTaxData, error: propsByTaxError } = useQuery({
+    queryKey: ['taxPropertiesOnlyByTaxonomies', exportTaxonomies],
+    queryFn: () =>
+      apolloClient.query({
+        query: propsByTaxQuery,
+        variables: {
+          exportTaxonomies,
+          queryExportTaxonomies: exportTaxonomies.length > 0,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
   const [expanded, setExpanded] = useState(initiallyExpanded)
   const onClickActions = () => setExpanded(!expanded)
 
   const taxProperties =
-    propsByTaxData?.taxPropertiesOnlyByTaxonomiesFunction?.nodes ?? []
+    propsByTaxData?.data?.taxPropertiesOnlyByTaxonomiesFunction?.nodes ?? []
   const taxPropertiesByTaxonomy = groupBy(taxProperties, (p) => p.taxonomyName)
 
   if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`

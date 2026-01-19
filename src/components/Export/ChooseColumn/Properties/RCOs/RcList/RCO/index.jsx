@@ -5,7 +5,8 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { AllChooser } from './AllChooser.jsx'
@@ -53,17 +54,29 @@ const fallback = (
 export const RCO = observer(({ pcname, relationtype, count }) => {
   const store = useContext(storeContext)
   const exportTaxonomies = store.export.taxonomies.toJSON()
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery(query, {
-    variables: {
+  const { data, error } = useQuery({
+    queryKey: [
+      'exportRcoPerRcoRelation',
       exportTaxonomies,
       pcname,
       relationtype,
-    },
+    ],
+    queryFn: () =>
+      apolloClient.query({
+        query: query,
+        variables: {
+          exportTaxonomies,
+          pcname,
+          relationtype,
+        },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   // spread to prevent node is not extensible error
-  const nodes = [...(data?.exportRcoPerRcoRelation?.nodes ?? [])]
+  const nodes = [...(data?.data?.exportRcoPerRcoRelation?.nodes ?? [])]
   const bezPartnerNodes = nodes.filter(
     (n) => n.property === 'Beziehungspartner',
   )
