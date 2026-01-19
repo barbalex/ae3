@@ -43,7 +43,6 @@ export const TCs = observer(() => {
       apolloClient.query({
         query: tcsQuery,
         variables: { id },
-        fetchPolicy: 'no-cache',
       }),
   })
 

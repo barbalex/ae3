@@ -43,7 +43,6 @@ export const Tree = observer(() => {
         variables: { username: store.login.username ?? '' },
         // seems that react-query cache is not working
         // no idea why
-        fetchPolicy: 'no-cache',
       }),
   })
 

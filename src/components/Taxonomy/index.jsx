@@ -100,11 +100,14 @@ export const Taxonomy = observer(() => {
     queryFn: () =>
       apolloClient.query({
         query: allUsersQuery,
-        fetchPolicy: 'no-cache',
       }),
   })
 
-  const { data: taxData, error: taxError, refetch } = useQuery({
+  const {
+    data: taxData,
+    error: taxError,
+    refetch,
+  } = useQuery({
     queryKey: ['taxonomy', taxId],
     queryFn: () =>
       apolloClient.query({
@@ -177,7 +180,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.importedBy,
-      refetch
+      refetch,
     })
 
   const onChangeOrganizationLr = (event) =>
@@ -189,7 +192,7 @@ export const Taxonomy = observer(() => {
       taxonomy: tax,
       value: event.target.value,
       prevValue: tax?.organizationId,
-      refetch
+      refetch,
     })
 
   if (taxError) {

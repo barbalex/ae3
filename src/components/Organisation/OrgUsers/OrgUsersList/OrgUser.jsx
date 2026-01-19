@@ -84,7 +84,6 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
     queryFn: () =>
       apolloClient.query({
         query: allUsersQuery,
-        fetchPolicy: 'no-cache',
       }),
   })
 
@@ -98,7 +97,6 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
       apolloClient.query({
         query: orgUsersQuery,
         variables: { name },
-        fetchPolicy: 'no-cache',
       }),
   })
 
