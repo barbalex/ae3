@@ -69,7 +69,6 @@ const IdParameter = observer(() => {
       apolloClient.query({
         query: objectQuery,
         variables: { id: objectId, hasObjectId },
-        fetchPolicy: 'no-cache',
       }),
     enabled: hasObjectId,
   })

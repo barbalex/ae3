@@ -60,7 +60,6 @@ export const OrgUsers = observer(() => {
       apolloClient.query({
         query: orgUsersQuery,
         variables: { id },
-        fetchPolicy: 'no-cache',
       }),
   })
 

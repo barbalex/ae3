@@ -69,7 +69,6 @@ const Organization = () => {
       apolloClient.query({
         query: orgQuery,
         variables: { orgId },
-        fetchPolicy: 'no-cache',
       }),
   })
 
