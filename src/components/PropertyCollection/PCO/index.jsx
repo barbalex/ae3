@@ -163,7 +163,6 @@ export const PCO = observer(() => {
           pCId: pcId,
           first: count,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
   const pcoData = data?.data

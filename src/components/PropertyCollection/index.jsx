@@ -93,8 +93,7 @@ export const PropertyCollection = observer(() => {
 
   const { data: dataAllUsers, error: allUsersError } = useQuery({
     queryKey: ['allUsersForPc'],
-    queryFn: () =>
-      apolloClient.query({ query: allUsersQuery, fetchPolicy: 'no-cache' }),
+    queryFn: () => apolloClient.query({ query: allUsersQuery }),
   })
   const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
 
@@ -104,7 +103,6 @@ export const PropertyCollection = observer(() => {
       apolloClient.query({
         query: pcQuery,
         variables: { pcId },
-        fetchPolicy: 'no-cache',
       }),
   })
   const pcData = dataPc?.data
