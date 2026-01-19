@@ -79,8 +79,7 @@ export const Row = observer(({ data }) => {
   const onClickExpandMore = (event) => {
     if (isEqual(url, activeNodeArray)) {
       // close node if its expand more symbol was clicked
-      const newUrl = [...url]
-      newUrl.pop()
+      const newUrl = url.toSpliced(-1)
       navigate(`/${newUrl.join('/')}`)
       // prevent onClick on node
       event.preventDefault()
