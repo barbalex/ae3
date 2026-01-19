@@ -55,7 +55,6 @@ export const Objekt = observer(() => {
         variables: {
           objectId,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
   const objekt = objectData?.data?.objectById
@@ -69,7 +68,6 @@ export const Objekt = observer(() => {
         variables: {
           objectIds: synonymIds,
         },
-        fetchPolicy: 'no-cache',
       }),
     enabled: synonymIds.length > 0,
   })

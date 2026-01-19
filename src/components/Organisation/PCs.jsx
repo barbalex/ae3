@@ -43,7 +43,6 @@ export const PCs = observer(() => {
       apolloClient.query({
         query: pcsQuery,
         variables: { id },
-        fetchPolicy: 'no-cache',
       }),
   })
 

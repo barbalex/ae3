@@ -96,7 +96,6 @@ export const AppBar = observer(() => {
           taxId,
           existsTaxId,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 
