@@ -42,7 +42,6 @@ export const RcList = observer(() => {
           exportTaxonomies,
           queryExportTaxonomies: exportTaxonomies.length > 0,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 
