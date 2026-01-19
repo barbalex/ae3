@@ -3,7 +3,8 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
@@ -60,16 +61,23 @@ const orgQuery = gql`
 
 const Organization = () => {
   const { orgId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery(orgQuery, {
-    variables: { orgId },
+  const { data, error } = useQuery({
+    queryKey: ['organization', orgId],
+    queryFn: () =>
+      apolloClient.query({
+        query: orgQuery,
+        variables: { orgId },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const [tab, setTab] = useState(0)
 
   const onChangeTab = (event, value) => setTab(value)
 
-  const org = data?.organizationById ?? {}
+  const org = data?.data?.organizationById ?? {}
 
   if (error) {
     return <div>{`Fehler: ${error.message}`}</div>

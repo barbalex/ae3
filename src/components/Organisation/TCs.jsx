@@ -1,7 +1,8 @@
 import { useContext, Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -30,17 +31,24 @@ const tcsQuery = gql`
 export const TCs = observer(() => {
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const apolloClient = useApolloClient()
   const id =
     activeNodeArray.length > 1 ?
       activeNodeArray[1]
     : '99999999-9999-9999-9999-999999999999'
 
-  const { data, error } = useQuery(tcsQuery, {
-    variables: { id },
+  const { data, error } = useQuery({
+    queryKey: ['organizationTCs', id],
+    queryFn: () =>
+      apolloClient.query({
+        query: tcsQuery,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      }),
   })
 
   const tcs = sortBy(
-    data?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
+    data?.data?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
     ['name'],
   )
 
