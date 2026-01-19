@@ -10,7 +10,7 @@ import { storeContext } from '../../../../storeContext.js'
 
 import { container } from './Property.module.css'
 
-export const Property = observer(({ field, label, objekt, disabled }) => {
+export const Property = observer(({ field, label, objekt, disabled, refetch }) => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [value, setValue] = useState(objekt?.[field] || '')
@@ -28,18 +28,8 @@ export const Property = observer(({ field, label, objekt, disabled }) => {
           name: value,
           id: objekt.id,
         },
-        optimisticResponse: {
-          updateObjectById: {
-            object: {
-              id: objekt.id,
-              name: value,
-              __typename: 'Object',
-            },
-            __typename: 'Object',
-          },
-          __typename: 'Mutation',
-        },
       })
+      refetch()
       await queryClient.invalidateQueries({
         queryKey: ['tree'],
       })

@@ -14,7 +14,7 @@ import { storeContext } from '../../storeContext.js'
 import { container, formControl } from './Property.module.css'
 
 export const Property = observer(
-  ({ field, label, pC, helperText, type = 'text', disabled }) => {
+  ({ field, label, pC, helperText, type = 'text', disabled, refetch }) => {
     const apolloClient = useApolloClient()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
@@ -37,6 +37,7 @@ export const Property = observer(
         setError,
         navigate,
         scrollIntoView,
+        refetch,
       })
 
     return (
