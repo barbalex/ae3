@@ -36,7 +36,6 @@ export const PCs = () => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
     },
   })

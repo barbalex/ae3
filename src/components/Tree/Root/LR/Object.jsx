@@ -33,7 +33,7 @@ export const Object = ({ parentData }) => {
           }
         `,
         variables: { parentId: parentData.id },
-        fetchPolicy: 'no-cache',
+
       })
     },
   })
