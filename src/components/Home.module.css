@@ -13,24 +13,21 @@
   overflow-y: auto;
   /* prevent layout shift when scrollbar appears */
   scrollbar-gutter: stable;
+  container-type: inline-size;
 }
 
-/* TODO: */
-/* use container-queries when they are supported by all browsers */
-/* meanwhile: deduce width from window width */
-/* stacked when < 700 */
-/* tree: in standard .35 of width */
 .cardContainer {
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
   padding: 25px;
-  @media (min-width: 1231px) {
+
+  @container (min-width: 800px) {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     padding: 35px;
   }
-  @media (min-width: 1847px) {
+  @container (min-width: 1200px) {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 50px;
     padding: 45px;
