@@ -171,7 +171,6 @@ export const RCO = observer(() => {
       apolloClient.query({
         query: rcoPreviewQuery,
         variables: { pCId: pcId, count },
-        fetchPolicy: 'no-cache',
       }),
   })
   const rcoData = data?.data

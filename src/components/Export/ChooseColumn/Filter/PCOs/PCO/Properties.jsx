@@ -49,7 +49,6 @@ export const Properties = observer(({ pc }) => {
           exportTaxonomies,
           pcName: pc,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

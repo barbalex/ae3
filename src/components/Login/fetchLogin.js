@@ -46,7 +46,6 @@ export const fetchLogin = async ({
       username: name,
       pass,
     },
-    fetchPolicy: 'no-cache',
   })
 
   if (CombinedGraphQLErrors.is(error)) {
