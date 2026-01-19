@@ -27,7 +27,7 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
       value = null
     }
     setPcoFilter({ pcname, pname, comparator, value })
-    // if value and not choosen, choose
+    // if value and not chosen, choose
     if (addFilterFields) {
       addPcoProperty({ pcname, pname })
     }

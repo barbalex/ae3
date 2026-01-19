@@ -88,7 +88,11 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
       }),
   })
 
-  const { data: orgUsersData, error: orgUsersError } = useQuery({
+  const {
+    data: orgUsersData,
+    error: orgUsersError,
+    refetch,
+  } = useQuery({
     queryKey: ['organizationUsersByName', name],
     queryFn: () =>
       apolloClient.query({
@@ -125,25 +129,13 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
         await apolloClient.mutate({
           mutation: updateOrgUserMutation,
           variables,
-          optimisticResponse: {
-            updateOrganizationUser: {
-              organizationUser: {
-                nodeId: orgUser.nodeId,
-                id: orgUser.id,
-                organizationId: orgUser.organizationId,
-                userId: user.id,
-                role,
-                __typename: 'OrganizationUser',
-              },
-              __typename: 'Mutation',
-            },
-          },
         })
       } catch (error) {
         console.log(error)
         setUserId('')
         return setNameError(error.message)
       }
+      refetch()
       setUserId(user.id)
       setNameError(undefined)
       orgUsersRefetch()
@@ -163,25 +155,13 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
       await apolloClient.mutate({
         mutation: updateOrgUserMutation,
         variables,
-        optimisticResponse: {
-          updateOrganizationUser: {
-            organizationUser: {
-              nodeId: orgUser.nodeId,
-              id: orgUser.id,
-              organizationId: orgUser.organizationId,
-              userId,
-              role: newRole,
-              __typename: 'OrganizationUser',
-            },
-            __typename: 'Mutation',
-          },
-        },
       })
     } catch (error) {
       console.log('error.message:', error.message)
       setRole('')
       return setRoleError(error?.message)
     }
+    refetch()
     setRole(newRole)
     setRoleError(undefined)
     orgUsersRefetch()
@@ -190,40 +170,9 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   const onClickDelete = async () => {
     await apolloClient.mutate({
       mutation: deleteOrgUserMutation,
-      variables: {
-        id: orgUser.id,
-      },
-      optimisticResponse: {
-        deleteOrganizationUserById: {
-          organizationUser: {
-            id: orgUser.id,
-            __typename: 'OrganizationUser',
-          },
-          __typename: 'Mutation',
-        },
-      },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      update: (proxy, { data: { deleteOrgUserMutation } }) => {
-        const data = proxy.readQuery({
-          query: orgUsersQuery,
-          variables: { name: orgName },
-        })
-        const orgUsers =
-          data?.organizationByName?.organizationUsersByOrganizationId?.nodes ??
-          []
-        const newOrgUsers = orgUsers.filter((u) => u.id !== orgUser.id)
-        set(
-          data,
-          'organizationByName.organizationUsersByOrganizationId.nodes',
-          newOrgUsers,
-        )
-        proxy.writeQuery({
-          query: orgUsersQuery,
-          variables: { name: orgName },
-          data,
-        })
-      },
+      variables: { id: orgUser.id },
     })
+    refetch()
     orgUsersRefetch()
   }
 

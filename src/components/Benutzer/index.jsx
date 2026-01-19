@@ -38,7 +38,7 @@ const User = observer(() => {
   const store = useContext(storeContext)
   const { login, scrollIntoView } = store
 
-  const { data, error } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryKey: ['user', userId],
     queryFn: () =>
       apolloClient.query({
@@ -105,6 +105,7 @@ const User = observer(() => {
       }
       return console.log(error)
     }
+    refetch()
     // refetch to update
     await queryClient.invalidateQueries({
       queryKey: ['tree'],
