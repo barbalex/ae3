@@ -4,14 +4,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Row } from '../../../Row/index.jsx'
-import { LoadingRow } from '../../../LoadingRow.jsx'
 import { Folders } from './Folders.jsx'
 
 export const PCs = () => {
   const { pcId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['tree', 'pcs'],
     queryFn: () => {
       // This query is re-run under certain circumstances
@@ -38,9 +37,8 @@ export const PCs = () => {
         `,
       })
     },
+    suspense: true,
   })
-
-  if (isLoading) return <LoadingRow level={2} />
 
   if (!data) return null
 

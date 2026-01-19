@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +11,7 @@ export const Object = ({ parentData }) => {
   const apolloClient = useApolloClient()
   const { pathname } = useLocation()
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['tree', 'lrObject', parentData.id],
     queryFn: () => {
       return apolloClient.query({
@@ -36,9 +37,8 @@ export const Object = ({ parentData }) => {
 
       })
     },
+    suspense: true,
   })
-
-  if (isLoading) return <LoadingRow level={parentData.url.length + 1} />
 
   if (!data) return null
 
@@ -51,7 +51,7 @@ export const Object = ({ parentData }) => {
       id: node.id,
       url: [...parentData.url, node.id],
       childrenCount: count,
-      info: isLoading ? '...' : count,
+      info: count,
       menuType: 'CmObject',
     }
     const isOpen = pathname.includes(node.id)
@@ -59,7 +59,11 @@ export const Object = ({ parentData }) => {
     nodes.push(
       <div key={node.id}>
         <Row data={nodeData} />
-        {isOpen && !!count && <Object parentData={nodeData} />}
+        {isOpen && !!count && (
+          <Suspense fallback={<LoadingRow level={parentData.url.length + 2} />}>
+            <Object parentData={nodeData} />
+          </Suspense>
+        )}
       </div>,
     )
   }
