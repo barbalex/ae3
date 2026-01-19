@@ -42,7 +42,8 @@ export const Objekt = observer(() => {
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const apolloClient = useApolloClient()
 
-  const objectId = getActiveObjectIdFromNodeArray(activeNodeArray)
+  const unsafeObjectId = getActiveObjectIdFromNodeArray(activeNodeArray)
+  const objectId = unsafeObjectId ?? '99999999-9999-9999-9999-999999999999'
   const {
     data: objectData,
     error: objectError,
@@ -52,10 +53,9 @@ export const Objekt = observer(() => {
     queryFn: () =>
       apolloClient.query({
         query: query,
-        variables: {
-          objectId,
-        },
+        variables: { objectId },
       }),
+    enabled: !!unsafeObjectId,
     suspense: true,
   })
   const objekt = objectData?.data?.objectById

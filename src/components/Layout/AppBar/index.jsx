@@ -83,20 +83,26 @@ export const AppBar = observer(() => {
     taxId = activeNodeArray[1]
   }
   const existsTaxId = taxId !== '99999999-9999-9999-9999-999999999999'
+
+  // Ensure objectId is never null or undefined when passed to GraphQL
+  const safeObjectId = objectId ?? '99999999-9999-9999-9999-999999999999'
+  const existsObjectId = !!objectId
+
   const { data } = useQuery({
     queryKey: ['appBarData', objectId, pCId, taxId],
     queryFn: () =>
       apolloClient.query({
         query: query,
         variables: {
-          objectId: objectId || '99999999-9999-9999-9999-999999999999',
-          existsObjectId: !!objectId,
+          objectId: safeObjectId,
+          existsObjectId,
           pCId,
           existsPCId,
           taxId,
           existsTaxId,
         },
       }),
+    enabled: existsObjectId || existsPCId || existsTaxId,
   })
 
   const [wide, setWide] = useState(false)
