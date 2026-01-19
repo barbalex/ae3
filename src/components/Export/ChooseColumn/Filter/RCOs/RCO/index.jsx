@@ -56,7 +56,6 @@ export const RCO = observer(({ pc }) => {
           exportTaxonomies,
           queryExportTaxonomies: exportTaxonomies.length > 0,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

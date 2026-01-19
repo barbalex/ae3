@@ -113,7 +113,6 @@ export const Taxonomy = observer(() => {
       apolloClient.query({
         query: taxQuery,
         variables: { taxId },
-        fetchPolicy: 'no-cache',
       }),
   })
 
