@@ -8,7 +8,7 @@ import { PropertyReadOnlyStacked } from '../../../../shared/PropertyReadOnlyStac
 import { Property } from '../../../../shared/Property.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 
-export const PropertyList = ({ propertiesArray, properties, editing, id }) => {
+export const PropertyList = ({ propertiesArray, properties, editing, id, refetch }) => {
   const store = useContext(storeContext)
   const { stacked } = store
 
@@ -25,6 +25,7 @@ export const PropertyList = ({ propertiesArray, properties, editing, id }) => {
         id={id}
         properties={properties}
         field={key}
+        refetch={refetch}
       />
     : stacked ?
       <PropertyReadOnlyStacked

@@ -14,7 +14,7 @@ import { storeContext } from '../../storeContext.js'
 import { container } from './Property.module.css'
 
 export const Property = observer(
-  ({ id, properties: propertiesPrevious, field: key }) => {
+  ({ id, properties: propertiesPrevious, field: key, refetch }) => {
     const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
@@ -47,6 +47,7 @@ export const Property = observer(
             __typename: 'Mutation',
           },
         })
+        refetch?.()
         await queryClient.invalidateQueries({
           queryKey: ['tree'],
         })
@@ -60,6 +61,7 @@ export const Property = observer(
         mutation: updatePropertyMutation,
         variables: { properties: JSON.stringify(properties), id },
       })
+      refetch?.()
       queryClient.invalidateQueries({
         queryKey: ['tree'],
       })
