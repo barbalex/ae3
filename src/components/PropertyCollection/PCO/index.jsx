@@ -17,15 +17,7 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
-import {
-  container,
-  total,
-  buttonsContainer,
-  exportButtons,
-  mutationButtons,
-  button,
-  buttonLoading,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const pcoQuery = gql`
   query pCOQuery($pCId: UUID!) {
@@ -294,15 +286,17 @@ export const PCO = observer(() => {
 
   if (error) {
     return (
-      <div className={container}>{`Error fetching data: ${error.message}`}</div>
+      <div
+        className={styles.container}
+      >{`Error fetching data: ${error.message}`}</div>
     )
   }
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Suspense fallback={<Spinner />}>
         {!showImportPco && (
-          <div className={total}>
+          <div className={styles.total}>
             {`${totalCount?.toLocaleString?.(
               'de-CH',
             )} Datensätze, ${propKeys?.length?.toLocaleString?.('de-CH')} Feld${
@@ -325,13 +319,13 @@ export const PCO = observer(() => {
               orderBy={orderBy}
               order={sortDirection}
             />
-            <div className={buttonsContainer}>
-              <div className={exportButtons}>
+            <div className={styles.buttonsContainer}>
+              <div className={styles.exportButtons}>
                 <Button
                   onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
-                  className={`button ${xlsxExportLoading ? buttonLoading : ''}`}
+                  className={`button ${xlsxExportLoading ? styles.buttonLoading : ''}`}
                 >
                   xlsx exportieren
                 </Button>
@@ -339,13 +333,13 @@ export const PCO = observer(() => {
                   onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  className={`button ${csvExportLoading ? buttonLoading : ''}`}
+                  className={`button ${csvExportLoading ? styles.buttonLoading : ''}`}
                 >
                   csv exportieren
                 </Button>
               </div>
               {userIsWriter && (
-                <div className={mutationButtons}>
+                <div className={styles.mutationButtons}>
                   <Button
                     onClick={onClickImport}
                     variant="outlined"
@@ -357,7 +351,7 @@ export const PCO = observer(() => {
                     onClick={onClickDelete}
                     variant="outlined"
                     color="inherit"
-                    className={`button ${deleteLoading ? buttonLoading : ''}`}
+                    className={`button ${deleteLoading ? styles.buttonLoading : ''}`}
                   >
                     Daten löschen
                   </Button>

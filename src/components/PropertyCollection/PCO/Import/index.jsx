@@ -19,15 +19,7 @@ import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { PcoInstructions } from './Instructions.jsx'
 
-import {
-  container,
-  dropzoneContainer,
-  dropzone,
-  dropzoneActive,
-  button,
-  total,
-  snackbar,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const importPcoQuery = gql`
   query pCOQuery(
@@ -333,14 +325,14 @@ export const ImportPco = observer(({ setImport }) => {
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <div className={container}>
+      <div className={styles.container}>
         <PcoInstructions
           {...checkState}
           objectIdsAreReal={objectIdsAreReal}
           pCOfOriginIdsAreReal={pCOfOriginIdsAreReal}
         />
         {!importing && (
-          <div className={dropzoneContainer}>
+          <div className={styles.dropzoneContainer}>
             <Dropzone
               onDrop={onDrop}
               types={[
@@ -369,7 +361,7 @@ export const ImportPco = observer(({ setImport }) => {
                 if (isDragActive)
                   return (
                     <div
-                      className={dropzoneActive}
+                      className={styles.dropzoneActive}
                       {...getRootProps()}
                     >
                       Hier fallen lassen
@@ -378,7 +370,7 @@ export const ImportPco = observer(({ setImport }) => {
                 if (isDragReject)
                   return (
                     <div
-                      className={dropzoneActive}
+                      className={styles.dropzoneActive}
                       {...getRootProps()}
                     >
                       njet!
@@ -386,7 +378,7 @@ export const ImportPco = observer(({ setImport }) => {
                   )
                 return (
                   <div
-                    className={dropzone}
+                    className={styles.dropzone}
                     {...getRootProps()}
                   >
                     <input {...getInputProps()} />
@@ -413,14 +405,14 @@ export const ImportPco = observer(({ setImport }) => {
                 completedFraction * 100
               }% ${100 - completedFraction * 100}%)`,
             }}
-            className={button}
+            className={styles.button}
           >
             {importing ? `${imported} importiert` : 'importieren'}
           </Button>
         )}
         {showPreview && (
           <>
-            <div className={total}>
+            <div className={styles.total}>
               {`${importData.length.toLocaleString(
                 'de-CH',
               )} Datensätze, ${propertyFields.length.toLocaleString(
@@ -445,7 +437,7 @@ export const ImportPco = observer(({ setImport }) => {
           </>
         )}
         <Snackbar
-          className={snackbar}
+          className={styles.snackbar}
           open={isLoading}
           message="lade Daten..."
         />

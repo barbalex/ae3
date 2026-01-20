@@ -5,20 +5,7 @@ import {
 } from 'react-icons/md'
 
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
-import {
-  h3,
-  firstTitle,
-  howToImportContainer,
-  h4,
-  liContainer,
-  emSpan,
-  inlineDiv,
-  doneIcon,
-  errorIcon,
-  infoOutlineIcon,
-  p,
-  ul,
-} from './Instructions.module.css'
+import styles from './Instructions.module.css'
 
 export const PcoInstructions = ({
   idsExist,
@@ -40,34 +27,34 @@ export const PcoInstructions = ({
   propertyValuesDontContainBackslash,
 }) => (
   <>
-    <h3 className={firstTitle}>
+    <h3 className={styles.firstTitle}>
       Anforderungen an zu importierende Eigenschaften
     </h3>
-    <div className={howToImportContainer}>
-      <h4 className={h4}>Autorenrechte</h4>
-      <ul className={ul}>
+    <div className={styles.howToImportContainer}>
+      <h4 className={styles.h4}>Autorenrechte</h4>
+      <ul className={styles.ul}>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
               Die Autoren müssen mit der Veröffentlichung einverstanden sein
             </div>
           </div>
         </li>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>Dafür verantwortlich ist, wer Daten importiert</div>
           </div>
         </li>
       </ul>
-      <h4 className={h4}>Tabelle</h4>
-      <ul className={ul}>
+      <h4 className={styles.h4}>Tabelle</h4>
+      <ul className={styles.ul}>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>Die erste Zeile enthält Feld-Namen (= Spalten-Titel)</div>
           </div>
         </li>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
               Jeder Wert hat einen Feld-Namen.
               <br />
@@ -75,49 +62,49 @@ export const PcoInstructions = ({
             </div>
             {existsNoDataWithoutKey && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
             {existsNoDataWithoutKey === false && (
               <div>
-                <ErrorIcon className={errorIcon} />
+                <ErrorIcon className={styles.errorIcon} />
               </div>
             )}
           </div>
         </li>
       </ul>
-      <h4 className={h4}>Zuordnungs-Felder</h4>
-      <ul className={ul}>
+      <h4 className={styles.h4}>Zuordnungs-Felder</h4>
+      <ul className={styles.ul}>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
-              Ein Feld namens <span className={emSpan}>id</span> kann enthalten
-              sein.
+              Ein Feld namens <span className={styles.emSpan}>id</span> kann
+              enthalten sein.
             </div>
             {idsExist && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
             {idsExist === false && (
               <div>
-                <div className={inlineDiv}>(ist nicht)</div>
+                <div className={styles.inlineDiv}>(ist nicht)</div>
               </div>
             )}
           </div>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>Wenn nicht, wird eine id erzeugt</div>
             {idsExist === false && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
           </div>
           <ul>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>id</span> muss gültige{' '}
+                  <span className={styles.emSpan}>id</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -129,29 +116,29 @@ export const PcoInstructions = ({
                 </div>
                 {idsAreUuids && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {idsAreUuids === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
             </li>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>id</span> muss eindeutig sein
+                  <span className={styles.emSpan}>id</span> muss eindeutig sein
                 </div>
                 {idsAreUnique && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {idsAreUnique === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
@@ -159,27 +146,27 @@ export const PcoInstructions = ({
           </ul>
         </li>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
-              Ein Feld namens <span className={emSpan}>objectId</span> muss
+              Ein Feld namens <span className={styles.emSpan}>objectId</span> muss
               enthalten sein
             </div>
             {objectIdsExist && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
             {objectIdsExist === false && (
               <div>
-                <ErrorIcon className={errorIcon} />
+                <ErrorIcon className={styles.errorIcon} />
               </div>
             )}
           </div>
           <ul>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>objectId</span> muss gültige{' '}
+                  <span className={styles.emSpan}>objectId</span> muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
                     target="_blank"
@@ -191,37 +178,37 @@ export const PcoInstructions = ({
                 </div>
                 {objectIdsAreUuid && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {objectIdsAreUuid === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
             </li>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>objectId</span> muss{' '}
-                  <span className={emSpan}>id</span> eines Objekts aus
+                  <span className={styles.emSpan}>objectId</span> muss{' '}
+                  <span className={styles.emSpan}>id</span> eines Objekts aus
                   arteigenschaften.ch sein
                 </div>
                 {objectIdsAreReal && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {objectIdsAreReal === false && !objectIdsAreRealNotTested && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
                 {objectIdsAreRealNotTested && (
                   <>
-                    <InfoOutlineIcon className={infoOutlineIcon} />
-                    <div className={inlineDiv}>
+                    <InfoOutlineIcon className={styles.infoOutlineIcon} />
+                    <div className={styles.inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
                     </div>
@@ -232,24 +219,24 @@ export const PcoInstructions = ({
           </ul>
         </li>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
               Ein Feld namens{' '}
-              <span className={emSpan}>propertyCollectionOfOrigin</span> kann
+              <span className={styles.emSpan}>propertyCollectionOfOrigin</span> kann
               enthalten sein.
             </div>
             {pCOfOriginIdsExist && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.styles.doneIcon} />
               </div>
             )}
             {pCOfOriginIdsExist === false && (
               <div>
-                <div className={inlineDiv}>(ist nicht)</div>
+                <div className={styles.inlineDiv}>(ist nicht)</div>
               </div>
             )}
           </div>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>
               Zweck: In zusammenfassenden Eigenschaften-Sammlungen markieren,
               aus welcher Eigenschaften-Sammlung diese Eigenschaften stammen.{' '}
@@ -264,9 +251,9 @@ export const PcoInstructions = ({
           </div>
           <ul>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  <span className={styles.emSpan}>propertyCollectionOfOrigin</span>{' '}
                   muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
@@ -279,38 +266,38 @@ export const PcoInstructions = ({
                 </div>
                 {pCOfOriginIdsAreUuid && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {pCOfOriginIdsAreUuid === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
             </li>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>
-                  <span className={emSpan}>propertyCollectionOfOrigin</span>{' '}
-                  muss <span className={emSpan}>id</span> einer
+                  <span className={styles.emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  muss <span className={styles.emSpan}>id</span> einer
                   Eigenschaften-Sammlung aus arteigenschaften.ch sein
                 </div>
                 {pCOfOriginIdsAreReal && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {pCOfOriginIdsAreReal === false &&
                   !pCOfOriginIdsAreRealNotTested && (
                     <div>
-                      <ErrorIcon className={errorIcon} />
+                      <ErrorIcon className={styles.errorIcon} />
                     </div>
                   )}
                 {pCOfOriginIdsAreRealNotTested && (
                   <>
-                    <InfoOutlineIcon className={infoOutlineIcon} />
-                    <div className={inlineDiv}>
+                    <InfoOutlineIcon className={styles.infoOutlineIcon} />
+                    <div className={styles.inlineDiv}>
                       (nicht getestet, da sehr viele Daten. Datensätze, welche
                       dieses Kriterium nicht erfüllen, werden nicht importiert)
                     </div>
@@ -321,20 +308,20 @@ export const PcoInstructions = ({
           </ul>
         </li>
       </ul>
-      <p className={p}>Alle weiteren Felder sind Eigenschaften des Objekts:</p>
-      <h4 className={h4}>Eigenschaften</h4>
-      <ul className={ul}>
+      <p className={styles.p}>Alle weiteren Felder sind Eigenschaften des Objekts:</p>
+      <h4 className={styles.h4}>Eigenschaften</h4>
+      <ul className={styles.ul}>
         <li>
-          <div className={liContainer}>
+          <div className={styles.liContainer}>
             <div>Es gibt mindestens eine Eigenschaft</div>
             {existsPropertyKey && (
               <div>
-                <DoneIcon className={doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
             {existsPropertyKey === false && (
               <div>
-                <ErrorIcon className={errorIcon} />
+                <ErrorIcon className={styles.errorIcon} />
               </div>
             )}
           </div>
@@ -343,31 +330,31 @@ export const PcoInstructions = ({
           Feld-Namen dürfen die folgenden Zeichen nicht enthalten:
           <ul>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>{'"'}</div>
                 {propertyKeysDontContainApostroph && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {propertyKeysDontContainApostroph === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
             </li>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>\</div>
                 {propertyKeysDontContainBackslash && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {propertyKeysDontContainBackslash === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
@@ -378,31 +365,31 @@ export const PcoInstructions = ({
           Feld-Werte dürfen die folgenden Zeichen nicht enthalten:
           <ul>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>{'"'}</div>
                 {propertyValuesDontContainApostroph && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {propertyValuesDontContainApostroph === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
             </li>
             <li>
-              <div className={liContainer}>
+              <div className={styles.liContainer}>
                 <div>\</div>
                 {propertyValuesDontContainBackslash && (
                   <div>
-                    <DoneIcon className={doneIcon} />
+                    <DoneIcon className={styles.doneIcon} />
                   </div>
                 )}
                 {propertyValuesDontContainBackslash === false && (
                   <div>
-                    <ErrorIcon className={errorIcon} />
+                    <ErrorIcon className={styles.errorIcon} />
                   </div>
                 )}
               </div>
@@ -410,7 +397,7 @@ export const PcoInstructions = ({
           </ul>
         </li>
       </ul>
-      <h3 className={h3}>Wirkung des Imports auf bereits vorhandene Daten</h3>
+      <h3 className={styles.h3}>Wirkung des Imports auf bereits vorhandene Daten</h3>
       <ul>
         <li>
           Enthält die Eigenschaften-Sammlung bereits einen Datensatz für ein
