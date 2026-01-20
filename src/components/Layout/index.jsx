@@ -6,10 +6,10 @@ import { Spinner } from '../shared/Spinner.jsx'
 const ActiveNodeArraySetter = lazy(() => import('../ActiveNodeArraySetter.jsx'))
 const IdParameter = lazy(() => import('../IdParameter.jsx'))
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 const Layout = () => (
-  <div className={container}>
+  <div className={styles.container}>
     <AppBar />
     <Suspense fallback={<Spinner />}>
       <Outlet />

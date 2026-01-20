@@ -7,7 +7,7 @@ import { MdDeleteSweep } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../storeContext.js'
-import { input, deleteFilterIcon } from './Filter.module.css'
+import styles from './Filter.module.css'
 
 export const Filter = observer(() => {
   const store = useContext(storeContext)
@@ -36,11 +36,11 @@ export const Filter = observer(() => {
               onClick={onClickEmptyFilter}
               title="Filter entfernen"
             >
-              <MdDeleteSweep className={deleteFilterIcon} />
+              <MdDeleteSweep className={styles.deleteFilterIcon} />
             </InputAdornment>
           : null
         }
-        className={input}
+        className={styles.input}
       />
     </FormControl>
   )

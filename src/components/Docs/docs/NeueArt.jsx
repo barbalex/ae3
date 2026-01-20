@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import styles from '../index.module.css'
 
 const NeueArtDoc = () => (
   <>
     <h1>Neue Art erfassen</h1>
-    <p className={dokuDate}>02.11.2021</p>
+    <p className={styles.dokuDate}>02.11.2021</p>
 
     <p>
       Grundsätzlich sind die Autoren einer Taxonomie für deren Nachführung
