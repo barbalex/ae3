@@ -21,6 +21,7 @@ export const Property = observer(
 
     const onChange = (event) => setValue(event.target.value)
     const onBlur = async (event) => {
+      if (!objekt?.id) return
       const { value } = event.target
       if (value !== 'prevValue') {
         await apolloClient.mutate({
