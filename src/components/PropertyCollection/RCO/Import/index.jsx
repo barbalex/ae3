@@ -19,15 +19,7 @@ import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'
 
-import {
-  container,
-  dropzoneContainer,
-  dropzone,
-  dropzoneActive,
-  button,
-  total,
-  snackbar,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const importRcoQuery = gql`
   query rCOQuery(
@@ -403,14 +395,14 @@ export const ImportRco = observer(({ setImport }) => {
 
   return (
     <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-      <div className={container}>
+      <div className={styles.container}>
         <RcoInstructions
           objectIdsAreReal={objectIdsAreReal}
           objectRelationIdsAreReal={objectRelationIdsAreReal}
           {...checkState}
         />
         {!importing && (
-          <div className={dropzoneContainer}>
+          <div className={styles.dropzoneContainer}>
             <Dropzone
               onDrop={onDrop}
               types={[
@@ -439,7 +431,7 @@ export const ImportRco = observer(({ setImport }) => {
                 if (isDragActive)
                   return (
                     <div
-                      className={dropzoneActive}
+                      className={styles.dropzoneActive}
                       {...getRootProps()}
                     >
                       Hier fallen lassen
@@ -448,7 +440,7 @@ export const ImportRco = observer(({ setImport }) => {
                 if (isDragReject)
                   return (
                     <div
-                      className={dropzoneActive}
+                      className={styles.dropzoneActive}
                       {...getRootProps()}
                     >
                       njet!
@@ -456,7 +448,7 @@ export const ImportRco = observer(({ setImport }) => {
                   )
                 return (
                   <div
-                    className={dropzone}
+                    className={styles.dropzone}
                     {...getRootProps()}
                   >
                     <input {...getInputProps()} />
@@ -483,14 +475,14 @@ export const ImportRco = observer(({ setImport }) => {
                 completedFraction * 100
               }% ${100 - completedFraction * 100}%)`,
             }}
-            className={button}
+            className={styles.button}
           >
             {importing ? `${imported} importiert` : 'importieren'}
           </Button>
         )}
         {showPreview && (
           <>
-            <div className={total}>
+            <div className={styles.total}>
               {`${importData.length.toLocaleString(
                 'de-CH',
               )} Datensätze, ${propertyFields.length.toLocaleString(
@@ -522,7 +514,7 @@ export const ImportRco = observer(({ setImport }) => {
         <Snackbar
           open={isLoading}
           message="lade Daten..."
-          className={snackbar}
+          className={styles.snackbar}
         />
       </div>
     </SimpleBar>
