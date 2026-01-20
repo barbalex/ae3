@@ -10,7 +10,7 @@ import { Taxonomies } from './Taxonomies.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-import { label } from './index.module.css'
+import styles from './index.module.css'
 
 const exportTypes = ['Arten', 'Lebensräume']
 const exportTypeTAXToReadable = {
@@ -85,7 +85,7 @@ export const ExportType = observer(({ type }) => {
             />
           }
           label={type}
-          className={label}
+          className={styles.label}
         />
         {exportType === type && <Taxonomies type={type} />}
       </div>

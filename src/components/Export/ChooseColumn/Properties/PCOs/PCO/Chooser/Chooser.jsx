@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
-import { container, label } from './Chooser.module.css'
+import styles from './Chooser.module.css'
 
 export const Chooser = observer(({ pcname, pname }) => {
   const store = useContext(storeContext)
@@ -24,7 +24,7 @@ export const Chooser = observer(({ pcname, pname }) => {
       .length > 0
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControlLabel
         control={
           <Checkbox
@@ -34,7 +34,7 @@ export const Chooser = observer(({ pcname, pname }) => {
           />
         }
         label={<div>{pname}</div>}
-        className={label}
+        className={styles.label}
       />
     </div>
   )
