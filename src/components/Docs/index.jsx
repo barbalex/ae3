@@ -11,7 +11,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Sidebar } from './Sidebar/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { container, doku, paper, content } from './index.module.css'
+import styles from './index.module.css'
 
 const Docs = observer(({ height }) => {
   const store = useContext(storeContext)
@@ -40,7 +40,7 @@ const Docs = observer(({ height }) => {
   if (stacked) {
     return (
       <ErrorBoundary>
-        <Paper className={paper}>
+        <Paper className={styles.paper}>
           <Tabs
             variant="fullWidth"
             value={tab}
@@ -51,13 +51,13 @@ const Docs = observer(({ height }) => {
             <Tab label="Formular" />
           </Tabs>
         </Paper>
-        <div className={content}>
+        <div className={styles.content}>
           {tab === 0 && <Sidebar stacked={true} />}
           {tab === 1 && (
             <SimpleBar
               style={{ maxHeight: height, height: '100%', width: '100%' }}
             >
-              <div className={doku}>
+              <div className={styles.doku}>
                 <Outlet />
               </div>
             </SimpleBar>
@@ -69,10 +69,10 @@ const Docs = observer(({ height }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Sidebar />
         <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
-          <div className={doku}>
+          <div className={styles.doku}>
             <Outlet />
           </div>
         </SimpleBar>

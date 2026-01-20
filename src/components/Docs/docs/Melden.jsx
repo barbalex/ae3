@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import styles from '../index.module.css'
 
 const MeldenDoc = () => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
-    <p className={dokuDate}>29.09.2019</p>
+    <p className={styles.dokuDate}>29.09.2019</p>
     <p>Das geht so:</p>
     <ul>
       <li>

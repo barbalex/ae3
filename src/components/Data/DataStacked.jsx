@@ -8,7 +8,7 @@ import { Outlet } from 'react-router'
 import { Tree } from '../Tree/index.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { paper } from './DataStacked.module.css'
+import styles from './DataStacked.module.css'
 
 export const DataStacked = observer(() => {
   const store = useContext(storeContext)
@@ -19,7 +19,7 @@ export const DataStacked = observer(() => {
 
   return (
     <>
-      <Paper className={paper}>
+      <Paper className={styles.paper}>
         <Tabs
           variant="fullWidth"
           value={tab}
