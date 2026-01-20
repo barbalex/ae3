@@ -15,14 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { RelationList } from './RelationList/index.jsx'
 import { PropertyList } from './PropertyList.jsx'
 
-import {
-  container,
-  card,
-  cardActions,
-  cardActionTitle,
-  cardActionsButtons,
-  cardText,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const PcPresentation = ({ pC }) => {
   const [expanded, setExpanded] = useState(false)
@@ -58,15 +51,15 @@ export const PcPresentation = ({ pC }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <Card className={card}>
+      <div className={styles.container}>
+        <Card className={styles.card}>
           <CardActions
             disableSpacing
             onClick={onClickActions}
-            className={cardActions}
+            className={styles.cardActions}
           >
-            <div className={cardActionTitle}>{pcname}</div>
-            <div className={cardActionsButtons}>
+            <div className={styles.cardActionTitle}>{pcname}</div>
+            <div className={styles.cardActionsButtons}>
               <IconButton
                 data-expanded={pCDescriptionExpanded}
                 aria-expanded={pCDescriptionExpanded}
@@ -99,7 +92,7 @@ export const PcPresentation = ({ pC }) => {
             >
               <PCDescription pC={pC} />
             </Collapse>
-            <div className={cardText}>
+            <div className={styles.cardText}>
               <PropertyList propertiesArray={propertiesArray} />
               {relations?.length > 0 && <RelationList relations={relations} />}
             </div>

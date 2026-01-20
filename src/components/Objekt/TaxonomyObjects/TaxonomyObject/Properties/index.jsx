@@ -13,13 +13,7 @@ import { PropertyList } from './PropertyList.jsx'
 import { NewProperty } from '../../../../shared/NewProperty.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 
-import {
-  titleContainer,
-  titleLabel,
-  titleLabelEditing,
-  titleLabelStacked,
-  titleValue,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const Properties = observer(({ id, properties, refetch }) => {
   const store = useContext(storeContext)
@@ -30,13 +24,13 @@ const Properties = observer(({ id, properties, refetch }) => {
   return (
     <>
       {propertiesArray.length > 0 && (
-        <div className={titleContainer}>
+        <div className={styles.titleContainer}>
           {editingTaxonomies ?
-            <p className={titleLabelEditing}>Eigenschaften:</p>
+            <p className={styles.titleLabelEditing}>Eigenschaften:</p>
           : stacked ?
-            <p className={titleLabelStacked}>Eigenschaften:</p>
-          : <p className={titleLabel}>Eigenschaften:</p>}
-          <p className={titleValue} />
+            <p className={styles.titleLabelStacked}>Eigenschaften:</p>
+          : <p className={styles.titleLabel}>Eigenschaften:</p>}
+          <p className={styles.titleValue} />
         </div>
       )}
       <PropertyList
