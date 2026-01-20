@@ -6,24 +6,19 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  cardContent,
-} from './HowTo.module.css'
+import styles from './HowTo.module.css'
 
 export const HowTo = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
-        className={cardActions}
+        className={styles.cardActions}
       >
-        <div className={cardActionTitle}>So geht's</div>
+        <div className={styles.cardActionTitle}>So geht's</div>
         <IconButton
           aria-expanded={expanded}
           aria-label="Show more"
@@ -37,7 +32,7 @@ export const HowTo = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={styles.cardContent}>
           <ul>
             <li>
               Nachfolgend sind alle Eigenschaften aufgelistet, die in den

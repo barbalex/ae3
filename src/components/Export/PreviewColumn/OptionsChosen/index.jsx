@@ -11,14 +11,7 @@ import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 
-import {
-  container,
-  title,
-  reset,
-  button,
-  hinweise,
-  optionen,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const OptionsChosen = observer(() => {
   const store = useContext(storeContext)
@@ -84,19 +77,19 @@ export const OptionsChosen = observer(() => {
   if (noDataChoosen) return null
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <div
-        className={title}
+        className={styles.title}
         title="Gewählte Optionen"
       >
         Gewählte Optionen
       </div>
-      <ul className={optionen}>
+      <ul className={styles.optionen}>
         <li>
           {`Typ: ${!exportType ? ' keiner' : exportType}`}
           {!!exportType && (
             <span
-              className={reset}
+              className={styles.reset}
               onClick={onClickResetType}
             >
               zurücksetzen
@@ -111,7 +104,7 @@ export const OptionsChosen = observer(() => {
           }`}
           {exportTaxonomies.length > 0 && (
             <span
-              className={reset}
+              className={styles.reset}
               onClick={onClickResetTaxonomies}
             >
               zurücksetzen
@@ -126,7 +119,7 @@ export const OptionsChosen = observer(() => {
           }`}
           {!withSynonymData && (
             <span
-              className={reset}
+              className={styles.reset}
               onClick={onClickResetExportWithSynonymData}
             >
               zurücksetzen
@@ -162,12 +155,12 @@ export const OptionsChosen = observer(() => {
         </li>
       </ul>
       <div
-        className={title}
+        className={styles.title}
         title="Hinweise"
       >
         Hinweise
       </div>
-      <ul className={hinweise}>
+      <ul className={styles.hinweise}>
         <li>
           Spaltentitel werden aus den Namen der Taxonomie, Eigenschaften- oder
           Beziehungssammlung und dem jeweiligen Feldnamen zusammengesetzt. Bei
@@ -196,7 +189,7 @@ export const OptionsChosen = observer(() => {
         onClick={onClickResetAll}
         variant="outlined"
         color="inherit"
-        className={button}
+        className={styles.button}
       >
         alle Optionen zurücksetzen
       </Button>

@@ -13,13 +13,7 @@ import { RcList } from './RcList/index.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  card,
-  cardActions,
-  cardActionTitle,
-  count,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const query = gql`
   query exportRcoCountQuery($exportTaxonomies: [String!]) {
@@ -57,17 +51,17 @@ export const RCOs = observer(({ rcoExpanded, onToggleRco }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <Card className={card}>
+      <div className={styles.container}>
+        <Card className={styles.card}>
           <CardActions
             disableSpacing
             onClick={onToggleRco}
-            className={cardActions}
+            className={styles.cardActions}
           >
-            <div className={cardActionTitle}>
+            <div className={styles.cardActionTitle}>
               Beziehungssammlungen
               <span
-                className={count}
+                className={styles.count}
               >{`(${loading ? '...' : pcCount} Sammlungen, ${
                 loading ? '...' : propertyCount
               } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</span>
