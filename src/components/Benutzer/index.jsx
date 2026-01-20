@@ -22,12 +22,7 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  leContainer,
-  orgContainer,
-  saveButton,
-  paper,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const User = observer(() => {
   const { userId } = useParams()
@@ -121,7 +116,7 @@ const User = observer(() => {
 
   if (error) {
     return (
-      <div className={leContainer}>
+      <div className={styles.leContainer}>
         `Fehler beim Laden der Daten: ${error.message}`
       </div>
     )
@@ -133,7 +128,7 @@ const User = observer(() => {
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
         <div>
-          <div className={orgContainer}>
+          <div className={styles.orgContainer}>
             <FormControl
               fullWidth
               error={!!nameErrorText}
@@ -193,12 +188,12 @@ const User = observer(() => {
               onClick={onSave}
               disabled={!saveEnabled}
               color="inherit"
-              className={saveButton}
+              className={styles.saveButton}
             >
               Änderungen speichern
             </Button>
           </div>
-          <Paper className={paper}>
+          <Paper className={styles.paper}>
             <Tabs
               variant="fullWidth"
               value={tab}
