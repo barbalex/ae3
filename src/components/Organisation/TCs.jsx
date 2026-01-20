@@ -11,7 +11,7 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { container, list, a } from './TCs.module.css'
+import styles from './TCs.module.css'
 
 const tcsQuery = gql`
   query orgTCsQuery($id: UUID!) {
@@ -52,13 +52,13 @@ export const TCs = observer(() => {
   )
 
   if (error)
-    return <div className={container}>{`Fehler: ${error.message}`}</div>
+    return <div className={styles.container}>{`Fehler: ${error.message}`}</div>
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={container}>
-          <div className={list}>
+        <div className={styles.container}>
+          <div className={styles.list}>
             <ul>
               {tcs.map((u) => {
                 const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
@@ -69,7 +69,7 @@ export const TCs = observer(() => {
                     <a
                       href={link}
                       target="_blank"
-                      className={a}
+                      className={styles.a}
                     >
                       {u.name}
                     </a>
