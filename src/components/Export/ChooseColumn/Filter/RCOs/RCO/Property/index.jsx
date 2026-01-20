@@ -6,7 +6,7 @@ import { Value } from './Value.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Property = observer(
   ({ pcname, relationtype, pname, jsontype }) => {
@@ -22,7 +22,7 @@ export const Property = observer(
     const { comparator, value } = exportRcoFilter
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <Value
           key={`${pcname}/${pname}/${jsontype}/${value}`}
           pcname={pcname}

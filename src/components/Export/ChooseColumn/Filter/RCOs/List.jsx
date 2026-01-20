@@ -10,7 +10,7 @@ import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
-import { errorContainer, spinnerContainer } from './List.module.css'
+import styles from './List.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForFilterRCOs(
@@ -31,7 +31,7 @@ const propsByTaxQuery = gql`
 `
 
 const fallback = (
-  <div className={spinnerContainer}>
+  <div className={styles.spinnerContainer}>
     <Spinner message="" />
   </div>
 )
@@ -66,7 +66,7 @@ export const RcoList = observer(() => {
 
   if (error) {
     return (
-      <div className={errorContainer}>
+      <div className={styles.errorContainer}>
         `Error loading data: ${error.message}`
       </div>
     )
