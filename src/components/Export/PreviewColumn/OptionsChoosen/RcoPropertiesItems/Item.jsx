@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../storeContext.js'
-import { reset } from './Item.module.css'
+import styles from './Item.module.css'
 
 export const Item = observer(({ properties }) => {
   const { pcname, relationtype, pname } = properties
@@ -21,7 +21,7 @@ export const Item = observer(({ properties }) => {
       {`${pcname} - ${relationtype}: ${pname}`}
       <span
         onClick={onClick}
-        className={reset}
+        className={styles.reset}
       >
         zurücksetzen
       </span>

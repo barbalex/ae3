@@ -7,7 +7,7 @@ import { PcoList } from './PCOs/index.jsx'
 import { RCOs } from './RCOs/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Properties = observer(() => {
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(false)
@@ -49,7 +49,7 @@ export const Properties = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <HowTo />
         <Taxonomies
           taxonomiesExpanded={taxonomiesExpanded}
