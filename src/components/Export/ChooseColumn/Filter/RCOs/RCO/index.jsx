@@ -14,14 +14,7 @@ import { Properties } from './Properties.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-import {
-  errorContainer,
-  card,
-  cardActions,
-  cardActionTitle,
-  count,
-  propertiesContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForFilterRCO(
@@ -74,7 +67,7 @@ export const RCO = observer(({ pc }) => {
 
   if (error) {
     return (
-      <div className={errorContainer}>
+      <div className={styles.errorContainer}>
         `Error loading data: ${error.message}`
       </div>
     )
@@ -82,16 +75,16 @@ export const RCO = observer(({ pc }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {pc}
             <span
-              className={count}
+              className={styles.count}
             >{`(${rcoPropertiesByPropertyCollection?.[pc]?.length} ${
               rcoPropertiesByPropertyCollection?.[pc]?.length === 1 ?
                 'Feld'
@@ -111,7 +104,7 @@ export const RCO = observer(({ pc }) => {
           timeout="auto"
           unmountOnExit
         >
-          <div className={propertiesContainer}>
+          <div className={styles.propertiesContainer}>
             <Properties properties={rcoPropertiesByPropertyCollection[pc]} />
           </div>
         </Collapse>

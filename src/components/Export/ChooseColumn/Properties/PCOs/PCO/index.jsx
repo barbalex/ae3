@@ -8,13 +8,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { Chooser } from './Chooser/index.jsx'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  collapse,
-  countClass,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const PCO = ({ pcName, count }) => {
   const [expanded, setExpanded] = useState(false)
@@ -22,16 +16,16 @@ export const PCO = ({ pcName, count }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {pcName}
             <span
-              className={countClass}
+              className={styles.countClass}
             >{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</span>
           </div>
           <IconButton
@@ -46,7 +40,7 @@ export const PCO = ({ pcName, count }) => {
           in={expanded}
           timeout="auto"
           unmountOnExit
-          className={collapse}
+          className={styles.collapse}
         >
           {expanded && (
             <Chooser

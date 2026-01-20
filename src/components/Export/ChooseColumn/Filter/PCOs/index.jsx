@@ -13,14 +13,7 @@ import { PcoList } from './List.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  errorContainer,
-  card,
-  cardActions,
-  cardActionTitle,
-  count,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCOs($exportTaxonomies: [String!]) {
@@ -65,7 +58,7 @@ export const PCOs = observer(({ pcoExpanded, onTogglePco }) => {
 
   if (error) {
     return (
-      <div className={errorContainer}>
+      <div className={styles.errorContainer}>
         `Error loading data: ${error.message}`
       </div>
     )
@@ -73,17 +66,17 @@ export const PCOs = observer(({ pcoExpanded, onTogglePco }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <Card className={card}>
+      <div className={styles.container}>
+        <Card className={styles.card}>
           <CardActions
             disableSpacing
             onClick={onTogglePco}
-            className={cardActions}
+            className={styles.cardActions}
           >
-            <div className={cardActionTitle}>
+            <div className={styles.cardActionTitle}>
               Eigenschaftensammlungen
               <span
-                className={count}
+                className={styles.count}
               >{`(${isLoading ? '...' : pcCount} Sammlungen, ${
                 isLoading ? '...' : propertyCount
               } ${propertyCount === 1 ? 'Feld' : 'Felder'})`}</span>
