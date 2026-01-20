@@ -9,7 +9,7 @@ import { onBlurLr } from './onBlurLr.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { container } from './PropertyLr.module.css'
+import styles from './PropertyLr.module.css'
 
 export const PropertyLr = observer(
   ({ taxonomy, field, label, type = 'text', disabled, refetch }) => {
@@ -35,7 +35,7 @@ export const PropertyLr = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={styles.container}>
           <TextField
             autoFocus={label === 'Name' && !value}
             label={label}

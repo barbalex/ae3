@@ -22,7 +22,7 @@ import { onBlurLr } from './onBlurLr.js'
 import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 
-import { container, cardEditButton, formControl } from './index.module.css'
+import styles from './index.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -197,10 +197,16 @@ export const Taxonomy = observer(() => {
     })
 
   if (taxError) {
-    return <div className={container}>{`Fehler: ${taxError.message}`}</div>
+    return (
+      <div className={styles.container}>{`Fehler: ${taxError.message}`}</div>
+    )
   }
   if (allUsersError) {
-    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
+    return (
+      <div
+        className={styles.container}
+      >{`Fehler: ${allUsersError.message}`}</div>
+    )
   }
 
   if (!tax?.id) return null
@@ -208,10 +214,10 @@ export const Taxonomy = observer(() => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={container}>
+        <div className={styles.container}>
           {userIsThisTaxWriter && editing && (
             <IconButton
-              className={cardEditButton}
+              className={styles.cardEditButton}
               aria-label="Daten anzeigen"
               title="Daten anzeigen"
               onClick={onClickStopEditing}
@@ -221,7 +227,7 @@ export const Taxonomy = observer(() => {
           )}
           {userIsThisTaxWriter && !editing && (
             <IconButton
-              className={cardEditButton}
+              className={styles.cardEditButton}
               aria-label="Daten bearbeiten"
               title="Daten bearbeiten"
               onClick={onClickStartEditing}
@@ -344,7 +350,7 @@ export const Taxonomy = observer(() => {
                 refetch={refetch}
               />
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
                 fullWidth
               >
@@ -374,7 +380,7 @@ export const Taxonomy = observer(() => {
                 </Select>
               </FormControl>
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
                 fullWidth
               >
@@ -444,7 +450,7 @@ export const Taxonomy = observer(() => {
                 refetch={refetch}
               />
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
               >
                 <InputLabel htmlFor="importedByLr">Importiert von</InputLabel>
@@ -465,7 +471,7 @@ export const Taxonomy = observer(() => {
                 </Select>
               </FormControl>
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
               >
                 <InputLabel htmlFor="organizationIdLr">
