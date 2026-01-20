@@ -9,7 +9,7 @@ import { AllChooser } from './AllChooser.jsx'
 import { Properties } from './Properties.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 
-import { propertiesContainer, spinnerContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCO(
@@ -30,7 +30,7 @@ const query = gql`
 `
 
 const fallback = (
-  <div className={spinnerContainer}>
+  <div className={styles.spinnerContainer}>
     <Spinner message="" />
   </div>
 )
@@ -64,7 +64,7 @@ export const Chooser = observer(({ pcName, count }) => {
           pcName={pcName}
         />
       )}
-      <div className={propertiesContainer}>
+      <div className={styles.propertiesContainer}>
         <Properties
           properties={properties}
           pcName={pcName}

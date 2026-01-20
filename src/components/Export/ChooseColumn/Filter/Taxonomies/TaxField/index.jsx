@@ -6,7 +6,7 @@ import { Value } from './Value.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { constants } from '../../../../../../modules/constants.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const TaxField = observer(({ taxname, pname, jsontype }) => {
   const store = useContext(storeContext)
@@ -18,7 +18,7 @@ export const TaxField = observer(({ taxname, pname, jsontype }) => {
   const { comparator, value } = exportTaxFilter
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Value
         key={`${taxname}/${pname}/${jsontype}/${value}`}
         taxname={taxname}
