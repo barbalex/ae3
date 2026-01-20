@@ -8,7 +8,7 @@ import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
 
-import { menu, menuTitle, menuTitleLink, simpleBar } from './index.module.css'
+import styles from './index.module.css'
 
 export const Sidebar = observer(({ stacked }) => {
   const store = useContext(storeContext)
@@ -18,18 +18,18 @@ export const Sidebar = observer(({ stacked }) => {
 
   return (
     <div
-      className={menu}
+      className={styles.menu}
       data-stacked={stacked}
       style={{
         width: stacked ? '100%' : constants.sidebar.width,
         minWidth: constants.sidebar.width,
       }}
     >
-      <SimpleBar className={simpleBar}>
-        <div className={menuTitle}>
+      <SimpleBar className={styles.simpleBar}>
+        <div className={styles.menuTitle}>
           <Link
             to={`/Dokumentation/`}
-            className={menuTitleLink}
+            className={styles.menuTitleLink}
           >
             Dokumentation
           </Link>

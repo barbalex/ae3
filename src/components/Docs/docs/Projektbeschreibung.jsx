@@ -1,9 +1,9 @@
-import { dokuDate } from '../index.module.css'
+import styles from '../index.module.css'
 
 const ProjektbeschreibungDoc = () => (
   <>
     <h1>Projektbeschreibung</h1>
-    <p className={dokuDate}>29.09.2019</p>
+    <p className={styles.dokuDate}>29.09.2019</p>
     <h1>Was ist arteigenschaften.ch?</h1>
     <h2>Ziele</h2>
     <h3>Ausgangspunkt</h3>
