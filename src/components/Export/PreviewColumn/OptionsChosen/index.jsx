@@ -20,7 +20,7 @@ import {
   optionen,
 } from './index.module.css'
 
-export const OptionsChoosen = observer(() => {
+export const OptionsChosen = observer(() => {
   const store = useContext(storeContext)
   const {
     setType,
