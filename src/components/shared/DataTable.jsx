@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
 import SimpleBar from 'simplebar-react'
 
-import { container, tableRow } from './DataTable.module.css'
+import styles from './DataTable.module.css'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -46,7 +46,7 @@ export const DataTable = ({
   // console.log('DataTable, data: ', data)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <Table
           sx={{
@@ -60,7 +60,7 @@ export const DataTable = ({
           stickyHeader={true}
         >
           <TableHead>
-            <TableRow className={tableRow}>
+            <TableRow className={styles.tableRow}>
               {columnNames.map((name) => {
                 const active = orderBy === name
                 // console.log('DataTable ', { name, orderBy, active })
@@ -127,7 +127,7 @@ export const DataTable = ({
           <TableBody>
             {data.sort(getComparator(order, orderBy)).map((row) => (
               <TableRow
-                className={tableRow}
+                className={styles.tableRow}
                 key={
                   uniqueKeyCombo ?
                     uniqueKeyCombo.map((key) => row[key]).join('/')

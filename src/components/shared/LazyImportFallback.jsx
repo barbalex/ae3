@@ -1,5 +1,5 @@
-import { container } from './LazyImportFallback.module.css'
+import styles from './LazyImportFallback.module.css'
 
-const LazyImportFallback = () => <div className={container}>Lade...</div>
+const LazyImportFallback = () => <div className={styles.container}>Lade...</div>
 
 export default LazyImportFallback
