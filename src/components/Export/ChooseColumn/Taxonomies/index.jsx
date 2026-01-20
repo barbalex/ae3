@@ -7,12 +7,7 @@ import { ExportTypes } from './ExportTypes/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  paperTextContainer,
-  propertyText,
-  paper,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Taxonomies = observer(() => {
   const store = useContext(storeContext)
@@ -31,16 +26,16 @@ export const Taxonomies = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <HowTo />
         <ExportTypes />
         <Paper
           elevation={1}
           style={{ backgroundColor: paperBackgroundColor }}
-          className={paper}
+          className={styles.paper}
         >
-          <div className={paperTextContainer}>
-            <div className={propertyText}>{textProperties}</div>
+          <div className={styles.paperTextContainer}>
+            <div className={styles.propertyText}>{textProperties}</div>
           </div>
         </Paper>
       </div>

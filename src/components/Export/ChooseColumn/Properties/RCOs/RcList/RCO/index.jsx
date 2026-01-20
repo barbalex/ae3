@@ -15,15 +15,7 @@ import { storeContext } from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 
-import {
-  propertiesContainer,
-  card,
-  cardActions,
-  cardActionTitle,
-  collapse,
-  countClass,
-  spinnerContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const query = gql`
   query exportRcoPerRcoRelationQuery(
@@ -46,7 +38,7 @@ const query = gql`
 `
 
 const fallback = (
-  <div className={spinnerContainer}>
+  <div className={styles.spinnerContainer}>
     <Spinner message="" />
   </div>
 )
@@ -95,15 +87,15 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {`${pcname}: ${relationtype}`}
-            <span className={countClass}>{`(${count ?? 0} ${
+            <span className={styles.countClass}>{`(${count ?? 0} ${
               count === 1 ? 'Feld' : 'Felder'
             })`}</span>
           </div>
@@ -119,7 +111,7 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
           in={expanded}
           timeout="auto"
           unmountOnExit
-          className={collapse}
+          className={styles.collapse}
         >
           <Suspense fallback={fallback}>
             {count > 1 && (
@@ -128,7 +120,7 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
                 relationtype={relationtype}
               />
             )}
-            <div className={propertiesContainer}>
+            <div className={styles.propertiesContainer}>
               <Properties
                 properties={nodes}
                 relationtype={relationtype}

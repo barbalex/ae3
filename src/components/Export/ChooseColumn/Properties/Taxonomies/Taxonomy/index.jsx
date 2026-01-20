@@ -17,14 +17,7 @@ import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  cardContent,
-  propertiesContainer,
-  count,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForPropertiesTaxonomy(
@@ -74,15 +67,15 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {tax}
-            <span className={count}>{`(${properties.length} ${
+            <span className={styles.count}>{`(${properties.length} ${
               properties.length === 1 ? 'Feld' : 'Felder'
             })`}</span>
             <IconButton
@@ -99,9 +92,9 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
           timeout="auto"
           unmountOnExit
         >
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             {properties.length > 1 && <AllChooser properties={properties} />}
-            <div className={propertiesContainer}>
+            <div className={styles.propertiesContainer}>
               <Properties properties={properties} />
             </div>
           </CardContent>
