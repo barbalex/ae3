@@ -7,7 +7,7 @@ import { PcoValue } from './Value.jsx'
 import { PcoCheckbox } from './Checkbox.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
   const store = useContext(storeContext)
@@ -21,7 +21,7 @@ export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
 
   if (jsontype === 'Boolean') {
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <PcoCheckbox
           pcname={pcname}
           pname={pname}
@@ -32,7 +32,7 @@ export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
   }
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <PcoValue
         key={`${pcname}/${pname}/${jsontype}/${value}`}
         pcname={pcname}

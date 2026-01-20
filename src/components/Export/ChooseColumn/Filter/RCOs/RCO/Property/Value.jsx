@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { readableType } from '../../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../../storeContext.js'
 
-import { container, labelClass, select } from './Value.module.css'
+import styles from './Value.module.css'
 
 const rcoFieldPropQuery = gql`
   query propDataQuery(
@@ -126,9 +126,9 @@ export const Value = observer(
     const valueToShow = value ? { value, label: value } : undefined
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <div
-          className={labelClass}
+          className={styles.labelClass}
         >{`${pname} (${readableType(jsontype)})`}</div>
         <Select
           key={focusCount}
@@ -158,7 +158,7 @@ export const Value = observer(
           spellCheck={false}
           // ensure the menu always is on top
           menuPortalTarget={document.body}
-          className={select}
+          className={styles.select}
         />
       </div>
     )
