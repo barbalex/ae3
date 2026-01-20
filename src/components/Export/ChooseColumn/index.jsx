@@ -14,13 +14,7 @@ import { Filter } from './Filter/index.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import {
-  snackbar,
-  card,
-  cardActions,
-  cardActionTitle,
-  container,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const ChooseColumn = observer(() => {
   const store = useContext(storeContext)
@@ -69,14 +63,16 @@ export const ChooseColumn = observer(() => {
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <div className={container}>
-          <Card className={card}>
+        <div className={styles.container}>
+          <Card className={styles.styles.card}>
             <CardActions
-              className={cardActions}
+              className={styles.cardActions}
               disableSpacing
               onClick={onToggleTaxonomies}
             >
-              <div className={cardActionTitle}>1. Taxonomie(n) wählen</div>
+              <div className={styles.cardActionTitle}>
+                1. Taxonomie(n) wählen
+              </div>
               <IconButton
                 aria-expanded={taxonomiesExpanded}
                 aria-label="Show more"
@@ -95,13 +91,13 @@ export const ChooseColumn = observer(() => {
               <Taxonomies />
             </Collapse>
           </Card>
-          <Card className={card}>
+          <Card className={styles.card}>
             <CardActions
-              className={cardActions}
+              className={styles.cardActions}
               disableSpacing
               onClick={onToggleFilter}
             >
-              <div className={cardActionTitle}>2. filtern</div>
+              <div className={styles.cardActionTitle}>2. filtern</div>
               <IconButton
                 aria-expanded={filterExpanded}
                 aria-label="Show more"
@@ -120,13 +116,15 @@ export const ChooseColumn = observer(() => {
               <Filter />
             </Collapse>
           </Card>
-          <Card className={card}>
+          <Card className={styles.card}>
             <CardActions
-              className={cardActions}
+              className={styles.cardActions}
               disableSpacing
               onClick={onToggleProperties}
             >
-              <div className={cardActionTitle}>3. Eigenschaften wählen</div>
+              <div className={styles.cardActionTitle}>
+                3. Eigenschaften wählen
+              </div>
               <IconButton
                 aria-expanded={propertiesExpanded}
                 aria-label="Show more"
@@ -148,7 +146,7 @@ export const ChooseColumn = observer(() => {
           <Snackbar
             open={!!message}
             message={message}
-            className={snackbar}
+            className={styles.snackbar}
           />
         </div>
       </SimpleBar>

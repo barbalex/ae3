@@ -12,16 +12,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { CountInput } from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 
-import {
-  container,
-  errorContainer,
-  spreadsheetContainer,
-  topButtonsContainer,
-  buttonsContainer,
-  total,
-  button,
-  snackbar,
-} from './Preview.module.css'
+import styles from './Preview.module.css'
 
 const exportMutation = gql`
   mutation exportDataMutation(
@@ -258,7 +249,7 @@ export const Preview = observer(() => {
 
   if (exportError) {
     return (
-      <div className={errorContainer}>
+      <div className={styles.errorContainer}>
         `Error fetching data: ${exportError.message}`
       </div>
     )
@@ -266,18 +257,18 @@ export const Preview = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         {rowCount > 0 && (
-          <div className={topButtonsContainer}>
+          <div className={styles.topButtonsContainer}>
             <Button
-              className={button}
+              className={styles.button}
               onClick={onClickXlsx}
               color="inherit"
             >
               .xlsx herunterladen
             </Button>
             <Button
-              className={button}
+              className={styles.button}
               onClick={onClickCsv}
               color="inherit"
             >
@@ -286,8 +277,8 @@ export const Preview = observer(() => {
           </div>
         )}
         {rowCount > 0 && (
-          <div className={spreadsheetContainer}>
-            <div className={total}>
+          <div className={styles.spreadsheetContainer}>
+            <div className={styles.total}>
               {`${rowCount.toLocaleString(
                 'de-CH',
               )} Datensätze, ${anzFelder.toLocaleString('de-CH')} ${
@@ -308,23 +299,23 @@ export const Preview = observer(() => {
           </div>
         )}
         {rowCount === 0 && (
-          <div className={spreadsheetContainer}>
-            <div className={total}>{`${rowCount.toLocaleString(
+          <div className={styles.spreadsheetContainer}>
+            <div className={styles.total}>{`${rowCount.toLocaleString(
               'de-CH',
             )} Datensätze`}</div>
           </div>
         )}
         {rowCount > 0 && (
-          <div className={buttonsContainer}>
+          <div className={styles.buttonsContainer}>
             <Button
-              className={button}
+              className={styles.button}
               onClick={onClickXlsx}
               color="inherit"
             >
               .xlsx herunterladen
             </Button>
             <Button
-              className={button}
+              className={styles.button}
               onClick={onClickCsv}
               color="inherit"
             >
@@ -333,12 +324,12 @@ export const Preview = observer(() => {
           </div>
         )}
         <Snackbar
-          className={snackbar}
+          className={styles.snackbar}
           open={!!message}
           message={message}
         />
         <Snackbar
-          className={snackbar}
+          className={styles.snackbar}
           open={exportLoading}
           message="Lade Daten..."
         />

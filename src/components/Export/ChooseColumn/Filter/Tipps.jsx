@@ -6,24 +6,19 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  cardContent,
-} from './Tipps.module.css'
+import styles from './Tipps.module.css'
 
 export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
-        className={cardActions}
+        className={styles.cardActions}
       >
-        <div className={cardActionTitle}>Tipps und Tricks</div>
+        <div className={styles.cardActionTitle}>Tipps und Tricks</div>
         <IconButton
           aria-expanded={expanded}
           aria-label="Show more"
@@ -37,7 +32,7 @@ export const Tipps = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={styles.cardContent}>
           <ul>
             <li>
               {`Sie können nach beliebig vielen Eigenschaften filtern. Jedes Kriterium reduziert die Anzahl "Treffer".`}
