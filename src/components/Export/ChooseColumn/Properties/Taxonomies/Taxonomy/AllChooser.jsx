@@ -4,7 +4,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../storeContext.js'
-import { container, label } from './AllChooser.module.css'
+import styles from './AllChooser.module.css'
 
 export const AllChooser = observer(({ properties }) => {
   const store = useContext(storeContext)
@@ -34,7 +34,7 @@ export const AllChooser = observer(({ properties }) => {
   const checked = checkedArray.length > 0 && !checkedArray.includes(false)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControlLabel
         control={
           <Checkbox
@@ -44,7 +44,7 @@ export const AllChooser = observer(({ properties }) => {
           />
         }
         label="alle"
-        className={label}
+        className={styles.label}
       />
     </div>
   )

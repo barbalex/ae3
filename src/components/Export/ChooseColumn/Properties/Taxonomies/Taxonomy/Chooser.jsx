@@ -4,7 +4,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../storeContext.js'
-import { container, countClass, label } from './Chooser.module.css'
+import styles from './Chooser.module.css'
 
 export const Chooser = observer(({ taxname, pname, count }) => {
   const store = useContext(storeContext)
@@ -20,7 +20,7 @@ export const Chooser = observer(({ taxname, pname, count }) => {
   const checked = taxProperties.filter((x) => x.pname === pname).length > 0
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControlLabel
         control={
           <Checkbox
@@ -34,11 +34,11 @@ export const Chooser = observer(({ taxname, pname, count }) => {
             {pname}{' '}
             <span
               title="Anzahl Objekte"
-              className={countClass}
+              className={styles.countClass}
             >{`(${count} Objekte)`}</span>
           </div>
         }
-        className={label}
+        className={styles.label}
       />
     </div>
   )

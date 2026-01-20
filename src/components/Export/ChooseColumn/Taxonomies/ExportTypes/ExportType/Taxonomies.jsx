@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { storeContext } from '../../../../../../storeContext.js'
-import { container, title, label } from './Taxonomies.module.css'
+import styles from './Taxonomies.module.css'
 
 export const Taxonomies = observer(({ type }) => {
   const store = useContext(storeContext)
@@ -58,8 +58,8 @@ export const Taxonomies = observer(({ type }) => {
   if (error) return `Fehler beim Laden der Taxonomien: ${error.message}`
 
   return (
-    <div className={container}>
-      <div className={title}>
+    <div className={styles.container}>
+      <div className={styles.title}>
         {(taxonomies ?? []).length === 1 ? 'Taxonomie:' : 'Taxonomien:'}
       </div>
       <FormGroup>
@@ -75,7 +75,7 @@ export const Taxonomies = observer(({ type }) => {
               />
             }
             label={tax.name}
-            className={label}
+            className={styles.label}
           />
         ))}
       </FormGroup>
