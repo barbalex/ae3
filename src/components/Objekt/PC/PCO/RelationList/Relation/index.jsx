@@ -3,7 +3,7 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { PropertyList } from './PropertyList.jsx'
 import { getUrlForObject } from '../../../../../../modules/getUrlForObject.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Relation = ({ relation, intermediateRelation }) => {
   // never pass null to Object.entries!!!
@@ -16,7 +16,7 @@ export const Relation = ({ relation, intermediateRelation }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={{
         borderBottom: intermediateRelation ? '1px solid #c6c6c6' : 'none',
         paddingTop: intermediateRelation ? 0 : 7,

@@ -1,6 +1,6 @@
 import { Relation } from './Relation/index.jsx'
 
-import { title } from './index.module.css'
+import styles from './index.module.css'
 
 export const RelationList = ({ relations }) => {
   const relationsTitleText =
@@ -9,7 +9,7 @@ export const RelationList = ({ relations }) => {
 
   return (
     <>
-      <div className={title}>{relationsTitle}</div>
+      <div className={styles.title}>{relationsTitle}</div>
       {relations.map((relation, index) => (
         <Relation
           key={relation.id}
