@@ -8,13 +8,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { Properties } from './Properties.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  count,
-  propertiesContainer,
-} from './JointTaxonomy.module.css'
+import styles from './JointTaxonomy.module.css'
 
 export const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
@@ -22,15 +16,17 @@ export const JointTaxonomy = ({ jointTaxProperties }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {`Gemeinsame Felder`}
-            <span className={count}>{`(${jointTaxProperties.length})`}</span>
+            <span
+              className={styles.count}
+            >{`(${jointTaxProperties.length})`}</span>
           </div>
           <IconButton
             aria-expanded={expanded}
@@ -45,7 +41,7 @@ export const JointTaxonomy = ({ jointTaxProperties }) => {
           timeout="auto"
           unmountOnExit
         >
-          <div className={propertiesContainer}>
+          <div className={styles.propertiesContainer}>
             <Properties properties={jointTaxProperties} />
           </div>
         </Collapse>

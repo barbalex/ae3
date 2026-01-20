@@ -14,14 +14,7 @@ import { Properties } from './Properties.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import {
-  card,
-  errorContainer,
-  cardActions,
-  cardActionTitle,
-  count,
-  propertiesContainer,
-} from './Taxonomy.module.css'
+import styles from './Taxonomy.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForFilterTaxonomy(
@@ -77,7 +70,7 @@ export const Taxonomy = observer(({ pc, initiallyExpanded }) => {
 
   if (error) {
     return (
-      <div className={errorContainer}>
+      <div className={styles.errorContainer}>
         `Error loading data: ${error.message}`
       </div>
     )
@@ -85,16 +78,16 @@ export const Taxonomy = observer(({ pc, initiallyExpanded }) => {
 
   return (
     <ErrorBoundary>
-      <Card className={card}>
+      <Card className={styles.card}>
         <CardActions
           disableSpacing
           onClick={() => setExpanded(!expanded)}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {pc}
             <span
-              className={count}
+              className={styles.count}
             >{`(${taxPropertiesByTaxonomy?.[pc]?.length} ${
               taxPropertiesByTaxonomy?.[pc]?.length === 1 ? 'Feld' : 'Felder'
             })`}</span>
@@ -112,7 +105,7 @@ export const Taxonomy = observer(({ pc, initiallyExpanded }) => {
           timeout="auto"
           unmountOnExit
         >
-          <div className={propertiesContainer}>
+          <div className={styles.propertiesContainer}>
             <Properties properties={taxPropertiesByTaxonomy?.[pc] ?? []} />
           </div>
         </Collapse>
