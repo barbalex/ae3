@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { readableType } from '../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../storeContext.js'
 
-import { container, label, select } from './Value.module.css'
+import styles from './Value.module.css'
 
 const taxFieldPropQuery = gql`
   query propDataQuery(
@@ -126,8 +126,8 @@ export const Value = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
-          <div className={label}>{`${pname} (${readableType(jsontype)})`}</div>
+        <div className={styles.container}>
+          <div className={styles.label}>{`${pname} (${readableType(jsontype)})`}</div>
           <Select
             key={focusCount}
             ref={ref}
@@ -156,7 +156,7 @@ export const Value = observer(
             spellCheck={false}
             // ensure the menu always is on top
             menuPortalTarget={document.body}
-            className={select}
+            className={styles.select}
           />
         </div>
       </ErrorBoundary>

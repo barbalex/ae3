@@ -4,7 +4,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
-import { label } from './Chooser.module.css'
+import styles from './Chooser.module.css'
 
 export const Chooser = observer(
   ({ pcname, relationtype, pname, propertiesLength }) => {
@@ -39,7 +39,7 @@ export const Chooser = observer(
             />
           }
           label={<div>{pname}</div>}
-          className={label}
+          className={styles.label}
         />
       </div>
     )

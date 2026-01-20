@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
 import { storeContext } from '../../../../../storeContext.js'
 
-import { filterValue, reset } from './Item.module.css'
+import styles from './Item.module.css'
 
 export const Item = observer(({ filter }) => {
   const store = useContext(storeContext)
@@ -22,12 +22,12 @@ export const Item = observer(({ filter }) => {
   return (
     <li>
       {`${taxname}: ${pname} ${comparator ? `${comparator}` : ''}`}
-      <span className={filterValue}>
+      <span className={styles.filterValue}>
         {typeof value === 'boolean' ? booleanToJaNein(value) : value}
       </span>
       <span
         onClick={onClick}
-        className={reset}
+        className={styles.reset}
       >
         zurücksetzen
       </span>

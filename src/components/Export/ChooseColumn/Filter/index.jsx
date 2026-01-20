@@ -13,7 +13,7 @@ import { RCOs } from './RCOs/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { container, label } from './index.module.css'
+import styles from './index.module.css'
 
 export const Filter = observer(() => {
   const store = useContext(storeContext)
@@ -57,7 +57,7 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <HowTo />
         <Tipps />
         <FormGroup>
@@ -70,7 +70,7 @@ export const Filter = observer(() => {
               />
             }
             label="Informationen von Synonymen mit exportieren"
-            className={label}
+            className={styles.label}
           />
           <FormControlLabel
             control={
@@ -81,7 +81,7 @@ export const Filter = observer(() => {
               />
             }
             label="Gefilterte Felder immer exportieren"
-            className={label}
+            className={styles.label}
           />
         </FormGroup>
         <Id />

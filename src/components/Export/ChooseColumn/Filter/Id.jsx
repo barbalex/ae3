@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../storeContext.js'
-import { field } from './Id.module.css'
+import styles from './Id.module.css'
 
 export const Id = observer(() => {
   const store = useContext(storeContext)
@@ -37,7 +37,7 @@ export const Id = observer(() => {
       autoCapitalize="off"
       spellCheck="false"
       variant="standard"
-      className={field}
+      className={styles.field}
     />
   )
 })
