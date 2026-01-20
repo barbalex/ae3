@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { ComparatorSelect } from '../../../ComparatorSelect.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 
-import { container, formControl } from './Comparator.module.css'
+import styles from './Comparator.module.css'
 
 export const PcoComparator = observer(
   ({ pcname, pname, value, comparator }) => {
@@ -17,10 +17,10 @@ export const PcoComparator = observer(
       setPcoFilter({ pcname, pname, comparator: event.target.value, value })
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <FormControl
           variant="standard"
-          className={formControl}
+          className={styles.formControl}
         >
           <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
           <ComparatorSelect

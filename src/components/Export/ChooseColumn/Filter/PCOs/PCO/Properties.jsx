@@ -8,7 +8,7 @@ import { PcoProperty } from './Property/index.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-import { spinnerContainer } from './Properties.module.css'
+import styles from './Properties.module.css'
 
 const query = gql`
   query propsByTaxDataQueryForFilterPCO(
@@ -29,7 +29,7 @@ const query = gql`
 `
 
 const fallback = (
-  <div className={spinnerContainer}>
+  <div className={styles.spinnerContainer}>
     <Spinner message="" />
   </div>
 )
