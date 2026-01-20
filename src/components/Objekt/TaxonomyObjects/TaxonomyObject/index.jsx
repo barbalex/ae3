@@ -37,15 +37,7 @@ import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
 import { storeContext } from '../../../../storeContext.js'
 
-import {
-  errorContainer,
-  container,
-  card,
-  cardActions,
-  cardActionsButtons,
-  cardActionTitle,
-  cardContent,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const organizationUsersQuery = gql`
   query AllOrganizationUsersQuery {
@@ -138,21 +130,23 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
   }
 
   if (error) {
-    return <div className={errorContainer}>{`Fehler: ${error.message}`}</div>
+    return (
+      <div className={styles.errorContainer}>{`Fehler: ${error.message}`}</div>
+    )
   }
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={container}>
-          <Card className={card}>
+        <div className={styles.container}>
+          <Card className={styles.card}>
             <CardActions
               disableSpacing
               onClick={onClickActions}
-              className={cardActions}
+              className={styles.cardActions}
             >
-              <div className={cardActionTitle}>{taxname}</div>
-              <div className={cardActionsButtons}>
+              <div className={styles.cardActionTitle}>{taxname}</div>
+              <div className={styles.cardActionsButtons}>
                 <LinkMenu objekt={objekt} />
                 {showLink && (
                   <IconButton
@@ -217,7 +211,7 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
               >
                 <TaxonomyDescription taxonomy={taxonomy} />
               </Collapse>
-              <CardContent className={cardContent}>
+              <CardContent className={styles.cardContent}>
                 {editing ?
                   <>
                     <Property

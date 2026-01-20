@@ -16,13 +16,7 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  errorContainer,
-  title,
-  titleSpan,
-  firstTitle,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
   let pCOs = []
@@ -85,24 +79,24 @@ export const Objekt = observer(() => {
 
   if (objectError) {
     return (
-      <div className={errorContainer}>{`Fehler: ${objectError.message}`}</div>
+      <div className={styles.errorContainer}>{`Fehler: ${objectError.message}`}</div>
     )
   }
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <SimpleBar style={{ maxHeight: '100%' }}>
-          <h3 className={firstTitle}>Taxonomie</h3>
+          <h3 className={styles.firstTitle}>Taxonomie</h3>
           <Suspense fallback={<Spinner />}>
             <TaxonomyObject
               objekt={objekt}
               refetch={refetch}
             />
             {synonymObjects.length > 0 && (
-              <h3 className={title}>
+              <h3 className={styles.title}>
                 {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
-                <span className={titleSpan}>
+                <span className={styles.titleSpan}>
                   {synonymObjects.length > 1 ?
                     ` (${synonymObjects.length})`
                   : ''}
@@ -111,9 +105,9 @@ export const Objekt = observer(() => {
             )}
             <TaxonomyObjects objects={synonymObjects} />
             {pcs.length > 0 && (
-              <h3 className={title}>
+              <h3 className={styles.title}>
                 Eigenschaften
-                <span className={titleSpan}>{` (${pcs.length} ${
+                <span className={styles.titleSpan}>{` (${pcs.length} ${
                   pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
                 })`}</span>
               </h3>
@@ -127,9 +121,9 @@ export const Objekt = observer(() => {
               />
             ))}
             {synonymPcs.length > 0 && (
-              <h3 className={title}>
+              <h3 className={styles.title}>
                 Eigenschaften von Synonymen
-                <span className={titleSpan}>
+                <span className={styles.titleSpan}>
                   {` (${synonymPcs.length} ${
                     synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
                   })`}
