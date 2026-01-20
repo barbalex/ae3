@@ -1,9 +1,9 @@
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import { container, list, a } from './PC.module.css'
+import styles from './PC.module.css'
 
 export const TCs = ({ tcs }) => (
-  <div className={container}>
-    <div className={list}>
+  <div className={styles.container}>
+    <div className={styles.list}>
       <ul>
         {tcs.map((u) => {
           const elem2 = tcs.type === 'ART' ? 'Arten' : 'Lebensräume'
@@ -14,7 +14,7 @@ export const TCs = ({ tcs }) => (
               <a
                 href={link}
                 target="_blank"
-                className={a}
+                className={styles.a}
               >
                 {u.name}
               </a>

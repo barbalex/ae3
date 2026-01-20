@@ -1,8 +1,8 @@
-import { container, list } from './Roles.module.css'
+import styles from './Roles.module.css'
 
 export const Roles = ({ orgUsers }) => (
-  <div className={container}>
-    <div className={list}>
+  <div className={styles.container}>
+    <div className={styles.list}>
       <ul>
         {orgUsers.map((u) => {
           const orgName = u?.organizationByOrganizationId?.name ?? ''

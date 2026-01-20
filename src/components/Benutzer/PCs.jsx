@@ -1,9 +1,9 @@
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import { container, list, a } from './PC.module.css'
+import styles from './PC.module.css'
 
 export const PCs = ({ pcs }) => (
-  <div className={container}>
-    <div className={list}>
+  <div className={styles.container}>
+    <div className={styles.list}>
       <ul>
         {pcs.map((u) => {
           const link = `${appBaseUrl}Eigenschaften-Sammlungen/${encodeURIComponent(
@@ -13,7 +13,7 @@ export const PCs = ({ pcs }) => (
           return (
             <li key={u.name}>
               <a
-                className={a}
+                className={styles.a}
                 href={link}
                 target="_blank"
               >
