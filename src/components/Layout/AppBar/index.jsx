@@ -17,17 +17,7 @@ import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
 
-import {
-  container,
-  appBar,
-  toolbar,
-  buttons,
-  button,
-  shareButton,
-  shareIcon,
-  titleContainer,
-  siteTitle,
-} from './index.module.css'
+import styles from './index.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
 const ShareButton = styled((props) => <Button {...props} />)(() => ({
@@ -151,17 +141,17 @@ export const AppBar = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <MuiAppBar
           position="static"
-          className={appBar}
+          className={styles.appBar}
         >
           <div>
-            <Toolbar className={toolbar}>
+            <Toolbar className={styles.toolbar}>
               {wide ?
-                <div className={titleContainer}>
+                <div className={styles.titleContainer}>
                   <Button
-                    className={siteTitle}
+                    className={styles.siteTitle}
                     color="inherit"
                     variant="text"
                     component={Link}
@@ -172,10 +162,10 @@ export const AppBar = observer(() => {
                   </Button>
                 </div>
               : <div />}
-              <div className={buttons}>
+              <div className={styles.buttons}>
                 <div>
                   <Button
-                    className={button}
+                    className={styles.button}
                     onClick={onClickColumnButtonData}
                     color="inherit"
                     style={{
@@ -190,7 +180,7 @@ export const AppBar = observer(() => {
                 </div>
                 <div>
                   <Button
-                    className={button}
+                    className={styles.button}
                     onClick={onClickColumnButtonExport}
                     color="inherit"
                     style={{
@@ -202,7 +192,7 @@ export const AppBar = observer(() => {
                 </div>
                 <div>
                   <Button
-                    className={button}
+                    className={styles.button}
                     onClick={onClickColumnButtonLogin}
                     title={loginTitle}
                     color="inherit"
@@ -217,7 +207,7 @@ export const AppBar = observer(() => {
                 </div>
                 <div>
                   <Button
-                    className={button}
+                    className={styles.button}
                     onClick={onClickColumnButtonDocs}
                     color="inherit"
                     style={{
@@ -233,13 +223,13 @@ export const AppBar = observer(() => {
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
                     <ShareButton
-                      className={shareButton}
+                      className={styles.shareButton}
                       aria-label="teilen"
                       onClick={onClickShare}
                       color="inherit"
                     >
                       <Icon>
-                        <ShareIcon className={shareIcon} />
+                        <ShareIcon className={styles.shareIcon} />
                       </Icon>
                     </ShareButton>
                   )}
