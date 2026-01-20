@@ -7,7 +7,7 @@ import { Preview } from './Preview.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import { container, howTo } from './index.module.css'
+import styles from './index.module.css'
 
 export const PreviewColumn = observer(() => {
   const store = useContext(storeContext)
@@ -16,11 +16,11 @@ export const PreviewColumn = observer(() => {
   return (
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <div className={container}>
+        <div className={styles.container}>
           <OptionsChoosen />
           <Preview />
           {exportTaxonomies.length === 0 && (
-            <div className={howTo}>
+            <div className={styles.howTo}>
               Sobald eine Taxonomie gewählt ist, werden hier Daten angezeigt.
             </div>
           )}
