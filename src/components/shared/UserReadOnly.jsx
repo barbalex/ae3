@@ -3,12 +3,7 @@ import Linkify from 'react-linkify'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-import {
-  container,
-  labelClass,
-  userContainer,
-  a,
-} from './UserReadOnly.module.css'
+import styles from './UserReadOnly.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -31,13 +26,13 @@ export const UserReadOnly = ({ label, user }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <div className={container}>
-          <p className={labelClass}>{`${label}:`}</p>
-          <div className={userContainer}>
+        <div className={styles.container}>
+          <p className={styles.labelClass}>{`${label}:`}</p>
+          <div className={styles.userContainer}>
             <a
               href={link}
               target="_blank"
-              className={a}
+              className={styles.a}
             >
               {name}
             </a>
