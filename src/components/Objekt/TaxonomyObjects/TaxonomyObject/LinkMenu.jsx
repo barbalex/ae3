@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import { MdLink as LinkIcon } from 'react-icons/md'
 
-import { button, linkIcon } from './LinkMenu.module.css'
+import styles from './LinkMenu.module.css'
 
 const ITEM_HEIGHT = 48
 
@@ -92,9 +92,9 @@ const LinkMenu = ({ objekt }) => {
         aria-haspopup="true"
         onClick={onClickIcon}
         color="inherit"
-        className={button}
+        className={styles.button}
       >
-        <LinkIcon className={linkIcon} />
+        <LinkIcon className={styles.linkIcon} />
       </Button>
       <Menu
         id="menu"

@@ -6,7 +6,7 @@ import { PcPresentation } from './PCO/index.jsx'
 import query from './query.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import { errorContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const PC = ({ pcId, objId }) => {
   const apolloClient = useApolloClient()
@@ -25,7 +25,7 @@ export const PC = ({ pcId, objId }) => {
   const pC = data?.data?.propertyCollectionById
 
   if (error) {
-    return <div className={errorContainer}>{`Fehler: ${error.message}`}</div>
+    return <div className={styles.errorContainer}>{`Fehler: ${error.message}`}</div>
   }
 
   // don't want too many spinners
