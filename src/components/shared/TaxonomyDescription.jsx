@@ -3,7 +3,7 @@ import Linkify from 'react-linkify'
 import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-import { container } from './TaxonomyDescription.module.css'
+import styles from './TaxonomyDescription.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -22,7 +22,7 @@ export const TaxonomyDescription = ({ taxonomy }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <div className={container}>
+        <div className={styles.container}>
           {taxonomy.description && (
             <PropertyReadOnly
               label="Beschreibung"

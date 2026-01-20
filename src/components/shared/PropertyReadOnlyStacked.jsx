@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField'
 import Linkify from 'react-linkify'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-import { container } from './PropertyReadOnlyStacked.module.css'
+import styles from './PropertyReadOnlyStacked.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -22,7 +22,7 @@ export const PropertyReadOnlyStacked = ({ label, value }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Linkify properties={linkifyProperties}>
           <TextField
             label={label}
