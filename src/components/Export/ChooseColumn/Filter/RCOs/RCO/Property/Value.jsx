@@ -96,7 +96,7 @@ export const Value = observer(
         comparator: comparatorValue,
         value: val,
       })
-      // 2. if value and field not choosen, choose it
+      // 2. if value and field not chosen, choose it
       if (addFilterFields && value) {
         addRcoProperty({ pcname, relationtype, pname })
       }

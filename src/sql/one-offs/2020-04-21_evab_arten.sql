@@ -29,7 +29,7 @@ create or replace view ae.evab_arten as
 --    nor be able to choose what taxonomy to choose species from
 --    In SISF (2018) names of synonyms existing in SISF (2005) are naturally very similar, often exactly same
 --    We need to pass them only once or user will not know which to choose
--- 2. EvAB needs to have all idArt's ever (possibly) choosen in the list
+-- 2. EvAB needs to have all idArt's ever (possibly) chosen in the list
 --    If an idArt that was delivered previously is not delivered any more, user will not see the specie's name
 --    Likely even worse will happen
 -- Solution:

@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 
-import { OptionsChoosen } from './OptionsChoosen/index.jsx'
+import { OptionsChosen } from './OptionsChosen/index.jsx'
 import { Preview } from './Preview.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
@@ -17,7 +17,7 @@ export const PreviewColumn = observer(() => {
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <div className={styles.container}>
-          <OptionsChoosen />
+          <OptionsChosen />
           <Preview />
           {exportTaxonomies.length === 0 && (
             <div className={styles.howTo}>

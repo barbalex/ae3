@@ -8,10 +8,10 @@
 --    - useSynonyms (optional, default: true)
 --    - list of objectIds (optional)
 --    - count (optional, limit is reserved word)
--- 1. for every pc with fields choosen, select: object_id, fieldname, value (while applying all filters)
+-- 1. for every pc with fields chosen, select: object_id, fieldname, value (while applying all filters)
 --    Use above query as template
 -- 2. get list of object_ids (with empty columns fieldname and value) while applying all filters
--- 3. for every tax field choosen, select: object_id, fieldname, value (while applying all filters)
+-- 3. for every tax field chosen, select: object_id, fieldname, value (while applying all filters)
 -- 4. combine all tables using either union or intersect
 --    see: https://www.enterprisedb.com/postgres-tutorials/how-combine-multiple-queries-single-result-set-using-union-intersect-and-except
 --    or: select into rec? (https://stackoverflow.com/a/6085167/712005)
@@ -21,16 +21,16 @@
 --
 -- alternative idea with temporary table and record: (https://stackoverflow.com/a/23957098/712005)
 -- 1. create temporary table _tmp with column id
--- 2. for every taxonomy: select list of object_ids and tax-fields choosen while applying all filters: insert into _tmp. Limit if count was passed
--- 3. for every pc with fields choosen: add column to _tmp, then update it with above query
+-- 2. for every taxonomy: select list of object_ids and tax-fields chosen while applying all filters: insert into _tmp. Limit if count was passed
+-- 3. for every pc with fields chosen: add column to _tmp, then update it with above query
 -- 4. select _tmp into record and return it
 -- 5. how to query unknown structure with graphql? Use id and jsonb instead!
 --
 -- alternative idea using id and jsonb:
 -- 0. define type as (id uuid, properties json)
 -- 1. create temporary table _tmp with column id
--- 2. for every taxonomy: select list of object_ids and tax-fields choosen while applying all filters: insert into _tmp. Limit if count was passed
--- 3. for every pc with fields choosen: add column to _tmp, then update it with above query
+-- 2. for every taxonomy: select list of object_ids and tax-fields chosen while applying all filters: insert into _tmp. Limit if count was passed
+-- 3. for every pc with fields chosen: add column to _tmp, then update it with above query
 -- 4. select _tmp into record and return it
 -- 5. how to query unknown structure with graphql? Use id and json instead.
 --    Build directly in json or convert _tmp using to_jsonb or row_to_json, then removing id using jsonb - text → jsonb?
