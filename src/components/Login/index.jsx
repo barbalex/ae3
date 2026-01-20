@@ -21,7 +21,7 @@ import { idbContext } from '../../idbContext.js'
 import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { container, button, snackbar } from './index.module.css'
+import styles from './index.module.css'
 
 const Login = observer(() => {
   const apolloClient = useApolloClient()
@@ -94,7 +94,7 @@ const Login = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         {!token && (
           <FormControl
             fullWidth
@@ -157,7 +157,7 @@ const Login = observer(() => {
         )}
         {!token && (
           <Button
-            className={button}
+            className={styles.button}
             color="inherit"
           >
             anmelden
@@ -165,7 +165,7 @@ const Login = observer(() => {
         )}
         {!!token && (
           <Button
-            className={button}
+            className={styles.button}
             onClick={onLogout}
             color="inherit"
           >
@@ -175,7 +175,7 @@ const Login = observer(() => {
         <Snackbar
           open={loginSuccessfull}
           message={`Willkommen ${name}`}
-          className={snackbar}
+          className={styles.snackbar}
         />
       </div>
     </ErrorBoundary>

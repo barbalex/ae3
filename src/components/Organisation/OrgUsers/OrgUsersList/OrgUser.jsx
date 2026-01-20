@@ -19,7 +19,7 @@ import { deleteOrgUserMutation } from './deleteOrgUserMutation.js'
 import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { container, formControl } from './OrgUser.module.css'
+import styles from './OrgUser.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -175,18 +175,26 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
   }
 
   if (orgUsersError) {
-    return <div className={container}>{`Fehler: ${orgUsersError.message}`}</div>
+    return (
+      <div
+        className={styles.container}
+      >{`Fehler: ${orgUsersError.message}`}</div>
+    )
   }
   if (allUsersError) {
-    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
+    return (
+      <div
+        className={styles.container}
+      >{`Fehler: ${allUsersError.message}`}</div>
+    )
   }
 
   return (
     <ErrorBoundary>
       <Suspense fallback={null}>
-        <div className={container}>
+        <div className={styles.container}>
           <FormControl
-            className={formControl}
+            className={styles.formControl}
             variant="standard"
           >
             <InputLabel htmlFor="Benutzer">Benutzer</InputLabel>
@@ -209,7 +217,7 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
             )}
           </FormControl>
           <FormControl
-            className={formControl}
+            className={styles.formControl}
             variant="standard"
           >
             <InputLabel htmlFor="Rolle">Rolle</InputLabel>

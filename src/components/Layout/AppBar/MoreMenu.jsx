@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router'
 
 import relations from '../../../modules/relations.png'
-import { moreVertIcon, button, version } from './MoreMenu.module.css'
+import styles from './MoreMenu.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
 const StyledButton = styled((props) => <Button {...props} />)(() => ({
@@ -70,11 +70,11 @@ export const MoreMenu = () => {
         aria-haspopup="true"
         onClick={onClickButton}
         title="Mehr..."
-        className={button}
+        className={styles.button}
         color="inherit"
       >
         <Icon>
-          <MoreVertIcon className={moreVertIcon} />
+          <MoreVertIcon className={styles.moreVertIcon} />
         </Icon>
       </StyledButton>
       <Menu
@@ -105,7 +105,7 @@ export const MoreMenu = () => {
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <div className={version}>Version: 3.1.46 vom 20.1.2026</div>
+        <div className={styles.version}>Version: 3.1.46 vom 20.1.2026</div>
       </Menu>
     </div>
   )
