@@ -96,7 +96,7 @@ export const Value = observer(
         comparator: comparatorValue,
         value: val,
       })
-      // 2. if value and field not choosen, choose it
+      // 2. if value and field not chosen, choose it
       if (addFilterFields && val) {
         addTaxProperty({ taxname, pname })
       }
@@ -127,7 +127,9 @@ export const Value = observer(
     return (
       <ErrorBoundary>
         <div className={styles.container}>
-          <div className={styles.label}>{`${pname} (${readableType(jsontype)})`}</div>
+          <div
+            className={styles.label}
+          >{`${pname} (${readableType(jsontype)})`}</div>
           <Select
             key={focusCount}
             ref={ref}
