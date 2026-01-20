@@ -19,16 +19,7 @@ import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js
 import { onClickContextMenu } from './onClickContextMenu.js'
 import { storeContext } from '../../../storeContext.js'
 
-import {
-  node,
-  spacer,
-  toggle,
-  symbolIcon,
-  symbolSpan,
-  content,
-  textSpan,
-  infoSpan,
-} from './index.module.css'
+import styles from './index.module.css'
 
 function collect(props) {
   return props
@@ -109,7 +100,7 @@ export const Row = observer(({ data }) => {
       onItemClick={onClickContextCallback}
     >
       <div
-        className={node}
+        className={styles.node}
         data-id={data.id}
         data-url={data.url}
         onClick={onClickNode}
@@ -120,12 +111,12 @@ export const Row = observer(({ data }) => {
           color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
         }}
       >
-        <div className={spacer} />
-        <div className={toggle}>
+        <div className={styles.spacer} />
+        <div className={styles.toggle}>
           {useSymbolIcon && (
             <Icon
               id="symbol"
-              className={`material-icons ${symbolIcon}`}
+              className={`material-icons ${styles.symbolIcon}`}
               style={{
                 fontSize: nodeIsInActiveNodePath ? 26 : 23,
                 fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -142,7 +133,7 @@ export const Row = observer(({ data }) => {
           )}
           {useSymbolSpan && (
             <span
-              className={symbolSpan}
+              className={styles.symbolSpan}
               style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
             >
               {'-'}
@@ -150,22 +141,22 @@ export const Row = observer(({ data }) => {
           )}
           {useLoadingSpan && (
             <span
-              className={symbolSpan}
+              className={styles.symbolSpan}
               style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
             >
               {' '}
             </span>
           )}
         </div>
-        <div className={content}>
+        <div className={styles.content}>
           <span
-            className={textSpan}
+            className={styles.textSpan}
             style={{ fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit' }}
           >
             {data.label ?? data.id}
           </span>
           {data.info !== undefined && (
-            <span className={infoSpan}>{`(${data.info})`}</span>
+            <span className={styles.infoSpan}>{`(${data.info})`}</span>
           )}
         </div>
       </div>

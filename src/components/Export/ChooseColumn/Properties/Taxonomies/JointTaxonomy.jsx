@@ -10,14 +10,7 @@ import { AllChooser } from './Taxonomy/AllChooser.jsx'
 import { Properties } from './Properties.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
-import {
-  card,
-  cardActions,
-  cardActionTitle,
-  collapse,
-  propertiesContainer,
-  count,
-} from './JointTaxonomy.module.css'
+import styles from './JointTaxonomy.module.css'
 
 export const JointTaxonomy = observer(({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
@@ -27,16 +20,18 @@ export const JointTaxonomy = observer(({ jointTaxProperties }) => {
     <ErrorBoundary>
       <Card
         key="jointTax"
-        className={card}
+        className={styles.card}
       >
         <CardActions
           disableSpacing
           onClick={onClickActions}
-          className={cardActions}
+          className={styles.cardActions}
         >
-          <div className={cardActionTitle}>
+          <div className={styles.cardActionTitle}>
             {`Gemeinsame Felder`}
-            <span className={count}>{`(${jointTaxProperties.length})`}</span>
+            <span
+              className={styles.count}
+            >{`(${jointTaxProperties.length})`}</span>
           </div>
           <IconButton
             aria-expanded={expanded}
@@ -50,12 +45,12 @@ export const JointTaxonomy = observer(({ jointTaxProperties }) => {
           in={expanded}
           timeout="auto"
           unmountOnExit
-          className={collapse}
+          className={styles.collapse}
         >
           {jointTaxProperties.length > 1 && (
             <AllChooser properties={jointTaxProperties} />
           )}
-          <div className={propertiesContainer}>
+          <div className={styles.propertiesContainer}>
             <Properties properties={jointTaxProperties} />
           </div>
         </Collapse>
