@@ -20,7 +20,7 @@ import { Root } from './Root/index.jsx'
 import { LoadingRow } from './LoadingRow.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
-import { errorContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const getUserIsTaxWriter = (data) => {
   const userRoles = (
@@ -52,7 +52,7 @@ export const Tree = observer(() => {
   if (error) {
     return (
       <div
-        className={errorContainer}
+        className={styles.errorContainer}
       >{`Error fetching data: ${error.message}`}</div>
     )
   }

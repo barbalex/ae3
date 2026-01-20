@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
 
-import { container, select, searchIcon } from './index.module.css'
+import styles from './index.module.css'
 
 const noOptionsMessage = () => null
 const loadingMessage = () => null
@@ -240,8 +240,8 @@ export const Filter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <FaSearch className={searchIcon} />
+      <div className={styles.container}>
+        <FaSearch className={styles.searchIcon} />
         <Select
           aria-label="treeFilter"
           styles={customStyles}
@@ -256,7 +256,7 @@ export const Filter = observer(() => {
           loadOptions={loadOptions}
           isClearable
           spellCheck={false}
-          className={`pad-left-25 ${select}`}
+          className={`pad-left-25 ${styles.select}`}
           // ensure the menu always is on top
           menuPortalTarget={document.body}
         />
