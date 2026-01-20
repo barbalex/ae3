@@ -9,7 +9,7 @@ import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { container, fieldContainer } from './NewProperty.module.css'
+import styles from './NewProperty.module.css'
 
 export const NewProperty = observer(
   ({ id, properties: propertiesPrevious, refetch }) => {
@@ -47,9 +47,9 @@ export const NewProperty = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={styles.container}>
           <InputLabel>Neues Feld:</InputLabel>
-          <div className={fieldContainer}>
+          <div className={styles.fieldContainer}>
             <TextField
               label="Feld-Name"
               value={label}

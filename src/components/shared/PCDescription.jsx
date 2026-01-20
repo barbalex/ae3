@@ -3,7 +3,7 @@ import Linkify from 'react-linkify'
 import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-import { container } from './PCDescription.module.css'
+import styles from './PCDescription.module.css'
 
 const linkifyProperties = {
   target: '_blank',
@@ -24,7 +24,7 @@ export const PCDescription = ({ pC }) => {
   return (
     <ErrorBoundary>
       <Linkify properties={linkifyProperties}>
-        <div className={container}>
+        <div className={styles.container}>
           {pC.description && (
             <PropertyReadOnly
               label="Beschreibung"
