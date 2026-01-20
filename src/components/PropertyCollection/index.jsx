@@ -23,13 +23,7 @@ import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import {
-  container,
-  cardEditButton,
-  formControl,
-  labelClass,
-  a,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const allUsersQuery = gql`
   query AllUsersQuery {
@@ -97,7 +91,11 @@ export const PropertyCollection = observer(() => {
   })
   const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
 
-  const { data: dataPc, error: pcError, refetch } = useQuery({
+  const {
+    data: dataPc,
+    error: pcError,
+    refetch,
+  } = useQuery({
     queryKey: ['pc', pcId],
     queryFn: () =>
       apolloClient.query({
@@ -181,19 +179,27 @@ export const PropertyCollection = observer(() => {
     })
 
   if (pcError) {
-    return <div className={container}>{`Fehler: ${pcError.message}`}</div>
+    return (
+      <div className={styles.container}>{`Fehler: ${pcError.message}`}</div>
+    )
   }
   if (allUsersError) {
-    return <div className={container}>{`Fehler: ${allUsersError.message}`}</div>
+    return (
+      <div
+        className={styles.container}
+      >{`Fehler: ${allUsersError.message}`}</div>
+    )
   }
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <Suspense fallback={<div className={container}>Lade Daten...</div>}>
+      <div className={styles.container}>
+        <Suspense
+          fallback={<div className={styles.container}>Lade Daten...</div>}
+        >
           {userIsThisPCWriter && editingPCs && (
             <IconButton
-              className={cardEditButton}
+              className={styles.cardEditButton}
               aria-label="Daten anzeigen"
               title="Daten anzeigen"
               onClick={onClickStopEditing}
@@ -203,7 +209,7 @@ export const PropertyCollection = observer(() => {
           )}
           {userIsThisPCWriter && !editingPCs && (
             <IconButton
-              className={cardEditButton}
+              className={styles.cardEditButton}
               aria-label="Daten bearbeiten"
               title="Daten bearbeiten"
               onClick={onClickStartEditing}
@@ -360,11 +366,11 @@ export const PropertyCollection = observer(() => {
                 }
               />
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
               >
                 <FormControlLabel
-                  className={labelClass}
+                  className={styles.labelClass}
                   control={
                     <Checkbox
                       color="primary"
@@ -390,7 +396,7 @@ export const PropertyCollection = observer(() => {
                   <span>
                     Mehr infos{' '}
                     <a
-                      className={a}
+                      className={styles.a}
                       href="https://github.com/barbalex/ae3#zusammenfassende-eigenschaften-sammlungen"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -429,7 +435,7 @@ export const PropertyCollection = observer(() => {
                 }
               />
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
               >
                 <InputLabel htmlFor="organizationIdArten">
@@ -452,7 +458,7 @@ export const PropertyCollection = observer(() => {
                 </Select>
               </FormControl>
               <FormControl
-                className={formControl}
+                className={styles.formControl}
                 variant="standard"
               >
                 <InputLabel htmlFor="importedByArten">
