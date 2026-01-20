@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { onBlurArten } from './onBlurArten.js'
 import { storeContext } from '../../storeContext.js'
 
-import { container, formControl } from './PropertyArten.module.css'
+import styles from './PropertyArten.module.css'
 
 export const Property = observer(
   ({ taxonomy, field, label, type = 'text', disabled, refetch }) => {
@@ -38,9 +38,9 @@ export const Property = observer(
       })
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <FormControl
-          className={formControl}
+          className={styles.formControl}
           fullWidth
           disabled={disabled}
           error={fieldError}

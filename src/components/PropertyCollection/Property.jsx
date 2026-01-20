@@ -11,7 +11,7 @@ import { onBlurDo } from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
 
-import { container, formControl } from './Property.module.css'
+import styles from './Property.module.css'
 
 export const Property = observer(
   ({ field, label, pC, helperText, type = 'text', disabled, refetch }) => {
@@ -42,11 +42,11 @@ export const Property = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
+        <div className={styles.container}>
           <FormControl
             error={!!error}
             variant="standard"
-            className={formControl}
+            className={styles.formControl}
           >
             <TextField
               autoFocus={label === 'Name' && !value}
