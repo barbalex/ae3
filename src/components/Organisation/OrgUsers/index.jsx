@@ -14,7 +14,7 @@ import { storeContext } from '../../../storeContext.js'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import { container, addNewButton, buttonContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const orgUsersQuery = gql`
   query orgUsersQuery($id: UUID!) {
@@ -89,23 +89,23 @@ export const OrgUsers = observer(() => {
   }
 
   if (error) {
-    return <div className={container}>{`Fehler: ${error.message}`}</div>
+    return <div className={styles.container}>{`Fehler: ${error.message}`}</div>
   }
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={container}>
+        <div className={styles.container}>
           <OrgUsersList
             orgUsers={orgUserSorted}
             orgUsersRefetch={refetch}
           />
-          <div className={buttonContainer}>
+          <div className={styles.buttonContainer}>
             <IconButton
               title="Neuen Benutzer mit Rolle erstellen"
               aria-label="Neue Rolle vergeben"
               onClick={onClickNew}
-              className={addNewButton}
+              className={styles.addNewButton}
             >
               <AddIcon color="error" />
             </IconButton>

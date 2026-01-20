@@ -11,7 +11,7 @@ import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { container, list, a } from './PCs.module.css'
+import styles from './PCs.module.css'
 
 const pcsQuery = gql`
   query orgPCsQuery($id: UUID!) {
@@ -53,20 +53,20 @@ export const PCs = observer(() => {
   )
 
   if (error)
-    return <div className={container}>{`Fehler: ${error.message}`}</div>
+    return <div className={styles.container}>{`Fehler: ${error.message}`}</div>
 
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={container}>
-          <div className={list}>
+        <div className={styles.container}>
+          <div className={styles.list}>
             <ul>
               {pcs.map((u) => (
                 <li key={u.name}>
                   <a
                     href={`${appBaseUrl}Eigenschaften-Sammlungen/${u.id}`}
                     target="_blank"
-                    className={a}
+                    className={styles.a}
                   >
                     {u.name}
                   </a>

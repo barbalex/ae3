@@ -15,7 +15,7 @@ import { OrgUsers } from './OrgUsers/index.jsx'
 import { TCs } from './TCs.jsx'
 import { PCs } from './PCs.jsx'
 
-import { orgContainer, paper } from './index.module.css'
+import styles from './index.module.css'
 
 const orgQuery = gql`
   query orgQuery($orgId: UUID!) {
@@ -85,7 +85,7 @@ const Organization = () => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<Spinner />}>
-        <div className={orgContainer}>
+        <div className={styles.orgContainer}>
           <PropertyReadOnly
             key="name"
             value={org?.name}
@@ -102,7 +102,7 @@ const Organization = () => {
             label="Kontakt"
           />
         </div>
-        <Paper className={paper}>
+        <Paper className={styles.paper}>
           <Tabs
             variant="fullWidth"
             value={tab}
