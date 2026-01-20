@@ -9,7 +9,7 @@ import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { formControl, labelClass, datePicker } from './Date.module.css'
+import styles from './Date.module.css'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -65,11 +65,11 @@ export const DateField = ({
   return (
     <FormControl
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <InputLabel
         htmlFor={name}
-        className={labelClass}
+        className={styles.labelClass}
       >
         {label}
       </InputLabel>
@@ -79,7 +79,7 @@ export const DateField = ({
         onChange={onChangeDatePicker}
         dateFormat={dateFormat}
         popperPlacement={popperPlacement}
-        className={datePicker}
+        className={styles.datePicker}
       />
       {!!error && <FormHelperText>{error}</FormHelperText>}
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}

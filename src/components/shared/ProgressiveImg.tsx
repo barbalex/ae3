@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { img, imgLoading } from './ProgressiveImg.module.css'
+import styles from './ProgressiveImg.module.css'
 
 export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
@@ -25,7 +25,7 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
     <img
       {...{ src: imgSrc, ...props }}
       alt={props.alt || ''}
-      className={`${img} ${isLoading ? imgLoading : ''}`}
+      className={`${styles.img} ${isLoading ? styles.imgLoading : ''}`}
     />
   )
 }
