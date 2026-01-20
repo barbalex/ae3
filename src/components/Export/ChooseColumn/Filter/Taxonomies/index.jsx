@@ -16,14 +16,7 @@ import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { joinTaxProperties } from './joinTaxProperties.js'
 
-import {
-  container,
-  errorContainer,
-  card,
-  cardActions,
-  cardActionTitle,
-  count,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const propsByTaxQuery = gql`
   query propsByTaxDataQueryForFilterTaxonomies(
@@ -79,7 +72,7 @@ export const Taxonomies = observer(
 
     if (error) {
       return (
-        <div className={errorContainer}>
+        <div className={styles.errorContainer}>
           `Error loading data: ${error.message}`
         </div>
       )
@@ -87,16 +80,18 @@ export const Taxonomies = observer(
 
     return (
       <ErrorBoundary>
-        <div className={container}>
-          <Card className={card}>
+        <div className={styles.container}>
+          <Card className={styles.card}>
             <CardActions
               disableSpacing
               onClick={onToggleTaxonomies}
-              className={cardActions}
+              className={styles.cardActions}
             >
-              <div className={cardActionTitle}>
+              <div className={styles.cardActionTitle}>
                 Taxonomien
-                <span className={count}>{`(${loading ? '...' : taxCount} ${
+                <span
+                  className={styles.count}
+                >{`(${loading ? '...' : taxCount} ${
                   taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
                 }, ${loading ? '...' : taxFieldsCount} ${
                   taxFieldsCount === 1 ? 'Feld' : 'Felder'

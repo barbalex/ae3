@@ -8,12 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { storeContext } from '../../../../../../../storeContext.js'
 
-import {
-  container,
-  formLabel,
-  formControlLabel,
-  radio,
-} from './Checkbox.module.css'
+import styles from './Checkbox.module.css'
 
 export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
@@ -34,14 +29,14 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   }
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControl
         component="fieldset"
         variant="standard"
       >
         <FormLabel
           component="legend"
-          className={formLabel}
+          className={styles.formLabel}
         >
           {pname}
         </FormLabel>
@@ -55,34 +50,34 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
             value="true"
             control={
               <Radio
-                className={radio}
+                className={styles.radio}
                 color="primary"
               />
             }
             label="Ja"
-            className={formControlLabel}
+            className={styles.formControlLabel}
           />
           <FormControlLabel
             value="false"
             control={
               <Radio
-                className={radio}
+                className={styles.radio}
                 color="primary"
               />
             }
             label="Nein"
-            className={formControlLabel}
+            className={styles.formControlLabel}
           />
           <FormControlLabel
             value="null"
             control={
               <Radio
-                className={radio}
+                className={styles.radio}
                 color="primary"
               />
             }
             label="nicht filtern"
-            className={formControlLabel}
+            className={styles.formControlLabel}
           />
         </RadioGroup>
       </FormControl>
