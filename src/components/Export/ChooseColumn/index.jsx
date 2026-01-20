@@ -64,7 +64,7 @@ export const ChooseColumn = observer(() => {
     <ErrorBoundary>
       <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <div className={styles.container}>
-          <Card className={styles.styles.card}>
+          <Card className={styles.card}>
             <CardActions
               className={styles.cardActions}
               disableSpacing
