@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { Tree } from '../Tree/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { dataElement } from './DataFlexed.module.css'
+import styles from './DataFlexed.module.css'
 
 export const DataFlexed = observer(() => (
   <ErrorBoundary>
@@ -17,7 +17,7 @@ export const DataFlexed = observer(() => (
         <Tree />
       </ReflexElement>
       <ReflexSplitter key="treeSplitter" />
-      <ReflexElement className={dataElement}>
+      <ReflexElement className={styles.dataElement}>
         <Outlet />
       </ReflexElement>
     </ReflexContainer>

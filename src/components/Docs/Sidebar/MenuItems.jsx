@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { MenuItem } from './MenuItem.jsx'
 import { storeContext } from '../../../storeContext.js'
 
-import { divider } from './MenuItems.module.css'
+import styles from './MenuItems.module.css'
 
 const nodes = [
   {
@@ -49,7 +49,7 @@ export const MenuItems = observer(() => {
 
   return (
     <List component="nav">
-      <Divider className={divider} />
+      <Divider className={styles.divider} />
       {nodesFiltered.map((node) => (
         <MenuItem
           node={node}

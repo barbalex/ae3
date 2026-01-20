@@ -1,9 +1,9 @@
-import {  dokuDate,  } from '../index.module.css'
+import styles from '../index.module.css'
 
 const BrowserDoc = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
-    <p className={dokuDate}>29.09.2019</p>
+    <p className={styles.dokuDate}>29.09.2019</p>
     <p>Es braucht einen modernen Browser:</p>
     <ul>
       <li>Auf Google Chrome wird arteigenschaften.ch entwickelt</li>
