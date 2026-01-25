@@ -148,8 +148,8 @@ export const PcoInstructions = ({
         <li>
           <div className={styles.liContainer}>
             <div>
-              Ein Feld namens <span className={styles.emSpan}>objectId</span> muss
-              enthalten sein
+              Ein Feld namens <span className={styles.emSpan}>objectId</span>{' '}
+              muss enthalten sein
             </div>
             {objectIdsExist && (
               <div>
@@ -222,12 +222,12 @@ export const PcoInstructions = ({
           <div className={styles.liContainer}>
             <div>
               Ein Feld namens{' '}
-              <span className={styles.emSpan}>propertyCollectionOfOrigin</span> kann
-              enthalten sein.
+              <span className={styles.emSpan}>propertyCollectionOfOrigin</span>{' '}
+              kann enthalten sein.
             </div>
             {pCOfOriginIdsExist && (
               <div>
-                <DoneIcon className={styles.styles.doneIcon} />
+                <DoneIcon className={styles.doneIcon} />
               </div>
             )}
             {pCOfOriginIdsExist === false && (
@@ -253,7 +253,9 @@ export const PcoInstructions = ({
             <li>
               <div className={styles.liContainer}>
                 <div>
-                  <span className={styles.emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  <span className={styles.emSpan}>
+                    propertyCollectionOfOrigin
+                  </span>{' '}
                   muss gültige{' '}
                   <a
                     href="https://de.wikipedia.org/wiki/Universally_Unique_Identifier"
@@ -279,7 +281,9 @@ export const PcoInstructions = ({
             <li>
               <div className={styles.liContainer}>
                 <div>
-                  <span className={styles.emSpan}>propertyCollectionOfOrigin</span>{' '}
+                  <span className={styles.emSpan}>
+                    propertyCollectionOfOrigin
+                  </span>{' '}
                   muss <span className={styles.emSpan}>id</span> einer
                   Eigenschaften-Sammlung aus arteigenschaften.ch sein
                 </div>
@@ -308,7 +312,9 @@ export const PcoInstructions = ({
           </ul>
         </li>
       </ul>
-      <p className={styles.p}>Alle weiteren Felder sind Eigenschaften des Objekts:</p>
+      <p className={styles.p}>
+        Alle weiteren Felder sind Eigenschaften des Objekts:
+      </p>
       <h4 className={styles.h4}>Eigenschaften</h4>
       <ul className={styles.ul}>
         <li>
@@ -397,7 +403,9 @@ export const PcoInstructions = ({
           </ul>
         </li>
       </ul>
-      <h3 className={styles.h3}>Wirkung des Imports auf bereits vorhandene Daten</h3>
+      <h3 className={styles.h3}>
+        Wirkung des Imports auf bereits vorhandene Daten
+      </h3>
       <ul>
         <li>
           Enthält die Eigenschaften-Sammlung bereits einen Datensatz für ein
