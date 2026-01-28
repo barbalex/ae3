@@ -55,3 +55,6 @@ export const docFilterAtom = atom<string | number>('')
 
 // SidebarWidth atom
 export const sidebarWidthAtom = atom<number | null>(null)
+
+// Editing states
+export const editingPCsAtom = atom<boolean>(false)

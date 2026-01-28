@@ -15,6 +15,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { useAtom, useAtomValue } from 'jotai'
 
 import { Property } from './Property.jsx'
 import { DateField } from '../shared/Date.jsx'
@@ -22,6 +23,7 @@ import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { storeContext } from '../../storeContext.js'
+import { editingPCsAtom, loginUsernameAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -82,8 +84,8 @@ export const PropertyCollection = observer(() => {
   const { pcId } = useParams()
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
-  const { editingPCs, setEditingPCs, login } = store
+  const [editingPCs, setEditingPCs] = useAtom(editingPCsAtom)
+  const username = useAtomValue(loginUsernameAtom)
 
   const { data: dataAllUsers, error: allUsersError } = useQuery({
     queryKey: ['allUsersForPc'],
@@ -107,7 +109,6 @@ export const PropertyCollection = observer(() => {
 
   const pC = pcData?.propertyCollectionById ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
-  const { username } = login
   const user = allUsers.find((u) => u.name === username)
   const orgsUserIsPCWriter = (user?.organizationUsersByUserId?.nodes ?? [])
     .filter((o) => ['orgCollectionWriter', 'orgAdmin'].includes(o.role))
