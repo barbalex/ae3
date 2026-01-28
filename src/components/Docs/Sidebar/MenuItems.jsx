@@ -1,10 +1,9 @@
-import { useContext } from 'react'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { MenuItem } from './MenuItem.jsx'
-import { storeContext } from '../../../storeContext.js'
+import { docFilterAtom } from '../../../jotaiStore/index.ts'
 
 import styles from './MenuItems.module.css'
 
@@ -41,8 +40,8 @@ const nodes = [
   },
 ]
 
-export const MenuItems = observer(() => {
-  const { docFilter } = useContext(storeContext)
+export const MenuItems = () => {
+  const docFilter = useAtomValue(docFilterAtom)
   const nodesFiltered = nodes.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(docFilter) ?? true,
   )
@@ -58,4 +57,4 @@ export const MenuItems = observer(() => {
       ))}
     </List>
   )
-})
+}

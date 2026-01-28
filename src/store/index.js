@@ -15,15 +15,8 @@ export const store = () =>
         [],
       ),
       sidebarWidth: types.maybeNull(types.number, null),
-      docFilter: types.optional(types.union(types.string, types.number), ''),
     })
     .actions((self) => ({
-      setSidebarWidth(val) {
-        self.sidebarWidth = val
-      },
-      setDocFilter(val) {
-        self.docFilter = val
-      },
       setEditingTaxonomies(value) {
         self.editingTaxonomies = value
       },
