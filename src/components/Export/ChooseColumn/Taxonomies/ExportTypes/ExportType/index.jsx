@@ -4,11 +4,14 @@ import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
-import { exportTypeAtom } from '../../../../../../jotaiStore/index.ts'
+import {
+  exportTypeAtom,
+  exportTaxonomiesAtom,
+} from '../../../../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
@@ -23,8 +26,7 @@ export const ExportType = observer(({ type }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
   const [exportType, setExportType] = useAtom(exportTypeAtom)
-  const { setTaxonomies } = store.export
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
 
   const onCheckType = async (event, isChecked) => {
     const { name } = event.target
@@ -49,7 +51,7 @@ export const ExportType = observer(({ type }) => {
       // if so, check it
       if ((taxonomies ?? []).length === 1) {
         const taxonomyName = taxonomies[0]?.taxonomyName
-        setTaxonomies([...exportTaxonomies, taxonomyName])
+        setExportTaxonomies([...exportTaxonomies, taxonomyName])
       }
       // check if taxonomy(s) of other type was chosen
       // if so: uncheck
@@ -57,7 +59,7 @@ export const ExportType = observer(({ type }) => {
         (t) => exportTypeTAXToReadable[t.type] === name,
       )
       if (exportTaxonomiesWithoutOtherType.length < exportTaxonomies.length) {
-        setTaxonomies(exportTaxonomiesWithoutOtherType)
+        setExportTaxonomies(exportTaxonomiesWithoutOtherType)
       }
     } else {
       setExportType(exportTypes.find((t) => t !== name))
@@ -66,7 +68,7 @@ export const ExportType = observer(({ type }) => {
       const remainingTaxonomies = exportTaxonomies.filter(
         (t) => !taxonomiesToUncheck.includes(t),
       )
-      setTaxonomies(remainingTaxonomies)
+      setExportTaxonomies(remainingTaxonomies)
     }
   }
 
