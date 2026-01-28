@@ -1,10 +1,9 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useAtomValue } from 'jotai'
 
@@ -22,6 +21,7 @@ import {
   exportTaxFiltersAtom,
   exportPcoFiltersAtom,
   exportRcoFiltersAtom,
+  exportWithSynonymDataAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './Preview.module.css'
@@ -83,13 +83,12 @@ const getSortFieldForQuery = (sortField) => {
   return sf
 }
 
-export const Preview = observer(() => {
+export const Preview = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const { withSynonymData } = store.export
   const taxFilters = useAtomValue(exportTaxFiltersAtom)
   const pcoFilters = useAtomValue(exportPcoFiltersAtom)
   const rcoFilters = useAtomValue(exportRcoFiltersAtom)
+  const withSynonymData = useAtomValue(exportWithSynonymDataAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
   const taxFields = useAtomValue(exportTaxPropertiesAtom)
@@ -338,4 +337,4 @@ export const Preview = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

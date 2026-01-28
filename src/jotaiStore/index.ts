@@ -127,3 +127,6 @@ export type RcoFilter = {
 }
 
 export const exportRcoFiltersAtom = atom<RcoFilter[]>([])
+
+// Export with synonym data atom
+export const exportWithSynonymDataAtom = atom<boolean>(true)
