@@ -1,13 +1,12 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { storeContext } from '../../../../storeContext.js'
+import { exportIdsAtom } from '../../../../jotaiStore/index.ts'
 import styles from './Id.module.css'
 
-export const Id = observer(() => {
-  const store = useContext(storeContext)
-  const { setIds } = store.export
+export const Id = () => {
+  const setExportIds = useSetAtom(exportIdsAtom)
 
   const [value, setValue] = useState('')
 
@@ -18,7 +17,7 @@ export const Id = observer(() => {
     //const valueForStore = value ? JSON.parse(`"[${event.target.value}]"`) : []
     const valueForStore =
       value ? event.target.value.replace(/\s/g, '').split(',') : []
-    setIds(valueForStore)
+    setExportIds(valueForStore)
   }
 
   return (
@@ -40,4 +39,4 @@ export const Id = observer(() => {
       className={styles.field}
     />
   )
-})
+}

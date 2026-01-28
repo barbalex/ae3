@@ -68,3 +68,6 @@ export const exportTypeAtom = atom<string | null>(null)
 
 // Export taxonomies atom
 export const exportTaxonomiesAtom = atom<string[]>([])
+
+// Export ids atom
+export const exportIdsAtom = atom<string[]>([])
