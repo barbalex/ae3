@@ -1,22 +1,17 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtom, useSetAtom } from 'jotai'
-
-import { storeContext } from '../../../../../../storeContext.js'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
 } from '../../../../../../jotaiStore/index.ts'
 import styles from './Taxonomies.module.css'
 
-export const Taxonomies = observer(({ type }) => {
-  const store = useContext(storeContext)
+export const Taxonomies = ({ type }) => {
   const setExportType = useSetAtom(exportTypeAtom)
   const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
   const apolloClient = useApolloClient()
@@ -86,4 +81,4 @@ export const Taxonomies = observer(({ type }) => {
       </FormGroup>
     </div>
   )
-})
+}

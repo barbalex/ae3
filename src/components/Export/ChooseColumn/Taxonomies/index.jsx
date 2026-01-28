@@ -1,11 +1,8 @@
-import { useContext } from 'react'
 import Paper from '@mui/material/Paper'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { HowTo } from './HowTo.jsx'
 import { ExportTypes } from './ExportTypes/index.jsx'
-import { storeContext } from '../../../../storeContext.js'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
@@ -14,8 +11,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
-export const Taxonomies = observer(() => {
-  const store = useContext(storeContext)
+export const Taxonomies = () => {
   const exportType = useAtomValue(exportTypeAtom)
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
@@ -46,4 +42,4 @@ export const Taxonomies = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
