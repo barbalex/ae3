@@ -1,16 +1,14 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { sortBy } from 'es-toolkit'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../../shared/PropertyReadOnlyStacked.jsx'
 import { Property } from '../../../../shared/Property.jsx'
-import { storeContext } from '../../../../../storeContext.js'
+import { stackedAtom } from '../../../../../jotaiStore/index.ts'
 
 export const PropertyList = ({ propertiesArray, properties, editing, id, refetch }) => {
-  const store = useContext(storeContext)
-  const { stacked } = store
+  const stacked = useAtomValue(stackedAtom)
 
   const queryClient = useQueryClient()
 

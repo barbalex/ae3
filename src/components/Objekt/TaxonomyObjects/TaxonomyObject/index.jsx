@@ -40,6 +40,7 @@ import { storeContext } from '../../../../storeContext.js'
 import {
   scrollIntoViewAtom,
   loginUsernameAtom,
+  stackedAtom,
 } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -65,7 +66,8 @@ const organizationUsersQuery = gql`
 export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies, stacked } = store
+  const { editingTaxonomies, setEditingTaxonomies } = store
+  const stacked = useAtomValue(stackedAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const username = useAtomValue(loginUsernameAtom)
   const apolloClient = useApolloClient()
