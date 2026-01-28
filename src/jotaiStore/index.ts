@@ -62,3 +62,6 @@ export const editingTaxonomiesAtom = atom<boolean>(false)
 
 // Active node array atom
 export const activeNodeArrayAtom = atom<(string | number)[]>([])
+
+// Export type atom
+export const exportTypeAtom = atom<string | null>(null)
