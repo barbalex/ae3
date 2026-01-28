@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import {
   MdExpandMore as ExpandMoreIcon,
   MdMoreHoriz as MoreHorizIcon,
@@ -9,19 +8,17 @@ import {
 import Icon from '@mui/material/Icon'
 import { isEqual } from 'es-toolkit'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
-import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
 import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
 import { onClickContextMenu } from './onClickContextMenu.js'
-import { storeContext } from '../../../storeContext.js'
 import {
   scrollIntoViewAtom,
   loginUsernameAtom,
+  activeNodeArrayAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -30,12 +27,11 @@ function collect(props) {
   return props
 }
 
-export const Row = observer(({ data }) => {
+export const Row = ({ data }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const loginUsername = useAtomValue(loginUsernameAtom)
   const navigate = useNavigate()
@@ -170,4 +166,4 @@ export const Row = observer(({ data }) => {
       </div>
     </ContextMenuTrigger>
   )
-})
+}

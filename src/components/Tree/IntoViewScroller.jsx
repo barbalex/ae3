@@ -1,15 +1,15 @@
-import { useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { storeContext } from '../../storeContext.js'
 import { isElementInViewport } from '../../modules/isElementInViewport.js'
 import { getLastIdFromUrl } from '../../modules/getLastIdFromUrl.js'
-import { scrollIntoViewCounterAtom } from '../../jotaiStore/index.ts'
+import {
+  scrollIntoViewCounterAtom,
+  activeNodeArrayAtom,
+} from '../../jotaiStore/index.ts'
 
-export const IntoViewScroller = observer(() => {
-  const store = useContext(storeContext)
-  const { activeNodeArray } = store
+export const IntoViewScroller = () => {
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const scrollIntoViewCounter = useAtomValue(scrollIntoViewCounterAtom)
 
   const scroller = () => {
@@ -45,4 +45,4 @@ export const IntoViewScroller = observer(() => {
   }, [scroller, scrollIntoViewCounter])
 
   return null
-})
+}
