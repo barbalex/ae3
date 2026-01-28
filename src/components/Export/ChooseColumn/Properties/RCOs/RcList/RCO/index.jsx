@@ -8,12 +8,14 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from './Properties.jsx'
 import { storeContext } from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
+import { exportTaxonomiesAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -45,7 +47,7 @@ const fallback = (
 
 export const RCO = observer(({ pcname, relationtype, count }) => {
   const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
