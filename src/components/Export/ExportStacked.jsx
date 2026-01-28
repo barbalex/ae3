@@ -1,18 +1,17 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { ChooseColumn } from './ChooseColumn/index.jsx'
 import { PreviewColumn } from './PreviewColumn/index.jsx'
-import { storeContext } from '../../storeContext.js'
+import { windowWidthAtom } from '../../jotaiStore/index.ts'
 
 import styles from './ExportStacked.module.css'
 
-export const ExportStacked = observer(() => {
-  const store = useContext(storeContext)
-  const { windowWidth } = store
+export const ExportStacked = () => {
+  const windowWidth = useAtomValue(windowWidthAtom)
   const [tab, setTab] = useState(0)
 
   const onChangeTab = (event, value) => setTab(value)
@@ -38,4 +37,4 @@ export const ExportStacked = observer(() => {
       </div>
     </div>
   )
-})
+}

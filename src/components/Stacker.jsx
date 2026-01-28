@@ -1,15 +1,17 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { debounce } from 'es-toolkit'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 
-import { storeContext } from '../storeContext.js'
-import { stackedAtom } from '../jotaiStore/index.ts'
+import {
+  stackedAtom,
+  windowWidthAtom,
+  windowHeightAtom,
+} from '../jotaiStore/index.ts'
 
-export const Stacker = observer(() => {
-  const store = useContext(storeContext)
-  const { setWindowWidth, setWindowHeight } = store
+export const Stacker = () => {
   const setStacked = useSetAtom(stackedAtom)
+  const setWindowWidth = useSetAtom(windowWidthAtom)
+  const setWindowHeight = useSetAtom(windowHeightAtom)
 
   const updateStacked = () => {
     if (typeof window === 'undefined') return
@@ -39,4 +41,4 @@ export const Stacker = observer(() => {
   }, [updateStacked])
 
   return null
-})
+}
