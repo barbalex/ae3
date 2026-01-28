@@ -2,10 +2,11 @@ import { jwtDecode } from 'jwt-decode'
 import { CombinedGraphQLErrors } from '@apollo/client'
 
 import { loginDbMutation } from './loginDbMutation.js'
-import { jotaiStore, setLoginAtom } from '../../jotaiStore/index.ts'
 
 export const fetchLogin = async ({
   client,
+  queryClient,
+  setLogin,
   changeNameErrorText,
   changePassErrorText,
   name: propsName,
@@ -33,7 +34,7 @@ export const fetchLogin = async ({
   }
   // reset existing token
   await idb.users.clear()
-  jotaiStore.set(setLoginAtom, {
+  setLogin({
     username: '',
     token: '',
   })
@@ -69,9 +70,13 @@ export const fetchLogin = async ({
       token: jwtToken,
     })
     try {
-      jotaiStore.set(setLoginAtom, {
+      setLogin({
         username,
         token: jwtToken,
+      })
+      // Invalidate tree query to refetch with new token
+      await queryClient.invalidateQueries({
+        queryKey: ['tree'],
       })
     } catch (error) {
       console.log(('Error during mutation', error))

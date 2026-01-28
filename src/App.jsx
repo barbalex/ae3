@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { Analytics } from '@vercel/analytics/react'
+import { useSetAtom } from 'jotai'
 
 import 'simplebar-react/dist/simplebar.min.css'
 
@@ -13,6 +14,7 @@ import 'react-reflex/styles.css'
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
 import { initializeIdb } from './modules/initializeIdb.js'
 import { setLoginFromIdb } from './modules/setLoginFromIdb.js'
+import { setLoginAtom } from './jotaiStore/index.ts'
 import { detectIE } from './modules/detectIE.js'
 import { client } from './client.js'
 import { IdbProvider } from './idbContext.js'
@@ -26,11 +28,12 @@ const Stacker = lazy(async () => ({
 
 export const App = () => {
   const idb = initializeIdb()
+  const setLogin = useSetAtom(setLoginAtom)
 
   const [store, setStore] = useState()
   useEffect(() => {
     const storeWithoutLogin = Store().create()
-    setLoginFromIdb({ idb, store: storeWithoutLogin }).then(
+    setLoginFromIdb({ idb, store: storeWithoutLogin, setLogin }).then(
       (storeWithLogin) => {
         setStore(storeWithLogin)
 

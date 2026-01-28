@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useContext } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -16,6 +16,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { fetchLogin } from './fetchLogin.js'
 import { idbContext } from '../../idbContext.js'
@@ -26,6 +27,7 @@ import styles from './index.module.css'
 
 const Login = observer(() => {
   const apolloClient = useApolloClient()
+  const queryClient = useQueryClient()
   const idb = useContext(idbContext)
   const token = useAtomValue(loginTokenAtom)
   const setLogin = useSetAtom(setLoginAtom)
@@ -45,6 +47,8 @@ const Login = observer(() => {
   const doFetchLogin = (namePassed, passPassed, navigate) =>
     fetchLogin({
       client: apolloClient,
+      queryClient,
+      setLogin,
       changeNameErrorText,
       changePassErrorText,
       name,
@@ -59,11 +63,15 @@ const Login = observer(() => {
       passwordInput,
       navigate,
     })
-  const onLogout = () => {
-    idb.users.clear()
+  const onLogout = async () => {
+    await idb.users.clear()
     setLogin({
       username: '',
       token: '',
+    })
+    // Invalidate tree query to refetch without token
+    await queryClient.invalidateQueries({
+      queryKey: ['tree'],
     })
   }
   const onBlurName = (e) => {
