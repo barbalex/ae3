@@ -1,4 +1,4 @@
-import { useState, useReducer, useContext, useMemo } from 'react'
+import { useState, useReducer, useMemo } from 'react'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
@@ -8,13 +8,12 @@ import { read, utils } from '@e965/xlsx'
 import isUuid from 'is-uuid'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { upsertRCOMutation } from './upsertRCOMutation.js'
-import { storeContext } from '../../../../storeContext.js'
+import { activeNodeArrayAtom } from '../../../../jotaiStore/index.ts'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'
@@ -99,12 +98,11 @@ const getImportDataFields = (importData) => {
   return fields
 }
 
-export const ImportRco = observer(({ setImport }) => {
+export const ImportRco = ({ setImport }) => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const pCId =
     activeNodeArray.length > 0 ?
       activeNodeArray[1]
@@ -519,4 +517,4 @@ export const ImportRco = observer(({ setImport }) => {
       </div>
     </SimpleBar>
   )
-})
+}

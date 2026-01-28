@@ -1,16 +1,15 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import { MdAdd as AddIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { createOrgUserMutation } from './createOrgUserMutation.js'
 import { OrgUsersList } from './OrgUsersList/index.jsx'
-import { storeContext } from '../../../storeContext.js'
+import { activeNodeArrayAtom } from '../../../jotaiStore/index.ts'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
@@ -45,10 +44,9 @@ const orgUsersQuery = gql`
   }
 `
 
-export const OrgUsers = observer(() => {
+export const OrgUsers = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const id =
     activeNodeArray.length > 1 ?
       activeNodeArray[1]
@@ -114,4 +112,4 @@ export const OrgUsers = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
