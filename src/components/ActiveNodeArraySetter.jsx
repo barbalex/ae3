@@ -1,13 +1,17 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { useSetAtom } from 'jotai'
+import { isEqual } from 'es-toolkit'
 
-import { storeContext } from '../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
+import {
+  activeNodeArrayAtom,
+  scrollIntoViewAtom,
+} from '../jotaiStore/index.ts'
 
-const ActiveNodeArraySetter = observer(() => {
-  const store = useContext(storeContext)
-  const { setActiveNodeArray } = store
+const ActiveNodeArraySetter = () => {
+  const setActiveNodeArray = useSetAtom(activeNodeArrayAtom)
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -16,8 +20,16 @@ const ActiveNodeArraySetter = observer(() => {
 
   useEffect(() => {
     // console.log('ActiveNodeArraySetter: setting activeNodeArray')
-    setActiveNodeArray(getActiveNodeArrayFromPathname(), navigate)
-  }, [navigate, pathname, setActiveNodeArray])
-})
+    const value = getActiveNodeArrayFromPathname()
+    setActiveNodeArray(value)
+    const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
+    if (!isEqual(activeNodeArrayFromUrl, value) && navigate) {
+      navigate(`/${value.join('/')}`)
+      setTimeout(() => scrollIntoView())
+    }
+  }, [navigate, pathname, setActiveNodeArray, scrollIntoView])
+
+  return null
+}
 
 export default ActiveNodeArraySetter
