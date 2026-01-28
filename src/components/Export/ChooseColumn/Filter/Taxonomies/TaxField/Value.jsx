@@ -3,12 +3,15 @@ import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { readableType } from '../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../storeContext.js'
-import { exportTaxPropertiesAtom } from '../../../../../../jotaiStore/index.ts'
+import {
+  exportTaxPropertiesAtom,
+  exportPcoPropertiesAtom,
+} from '../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './Value.module.css'
@@ -59,6 +62,7 @@ export const Value = ({
   const store = useContext(storeContext)
   const { addFilterFields, setTaxFilters } = store.export
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
+  const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
 
   // Problem with loading data
   // Want to load all data when user focuses on input
@@ -110,7 +114,7 @@ export const Value = ({
       const nrOfPropertiesExported =
         taxProperties.length +
         (store.export.rcoProperties?.length || 0) +
-        (store.export.pcoProperties?.length || 0)
+        (pcoProperties?.length || 0)
       if (nrOfPropertiesExported <= constants.export.maxFields) {
         // Only add if not yet done
         const taxProperty = taxProperties.find(
