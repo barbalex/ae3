@@ -4,9 +4,11 @@ import Highlighter from 'react-highlight-words'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { readableType } from '../../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../../storeContext.js'
+import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Value.module.css'
 
@@ -49,7 +51,9 @@ export const PcoValue = observer(
   ({ pcname, pname, jsontype, comparator, value: propsValue }) => {
     const apolloClient = useApolloClient()
     const store = useContext(storeContext)
-    const { addFilterFields, setPcoFilter, addPcoProperty } = store.export
+    const { addFilterFields, setPcoFilter } = store.export
+    const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
+    const setPcoProperties = useSetAtom(exportPcoPropertiesAtom)
 
     // Problem with loading data
     // Want to load all data when user focuses on input
@@ -97,7 +101,11 @@ export const PcoValue = observer(
       })
       // 2. if value and field not chosen, choose it
       if (addFilterFields && val) {
-        addPcoProperty({ pcname, pname })
+        if (
+          !pcoProperties.find((t) => t.pcname === pcname && t.pname === pname)
+        ) {
+          setPcoProperties([...pcoProperties, { pcname, pname }])
+        }
       }
     }
 
