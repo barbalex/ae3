@@ -18,12 +18,8 @@ export const store = () =>
       docFilter: types.optional(types.union(types.string, types.number), ''),
       windowWidth: types.optional(types.number, 800),
       windowHeight: types.optional(types.number, 800),
-      stacked: types.optional(types.boolean, false),
     })
     .actions((self) => ({
-      setStacked(val) {
-        self.stacked = val
-      },
       setWindowHeight(val) {
         self.windowHeight = val
       },

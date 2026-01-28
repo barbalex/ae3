@@ -37,3 +37,6 @@ export const setLoginAtom = atom(
     set(loginTokenAtom, token)
   },
 )
+
+// Stacked atom
+export const stackedAtom = atom<boolean>(false)
