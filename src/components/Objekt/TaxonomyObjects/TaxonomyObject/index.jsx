@@ -6,7 +6,7 @@
  * if user clicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
-import { useState, useContext, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -23,9 +23,8 @@ import {
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
@@ -36,11 +35,11 @@ import { Property } from './Property.jsx'
 import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
-import { storeContext } from '../../../../storeContext.js'
 import {
   scrollIntoViewAtom,
   loginUsernameAtom,
   stackedAtom,
+  editingTaxonomiesAtom,
 } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -63,10 +62,11 @@ const organizationUsersQuery = gql`
   }
 `
 
-export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
+export const TaxonomyObject = ({ objekt, showLink, refetch }) => {
   const queryClient = useQueryClient()
-  const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies } = store
+  const [editingTaxonomies, setEditingTaxonomies] = useAtom(
+    editingTaxonomiesAtom,
+  )
   const stacked = useAtomValue(stackedAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const username = useAtomValue(loginUsernameAtom)
@@ -270,4 +270,4 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
