@@ -9,7 +9,6 @@ export const store = () =>
     .model({
       export: types.optional(Export, defaultExport),
       editingTaxonomies: types.optional(types.boolean, false),
-      editingPCs: types.optional(types.boolean, false),
       activeNodeArray: types.optional(
         types.array(types.union(types.string, types.number)),
         [],
@@ -18,9 +17,6 @@ export const store = () =>
     .actions((self) => ({
       setEditingTaxonomies(value) {
         self.editingTaxonomies = value
-      },
-      setEditingPCs(value) {
-        self.editingPCs = value
       },
       setActiveNodeArray(value, navigate) {
         self.activeNodeArray = value

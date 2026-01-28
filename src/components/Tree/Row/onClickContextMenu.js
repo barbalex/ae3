@@ -24,7 +24,7 @@ export const onClickContextMenu = async ({
   navigate,
   queryClient,
 }) => {
-  const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
+  const { setEditingTaxonomies, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
     return console.log('no target passed with click')
@@ -119,7 +119,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editingTaxonomies true
         if (!editingTaxonomies) {
-          setEditingPCs(true)
+          jotaiStore.set(editingPCsAtom, true)
         }
       }
       queryClient.invalidateQueries({
