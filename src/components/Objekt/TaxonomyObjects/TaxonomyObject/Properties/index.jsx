@@ -6,20 +6,19 @@
  * if user clicks it, toggle store > editingTaxonomies
  * edit prop: see https://stackoverflow.com/a/35349699/712005
  */
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { PropertyList } from './PropertyList.jsx'
 import { NewProperty } from '../../../../shared/NewProperty.jsx'
-import { storeContext } from '../../../../../storeContext.js'
-import { stackedAtom } from '../../../../../jotaiStore/index.ts'
+import {
+  stackedAtom,
+  editingTaxonomiesAtom,
+} from '../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-const Properties = observer(({ id, properties, refetch }) => {
-  const store = useContext(storeContext)
-  const { editingTaxonomies } = store
+const Properties = ({ id, properties, refetch }) => {
+  const editingTaxonomies = useAtomValue(editingTaxonomiesAtom)
   const stacked = useAtomValue(stackedAtom)
 
   const propertiesArray = Object.entries(properties)
@@ -53,6 +52,6 @@ const Properties = observer(({ id, properties, refetch }) => {
       )}
     </>
   )
-})
+}
 
 export default Properties
