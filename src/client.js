@@ -21,7 +21,7 @@ export const client = ({ idb, store }) => {
    * for reasons unrelated to the database itself and not covered by any other error code
    */
   const authLink = new SetContextLink(async () => {
-    const { token } = store.login
+    const { token, setLogin } = store.login
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma
@@ -34,7 +34,6 @@ export const client = ({ idb, store }) => {
           },
         }
       } else {
-        const { setLogin } = store
         // token is not valid any more > remove it
         idb.users.clear()
         setLogin({
