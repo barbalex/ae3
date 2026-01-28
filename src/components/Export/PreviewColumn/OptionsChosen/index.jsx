@@ -1,6 +1,4 @@
-import { useContext } from 'react'
 import Button from '@mui/material/Button'
-import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useAtom, useSetAtom, useAtomValue } from 'jotai'
 
@@ -20,12 +18,12 @@ import {
   exportTaxFiltersAtom,
   exportPcoFiltersAtom,
   exportRcoFiltersAtom,
+  exportWithSynonymDataAtom,
 } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const OptionsChosen = observer(() => {
-  const store = useContext(storeContext)
+export const OptionsChosen = () => {
   const [exportType, setExportType] = useAtom(exportTypeAtom)
   const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
@@ -34,7 +32,9 @@ export const OptionsChosen = observer(() => {
   const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
   const [pcoFilters, setPcoFilters] = useAtom(exportPcoFiltersAtom)
   const [rcoFilters, setRcoFilters] = useAtom(exportRcoFiltersAtom)
-  const { withSynonymData, setWithSynonymData } = store.export
+  const [withSynonymData, setWithSynonymData] = useAtom(
+    exportWithSynonymDataAtom,
+  )
 
   const noDataChoosen =
     [
@@ -189,4 +189,4 @@ export const OptionsChosen = observer(() => {
       </Button>
     </div>
   )
-})
+}
