@@ -16,16 +16,8 @@ export const store = () =>
       ),
       sidebarWidth: types.maybeNull(types.number, null),
       docFilter: types.optional(types.union(types.string, types.number), ''),
-      windowWidth: types.optional(types.number, 800),
-      windowHeight: types.optional(types.number, 800),
     })
     .actions((self) => ({
-      setWindowHeight(val) {
-        self.windowHeight = val
-      },
-      setWindowWidth(val) {
-        self.windowWidth = val
-      },
       setSidebarWidth(val) {
         self.sidebarWidth = val
       },
@@ -45,10 +37,5 @@ export const store = () =>
           navigate(`/${value.join('/')}`)
           setTimeout(() => self.scrollIntoView())
         }
-      },
-    }))
-    .views((self) => ({
-      get singleColumnView() {
-        return self.windowWidth <= 700
       },
     }))

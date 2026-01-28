@@ -17,7 +17,10 @@ import { getActiveObjectIdFromNodeArray } from '../../../modules/getActiveObject
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
-import { loginUsernameAtom } from '../../../jotaiStore/index.ts'
+import {
+  loginUsernameAtom,
+  singleColumnViewAtom,
+} from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -54,7 +57,7 @@ const query = gql`
 
 export const AppBar = observer(() => {
   const store = useContext(storeContext)
-  const { singleColumnView } = store
+  const singleColumnView = useAtomValue(singleColumnViewAtom)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const username = useAtomValue(loginUsernameAtom)
   const apolloClient = useApolloClient()
