@@ -19,6 +19,7 @@ import {
   exportTypeAtom,
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,
+  exportTaxFiltersAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './Preview.module.css'
@@ -87,13 +88,12 @@ export const Preview = observer(() => {
     withSynonymData,
     pcoFilters: pcoFiltersPassed,
     rcoFilters: rcoFiltersPassed,
-    taxFilters: taxFiltersPassed,
   } = store.export
   // 2019 08 20: No idea why suddenly need to getSnapshot
   // because without changes are not detected????
   const pcoFilters = getSnapshot(pcoFiltersPassed)
   const rcoFilters = getSnapshot(rcoFiltersPassed)
-  const taxFilters = getSnapshot(taxFiltersPassed)
+  const taxFilters = useAtomValue(exportTaxFiltersAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
   const taxFields = useAtomValue(exportTaxPropertiesAtom)

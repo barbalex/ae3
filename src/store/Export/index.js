@@ -1,6 +1,5 @@
 import { types } from 'mobx-state-tree'
 
-import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter.js'
 import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
 import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
 import { constants } from '../../modules/constants.js'
@@ -9,14 +8,11 @@ import {
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,
+  exportTaxFiltersAtom,
 } from '../../jotaiStore/index.ts'
 
 export default types
   .model('Export', {
-    taxFilters: types.optional(
-      types.array(types.optional(TaxFilter, defaultTaxFilter)),
-      [],
-    ),
     pcoFilters: types.optional(
       types.array(types.optional(PcoFilter, defaultPcoFilter)),
       [],
@@ -123,44 +119,6 @@ export default types
           {
             pcname,
             relationtype,
-            pname,
-            comparator,
-            value,
-          },
-        ]
-      }
-    },
-    resetTaxFilters() {
-      self.taxFilters = []
-    },
-    setTaxFilters({ taxname, pname, comparator, value }) {
-      const taxFilter = self.taxFilters.find(
-        (x) => x.taxname === taxname && x.pname === pname,
-      )
-      if (!comparator && !value && value !== 0) {
-        // remove
-        self.taxFilters = self.taxFilters.filter(
-          (x) => !(x.taxname === taxname && x.pname === pname),
-        )
-      } else if (!taxFilter) {
-        // add new one
-        self.taxFilters = [
-          ...self.taxFilters,
-          {
-            taxname,
-            pname,
-            comparator,
-            value,
-          },
-        ]
-      } else {
-        // edit = add new one instead of existing
-        self.taxFilters = [
-          ...self.taxFilters.filter(
-            (x) => !(x.taxname === taxname && x.pname === pname),
-          ),
-          {
-            taxname,
             pname,
             comparator,
             value,
