@@ -8,15 +8,20 @@ import { observer } from 'mobx-react-lite'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { storeContext } from '../../../../../../../storeContext.js'
-import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
+import {
+  exportPcoPropertiesAtom,
+  exportPcoFiltersAtom,
+} from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Checkbox.module.css'
 
 export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
-  const { addFilterFields, setPcoFilter } = store.export
+  const { addFilterFields } = store.export
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const setPcoProperties = useSetAtom(exportPcoPropertiesAtom)
+  const pcoFilters = useAtomValue(exportPcoFiltersAtom)
+  const setPcoFilters = useSetAtom(exportPcoFiltersAtom)
 
   const onChange = (e, val) => {
     let comparator = '='
@@ -25,7 +30,39 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
       comparator = null
       value = null
     }
-    setPcoFilter({ pcname, pname, comparator, value })
+    const pcoFilter = pcoFilters.find(
+      (x) => x.pcname === pcname && x.pname === pname,
+    )
+    if (!comparator && !value && value !== 0) {
+      // remove
+      setPcoFilters(
+        pcoFilters.filter((x) => !(x.pcname === pcname && x.pname === pname)),
+      )
+    } else if (!pcoFilter) {
+      // add new one
+      setPcoFilters([
+        ...pcoFilters,
+        {
+          pcname,
+          pname,
+          comparator,
+          value,
+        },
+      ])
+    } else {
+      // edit = replace existing
+      setPcoFilters([
+        ...pcoFilters.filter(
+          (x) => !(x.pcname === pcname && x.pname === pname),
+        ),
+        {
+          pcname,
+          pname,
+          comparator,
+          value,
+        },
+      ])
+    }
     // if value and not chosen, choose
     if (addFilterFields) {
       if (
