@@ -1,16 +1,14 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { Comparator } from './Comparator.jsx'
 import { Value } from './Value.jsx'
-import { storeContext } from '../../../../../../storeContext.js'
+import { exportTaxFiltersAtom } from '../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './index.module.css'
 
-export const TaxField = observer(({ taxname, pname, jsontype }) => {
-  const store = useContext(storeContext)
-  const { taxFilters } = store.export
+export const TaxField = ({ taxname, pname, jsontype }) => {
+  const taxFilters = useAtomValue(exportTaxFiltersAtom)
 
   const exportTaxFilter = taxFilters.find(
     (x) => x.taxname === taxname && x.pname === pname,
@@ -37,4 +35,4 @@ export const TaxField = observer(({ taxname, pname, jsontype }) => {
       )}
     </div>
   )
-})
+}
