@@ -1,19 +1,24 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
 import Select from 'react-select/async'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { getUrlForObject } from '../../../modules/getUrlForObject.js'
-import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
+import {
+  treeFilterTextAtom,
+  treeFilterIdAtom,
+  setTreeFilterAtom,
+  scrollIntoViewAtom,
+} from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -146,32 +151,35 @@ const getCustomStyles = (singleColumnView) => ({
   }),
 })
 
-export const Filter = observer(() => {
+export const Filter = () => {
   // TODO: use local state instead of mobx for label, id
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const { treeFilter, scrollIntoView } = store
-  const { setTreeFilter } = treeFilter
+
+  const treeFilterText = useAtomValue(treeFilterTextAtom)
+  const treeFilterId = useAtomValue(treeFilterIdAtom)
+  const setTreeFilter = useSetAtom(setTreeFilterAtom)
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
   const navigate = useNavigate()
 
-  const treeFilterId = treeFilter.id ?? '99999999-9999-9999-9999-999999999999'
+  const actualTreeFilterId =
+    treeFilterId ?? '99999999-9999-9999-9999-999999999999'
   const { data: objectUrlData } = useQuery({
-    queryKey: ['objectUrl', treeFilterId],
+    queryKey: ['objectUrl', actualTreeFilterId],
     queryFn: () =>
       apolloClient.query({
         query: objectUrlQuery,
         variables: {
-          treeFilterId,
-          run: !!treeFilter.id,
+          treeFilterId: actualTreeFilterId,
+          run: !!treeFilterId,
         },
       }),
-    enabled: !!treeFilter.id,
+    enabled: !!treeFilterId,
   })
 
   const onInputChange = (option) => {
     if (!option) return
-    setTreeFilter({ text: option, id: treeFilterId })
+    setTreeFilter({ text: option, id: actualTreeFilterId })
   }
 
   const onChange = (option) => {
@@ -209,8 +217,8 @@ export const Filter = observer(() => {
      * and reset treeFilter, id and text
      */
     if (
-      treeFilterId &&
-      treeFilterId !== '99999999-9999-9999-9999-999999999999' &&
+      actualTreeFilterId &&
+      actualTreeFilterId !== '99999999-9999-9999-9999-999999999999' &&
       urlObject &&
       urlObject.id
     ) {
@@ -220,15 +228,19 @@ export const Filter = observer(() => {
       setTreeFilter({ id: null, text: '' })
     }
   }, [
-    treeFilterId,
+    actualTreeFilterId,
     setTreeFilter,
     objectUrlData?.data?.objectById,
     navigate,
-    scrollIntoView,
   ])
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
-    buildOptions({ client: apolloClient, treeFilter, cb, val })
+    buildOptions({
+      client: apolloClient,
+      treeFilter: { text: treeFilterText, id: treeFilterId },
+      cb,
+      val,
+    })
   }, 600)
 
   const loadOptions = (val, cb) => buildOptionsDebounced({ cb, val })
@@ -263,4 +275,4 @@ export const Filter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

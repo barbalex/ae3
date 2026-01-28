@@ -13,11 +13,13 @@ import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 import { getSnapshot } from 'mobx-state-tree'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
 import { isUrlInActiveNodePath } from '../../../modules/isUrlInActiveNodePath.js'
 import { onClickContextMenu } from './onClickContextMenu.js'
 import { storeContext } from '../../../storeContext.js'
+import { scrollIntoViewAtom } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -31,6 +33,7 @@ export const Row = observer(({ data }) => {
 
   const store = useContext(storeContext)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const navigate = useNavigate()
 
   const nodeIsInActiveNodePath = isUrlInActiveNodePath(
@@ -84,6 +87,7 @@ export const Row = observer(({ data }) => {
       target,
       client: apolloClient,
       store,
+      scrollIntoView,
       navigate,
       queryClient,
     })
