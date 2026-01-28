@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { jotaiStore, treeFilterTextAtom } from '../../../jotaiStore/index.ts'
+
 const filterSuggestionsQuery = gql`
   query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {
     propertyCollectionByPropertyName(propertyName: $treeFilterText)
@@ -23,14 +25,15 @@ const filterSuggestionsQuery = gql`
   }
 `
 
-export const buildOptions = async ({ cb, client, treeFilter }) => {
+export const buildOptions = async ({ cb, client }) => {
   let resultFilterSuggestionsQuery
+  const treeFilterText = jotaiStore.get(treeFilterTextAtom)
   try {
     resultFilterSuggestionsQuery = await client.query({
       query: filterSuggestionsQuery,
       variables: {
-        treeFilterText: treeFilter.text || 'ZZZZ',
-        run: !!treeFilter.text,
+        treeFilterText: treeFilterText || 'ZZZZ',
+        run: !!treeFilterText,
       },
     })
   } catch (error) {

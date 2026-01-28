@@ -12,15 +12,28 @@ export const setTreeFilterAtom = atom(
   (get, set, { id, text }: { id: string | null; text: string }) => {
     set(treeFilterTextAtom, text)
     set(treeFilterIdAtom, id)
-  }
+  },
 )
 
 // ScrollIntoView atoms
 export const scrollIntoViewCounterAtom = atom<number>(0)
 
-export const scrollIntoViewAtom = atom(
+export const scrollIntoViewAtom = atom(null, (get, set) => {
+  set(scrollIntoViewCounterAtom, get(scrollIntoViewCounterAtom) + 1)
+})
+
+// Login atoms
+export const loginTokenAtom = atom<string | null>(null)
+export const loginUsernameAtom = atom<string | null>(null)
+
+export const setLoginAtom = atom(
   null,
-  (get, set) => {
-    set(scrollIntoViewCounterAtom, get(scrollIntoViewCounterAtom) + 1)
-  }
+  (
+    get,
+    set,
+    { username, token }: { username: string | null; token: string | null },
+  ) => {
+    set(loginUsernameAtom, username)
+    set(loginTokenAtom, token)
+  },
 )
