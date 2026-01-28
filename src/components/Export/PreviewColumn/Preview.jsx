@@ -21,6 +21,7 @@ import {
   exportRcoPropertiesAtom,
   exportTaxFiltersAtom,
   exportPcoFiltersAtom,
+  exportRcoFiltersAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './Preview.module.css'
@@ -85,12 +86,10 @@ const getSortFieldForQuery = (sortField) => {
 export const Preview = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const { withSynonymData, rcoFilters: rcoFiltersPassed } = store.export
-  // 2019 08 20: No idea why suddenly need to getSnapshot
-  // because without changes are not detected????
-  const rcoFilters = getSnapshot(rcoFiltersPassed)
+  const { withSynonymData } = store.export
   const taxFilters = useAtomValue(exportTaxFiltersAtom)
   const pcoFilters = useAtomValue(exportPcoFiltersAtom)
+  const rcoFilters = useAtomValue(exportRcoFiltersAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
   const taxFields = useAtomValue(exportTaxPropertiesAtom)

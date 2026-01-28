@@ -1,47 +1,43 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { Comparator } from './Comparator.jsx'
 import { Value } from './Value.jsx'
-import { storeContext } from '../../../../../../../storeContext.js'
 import { constants } from '../../../../../../../modules/constants.js'
+import { exportRcoFiltersAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const Property = observer(
-  ({ pcname, relationtype, pname, jsontype }) => {
-    const store = useContext(storeContext)
-    const { rcoFilters } = store.export
+export const Property = ({ pcname, relationtype, pname, jsontype }) => {
+  const rcoFilters = useAtomValue(exportRcoFiltersAtom)
 
-    const exportRcoFilter = rcoFilters.find(
-      (x) =>
-        x.pcname === pcname &&
-        x.relationtype === relationtype &&
-        x.pname === pname,
-    ) || { comparator: null, value: null }
-    const { comparator, value } = exportRcoFilter
+  const exportRcoFilter = rcoFilters.find(
+    (x) =>
+      x.pcname === pcname &&
+      x.relationtype === relationtype &&
+      x.pname === pname,
+  ) || { comparator: null, value: null }
+  const { comparator, value } = exportRcoFilter
 
-    return (
-      <div className={styles.container}>
-        <Value
-          key={`${pcname}/${pname}/${jsontype}/${value}`}
+  return (
+    <div className={styles.container}>
+      <Value
+        key={`${pcname}/${pname}/${jsontype}/${value}`}
+        pcname={pcname}
+        relationtype={relationtype}
+        pname={pname}
+        value={value}
+        comparator={comparator}
+        jsontype={jsontype}
+      />
+      {value !== undefined && value !== null && (
+        <Comparator
           pcname={pcname}
           relationtype={relationtype}
           pname={pname}
-          value={value}
           comparator={comparator}
-          jsontype={jsontype}
+          value={value}
         />
-        {value !== undefined && value !== null && (
-          <Comparator
-            pcname={pcname}
-            relationtype={relationtype}
-            pname={pname}
-            comparator={comparator}
-            value={value}
-          />
-        )}
-      </div>
-    )
-  },
-)
+      )}
+    </div>
+  )
+}
