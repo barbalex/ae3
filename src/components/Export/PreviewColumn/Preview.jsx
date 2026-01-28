@@ -15,6 +15,8 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import {
   exportTaxonomiesAtom,
   exportIdsAtom,
+  exportTaxPropertiesAtom,
+  exportTypeAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './Preview.module.css'
@@ -81,13 +83,11 @@ export const Preview = observer(() => {
   const store = useContext(storeContext)
   const {
     withSynonymData,
-    type,
     pcoFilters: pcoFiltersPassed,
     rcoFilters: rcoFiltersPassed,
     taxFilters: taxFiltersPassed,
     rcoProperties: rcoPropertiesPassed,
     pcoProperties: pcoPropertiesPassed,
-    taxProperties: taxPropertiesPassed,
   } = store.export
   // 2019 08 20: No idea why suddenly need to getSnapshot
   // because without changes are not detected????
@@ -96,9 +96,10 @@ export const Preview = observer(() => {
   const taxFilters = getSnapshot(taxFiltersPassed)
   const rcoProperties = getSnapshot(rcoPropertiesPassed)
   const pcoProperties = getSnapshot(pcoPropertiesPassed)
-  const taxFields = getSnapshot(taxPropertiesPassed)
+  const taxFields = useAtomValue(exportTaxPropertiesAtom)
   const taxonomies = useAtomValue(exportTaxonomiesAtom)
   const exportIds = useAtomValue(exportIdsAtom)
+  const type = useAtomValue(exportTypeAtom)
 
   const [count, setCount] = useState(15)
   const [sortField, setSortField] = useState()

@@ -71,3 +71,11 @@ export const exportTaxonomiesAtom = atom<string[]>([])
 
 // Export ids atom
 export const exportIdsAtom = atom<string[]>([])
+
+// Export tax properties atom
+export type TaxProperty = {
+  taxname: string | null
+  pname: string | null
+}
+
+export const exportTaxPropertiesAtom = atom<TaxProperty[]>([])
