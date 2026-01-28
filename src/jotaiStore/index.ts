@@ -96,3 +96,13 @@ export type RcoProperty = {
 }
 
 export const exportRcoPropertiesAtom = atom<RcoProperty[]>([])
+
+// Export tax filters atom
+export type TaxFilter = {
+  taxname: string | null
+  pname: string | null
+  comparator: string | null
+  value: string | number | null
+}
+
+export const exportTaxFiltersAtom = atom<TaxFilter[]>([])
