@@ -1,13 +1,11 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
-import { storeContext } from '../../../../storeContext.js'
+import { stackedAtom } from '../../../../jotaiStore/index.ts'
 
 export const PropertyList = ({ propertiesArray }) => {
-  const store = useContext(storeContext)
-  const { stacked } = store
+  const stacked = useAtomValue(stackedAtom)
 
   return propertiesArray.map(([key, value]) =>
     stacked ?
