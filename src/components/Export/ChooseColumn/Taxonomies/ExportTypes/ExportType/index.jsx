@@ -1,13 +1,10 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtom, useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies.jsx'
-import { storeContext } from '../../../../../../storeContext.js'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
@@ -22,9 +19,8 @@ const exportTypeTAXToReadable = {
   LEBENSRAUM: 'Lebensräume',
 }
 
-export const ExportType = observer(({ type }) => {
+export const ExportType = ({ type }) => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
   const [exportType, setExportType] = useAtom(exportTypeAtom)
   const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
 
@@ -91,4 +87,4 @@ export const ExportType = observer(({ type }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}
