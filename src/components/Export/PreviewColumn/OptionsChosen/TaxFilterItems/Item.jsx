@@ -1,23 +1,19 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
-import { storeContext } from '../../../../../storeContext.js'
+import { exportTaxFiltersAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './Item.module.css'
 
-export const Item = observer(({ filter }) => {
-  const store = useContext(storeContext)
-  const { setTaxFilters } = store.export
+export const Item = ({ filter }) => {
+  const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
 
   const { taxname, pname, comparator, value } = filter
-  const onClick = () =>
-    setTaxFilters({
-      taxname,
-      pname,
-      comparator: '',
-      value: '',
-    })
+  const onClick = () => {
+    setTaxFilters(
+      taxFilters.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+    )
+  }
 
   return (
     <li>
@@ -33,4 +29,4 @@ export const Item = observer(({ filter }) => {
       </span>
     </li>
   )
-})
+}
