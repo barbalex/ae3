@@ -1,18 +1,16 @@
-import { useContext } from 'react'
 import { Link } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
+import { useAtomValue } from 'jotai'
 
-import { storeContext } from '../../../storeContext.js'
 import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
+import { sidebarWidthAtom } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const Sidebar = observer(({ stacked }) => {
-  const store = useContext(storeContext)
-  const { sidebarWidth } = store
+export const Sidebar = ({ stacked }) => {
+  const sidebarWidth = useAtomValue(sidebarWidthAtom)
 
   if (sidebarWidth === 0) return null
 
@@ -39,4 +37,4 @@ export const Sidebar = observer(({ stacked }) => {
       </SimpleBar>
     </div>
   )
-})
+}

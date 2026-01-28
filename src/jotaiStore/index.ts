@@ -52,3 +52,6 @@ export const singleColumnViewAtom = atom<boolean>(
 
 // DocFilter atom
 export const docFilterAtom = atom<string | number>('')
+
+// SidebarWidth atom
+export const sidebarWidthAtom = atom<number | null>(null)
