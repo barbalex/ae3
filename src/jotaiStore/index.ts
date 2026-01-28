@@ -87,3 +87,12 @@ export type PcoProperty = {
 }
 
 export const exportPcoPropertiesAtom = atom<PcoProperty[]>([])
+
+// Export rco properties atom
+export type RcoProperty = {
+  pcname: string | null
+  relationtype: string | null
+  pname: string | null
+}
+
+export const exportRcoPropertiesAtom = atom<RcoProperty[]>([])
