@@ -14,7 +14,7 @@ import 'react-reflex/styles.css'
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
 import { initializeIdb } from './modules/initializeIdb.js'
 import { setLoginFromIdb } from './modules/setLoginFromIdb.js'
-import { setLoginAtom } from './jotaiStore/index.ts'
+import { setLoginAtom, activeNodeArrayAtom } from './jotaiStore/index.ts'
 import { detectIE } from './modules/detectIE.js'
 import { client } from './client.js'
 import { IdbProvider } from './idbContext.js'
@@ -29,6 +29,7 @@ const Stacker = lazy(async () => ({
 export const App = () => {
   const idb = initializeIdb()
   const setLogin = useSetAtom(setLoginAtom)
+  const setActiveNodeArray = useSetAtom(activeNodeArrayAtom)
 
   const [store, setStore] = useState()
   useEffect(() => {
@@ -38,7 +39,6 @@ export const App = () => {
         setStore(storeWithLogin)
 
         // initiate activeNodeArray
-        const { setActiveNodeArray } = storeWithLogin
         setActiveNodeArray(getActiveNodeArrayFromPathname())
       },
     )

@@ -1,4 +1,4 @@
-import { useState, useContext, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { MdClear } from 'react-icons/md'
 import Select from '@mui/material/Select'
@@ -11,12 +11,11 @@ import { set } from 'es-toolkit/compat'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { updateOrgUserMutation } from './updateOrgUserMutation.js'
 import { deleteOrgUserMutation } from './deleteOrgUserMutation.js'
-import { storeContext } from '../../../../storeContext.js'
+import { activeNodeArrayAtom } from '../../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './OrgUser.module.css'
@@ -73,10 +72,9 @@ const orgUsersQuery = gql`
   }
 `
 
-export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
+export const OrgUser = ({ orgUser, orgUsersRefetch }) => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const name = activeNodeArray.length > 1 ? activeNodeArray[1] : 'none'
 
   const { data: allUsersData, error: allUsersError } = useQuery({
@@ -250,4 +248,4 @@ export const OrgUser = observer(({ orgUser, orgUsersRefetch }) => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
