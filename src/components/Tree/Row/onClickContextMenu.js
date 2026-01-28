@@ -20,6 +20,7 @@ export const onClickContextMenu = async ({
   client,
   store,
   scrollIntoView,
+  loginUsername,
   navigate,
   queryClient,
 }) => {
@@ -64,7 +65,7 @@ export const onClickContextMenu = async ({
             }
           }
         `,
-        variables: { name: store.login.username },
+        variables: { name: loginUsername },
       })
       const userId = userData?.userByName?.id
       if (table === 'object') {
