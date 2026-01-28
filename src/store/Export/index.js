@@ -1,8 +1,5 @@
 import { types } from 'mobx-state-tree'
 
-import TaxProperty, {
-  defaultValue as defaultTaxProperty,
-} from './TaxProperty.js'
 import RcoProperty, {
   defaultValue as defaultRcoProperty,
 } from './RcoProperty.js'
@@ -154,10 +151,9 @@ export default types
     },
     addRcoProperty({ pcname, relationtype, pname }) {
       const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
+      const pcoProperties = jotaiStore.get(exportPcoPropertiesAtom)
       const nrOfPropertiesExported =
-        taxProperties.length +
-        self.rcoProperties.length +
-        self.pcoProperties.length
+        taxProperties.length + self.rcoProperties.length + pcoProperties.length
       if (nrOfPropertiesExported > constants.export.maxFields) {
         self.tooManyProperties = true
       } else {
