@@ -8,10 +8,12 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { PcoList as List } from './PCOs.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
+import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -40,7 +42,7 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcosList', exportTaxonomies],
