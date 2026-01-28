@@ -13,15 +13,16 @@ import './index.css'
 import 'react-reflex/styles.css'
 
 import { graphQlUri } from './modules/graphQlUri.js'
+import { jotaiStore, loginTokenAtom, setLoginAtom } from './jotaiStore/index.ts'
 
-export const client = ({ idb, store }) => {
+export const client = ({ idb }) => {
   /**
    * On the next line Firefox 45.3.0 errors out with:
    * Unhandled Rejection (OpenFailedError): UnknownError The operation failed
    * for reasons unrelated to the database itself and not covered by any other error code
    */
   const authLink = new SetContextLink(async () => {
-    const { token, setLogin } = store.login
+    const token = jotaiStore.get(loginTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma
@@ -36,13 +37,13 @@ export const client = ({ idb, store }) => {
       } else {
         // token is not valid any more > remove it
         idb.users.clear()
-        setLogin({
+        jotaiStore.set(setLoginAtom, {
           username: 'Login abgelaufen',
           token: '',
         })
         setTimeout(
           () =>
-            setLogin({
+            jotaiStore.set(setLoginAtom, {
               username: '',
               token: '',
             }),
