@@ -13,13 +13,13 @@ import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter.js'
 import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
 import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
 import { constants } from '../../modules/constants.js'
+import {
+  jotaiStore,
+  exportTaxPropertiesAtom,
+} from '../../jotaiStore/index.ts'
 
 export default types
   .model('Export', {
-    taxProperties: types.optional(
-      types.array(types.optional(TaxProperty, defaultTaxProperty)),
-      [],
-    ),
     pcoProperties: types.optional(
       types.array(types.optional(PcoProperty, defaultPcoProperty)),
       [],
@@ -93,10 +93,9 @@ export default types
       }
     },
     addPcoProperty({ pcname, pname }) {
+      const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
       const nrOfPropertiesExported =
-        self.taxProperties.length +
-        self.rcoProperties.length +
-        self.pcoProperties.length
+        taxProperties.length + self.rcoProperties.length + self.pcoProperties.length
       if (nrOfPropertiesExported > constants.export.maxFields) {
         self.tooManyProperties = true
       } else {
@@ -191,10 +190,9 @@ export default types
       )
     },
     addRcoProperty({ pcname, relationtype, pname }) {
+      const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
       const nrOfPropertiesExported =
-        self.taxProperties.length +
-        self.rcoProperties.length +
-        self.pcoProperties.length
+        taxProperties.length + self.rcoProperties.length + self.pcoProperties.length
       if (nrOfPropertiesExported > constants.export.maxFields) {
         self.tooManyProperties = true
       } else {
@@ -217,33 +215,6 @@ export default types
           self.rcoProperties = rcoProperties
         }
       }
-    },
-    addTaxProperty({ taxname, pname }) {
-      // TODO:
-      // if single self.taxonomies, use taxname instead of 'taxonomie'
-      // if multiple self.taxonomies, rename all taxProperties to 'taxonomie'
-      const nrOfPropertiesExported =
-        self.taxProperties.length +
-        self.rcoProperties.length +
-        self.pcoProperties.length
-      if (nrOfPropertiesExported > constants.export.maxFields) {
-        return (self.tooManyProperties = true)
-      }
-      // only add if not yet done
-      const taxProperty = self.taxProperties.find(
-        (t) => t.taxname === taxname && t.pname === pname,
-      )
-      if (!taxProperty) {
-        self.taxProperties = [...self.taxProperties, { taxname, pname }]
-      }
-    },
-    removeTaxProperty({ taxname, pname }) {
-      self.taxProperties = self.taxProperties.filter(
-        (x) => !(x.taxname === taxname && x.pname === pname),
-      )
-    },
-    resetTaxProperties() {
-      self.taxProperties = []
     },
     resetTaxFilters() {
       self.taxFilters = []

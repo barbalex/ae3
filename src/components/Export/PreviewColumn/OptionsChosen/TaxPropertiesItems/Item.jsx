@@ -1,19 +1,16 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { storeContext } from '../../../../../storeContext.js'
+import { exportTaxPropertiesAtom } from '../../../../../jotaiStore/index.ts'
 import styles from './Item.module.css'
 
-export const Item = observer(({ properties }) => {
-  const store = useContext(storeContext)
-  const { removeTaxProperty } = store.export
+export const Item = ({ properties }) => {
+  const setTaxProperties = useSetAtom(exportTaxPropertiesAtom)
 
   const { taxname, pname } = properties
   const onClick = () =>
-    removeTaxProperty({
-      taxname,
-      pname,
-    })
+    setTaxProperties((prev) =>
+      prev.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+    )
 
   return (
     <li key={`${taxname}: ${pname}`}>
@@ -26,4 +23,4 @@ export const Item = observer(({ properties }) => {
       </span>
     </li>
   )
-})
+}
