@@ -1,13 +1,16 @@
 import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { storeContext } from '../../storeContext.js'
 import { isElementInViewport } from '../../modules/isElementInViewport.js'
 import { getLastIdFromUrl } from '../../modules/getLastIdFromUrl.js'
+import { scrollIntoViewCounterAtom } from '../../jotaiStore/index.ts'
 
 export const IntoViewScroller = observer(() => {
   const store = useContext(storeContext)
-  const { activeNodeArray, scrollIntoViewCounter } = store
+  const { activeNodeArray } = store
+  const scrollIntoViewCounter = useAtomValue(scrollIntoViewCounterAtom)
 
   const scroller = () => {
     // 1. Get id from url

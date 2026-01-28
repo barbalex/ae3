@@ -2,7 +2,6 @@ import { types } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 
 import Export, { defaultValue as defaultExport } from './Export/index.js'
-import TreeFilter, { defaultValue as defaultTreeFilter } from './TreeFilter.js'
 import Login, { defaultValue as defaultLogin } from './Login.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
 
@@ -16,19 +15,14 @@ export const store = () =>
         types.array(types.union(types.string, types.number)),
         [],
       ),
-      treeFilter: types.optional(TreeFilter, defaultTreeFilter),
       login: types.optional(Login, defaultLogin),
       sidebarWidth: types.maybeNull(types.number, null),
       docFilter: types.optional(types.union(types.string, types.number), ''),
       windowWidth: types.optional(types.number, 800),
       windowHeight: types.optional(types.number, 800),
       stacked: types.optional(types.boolean, false),
-      scrollIntoViewCounter: types.optional(types.number, 0),
     })
     .actions((self) => ({
-      scrollIntoView() {
-        self.scrollIntoViewCounter += 1
-      },
       setStacked(val) {
         self.stacked = val
       },
