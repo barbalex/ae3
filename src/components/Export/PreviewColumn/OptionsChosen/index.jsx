@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useAtom } from 'jotai'
 
 import { TaxFilterItems } from './TaxFilterItems/index.jsx'
 import { PcoFilterItems } from './PcoFilterItems/index.jsx'
@@ -10,14 +11,14 @@ import { TaxPropertiesItems } from './TaxPropertiesItems/index.jsx'
 import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
+import { exportTypeAtom } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 export const OptionsChosen = observer(() => {
   const store = useContext(storeContext)
+  const [exportType, setExportType] = useAtom(exportTypeAtom)
   const {
-    setType,
-    type: exportType,
     setTaxonomies,
     withSynonymData,
     setWithSynonymData,
@@ -54,7 +55,7 @@ export const OptionsChosen = observer(() => {
     ].length === 0
 
   const onClickResetAll = () => {
-    setType(null)
+    setExportType(null)
     setTaxonomies([])
     resetPcoProperties()
     resetRcoProperties()
@@ -66,7 +67,7 @@ export const OptionsChosen = observer(() => {
   }
 
   const onClickResetType = () => {
-    setType()
+    setExportType(null)
     setTaxonomies([])
   }
 

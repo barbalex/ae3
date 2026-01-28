@@ -3,11 +3,12 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
 import { useApolloClient } from '@apollo/client/react'
+import { useAtom } from 'jotai'
 
 import { Taxonomies } from './Taxonomies.jsx'
 import { storeContext } from '../../../../../../storeContext.js'
+import { exportTypeAtom } from '../../../../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
@@ -21,11 +22,8 @@ const exportTypeTAXToReadable = {
 export const ExportType = observer(({ type }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    type: exportType,
-    setType: setExportType,
-    setTaxonomies,
-  } = store.export
+  const [exportType, setExportType] = useAtom(exportTypeAtom)
+  const { setTaxonomies } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
   const onCheckType = async (event, isChecked) => {
