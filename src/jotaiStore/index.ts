@@ -116,3 +116,14 @@ export type PcoFilter = {
 }
 
 export const exportPcoFiltersAtom = atom<PcoFilter[]>([])
+
+// Export rco filters atom
+export type RcoFilter = {
+  pcname: string | null
+  relationtype: string | null
+  pname: string | null
+  comparator: string | null
+  value: string | number | null
+}
+
+export const exportRcoFiltersAtom = atom<RcoFilter[]>([])
