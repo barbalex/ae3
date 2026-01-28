@@ -1,23 +1,20 @@
 import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
+import { useSetAtom } from 'jotai'
 
 import { idbContext } from '../../idbContext.js'
-import { storeContext } from '../../storeContext.js'
+import { setLoginAtom } from '../../jotaiStore/index.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
-export const RouterErrorBoundary = observer(({ children }) => {
+export const RouterErrorBoundary = ({ children }) => {
   const error = useRouteError()
 
   const idb = useContext(idbContext)
-  const store = useContext(storeContext)
+  const setLogin = useSetAtom(setLoginAtom)
 
   const onReset = () => {
-    const { login } = store
-    const { setLogin } = login
-
     if (typeof window !== 'undefined') {
       idb.users.clear()
       setLogin({
@@ -59,4 +56,4 @@ export const RouterErrorBoundary = observer(({ children }) => {
       </div>
     </div>
   )
-})
+}

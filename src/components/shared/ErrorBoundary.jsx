@@ -1,10 +1,10 @@
 import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import Button from '@mui/material/Button'
+import { useSetAtom } from 'jotai'
 
 import { idbContext } from '../../idbContext.js'
-import { storeContext } from '../../storeContext.js'
+import { setLoginAtom } from '../../jotaiStore/index.ts'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -47,19 +47,16 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = observer(({ children }) => {
+export const ErrorBoundary = ({ children }) => {
   const idb = useContext(idbContext)
-  const store = useContext(storeContext)
+  const setLogin = useSetAtom(setLoginAtom)
 
   const onReset = () => {
-    const { login } = store
-    const { setLogin } = login
-
     if (typeof window !== 'undefined') {
       idb.users.clear()
       setLogin({
-        username: '',
-        token: '',
+        username: null,
+        token: null,
       })
       window.location.reload(true)
     }
@@ -73,4 +70,4 @@ export const ErrorBoundary = observer(({ children }) => {
       {children}
     </ErrorBoundaryComponent>
   )
-})
+}
