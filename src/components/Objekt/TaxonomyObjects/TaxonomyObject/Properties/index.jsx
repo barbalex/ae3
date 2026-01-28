@@ -8,16 +8,19 @@
  */
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { PropertyList } from './PropertyList.jsx'
 import { NewProperty } from '../../../../shared/NewProperty.jsx'
 import { storeContext } from '../../../../../storeContext.js'
+import { stackedAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 const Properties = observer(({ id, properties, refetch }) => {
   const store = useContext(storeContext)
-  const { editingTaxonomies, stacked } = store
+  const { editingTaxonomies } = store
+  const stacked = useAtomValue(stackedAtom)
 
   const propertiesArray = Object.entries(properties)
 
