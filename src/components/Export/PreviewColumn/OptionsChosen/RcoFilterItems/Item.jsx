@@ -1,24 +1,27 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
-import { storeContext } from '../../../../../storeContext.js'
+import { exportRcoFiltersAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './Item.module.css'
 
-export const Item = observer(({ filter }) => {
+export const Item = ({ filter }) => {
   const { pcname, relationtype, pname, comparator, value } = filter
-  const store = useContext(storeContext)
-  const { setRcoFilters } = store.export
+  const rcoFilters = useAtomValue(exportRcoFiltersAtom)
+  const setRcoFilters = useSetAtom(exportRcoFiltersAtom)
 
-  const onClick = () =>
-    setRcoFilters({
-      pcname,
-      relationtype,
-      pname,
-      comparator: '',
-      value: '',
-    })
+  const onClick = () => {
+    setRcoFilters(
+      rcoFilters.filter(
+        (x) =>
+          !(
+            x.pcname === pcname &&
+            x.relationtype === relationtype &&
+            x.pname === pname
+          ),
+      ),
+    )
+  }
 
   return (
     <li>
@@ -34,4 +37,4 @@ export const Item = observer(({ filter }) => {
       </span>
     </li>
   )
-})
+}

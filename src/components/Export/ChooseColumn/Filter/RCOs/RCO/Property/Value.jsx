@@ -8,7 +8,10 @@ import { useSetAtom, useAtomValue } from 'jotai'
 
 import { readableType } from '../../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../../storeContext.js'
-import { exportRcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
+import {
+  exportRcoPropertiesAtom,
+  exportRcoFiltersAtom,
+} from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Value.module.css'
 
@@ -51,9 +54,11 @@ export const Value = observer(
   ({ relationtype, pcname, pname, jsontype, comparator, value: propValue }) => {
     const apolloClient = useApolloClient()
     const store = useContext(storeContext)
-    const { addFilterFields, setRcoFilters } = store.export
+    const { addFilterFields } = store.export
     const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
     const setRcoProperties = useSetAtom(exportRcoPropertiesAtom)
+    const rcoFilters = useAtomValue(exportRcoFiltersAtom)
+    const setRcoFilters = useSetAtom(exportRcoFiltersAtom)
 
     // Problem with loading data
     // Want to load all data when user focuses on input
@@ -93,13 +98,56 @@ export const Value = observer(
       let comparatorValue = comparator
       if (!comparator && val) comparatorValue = 'ILIKE'
       if (!val) comparatorValue = null
-      setRcoFilters({
-        pcname,
-        relationtype,
-        pname,
-        comparator: comparatorValue,
-        value: val,
-      })
+      const rcoFilter = rcoFilters.find(
+        (x) =>
+          x.pcname === pcname &&
+          x.relationtype === relationtype &&
+          x.pname === pname,
+      )
+      if (!comparatorValue && !val && val !== 0) {
+        // remove
+        setRcoFilters(
+          rcoFilters.filter(
+            (x) =>
+              !(
+                x.pcname === pcname &&
+                x.relationtype === relationtype &&
+                x.pname === pname
+              ),
+          ),
+        )
+      } else if (!rcoFilter) {
+        // add new one
+        setRcoFilters([
+          ...rcoFilters,
+          {
+            pcname,
+            relationtype,
+            pname,
+            comparator: comparatorValue,
+            value: val,
+          },
+        ])
+      } else {
+        // edit = add new one instead of existing
+        setRcoFilters([
+          ...rcoFilters.filter(
+            (x) =>
+              !(
+                x.pcname === pcname &&
+                x.relationtype === relationtype &&
+                x.pname === pname
+              ),
+          ),
+          {
+            pcname,
+            relationtype,
+            pname,
+            comparator: comparatorValue,
+            value: val,
+          },
+        ])
+      }
       // 2. if value and field not chosen, choose it
       if (addFilterFields && value) {
         if (
