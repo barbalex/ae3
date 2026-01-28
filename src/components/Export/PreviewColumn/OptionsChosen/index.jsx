@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 
 import { TaxFilterItems } from './TaxFilterItems/index.jsx'
 import { PcoFilterItems } from './PcoFilterItems/index.jsx'
@@ -11,15 +11,15 @@ import { TaxPropertiesItems } from './TaxPropertiesItems/index.jsx'
 import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
-import { exportTypeAtom } from '../../../../jotaiStore/index.ts'
+import { exportTypeAtom, exportTaxonomiesAtom } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 export const OptionsChosen = observer(() => {
   const store = useContext(storeContext)
   const [exportType, setExportType] = useAtom(exportTypeAtom)
+  const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
   const {
-    setTaxonomies,
     withSynonymData,
     setWithSynonymData,
     pcoFilters: pcoFiltersPassed,
@@ -41,7 +41,6 @@ export const OptionsChosen = observer(() => {
   const rcoProperties = getSnapshot(rcoPropertiesPassed)
   const pcoProperties = getSnapshot(pcoPropertiesPassed)
   const taxProperties = getSnapshot(taxPropertiesPassed)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
 
   const noDataChoosen =
     [
@@ -56,7 +55,7 @@ export const OptionsChosen = observer(() => {
 
   const onClickResetAll = () => {
     setExportType(null)
-    setTaxonomies([])
+    setExportTaxonomies([])
     resetPcoProperties()
     resetRcoProperties()
     resetTaxProperties()
@@ -68,10 +67,10 @@ export const OptionsChosen = observer(() => {
 
   const onClickResetType = () => {
     setExportType(null)
-    setTaxonomies([])
+    setExportTaxonomies([])
   }
 
-  const onClickResetTaxonomies = () => setTaxonomies([])
+  const onClickResetTaxonomies = () => setExportTaxonomies([])
 
   const onClickResetExportWithSynonymData = () => setWithSynonymData(true)
 

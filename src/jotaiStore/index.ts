@@ -65,3 +65,6 @@ export const activeNodeArrayAtom = atom<(string | number)[]>([])
 
 // Export type atom
 export const exportTypeAtom = atom<string | null>(null)
+
+// Export taxonomies atom
+export const exportTaxonomiesAtom = atom<string[]>([])

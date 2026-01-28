@@ -16,7 +16,6 @@ import { constants } from '../../modules/constants.js'
 
 export default types
   .model('Export', {
-    taxonomies: types.optional(types.array(types.string), []),
     ids: types.optional(types.array(types.string), []),
     taxProperties: types.optional(
       types.array(types.optional(TaxProperty, defaultTaxProperty)),
@@ -47,9 +46,6 @@ export default types
     addFilterFields: types.optional(types.boolean, true),
   })
   .actions((self) => ({
-    setTaxonomies(value) {
-      self.taxonomies = value
-    },
     setIds(value) {
       self.ids = value
     },
