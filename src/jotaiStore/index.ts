@@ -58,3 +58,4 @@ export const sidebarWidthAtom = atom<number | null>(null)
 
 // Editing states
 export const editingPCsAtom = atom<boolean>(false)
+export const editingTaxonomiesAtom = atom<boolean>(false)

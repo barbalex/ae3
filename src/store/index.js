@@ -8,16 +8,12 @@ export const store = () =>
   types
     .model({
       export: types.optional(Export, defaultExport),
-      editingTaxonomies: types.optional(types.boolean, false),
       activeNodeArray: types.optional(
         types.array(types.union(types.string, types.number)),
         [],
       ),
     })
     .actions((self) => ({
-      setEditingTaxonomies(value) {
-        self.editingTaxonomies = value
-      },
       setActiveNodeArray(value, navigate) {
         self.activeNodeArray = value
         const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
