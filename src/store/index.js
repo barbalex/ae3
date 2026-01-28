@@ -2,7 +2,6 @@ import { types } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 
 import Export, { defaultValue as defaultExport } from './Export/index.js'
-import Login, { defaultValue as defaultLogin } from './Login.js'
 import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFromPathname.js'
 
 export const store = () =>
@@ -15,7 +14,6 @@ export const store = () =>
         types.array(types.union(types.string, types.number)),
         [],
       ),
-      login: types.optional(Login, defaultLogin),
       sidebarWidth: types.maybeNull(types.number, null),
       docFilter: types.optional(types.union(types.string, types.number), ''),
       windowWidth: types.optional(types.number, 800),
