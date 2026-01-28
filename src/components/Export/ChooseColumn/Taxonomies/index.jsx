@@ -6,7 +6,10 @@ import { useAtomValue } from 'jotai'
 import { HowTo } from './HowTo.jsx'
 import { ExportTypes } from './ExportTypes/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
-import { exportTypeAtom } from '../../../../jotaiStore/index.ts'
+import {
+  exportTypeAtom,
+  exportTaxonomiesAtom,
+} from '../../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
@@ -14,7 +17,7 @@ import styles from './index.module.css'
 export const Taxonomies = observer(() => {
   const store = useContext(storeContext)
   const exportType = useAtomValue(exportTypeAtom)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   let paperBackgroundColor = '#1565C0'
   let textProperties = 'Wählen Sie eine oder mehrere Taxonomien.'

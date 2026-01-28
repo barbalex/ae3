@@ -1,17 +1,19 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
+import { useAtomValue } from 'jotai'
 
 import { OptionsChosen } from './OptionsChosen/index.jsx'
 import { Preview } from './Preview.jsx'
 import { storeContext } from '../../../storeContext.js'
+import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
 export const PreviewColumn = observer(() => {
   const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   return (
     <ErrorBoundary>
