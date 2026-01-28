@@ -25,6 +25,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
+import { useSetAtom } from 'jotai'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
@@ -36,6 +37,7 @@ import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
 import { storeContext } from '../../../../storeContext.js'
+import { scrollIntoViewAtom } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -64,9 +66,9 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
     editingTaxonomies,
     setEditingTaxonomies,
     login,
-    scrollIntoView,
     stacked,
   } = store
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const apolloClient = useApolloClient()
 
   const navigate = useNavigate()

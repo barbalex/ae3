@@ -11,6 +11,7 @@ import { CombinedGraphQLErrors } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { query } from './query.js'
 import { Roles } from './Roles.jsx'
@@ -21,6 +22,7 @@ import { updateUserMutationWithPass } from './updateUserMutationWithPass.js'
 import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { scrollIntoViewAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -31,7 +33,8 @@ const User = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
-  const { login, scrollIntoView } = store
+  const { login } = store
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
   const { data, error, refetch } = useQuery({
     queryKey: ['user', userId],
