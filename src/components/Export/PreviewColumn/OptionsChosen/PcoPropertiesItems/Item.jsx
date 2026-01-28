@@ -1,19 +1,17 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { storeContext } from '../../../../../storeContext.js'
+import { exportPcoPropertiesAtom } from '../../../../../jotaiStore/index.ts'
 import styles from './Item.module.css'
 
-export const Item = observer(({ properties }) => {
-  const store = useContext(storeContext)
-  const { removePcoProperty } = store.export
+export const Item = ({ properties }) => {
+  const setPcoProperties = useSetAtom(exportPcoPropertiesAtom)
   const { pcname, pname } = properties
 
-  const onClick = () =>
-    removePcoProperty({
-      pcname,
-      pname,
-    })
+  const onClick = () => {
+    setPcoProperties((prev) =>
+      prev.filter((x) => !(x.pcname === pcname && x.pname === pname)),
+    )
+  }
 
   return (
     <li>
@@ -26,4 +24,4 @@ export const Item = observer(({ properties }) => {
       </span>
     </li>
   )
-})
+}

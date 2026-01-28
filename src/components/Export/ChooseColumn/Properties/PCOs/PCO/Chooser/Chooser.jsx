@@ -1,22 +1,29 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../../storeContext.js'
+import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../../modules/constants.js'
 
 import styles from './Chooser.module.css'
 
-export const Chooser = observer(({ pcname, pname }) => {
-  const store = useContext(storeContext)
-  const { pcoProperties, addPcoProperty, removePcoProperty } = store.export
+export const Chooser = ({ pcname, pname }) => {
+  const [pcoProperties, setPcoProperties] = useAtom(exportPcoPropertiesAtom)
 
   const onCheck = (event, isChecked) => {
     if (isChecked) {
-      return addPcoProperty({ pcname, pname })
+      if (
+        !pcoProperties.find((t) => t.pcname === pcname && t.pname === pname)
+      ) {
+        setPcoProperties([...pcoProperties, { pcname, pname }])
+      }
+    } else {
+      setPcoProperties(
+        pcoProperties.filter(
+          (x) => !(x.pcname === pcname && x.pname === pname),
+        ),
+      )
     }
-    removePcoProperty({ pcname, pname })
   }
 
   const checked =
@@ -38,4 +45,4 @@ export const Chooser = observer(({ pcname, pname }) => {
       />
     </div>
   )
-})
+}
