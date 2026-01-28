@@ -54,7 +54,7 @@ export const App = () => {
   // on first render returns null
   if (!store) return null
 
-  const myClient = client({ idb, store })
+  const myClient = client({ idb })
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

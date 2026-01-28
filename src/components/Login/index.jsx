@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react'
+import { useState, useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -15,20 +15,20 @@ import {
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { fetchLogin } from './fetchLogin.js'
 import { idbContext } from '../../idbContext.js'
-import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { loginTokenAtom, setLoginAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 const Login = observer(() => {
   const apolloClient = useApolloClient()
   const idb = useContext(idbContext)
-  const store = useContext(storeContext)
-  const { login } = store
-  const { token, setLogin } = login
+  const token = useAtomValue(loginTokenAtom)
+  const setLogin = useSetAtom(setLoginAtom)
 
   const navigate = useNavigate()
 
@@ -55,7 +55,6 @@ const Login = observer(() => {
       namePassed,
       passPassed,
       idb,
-      store,
       nameInput,
       passwordInput,
       navigate,
