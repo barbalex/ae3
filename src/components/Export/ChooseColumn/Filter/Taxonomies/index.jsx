@@ -34,9 +34,8 @@ const propsByTaxQuery = gql`
   }
 `
 
-export const Taxonomies = (
-  ({ taxonomiesExpanded, onToggleTaxonomies }) => {
-    const apolloClient = useApolloClient()
+export const Taxonomies = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
+  const apolloClient = useApolloClient()
 
     const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
@@ -125,4 +124,4 @@ export const Taxonomies = (
         </div>
       </ErrorBoundary>
     )
-  }
+}
