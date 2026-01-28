@@ -1,16 +1,16 @@
-import { useState, useContext, useMemo, Suspense } from 'react'
+import { useState, useMemo, Suspense } from 'react'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { ImportRco } from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'
 import { deleteRcoOfPcMutation } from './deleteRcoOfPcMutation.js'
-import { storeContext } from '../../../storeContext.js'
+import { loginUsernameAtom } from '../../../jotaiStore/index.ts'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
@@ -147,13 +147,12 @@ const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
   return doOrderBy(rCOUnsorted, orderBy, sortDirection)
 }
 
-export const RCO = observer(() => {
+export const RCO = () => {
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
   const { pcId } = useParams()
 
-  const store = useContext(storeContext)
-  const { login } = store
+  const username = useAtomValue(loginUsernameAtom)
 
   const [count, setCount] = useState(15)
 
@@ -200,7 +199,6 @@ export const RCO = observer(() => {
       ?.organizationUsersByOrganizationId?.nodes ?? []
   ).filter((u) => ['orgAdmin', 'orgCollectionWriter'].includes(u.role))
   const writerNames = union(rCOWriters.map((w) => w.userByUserId.name))
-  const { username } = login
   const userIsWriter = !!username && writerNames.includes(username)
   const showImportRco =
     ((
@@ -381,4 +379,4 @@ export const RCO = observer(() => {
       </Suspense>
     </div>
   )
-})
+}
