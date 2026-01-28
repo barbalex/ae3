@@ -1,25 +1,30 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../storeContext.js'
+import { exportTaxPropertiesAtom } from '../../../../../../jotaiStore/index.ts'
 import styles from './AllChooser.module.css'
 
-export const AllChooser = observer(({ properties }) => {
-  const store = useContext(storeContext)
-  const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
+export const AllChooser = ({ properties }) => {
+  const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
 
   const onCheck = async (event, isChecked) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const p of properties) {
-      const taxname = p.taxname ? p.taxname : p.taxonomyName
-      const pname = p.propertyName
-      if (isChecked) {
-        addTaxProperty({ taxname, pname })
-      } else {
-        removeTaxProperty({ taxname, pname })
-      }
+    if (isChecked) {
+      const propsToAdd = properties
+        .map((p) => ({
+          taxname: p.taxname ? p.taxname : p.taxonomyName,
+          pname: p.propertyName,
+        }))
+        .filter(
+          (p) =>
+            !taxProperties.find(
+              (x) => x.taxname === p.taxname && x.pname === p.pname,
+            ),
+        )
+      setTaxProperties([...taxProperties, ...propsToAdd])
+    } else {
+      const pnames = properties.map((p) => p.propertyName)
+      setTaxProperties(taxProperties.filter((x) => !pnames.includes(x.pname)))
     }
   }
 
@@ -48,4 +53,4 @@ export const AllChooser = observer(({ properties }) => {
       />
     </div>
   )
-})
+}

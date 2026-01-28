@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom, useAtomValue } from 'jotai'
 
 import { TaxFilterItems } from './TaxFilterItems/index.jsx'
 import { PcoFilterItems } from './PcoFilterItems/index.jsx'
@@ -11,7 +11,11 @@ import { TaxPropertiesItems } from './TaxPropertiesItems/index.jsx'
 import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
-import { exportTypeAtom, exportTaxonomiesAtom } from '../../../../jotaiStore/index.ts'
+import {
+  exportTypeAtom,
+  exportTaxonomiesAtom,
+  exportTaxPropertiesAtom,
+} from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -19,6 +23,7 @@ export const OptionsChosen = observer(() => {
   const store = useContext(storeContext)
   const [exportType, setExportType] = useAtom(exportTypeAtom)
   const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
+  const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
   const {
     withSynonymData,
     setWithSynonymData,
@@ -32,15 +37,12 @@ export const OptionsChosen = observer(() => {
     rcoProperties: rcoPropertiesPassed,
     resetPcoProperties,
     pcoProperties: pcoPropertiesPassed,
-    resetTaxProperties,
-    taxProperties: taxPropertiesPassed,
   } = store.export
   const pcoFilters = getSnapshot(pcoFiltersPassed)
   const rcoFilters = getSnapshot(rcoFiltersPassed)
   const taxFilters = getSnapshot(taxFiltersPassed)
   const rcoProperties = getSnapshot(rcoPropertiesPassed)
   const pcoProperties = getSnapshot(pcoPropertiesPassed)
-  const taxProperties = getSnapshot(taxPropertiesPassed)
 
   const noDataChoosen =
     [
@@ -58,7 +60,7 @@ export const OptionsChosen = observer(() => {
     setExportTaxonomies([])
     resetPcoProperties()
     resetRcoProperties()
-    resetTaxProperties()
+    setTaxProperties([])
     resetTaxFilters()
     resetPcoFilters()
     resetRcoFilters()
