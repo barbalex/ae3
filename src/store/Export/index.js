@@ -1,6 +1,5 @@
 import { types } from 'mobx-state-tree'
 
-import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
 import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
 import { constants } from '../../modules/constants.js'
 import {
@@ -9,14 +8,11 @@ import {
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,
   exportTaxFiltersAtom,
+  exportPcoFiltersAtom,
 } from '../../jotaiStore/index.ts'
 
 export default types
   .model('Export', {
-    pcoFilters: types.optional(
-      types.array(types.optional(PcoFilter, defaultPcoFilter)),
-      [],
-    ),
     rcoFilters: types.optional(
       types.array(types.optional(RcoFilter, defaultRcoFilter)),
       [],
@@ -34,44 +30,6 @@ export default types
     },
     setAddFilterFields(value) {
       self.addFilterFields = value
-    },
-    resetPcoFilters() {
-      self.pcoFilters = []
-    },
-    setPcoFilter({ pcname, pname, comparator, value }) {
-      const pcoFilter = self.pcoFilters.find(
-        (x) => x.pcname === pcname && x.pname === pname,
-      )
-      if (!comparator && !value && value !== 0) {
-        // remove
-        self.pcoFilters = self.pcoFilters.filter(
-          (x) => !(x.pcname === pcname && x.pname === pname),
-        )
-      } else if (!pcoFilter) {
-        // add new one
-        self.pcoFilters = [
-          ...self.pcoFilters,
-          {
-            pcname,
-            pname,
-            comparator,
-            value,
-          },
-        ]
-      } else {
-        // edit = add new one instead of existing
-        self.pcoFilters = [
-          ...self.pcoFilters.filter(
-            (x) => !(x.pcname === pcname && x.pname === pname),
-          ),
-          {
-            pcname,
-            pname,
-            comparator,
-            value,
-          },
-        ]
-      }
     },
     resetRcoFilters() {
       self.rcoFilters = []
