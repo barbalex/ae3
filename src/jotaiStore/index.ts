@@ -79,3 +79,11 @@ export type TaxProperty = {
 }
 
 export const exportTaxPropertiesAtom = atom<TaxProperty[]>([])
+
+// Export pco properties atom
+export type PcoProperty = {
+  pcname: string | null
+  pname: string | null
+}
+
+export const exportPcoPropertiesAtom = atom<PcoProperty[]>([])
