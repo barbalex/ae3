@@ -5,14 +5,18 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { storeContext } from '../../../../../../../storeContext.js'
+import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Checkbox.module.css'
 
 export const PcoCheckbox = observer(({ pname, pcname, value }) => {
   const store = useContext(storeContext)
-  const { addFilterFields, setPcoFilter, addPcoProperty } = store.export
+  const { addFilterFields, setPcoFilter } = store.export
+  const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
+  const setPcoProperties = useSetAtom(exportPcoPropertiesAtom)
 
   const onChange = (e, val) => {
     let comparator = '='
@@ -24,7 +28,11 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
     setPcoFilter({ pcname, pname, comparator, value })
     // if value and not chosen, choose
     if (addFilterFields) {
-      addPcoProperty({ pcname, pname })
+      if (
+        !pcoProperties.find((t) => t.pcname === pcname && t.pname === pname)
+      ) {
+        setPcoProperties([...pcoProperties, { pcname, pname }])
+      }
     }
   }
 

@@ -1,26 +1,32 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../../storeContext.js'
+import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 import styles from './AllChooser.module.css'
 
-export const AllChooser = observer(({ properties, pcName }) => {
-  const store = useContext(storeContext)
-  const { pcoProperties, addPcoProperty, removePcoProperty } = store.export
+export const AllChooser = ({ properties, pcName }) => {
+  const [pcoProperties, setPcoProperties] = useAtom(exportPcoPropertiesAtom)
 
   const onCheck = (event, isChecked) => {
     if (isChecked) {
-      return properties.forEach((p) => {
-        const pcname = pcName
-        const pname = p.property
-        addPcoProperty({ pcname, pname })
-      })
+      const newProperties = properties
+        .filter(
+          (p) =>
+            !pcoProperties.find(
+              (x) => x.pcname === pcName && x.pname === p.property,
+            ),
+        )
+        .map((p) => ({ pcname: pcName, pname: p.property }))
+      setPcoProperties([...pcoProperties, ...newProperties])
+    } else {
+      const propertyNames = properties.map((p) => p.property)
+      setPcoProperties(
+        pcoProperties.filter(
+          (x) => !(x.pcname === pcName && propertyNames.includes(x.pname)),
+        ),
+      )
     }
-    properties.forEach((p) =>
-      removePcoProperty({ pcname: pcName, pname: p.property }),
-    )
   }
 
   const checkedArray = properties.map(
@@ -45,4 +51,4 @@ export const AllChooser = observer(({ properties, pcName }) => {
       />
     </div>
   )
-})
+}
