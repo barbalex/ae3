@@ -9,12 +9,14 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { Taxonomy } from './Taxonomy.jsx'
 import { JointTaxonomy } from './JointTaxonomy.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { joinTaxProperties } from './joinTaxProperties.js'
+import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -40,7 +42,7 @@ export const Taxonomies = observer(
     const apolloClient = useApolloClient()
 
     const store = useContext(storeContext)
-    const exportTaxonomies = store.export.taxonomies.toJSON()
+    const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
     const { data, error, loading } = useQuery({
       queryKey: ['exportChooseColumnFilterTaxonomiesCard', exportTaxonomies],
