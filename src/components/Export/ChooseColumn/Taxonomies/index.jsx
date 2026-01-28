@@ -1,17 +1,19 @@
 import { useContext } from 'react'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { HowTo } from './HowTo.jsx'
 import { ExportTypes } from './ExportTypes/index.jsx'
 import { storeContext } from '../../../../storeContext.js'
+import { exportTypeAtom } from '../../../../jotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
 export const Taxonomies = observer(() => {
   const store = useContext(storeContext)
-  const { type: exportType } = store.export
+  const exportType = useAtomValue(exportTypeAtom)
   const exportTaxonomies = store.export.taxonomies.toJSON()
 
   let paperBackgroundColor = '#1565C0'

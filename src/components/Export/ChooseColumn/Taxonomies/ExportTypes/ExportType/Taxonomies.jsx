@@ -6,13 +6,16 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { storeContext } from '../../../../../../storeContext.js'
+import { exportTypeAtom } from '../../../../../../jotaiStore/index.ts'
 import styles from './Taxonomies.module.css'
 
 export const Taxonomies = observer(({ type }) => {
   const store = useContext(storeContext)
-  const { setType, setTaxonomies } = store.export
+  const setExportType = useSetAtom(exportTypeAtom)
+  const { setTaxonomies } = store.export
   const exportTaxonomies = store.export.taxonomies.toJSON()
   const apolloClient = useApolloClient()
 
@@ -50,7 +53,7 @@ export const Taxonomies = observer(({ type }) => {
       if ((taxonomies ?? []).length === 0) {
         // this was the only taxonomy in this type
         // it makes sense to also uncheck the type
-        setType(null)
+        setExportType(null)
       }
     }
   }
