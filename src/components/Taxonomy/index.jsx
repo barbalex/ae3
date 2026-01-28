@@ -1,4 +1,4 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
 import Select from '@mui/material/Select'
@@ -10,8 +10,6 @@ import { format } from 'date-fns'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useAtomValue, useAtom } from 'jotai'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
@@ -20,11 +18,11 @@ import { Property } from './PropertyArten.jsx'
 import { PropertyLr } from './PropertyLr.jsx'
 import { onBlurArten } from './onBlurArten.js'
 import { onBlurLr } from './onBlurLr.js'
-import { storeContext } from '../../storeContext.js'
 import {
   loginUsernameAtom,
   editingTaxonomiesAtom,
   scrollIntoViewAtom,
+  activeNodeArrayAtom,
 } from '../../jotaiStore/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 
@@ -92,15 +90,14 @@ const taxQuery = gql`
   }
 `
 
-export const Taxonomy = observer(() => {
+export const Taxonomy = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
   const scrollIntoView = useAtomValue(scrollIntoViewAtom)
   const [editingTaxonomies, setEditingTaxonomies] = useAtom(
     editingTaxonomiesAtom,
   )
   const username = useAtomValue(loginUsernameAtom)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
 
@@ -552,4 +549,4 @@ export const Taxonomy = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
