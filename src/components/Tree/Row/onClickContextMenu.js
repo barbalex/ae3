@@ -19,10 +19,10 @@ export const onClickContextMenu = async ({
   target,
   client,
   store,
+  scrollIntoView,
   navigate,
   queryClient,
 }) => {
-  const { scrollIntoView } = store
   const { setEditingTaxonomies, setEditingPCs, editingTaxonomies } = store
   if (!data) return console.log('no data passed with click')
   if (!target) {
