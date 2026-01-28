@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -8,12 +7,10 @@ import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { Taxonomy } from './Taxonomy.jsx'
 import { JointTaxonomy } from './JointTaxonomy.jsx'
-import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { joinTaxProperties } from './joinTaxProperties.js'
 import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
@@ -37,11 +34,10 @@ const propsByTaxQuery = gql`
   }
 `
 
-export const Taxonomies = observer(
+export const Taxonomies = (
   ({ taxonomiesExpanded, onToggleTaxonomies }) => {
     const apolloClient = useApolloClient()
 
-    const store = useContext(storeContext)
     const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
     const { data, error, loading } = useQuery({
@@ -129,5 +125,4 @@ export const Taxonomies = observer(
         </div>
       </ErrorBoundary>
     )
-  },
-)
+  }

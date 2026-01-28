@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -8,12 +7,10 @@ import { groupBy, sumBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { TaxonomiesList } from './TaxonomiesList.jsx'
 import { JointTaxonomy } from './JointTaxonomy.jsx'
-import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
 
@@ -36,99 +33,92 @@ const propsByTaxQuery = gql`
   }
 `
 
-export const Taxonomies = observer(
-  ({ taxonomiesExpanded, onToggleTaxonomies }) => {
-    const store = useContext(storeContext)
-    const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-    const apolloClient = useApolloClient()
+export const Taxonomies = ({ taxonomiesExpanded, onToggleTaxonomies }) => {
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
+  const apolloClient = useApolloClient()
 
-    const { data: propsByTaxData, error: propsByTaxError } = useQuery({
-      queryKey: ['taxPropertiesByTaxonomies', exportTaxonomies],
-      queryFn: () =>
-        apolloClient.query({
-          query: propsByTaxQuery,
-          variables: {
-            exportTaxonomies,
-            queryExportTaxonomies: exportTaxonomies.length > 0,
-          },
-        }),
-    })
+  const { data: propsByTaxData, error: propsByTaxError } = useQuery({
+    queryKey: ['taxPropertiesByTaxonomies', exportTaxonomies],
+    queryFn: () =>
+      apolloClient.query({
+        query: propsByTaxQuery,
+        variables: {
+          exportTaxonomies,
+          queryExportTaxonomies: exportTaxonomies.length > 0,
+        },
+      }),
+  })
 
-    const taxProperties =
-      propsByTaxData?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
+  const taxProperties =
+    propsByTaxData?.data?.taxPropertiesByTaxonomiesFunction?.nodes ?? []
 
-    const taxPropertiesByTaxonomy = groupBy(
-      taxProperties,
-      (p) => p.taxonomyName,
+  const taxPropertiesByTaxonomy = groupBy(taxProperties, (p) => p.taxonomyName)
+  const taxPropertiesFields = groupBy(taxProperties, (p) => p.propertyName)
+  const taxonomies = Object.keys(taxPropertiesByTaxonomy)
+  const taxCount = taxonomies.length
+  const taxFieldsCount = Object.keys(taxPropertiesFields).length
+  let jointTaxProperties = []
+  if (taxCount > 1) {
+    jointTaxProperties = Object.values(
+      groupBy(taxProperties, (t) => `${t.propertyName}/${t.jsontype}`),
     )
-    const taxPropertiesFields = groupBy(taxProperties, (p) => p.propertyName)
-    const taxonomies = Object.keys(taxPropertiesByTaxonomy)
-    const taxCount = taxonomies.length
-    const taxFieldsCount = Object.keys(taxPropertiesFields).length
-    let jointTaxProperties = []
-    if (taxCount > 1) {
-      jointTaxProperties = Object.values(
-        groupBy(taxProperties, (t) => `${t.propertyName}/${t.jsontype}`),
-      )
-        .filter((v) => v.length === taxCount)
-        .map((t) => ({
-          count: sumBy(t, (x) => Number(x.count)),
-          jsontype: t[0].jsontype,
-          propertyName: t[0].propertyName,
-          taxonomies: t.map((x) => x.taxonomyName),
-          taxname: 'Taxonomie',
-        }))
-    }
-    const initiallyExpanded = taxonomies.length === 1
+      .filter((v) => v.length === taxCount)
+      .map((t) => ({
+        count: sumBy(t, (x) => Number(x.count)),
+        jsontype: t[0].jsontype,
+        propertyName: t[0].propertyName,
+        taxonomies: t.map((x) => x.taxonomyName),
+        taxname: 'Taxonomie',
+      }))
+  }
+  const initiallyExpanded = taxonomies.length === 1
 
-    if (propsByTaxError)
-      return `Error fetching data: ${propsByTaxError.message}`
+  if (propsByTaxError) return `Error fetching data: ${propsByTaxError.message}`
 
-    return (
-      <ErrorBoundary>
-        <div className={styles.container}>
-          <Card className={styles.card}>
-            <CardActions
-              disableSpacing
-              onClick={onToggleTaxonomies}
-              className={styles.cardActions}
-            >
-              <div className={styles.cardActionTitle}>
-                Taxonomien
-                {taxCount > 0 && (
-                  <span className={styles.count}>{`(${taxCount} ${
-                    taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
-                  }, ${taxFieldsCount} ${
-                    taxFieldsCount === 1 ? 'Feld' : 'Felder'
-                  })`}</span>
-                )}
-              </div>
-              <IconButton
-                aria-expanded={taxonomiesExpanded}
-                aria-label="Show more"
-                style={{
-                  transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
-                }}
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse
-              in={taxonomiesExpanded}
-              timeout="auto"
-              unmountOnExit
-            >
-              {jointTaxProperties.length > 0 && (
-                <JointTaxonomy jointTaxProperties={jointTaxProperties} />
+  return (
+    <ErrorBoundary>
+      <div className={styles.container}>
+        <Card className={styles.card}>
+          <CardActions
+            disableSpacing
+            onClick={onToggleTaxonomies}
+            className={styles.cardActions}
+          >
+            <div className={styles.cardActionTitle}>
+              Taxonomien
+              {taxCount > 0 && (
+                <span className={styles.count}>{`(${taxCount} ${
+                  taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
+                }, ${taxFieldsCount} ${
+                  taxFieldsCount === 1 ? 'Feld' : 'Felder'
+                })`}</span>
               )}
-              <TaxonomiesList
-                taxonomies={taxonomies}
-                initiallyExpanded={initiallyExpanded}
-              />
-            </Collapse>
-          </Card>
-        </div>
-      </ErrorBoundary>
-    )
-  },
-)
+            </div>
+            <IconButton
+              aria-expanded={taxonomiesExpanded}
+              aria-label="Show more"
+              style={{
+                transform: taxonomiesExpanded ? 'rotate(180deg)' : 'none',
+              }}
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+          <Collapse
+            in={taxonomiesExpanded}
+            timeout="auto"
+            unmountOnExit
+          >
+            {jointTaxProperties.length > 0 && (
+              <JointTaxonomy jointTaxProperties={jointTaxProperties} />
+            )}
+            <TaxonomiesList
+              taxonomies={taxonomies}
+              initiallyExpanded={initiallyExpanded}
+            />
+          </Collapse>
+        </Card>
+      </div>
+    </ErrorBoundary>
+  )
+}
