@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Icon from '@mui/material/Icon'
@@ -8,18 +8,16 @@ import { styled } from '@mui/material/styles'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useLocation, useNavigate, Link } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { getActiveObjectIdFromNodeArray } from '../../../modules/getActiveObjectIdFromNodeArray.js'
-import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
 import {
   loginUsernameAtom,
   singleColumnViewAtom,
+  activeNodeArrayAtom,
 } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -55,10 +53,9 @@ const query = gql`
   }
 `
 
-export const AppBar = observer(() => {
-  const store = useContext(storeContext)
+export const AppBar = () => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const username = useAtomValue(loginUsernameAtom)
   const apolloClient = useApolloClient()
 
@@ -248,4 +245,4 @@ export const AppBar = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
