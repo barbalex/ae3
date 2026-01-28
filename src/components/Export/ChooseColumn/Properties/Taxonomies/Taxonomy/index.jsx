@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -9,12 +9,10 @@ import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from '../Properties.jsx'
-import { storeContext } from '../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../jotaiStore/index.ts'
@@ -37,8 +35,7 @@ const propsByTaxQuery = gql`
   }
 `
 
-export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
-  const store = useContext(storeContext)
+export const Taxonomy = ({ initiallyExpanded, tax }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
   const apolloClient = useApolloClient()
 
@@ -104,4 +101,4 @@ export const Taxonomy = observer(({ initiallyExpanded, tax }) => {
       </Card>
     </ErrorBoundary>
   )
-})
+}
