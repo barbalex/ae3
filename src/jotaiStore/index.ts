@@ -40,3 +40,12 @@ export const setLoginAtom = atom(
 
 // Stacked atom
 export const stackedAtom = atom<boolean>(false)
+
+// Window dimensions atoms
+export const windowWidthAtom = atom<number>(800)
+export const windowHeightAtom = atom<number>(800)
+
+// Derived atom for single column view
+export const singleColumnViewAtom = atom<boolean>(
+  (get) => get(windowWidthAtom) <= 700,
+)

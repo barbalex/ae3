@@ -1,18 +1,17 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 import { Outlet } from 'react-router'
 
 import { Tree } from '../Tree/index.jsx'
-import { storeContext } from '../../storeContext.js'
+import { windowHeightAtom } from '../../jotaiStore/index.ts'
 
 import styles from './DataStacked.module.css'
 
-export const DataStacked = observer(() => {
-  const store = useContext(storeContext)
-  const { windowHeight } = store
+export const DataStacked = () => {
+  const windowHeight = useAtomValue(windowHeightAtom)
 
   const [tab, setTab] = useState(0)
   const onChangeTab = (event, value) => setTab(value)
@@ -42,4 +41,4 @@ export const DataStacked = observer(() => {
       </div>
     </>
   )
-})
+}
