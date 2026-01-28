@@ -2,6 +2,7 @@ import { jwtDecode } from 'jwt-decode'
 import { CombinedGraphQLErrors } from '@apollo/client'
 
 import { loginDbMutation } from './loginDbMutation.js'
+import { jotaiStore, setLoginAtom } from '../../jotaiStore/index.ts'
 
 export const fetchLogin = async ({
   client,
@@ -15,14 +16,11 @@ export const fetchLogin = async ({
   namePassed,
   passPassed,
   idb,
-  store,
   nameInput,
   passwordInput,
   navigate,
 }) => {
-  const { login } = store
-  const { setLogin } = login
-  // when bluring fields need to pass event value
+  // when blurring fields need to pass event value
   // on the other hand when clicking on Anmelden button,
   // need to grab props
   const name = namePassed || propsName || nameInput.current.value
@@ -35,7 +33,7 @@ export const fetchLogin = async ({
   }
   // reset existing token
   await idb.users.clear()
-  setLogin({
+  jotaiStore.set(setLoginAtom, {
     username: '',
     token: '',
   })
@@ -71,7 +69,7 @@ export const fetchLogin = async ({
       token: jwtToken,
     })
     try {
-      setLogin({
+      jotaiStore.set(setLoginAtom, {
         username,
         token: jwtToken,
       })

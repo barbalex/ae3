@@ -14,7 +14,6 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
 import {
-  treeFilterTextAtom,
   treeFilterIdAtom,
   setTreeFilterAtom,
   scrollIntoViewAtom,
@@ -155,7 +154,6 @@ export const Filter = () => {
   // TODO: use local state instead of mobx for label, id
   const apolloClient = useApolloClient()
 
-  const treeFilterText = useAtomValue(treeFilterTextAtom)
   const treeFilterId = useAtomValue(treeFilterIdAtom)
   const setTreeFilter = useSetAtom(setTreeFilterAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
@@ -237,7 +235,6 @@ export const Filter = () => {
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({
       client: apolloClient,
-      treeFilter: { text: treeFilterText, id: treeFilterId },
       cb,
       val,
     })
