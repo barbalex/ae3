@@ -3,9 +3,6 @@ import { types } from 'mobx-state-tree'
 import TaxProperty, {
   defaultValue as defaultTaxProperty,
 } from './TaxProperty.js'
-import PcoProperty, {
-  defaultValue as defaultPcoProperty,
-} from './PcoProperty.js'
 import RcoProperty, {
   defaultValue as defaultRcoProperty,
 } from './RcoProperty.js'
@@ -16,14 +13,11 @@ import { constants } from '../../modules/constants.js'
 import {
   jotaiStore,
   exportTaxPropertiesAtom,
+  exportPcoPropertiesAtom,
 } from '../../jotaiStore/index.ts'
 
 export default types
   .model('Export', {
-    pcoProperties: types.optional(
-      types.array(types.optional(PcoProperty, defaultPcoProperty)),
-      [],
-    ),
     rcoProperties: types.optional(
       types.array(types.optional(RcoProperty, defaultRcoProperty)),
       [],
@@ -92,34 +86,6 @@ export default types
         ]
       }
     },
-    addPcoProperty({ pcname, pname }) {
-      const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
-      const nrOfPropertiesExported =
-        taxProperties.length + self.rcoProperties.length + self.pcoProperties.length
-      if (nrOfPropertiesExported > constants.export.maxFields) {
-        self.tooManyProperties = true
-      } else {
-        // only add if not yet done
-        if (
-          !self.pcoProperties.find(
-            (t) => t.pcname === pcname && t.pname === pname,
-          )
-        ) {
-          self.pcoProperties = [
-            ...self.pcoProperties,
-            {
-              pcname,
-              pname,
-            },
-          ]
-        }
-      }
-    },
-    removePcoProperty({ pcname, pname }) {
-      self.pcoProperties = self.pcoProperties.filter(
-        (x) => !(x.pcname === pcname && x.pname === pname),
-      )
-    },
     resetRcoFilters() {
       self.rcoFilters = []
     },
@@ -176,9 +142,6 @@ export default types
     resetRcoProperties() {
       self.rcoProperties = []
     },
-    resetPcoProperties() {
-      self.pcoProperties = []
-    },
     removeRcoProperty({ pcname, relationtype, pname }) {
       self.rcoProperties = self.rcoProperties.filter(
         (x) =>
@@ -192,7 +155,9 @@ export default types
     addRcoProperty({ pcname, relationtype, pname }) {
       const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
       const nrOfPropertiesExported =
-        taxProperties.length + self.rcoProperties.length + self.pcoProperties.length
+        taxProperties.length +
+        self.rcoProperties.length +
+        self.pcoProperties.length
       if (nrOfPropertiesExported > constants.export.maxFields) {
         self.tooManyProperties = true
       } else {
