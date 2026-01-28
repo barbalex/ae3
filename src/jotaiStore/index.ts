@@ -49,3 +49,6 @@ export const windowHeightAtom = atom<number>(800)
 export const singleColumnViewAtom = atom<boolean>(
   (get) => get(windowWidthAtom) <= 700,
 )
+
+// DocFilter atom
+export const docFilterAtom = atom<string | number>('')

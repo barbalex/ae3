@@ -1,17 +1,15 @@
-import { useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../storeContext.js'
+import { docFilterAtom } from '../../../jotaiStore/index.ts'
 import styles from './Filter.module.css'
 
-export const Filter = observer(() => {
-  const store = useContext(storeContext)
-  const { docFilter, setDocFilter } = store
+export const Filter = () => {
+  const [docFilter, setDocFilter] = useAtom(docFilterAtom)
   const onChange = (e) => setDocFilter(e.target.value)
   const onClickEmptyFilter = () => setDocFilter('')
 
@@ -44,4 +42,4 @@ export const Filter = observer(() => {
       />
     </FormControl>
   )
-})
+}
