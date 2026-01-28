@@ -3,11 +3,13 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { PCO } from './PCO/index.jsx'
 import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
+import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
 
 import styles from './List.module.css'
 
@@ -32,7 +34,7 @@ export const PcoList = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error } = useQuery({
     queryKey: ['filterPcosList', exportTaxonomies],
