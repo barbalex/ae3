@@ -1,13 +1,12 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import { storeContext } from '../../storeContext.js'
+import { activeNodeArrayAtom } from '../../jotaiStore/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
@@ -28,9 +27,8 @@ const tcsQuery = gql`
   }
 `
 
-export const TCs = observer(() => {
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+export const TCs = () => {
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const apolloClient = useApolloClient()
   const id =
     activeNodeArray.length > 1 ?
@@ -82,4 +80,4 @@ export const TCs = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
