@@ -25,7 +25,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
@@ -37,7 +37,10 @@ import LinkMenu from './LinkMenu.jsx'
 import Properties from './Properties/index.jsx'
 import { getUrlForObject } from '../../../../modules/getUrlForObject.js'
 import { storeContext } from '../../../../storeContext.js'
-import { scrollIntoViewAtom } from '../../../../jotaiStore/index.ts'
+import {
+  scrollIntoViewAtom,
+  loginUsernameAtom,
+} from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -62,13 +65,9 @@ const organizationUsersQuery = gql`
 export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
   const queryClient = useQueryClient()
   const store = useContext(storeContext)
-  const {
-    editingTaxonomies,
-    setEditingTaxonomies,
-    login,
-    stacked,
-  } = store
+  const { editingTaxonomies, setEditingTaxonomies, stacked } = store
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
+  const username = useAtomValue(loginUsernameAtom)
   const apolloClient = useApolloClient()
 
   const navigate = useNavigate()
@@ -84,7 +83,6 @@ export const TaxonomyObject = observer(({ objekt, showLink, refetch }) => {
   const [expanded, setExpanded] = useState(showLink ? false : true)
   const [taxExpanded, setTaxExpanded] = useState(false)
 
-  const { username } = login
   const organizationUsers = data?.data?.allOrganizationUsers?.nodes ?? []
   const editing = editingTaxonomies
   const userRoles = organizationUsers
