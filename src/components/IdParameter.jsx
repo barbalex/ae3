@@ -1,14 +1,14 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import isUuid from 'is-uuid'
-import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
+import { useSetAtom } from 'jotai'
 
 import { getUrlForObject } from '../modules/getUrlForObject.js'
 import { getUrlParamByName } from '../modules/getUrlParamByName.js'
-import { storeContext } from '../storeContext.js'
+import { scrollIntoViewAtom } from '../jotaiStore/index.ts'
 
 const objectQuery = gql`
   query ObjectQuery($id: UUID!, $hasObjectId: Boolean!) {
@@ -49,10 +49,10 @@ const objectQuery = gql`
   }
 `
 
-const IdParameter = observer(() => {
-  const store = useContext(storeContext)
+const IdParameter = () => {
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
+  const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   /**
    * check if old url was passed that contains objectId-Param
    * for instance:
@@ -79,11 +79,11 @@ const IdParameter = observer(() => {
       // if idParam was passed, open object
       const url = getUrlForObject(data?.data?.objectById)
       navigate(`/${url.join('/')}`)
-      setTimeout(() => store.scrollIntoView())
+      setTimeout(() => scrollIntoView())
       // remove id param from url. Nope, not needed
     }
-  }, [data?.data?.objectById, error, hasObjectId, navigate, store])
+  }, [data?.data?.objectById, error, hasObjectId, navigate, scrollIntoView])
   return null
-})
+}
 
 export default IdParameter

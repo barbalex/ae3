@@ -1,26 +1,24 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import { MdClear } from 'react-icons/md'
 import { omit } from 'es-toolkit'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-import { storeContext } from '../../storeContext.js'
+import { scrollIntoViewAtom } from '../../jotaiStore/index.ts'
 
 import styles from './Property.module.css'
 
-export const Property = observer(
-  ({ id, properties: propertiesPrevious, field: key, refetch }) => {
+export const Property = ({ id, properties: propertiesPrevious, field: key, refetch }) => {
     const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
 
-    const store = useContext(storeContext)
-    const { scrollIntoView } = store
+    const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
     const onChange = (event) => setValue(event.target.value)
 
@@ -82,5 +80,4 @@ export const Property = observer(
         </div>
       </ErrorBoundary>
     )
-  },
-)
+}
