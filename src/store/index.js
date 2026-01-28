@@ -14,7 +14,6 @@ export const store = () =>
         types.array(types.union(types.string, types.number)),
         [],
       ),
-      sidebarWidth: types.maybeNull(types.number, null),
     })
     .actions((self) => ({
       setEditingTaxonomies(value) {

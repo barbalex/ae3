@@ -1,13 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../storeContext.js'
+import { sidebarWidthAtom } from '../../../jotaiStore/index.ts'
 
-export const MenuItem = observer(({ node }) => {
-  const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
+export const MenuItem = ({ node }) => {
+  const [sidebarWidth, setSidebarWidth] = useAtom(sidebarWidthAtom)
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -33,4 +32,4 @@ export const MenuItem = observer(({ node }) => {
       </ListItemText>
     </ListItemButton>
   )
-})
+}
