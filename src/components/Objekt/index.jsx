@@ -1,10 +1,9 @@
-import { useContext, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { Suspense } from 'react'
 import { uniqBy } from 'es-toolkit'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import SimpleBar from 'simplebar-react'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { TaxonomyObjects } from './TaxonomyObjects/index.jsx'
 import { TaxonomyObject } from './TaxonomyObjects/TaxonomyObject/index.jsx'
@@ -12,7 +11,7 @@ import { PC } from './PC/index.jsx'
 import { getActiveObjectIdFromNodeArray } from '../../modules/getActiveObjectIdFromNodeArray.js'
 import { query } from './query.js'
 import { querySynonyms } from './querySynonyms.js'
-import { storeContext } from '../../storeContext.js'
+import { activeNodeArrayAtom } from '../../jotaiStore/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
@@ -31,9 +30,8 @@ const getPropertyCollectionObjectsOfSynonyms = ({ synonymObjects, pcsIds }) => {
   return pCOs
 }
 
-export const Objekt = observer(() => {
-  const store = useContext(storeContext)
-  const activeNodeArray = getSnapshot(store.activeNodeArray)
+export const Objekt = () => {
+  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const apolloClient = useApolloClient()
 
   const unsafeObjectId = getActiveObjectIdFromNodeArray(activeNodeArray)
@@ -79,7 +77,9 @@ export const Objekt = observer(() => {
 
   if (objectError) {
     return (
-      <div className={styles.errorContainer}>{`Fehler: ${objectError.message}`}</div>
+      <div
+        className={styles.errorContainer}
+      >{`Fehler: ${objectError.message}`}</div>
     )
   }
 
@@ -142,4 +142,4 @@ export const Objekt = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
