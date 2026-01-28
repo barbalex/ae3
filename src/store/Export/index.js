@@ -16,7 +16,6 @@ import { constants } from '../../modules/constants.js'
 
 export default types
   .model('Export', {
-    ids: types.optional(types.array(types.string), []),
     taxProperties: types.optional(
       types.array(types.optional(TaxProperty, defaultTaxProperty)),
       [],
@@ -46,9 +45,6 @@ export default types
     addFilterFields: types.optional(types.boolean, true),
   })
   .actions((self) => ({
-    setIds(value) {
-      self.ids = value
-    },
     setWithSynonymData(value) {
       self.withSynonymData = value
     },

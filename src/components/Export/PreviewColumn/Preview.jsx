@@ -12,7 +12,10 @@ import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { CountInput } from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
-import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
+import {
+  exportTaxonomiesAtom,
+  exportIdsAtom,
+} from '../../../jotaiStore/index.ts'
 
 import styles from './Preview.module.css'
 
@@ -95,7 +98,7 @@ export const Preview = observer(() => {
   const pcoProperties = getSnapshot(pcoPropertiesPassed)
   const taxFields = getSnapshot(taxPropertiesPassed)
   const taxonomies = useAtomValue(exportTaxonomiesAtom)
-  const exportIds = store.export.ids.toJSON()
+  const exportIds = useAtomValue(exportIdsAtom)
 
   const [count, setCount] = useState(15)
   const [sortField, setSortField] = useState()
