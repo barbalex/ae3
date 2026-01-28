@@ -19,6 +19,7 @@ import {
   exportRcoPropertiesAtom,
   exportTaxFiltersAtom,
   exportPcoFiltersAtom,
+  exportRcoFiltersAtom,
 } from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -32,13 +33,8 @@ export const OptionsChosen = observer(() => {
   const [rcoProperties, setRcoProperties] = useAtom(exportRcoPropertiesAtom)
   const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
   const [pcoFilters, setPcoFilters] = useAtom(exportPcoFiltersAtom)
-  const {
-    withSynonymData,
-    setWithSynonymData,
-    rcoFilters: rcoFiltersPassed,
-    resetRcoFilters,
-  } = store.export
-  const rcoFilters = getSnapshot(rcoFiltersPassed)
+  const [rcoFilters, setRcoFilters] = useAtom(exportRcoFiltersAtom)
+  const { withSynonymData, setWithSynonymData } = store.export
 
   const noDataChoosen =
     [
@@ -59,7 +55,7 @@ export const OptionsChosen = observer(() => {
     setTaxProperties([])
     setTaxFilters([])
     setPcoFilters([])
-    resetRcoFilters()
+    setRcoFilters([])
     setWithSynonymData(true)
   }
 
