@@ -12,6 +12,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -20,6 +21,7 @@ import { PropertyLr } from './PropertyLr.jsx'
 import { onBlurArten } from './onBlurArten.js'
 import { onBlurLr } from './onBlurLr.js'
 import { storeContext } from '../../storeContext.js'
+import { loginUsernameAtom } from '../../jotaiStore/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 
 import styles from './index.module.css'
@@ -89,8 +91,8 @@ const taxQuery = gql`
 export const Taxonomy = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const { editingTaxonomies, setEditingTaxonomies, login, scrollIntoView } =
-    store
+  const { editingTaxonomies, setEditingTaxonomies, scrollIntoView } = store
+  const username = useAtomValue(loginUsernameAtom)
   const activeNodeArray = getSnapshot(store.activeNodeArray)
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
@@ -124,7 +126,6 @@ export const Taxonomy = observer(() => {
   const editing = editingTaxonomies
   const editingArten = editing && tax?.type === 'ART'
   const editingLr = editing && tax?.type === 'LEBENSRAUM'
-  const { username } = login
   const allUsers = allUsersData?.data?.allUsers?.nodes ?? []
   const user = allUsers.find((u) => u.name === username)
   const orgsUserIsTaxWriter = (user?.organizationUsersByUserId?.nodes ?? [])

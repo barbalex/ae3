@@ -1,13 +1,11 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { storeContext } from '../../storeContext.js'
+import { stackedAtom } from '../../jotaiStore/index.ts'
 import { ExportFlexed } from './ExportFlexed.jsx'
 import { ExportStacked } from './ExportStacked.jsx'
 
-export const Export = observer(() => {
-  const store = useContext(storeContext)
-  const { stacked } = store
+export const Export = () => {
+  const stacked = useAtomValue(stackedAtom)
 
   return stacked ? <ExportStacked /> : <ExportFlexed />
-})
+}
