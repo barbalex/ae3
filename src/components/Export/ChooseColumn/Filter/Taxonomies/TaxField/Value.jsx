@@ -12,6 +12,7 @@ import {
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,
+  exportTaxFiltersAtom,
 } from '../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
@@ -61,10 +62,11 @@ export const Value = ({
 }) => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const { addFilterFields, setTaxFilters } = store.export
+  const { addFilterFields } = store.export
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
+  const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
 
   // Problem with loading data
   // Want to load all data when user focuses on input
@@ -104,12 +106,38 @@ export const Value = ({
     let comparatorValue = comparator
     if (!comparator && val) comparatorValue = 'ILIKE'
     if (!val) comparatorValue = null
-    setTaxFilters({
-      taxname,
-      pname,
-      comparator: comparatorValue,
-      value: val,
-    })
+    
+    const taxFilter = taxFilters.find(
+      (x) => x.taxname === taxname && x.pname === pname,
+    )
+    if (!comparatorValue && !val && val !== 0) {
+      // remove
+      setTaxFilters(
+        taxFilters.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+      )
+    } else if (!taxFilter) {
+      // add new one
+      setTaxFilters([
+        ...taxFilters,
+        {
+          taxname,
+          pname,
+          comparator: comparatorValue,
+          value: val,
+        },
+      ])
+    } else {
+      // edit = add new one instead of existing
+      setTaxFilters([
+        ...taxFilters.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+        {
+          taxname,
+          pname,
+          comparator: comparatorValue,
+          value: val,
+        },
+      ])
+    }
     // 2. if value and field not chosen, choose it
     if (addFilterFields && val) {
       // Check total properties count
