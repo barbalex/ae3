@@ -1,47 +1,62 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../../storeContext.js'
+import { exportRcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 import styles from './Chooser.module.css'
 
-export const Chooser = observer(
-  ({ pcname, relationtype, pname, propertiesLength }) => {
-    const store = useContext(storeContext)
-    const { rcoProperties, addRcoProperty, removeRcoProperty } = store.export
+export const Chooser = ({ pcname, relationtype, pname, propertiesLength }) => {
+  const [rcoProperties, setRcoProperties] = useAtom(exportRcoPropertiesAtom)
 
-    const onCheck = (event, isChecked) => {
-      if (isChecked) {
-        return addRcoProperty({ pcname, relationtype, pname })
+  const onCheck = (event, isChecked) => {
+    if (isChecked) {
+      if (
+        !rcoProperties.find(
+          (t) =>
+            t.pcname === pcname &&
+            t.relationtype === relationtype &&
+            t.pname === pname,
+        )
+      ) {
+        setRcoProperties([...rcoProperties, { pcname, relationtype, pname }])
       }
-      removeRcoProperty({ pcname, relationtype, pname })
+    } else {
+      setRcoProperties(
+        rcoProperties.filter(
+          (x) =>
+            !(
+              x.pcname === pcname &&
+              x.relationtype === relationtype &&
+              x.pname === pname
+            ),
+        ),
+      )
     }
+  }
 
-    const checked =
-      rcoProperties.filter(
-        (x) =>
-          x.pcname === pcname &&
-          x.relationtype === relationtype &&
-          x.pname === pname,
-      ).length > 0
+  const checked =
+    rcoProperties.filter(
+      (x) =>
+        x.pcname === pcname &&
+        x.relationtype === relationtype &&
+        x.pname === pname,
+    ).length > 0
 
-    const containerWidth = propertiesLength === 1 ? 100 : 100 / propertiesLength
+  const containerWidth = propertiesLength === 1 ? 100 : 100 / propertiesLength
 
-    return (
-      <div style={{ width: `${containerWidth}%` }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              color="primary"
-              checked={checked}
-              onChange={onCheck}
-            />
-          }
-          label={<div>{pname}</div>}
-          className={styles.label}
-        />
-      </div>
-    )
-  },
-)
+  return (
+    <div style={{ width: `${containerWidth}%` }}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            color="primary"
+            checked={checked}
+            onChange={onCheck}
+          />
+        }
+        label={<div>{pname}</div>}
+        className={styles.label}
+      />
+    </div>
+  )
+}

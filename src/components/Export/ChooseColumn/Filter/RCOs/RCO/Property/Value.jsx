@@ -4,9 +4,11 @@ import Highlighter from 'react-highlight-words'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { readableType } from '../../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../../storeContext.js'
+import { exportRcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Value.module.css'
 
@@ -49,7 +51,9 @@ export const Value = observer(
   ({ relationtype, pcname, pname, jsontype, comparator, value: propValue }) => {
     const apolloClient = useApolloClient()
     const store = useContext(storeContext)
-    const { addFilterFields, setRcoFilters, addRcoProperty } = store.export
+    const { addFilterFields, setRcoFilters } = store.export
+    const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
+    const setRcoProperties = useSetAtom(exportRcoPropertiesAtom)
 
     // Problem with loading data
     // Want to load all data when user focuses on input
@@ -98,7 +102,16 @@ export const Value = observer(
       })
       // 2. if value and field not chosen, choose it
       if (addFilterFields && value) {
-        addRcoProperty({ pcname, relationtype, pname })
+        if (
+          !rcoProperties.find(
+            (t) =>
+              t.pcname === pcname &&
+              t.relationtype === relationtype &&
+              t.pname === pname,
+          )
+        ) {
+          setRcoProperties([...rcoProperties, { pcname, relationtype, pname }])
+        }
       }
     }
 
