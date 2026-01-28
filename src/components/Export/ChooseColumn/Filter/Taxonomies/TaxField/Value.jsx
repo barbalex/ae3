@@ -3,11 +3,13 @@ import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
+import { useAtom, useSetAtom } from 'jotai'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { readableType } from '../../../../../../modules/readableType.js'
 import { storeContext } from '../../../../../../storeContext.js'
+import { exportTaxPropertiesAtom } from '../../../../../../jotaiStore/index.ts'
+import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './Value.module.css'
 
@@ -46,122 +48,140 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
   />
 )
 
-export const Value = observer(
-  ({ taxname, pname, jsontype, comparator, value: propsValue }) => {
-    const apolloClient = useApolloClient()
-    const store = useContext(storeContext)
-    const { addFilterFields, addTaxProperty, setTaxFilters } = store.export
+export const Value = ({
+  taxname,
+  pname,
+  jsontype,
+  comparator,
+  value: propsValue,
+}) => {
+  const apolloClient = useApolloClient()
+  const store = useContext(storeContext)
+  const { addFilterFields, setTaxFilters } = store.export
+  const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
 
-    // Problem with loading data
-    // Want to load all data when user focuses on input
-    // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
-    // So need to set key on Select and update it on focus
-    // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
-    const ref = useRef()
-    const [focusCount, setFocusCount] = useState(0)
+  // Problem with loading data
+  // Want to load all data when user focuses on input
+  // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
+  // So need to set key on Select and update it on focus
+  // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
+  const ref = useRef()
+  const [focusCount, setFocusCount] = useState(0)
 
-    const [value, setValue] = useState(propsValue ?? '')
-    const [error, setError] = useState(undefined)
+  const [value, setValue] = useState(propsValue ?? '')
+  const [error, setError] = useState(undefined)
 
-    const loadOptions = async (val) => {
-      if (!focusCount) return []
-      const { data, error } = await apolloClient.query({
-        query: taxFieldPropQuery,
-        variables: {
-          tableName: 'object',
-          propName: pname,
-          pcFieldName: 'taxonomy_id',
-          pcTableName: 'taxonomy',
-          pcName: taxname,
-          propValue: val ?? '',
-        },
-      })
-      const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
-        value: n.value,
-        label: n.value,
-      }))
-      setValue(val)
-      setError(error)
-      return returnData
-    }
+  const loadOptions = async (val) => {
+    if (!focusCount) return []
+    const { data, error } = await apolloClient.query({
+      query: taxFieldPropQuery,
+      variables: {
+        tableName: 'object',
+        propName: pname,
+        pcFieldName: 'taxonomy_id',
+        pcTableName: 'taxonomy',
+        pcName: taxname,
+        propValue: val ?? '',
+      },
+    })
+    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+      value: n.value,
+      label: n.value,
+    }))
+    setValue(val)
+    setError(error)
+    return returnData
+  }
 
-    const setFilter = (val) => {
-      // 1. change filter value
-      let comparatorValue = comparator
-      if (!comparator && val) comparatorValue = 'ILIKE'
-      if (!val) comparatorValue = null
-      setTaxFilters({
-        taxname,
-        pname,
-        comparator: comparatorValue,
-        value: val,
-      })
-      // 2. if value and field not chosen, choose it
-      if (addFilterFields && val) {
-        addTaxProperty({ taxname, pname })
+  const setFilter = (val) => {
+    // 1. change filter value
+    let comparatorValue = comparator
+    if (!comparator && val) comparatorValue = 'ILIKE'
+    if (!val) comparatorValue = null
+    setTaxFilters({
+      taxname,
+      pname,
+      comparator: comparatorValue,
+      value: val,
+    })
+    // 2. if value and field not chosen, choose it
+    if (addFilterFields && val) {
+      // Check total properties count
+      const nrOfPropertiesExported =
+        taxProperties.length +
+        (store.export.rcoProperties?.length || 0) +
+        (store.export.pcoProperties?.length || 0)
+      if (nrOfPropertiesExported <= constants.export.maxFields) {
+        // Only add if not yet done
+        const taxProperty = taxProperties.find(
+          (t) => t.taxname === taxname && t.pname === pname,
+        )
+        if (!taxProperty) {
+          setTaxProperties([...taxProperties, { taxname, pname }])
+        }
       }
     }
+  }
 
-    const onBlur = () => setFilter(value)
+  const onBlur = () => setFilter(value)
 
-    const onChange = (newValue, actionMeta) => {
-      let value
-      switch (actionMeta.action) {
-        case 'clear':
-          value = ''
-          break
-        default:
-          value = newValue?.value
-          break
-      }
-      setValue(value)
-      setFilter(value)
+  const onChange = (newValue, actionMeta) => {
+    let value
+    switch (actionMeta.action) {
+      case 'clear':
+        value = ''
+        break
+      default:
+        value = newValue?.value
+        break
     }
+    setValue(value)
+    setFilter(value)
+  }
 
-    if (error) {
-      return `Error loading data: ${error.message}`
-    }
+  if (error) {
+    return `Error loading data: ${error.message}`
+  }
 
-    const valueToShow = value ? { value, label: value } : undefined
+  const valueToShow = value ? { value, label: value } : undefined
 
-    return (
-      <ErrorBoundary>
-        <div className={styles.container}>
-          <div
-            className={styles.label}
-          >{`${pname} (${readableType(jsontype)})`}</div>
-          <Select
-            key={focusCount}
-            ref={ref}
-            value={valueToShow}
-            defaultOptions={true}
-            onChange={onChange}
-            onBlur={onBlur}
-            onFocus={() => {
-              if (focusCount === 0) {
-                setFocusCount(1)
-                setTimeout(() => {
-                  ref.current.onMenuOpen()
-                  ref.current.focus()
-                })
-              }
-            }}
-            formatOptionLabel={formatOptionLabel}
-            placeholder={''}
-            noOptionsMessage={noOptionsMessage}
-            loadingMessage={loadingMessage}
-            classNamePrefix="react-select"
-            loadOptions={loadOptions}
-            cacheOptions
-            isClearable
-            openMenuOnFocus={true}
-            spellCheck={false}
-            // ensure the menu always is on top
-            menuPortalTarget={document.body}
-            className={styles.select}
-          />
-        </div>
-      </ErrorBoundary>
-    )
-  },
-)
+  return (
+    <ErrorBoundary>
+      <div className={styles.container}>
+        <div
+          className={styles.label}
+        >{`${pname} (${readableType(jsontype)})`}</div>
+        <Select
+          key={focusCount}
+          ref={ref}
+          value={valueToShow}
+          defaultOptions={true}
+          onChange={onChange}
+          onBlur={onBlur}
+          onFocus={() => {
+            if (focusCount === 0) {
+              setFocusCount(1)
+              setTimeout(() => {
+                ref.current.onMenuOpen()
+                ref.current.focus()
+              })
+            }
+          }}
+          formatOptionLabel={formatOptionLabel}
+          placeholder={''}
+          noOptionsMessage={noOptionsMessage}
+          loadingMessage={loadingMessage}
+          classNamePrefix="react-select"
+          loadOptions={loadOptions}
+          cacheOptions
+          isClearable
+          openMenuOnFocus={true}
+          spellCheck={false}
+          // ensure the menu always is on top
+          menuPortalTarget={document.body}
+          className={styles.select}
+        />
+      </div>
+    </ErrorBoundary>
+  )
+}

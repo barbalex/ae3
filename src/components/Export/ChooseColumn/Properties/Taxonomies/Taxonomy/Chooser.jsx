@@ -1,20 +1,23 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../storeContext.js'
+import { exportTaxPropertiesAtom } from '../../../../../../jotaiStore/index.ts'
 import styles from './Chooser.module.css'
 
-export const Chooser = observer(({ taxname, pname, count }) => {
-  const store = useContext(storeContext)
-  const { taxProperties, addTaxProperty, removeTaxProperty } = store.export
+export const Chooser = ({ taxname, pname, count }) => {
+  const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
 
   const onCheck = (event, isChecked) => {
     if (isChecked) {
-      return addTaxProperty({ taxname, pname })
+      setTaxProperties([...taxProperties, { taxname, pname }])
+    } else {
+      setTaxProperties(
+        taxProperties.filter(
+          (x) => !(x.taxname === taxname && x.pname === pname),
+        ),
+      )
     }
-    return removeTaxProperty({ taxname, pname })
   }
 
   const checked = taxProperties.filter((x) => x.pname === pname).length > 0
@@ -42,4 +45,4 @@ export const Chooser = observer(({ taxname, pname, count }) => {
       />
     </div>
   )
-})
+}
