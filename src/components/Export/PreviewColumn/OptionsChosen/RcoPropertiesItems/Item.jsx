@@ -1,20 +1,24 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { storeContext } from '../../../../../storeContext.js'
+import { exportRcoPropertiesAtom } from '../../../../../jotaiStore/index.ts'
 import styles from './Item.module.css'
 
-export const Item = observer(({ properties }) => {
+export const Item = ({ properties }) => {
   const { pcname, relationtype, pname } = properties
-  const store = useContext(storeContext)
-  const { removeRcoProperty } = store.export
+  const setRcoProperties = useSetAtom(exportRcoPropertiesAtom)
 
-  const onClick = () =>
-    removeRcoProperty({
-      pcname,
-      relationtype,
-      pname,
-    })
+  const onClick = () => {
+    setRcoProperties((prev) =>
+      prev.filter(
+        (x) =>
+          !(
+            x.pcname === pcname &&
+            x.relationtype === relationtype &&
+            x.pname === pname
+          ),
+      ),
+    )
+  }
 
   return (
     <li>
@@ -27,4 +31,4 @@ export const Item = observer(({ properties }) => {
       </span>
     </li>
   )
-})
+}

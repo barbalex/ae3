@@ -1,8 +1,5 @@
 import { types } from 'mobx-state-tree'
 
-import RcoProperty, {
-  defaultValue as defaultRcoProperty,
-} from './RcoProperty.js'
 import TaxFilter, { defaultValue as defaultTaxFilter } from './TaxFilter.js'
 import PcoFilter, { defaultValue as defaultPcoFilter } from './PcoFilter.js'
 import RcoFilter, { defaultValue as defaultRcoFilter } from './RcoFilter.js'
@@ -11,14 +8,11 @@ import {
   jotaiStore,
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
+  exportRcoPropertiesAtom,
 } from '../../jotaiStore/index.ts'
 
 export default types
   .model('Export', {
-    rcoProperties: types.optional(
-      types.array(types.optional(RcoProperty, defaultRcoProperty)),
-      [],
-    ),
     taxFilters: types.optional(
       types.array(types.optional(TaxFilter, defaultTaxFilter)),
       [],
@@ -134,47 +128,6 @@ export default types
             value,
           },
         ]
-      }
-    },
-    resetRcoProperties() {
-      self.rcoProperties = []
-    },
-    removeRcoProperty({ pcname, relationtype, pname }) {
-      self.rcoProperties = self.rcoProperties.filter(
-        (x) =>
-          !(
-            x.pcname === pcname &&
-            x.relationtype === relationtype &&
-            x.pname === pname
-          ),
-      )
-    },
-    addRcoProperty({ pcname, relationtype, pname }) {
-      const taxProperties = jotaiStore.get(exportTaxPropertiesAtom)
-      const pcoProperties = jotaiStore.get(exportPcoPropertiesAtom)
-      const nrOfPropertiesExported =
-        taxProperties.length + self.rcoProperties.length + pcoProperties.length
-      if (nrOfPropertiesExported > constants.export.maxFields) {
-        self.tooManyProperties = true
-      } else {
-        // only add if not yet done
-        const rcoProperty = self.rcoProperties.find(
-          (t) =>
-            t.pcname === pcname &&
-            t.relationtype === relationtype &&
-            t.pname === pname,
-        )
-        if (!rcoProperty) {
-          const rcoProperties = [
-            ...self.rcoProperties,
-            {
-              pcname,
-              relationtype,
-              pname,
-            },
-          ]
-          self.rcoProperties = rcoProperties
-        }
       }
     },
     resetTaxFilters() {
