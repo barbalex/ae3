@@ -1,29 +1,44 @@
-import { useContext } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
-import { storeContext } from '../../../../../../../storeContext.js'
+import { exportRcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
 import styles from './AllChooser.module.css'
 
-export const AllChooser = observer(({ properties, relationtype }) => {
-  const store = useContext(storeContext)
-  const { rcoProperties, addRcoProperty, removeRcoProperty } = store.export
+export const AllChooser = ({ properties, relationtype }) => {
+  const [rcoProperties, setRcoProperties] = useAtom(exportRcoPropertiesAtom)
 
   const onCheck = (event, isChecked) => {
     if (isChecked) {
-      return properties.forEach(({ pcname, property }) =>
-        addRcoProperty({ pcname, relationtype, pname: property }),
+      const newProperties = properties
+        .filter(
+          (p) =>
+            !rcoProperties.find(
+              (x) =>
+                x.pcname === p.pcname &&
+                x.relationtype === relationtype &&
+                x.pname === p.property,
+            ),
+        )
+        .map((p) => ({ pcname: p.pcname, relationtype, pname: p.property }))
+      setRcoProperties([...rcoProperties, ...newProperties])
+    } else {
+      const propertyPairs = properties.map((p) => ({
+        pcname: p.pcname,
+        pname: p.property,
+      }))
+      setRcoProperties(
+        rcoProperties.filter(
+          (x) =>
+            !(
+              x.relationtype === relationtype &&
+              propertyPairs.some(
+                (p) => p.pcname === x.pcname && p.pname === x.pname,
+              )
+            ),
+        ),
       )
     }
-    removeRcoProperty({
-      pcname: properties[0].pcname,
-      relationtype,
-      pname: properties[0].property,
-    })
-    properties.forEach(({ pcname, property }) => {
-      removeRcoProperty({ pcname, relationtype, pname: property })
-    })
   }
 
   const checkedArray = properties.map(
@@ -52,4 +67,4 @@ export const AllChooser = observer(({ properties, relationtype }) => {
       />
     </div>
   )
-})
+}
