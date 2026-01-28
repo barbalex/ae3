@@ -7,18 +7,20 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import Snackbar from '@mui/material/Snackbar'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
+import { useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies/index.jsx'
 import { Properties } from './Properties/index.jsx'
 import { Filter } from './Filter/index.jsx'
 import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 export const ChooseColumn = observer(() => {
   const store = useContext(storeContext)
-  const exportTaxonomies = store.export.taxonomies.toJSON()
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(true)
   const [filterExpanded, setFilterExpanded] = useState(false)
