@@ -1,4 +1,4 @@
-import { useState, useContext, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -7,12 +7,10 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from './Properties.jsx'
-import { storeContext } from '../../../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../../jotaiStore/index.ts'
@@ -45,8 +43,7 @@ const fallback = (
   </div>
 )
 
-export const RCO = observer(({ pcname, relationtype, count }) => {
-  const store = useContext(storeContext)
+export const RCO = ({ pcname, relationtype, count }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
   const apolloClient = useApolloClient()
 
@@ -133,4 +130,4 @@ export const RCO = observer(({ pcname, relationtype, count }) => {
       </Card>
     </ErrorBoundary>
   )
-})
+}

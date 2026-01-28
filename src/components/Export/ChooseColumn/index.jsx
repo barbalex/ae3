@@ -1,25 +1,22 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import Snackbar from '@mui/material/Snackbar'
-import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies/index.jsx'
 import { Properties } from './Properties/index.jsx'
 import { Filter } from './Filter/index.jsx'
-import { storeContext } from '../../../storeContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const ChooseColumn = observer(() => {
-  const store = useContext(storeContext)
+export const ChooseColumn = () => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(true)
@@ -154,4 +151,4 @@ export const ChooseColumn = observer(() => {
       </SimpleBar>
     </ErrorBoundary>
   )
-})
+}

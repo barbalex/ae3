@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
@@ -7,11 +6,9 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { PcoList as List } from './PCOs.jsx'
-import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
 
@@ -38,10 +35,9 @@ const query = gql`
   }
 `
 
-export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
+export const PcoList = ({ pcoExpanded, onTogglePco }) => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error, isLoading } = useQuery({
@@ -96,4 +92,4 @@ export const PcoList = observer(({ pcoExpanded, onTogglePco }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}
