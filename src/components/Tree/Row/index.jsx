@@ -90,7 +90,6 @@ export const Row = observer(({ data }) => {
       data,
       target,
       client: apolloClient,
-      store,
       scrollIntoView,
       loginUsername,
       navigate,

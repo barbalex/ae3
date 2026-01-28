@@ -8,6 +8,8 @@ import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
 import createPCMutation from '../../PropertyCollection/createPCMutation.js'
 import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
 import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
+import { jotaiStore } from '../../../jotaiStore/index.ts'
+import { editingTaxonomiesAtom, editingPCsAtom } from '../../../jotaiStore/index.ts'
 
 const taxonomyTypeConverter = {
   Arten: 'ART',
@@ -18,13 +20,12 @@ export const onClickContextMenu = async ({
   data,
   target,
   client,
-  store,
   scrollIntoView,
   loginUsername,
   navigate,
   queryClient,
 }) => {
-  const { setEditingTaxonomies, editingTaxonomies } = store
+  const editingTaxonomies = jotaiStore.get(editingTaxonomiesAtom)
   if (!data) return console.log('no data passed with click')
   if (!target) {
     return console.log('no target passed with click')
@@ -32,14 +33,7 @@ export const onClickContextMenu = async ({
   const { table, action } = data
   const id = target.firstElementChild.getAttribute('data-id')
   const url = target.firstElementChild.getAttribute('data-url').split(',')
-  // console.log('onClickContextMenu', {
-  //   data,
-  //   table,
-  //   action,
-  //   id,
-  //   url,
-  //   activeNodeArray: getSnapshot(store.activeNodeArray),
-  // })
+
   const actions = {
     insert: async () => {
       if (table === 'user') {
@@ -87,7 +81,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editing true
         if (!editingTaxonomies) {
-          setEditingTaxonomies(true)
+          jotaiStore.set(editingTaxonomiesAtom, true)
         }
       }
       if (table === 'taxonomy') {
@@ -105,7 +99,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
-          setEditingTaxonomies(true)
+          jotaiStore.set(editingTaxonomiesAtom, true)
         }
       }
       if (table === 'pc') {
