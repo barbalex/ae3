@@ -1,13 +1,11 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { RCO } from './RCO/index.jsx'
-import { storeContext } from '../../../../../storeContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
@@ -38,10 +36,9 @@ const fallback = (
   </div>
 )
 
-export const RcoList = observer(() => {
+export const RcoList = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error } = useQuery({
@@ -86,4 +83,4 @@ export const RcoList = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
