@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { Arten } from './Arten/index.jsx'
 import { LR } from './LR/index.jsx'
@@ -10,11 +11,13 @@ import { PC } from './PC/index.jsx'
 import { UsersFolder } from './Users/index.jsx'
 import { OrganizationsFolder } from './Organizations/index.jsx'
 import { storeContext } from '../../../storeContext.js'
+import { loginTokenAtom } from '../../../jotaiStore/index.ts'
 
 export const Root = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(storeContext)
-  const hasToken = !!store.login.token
+  const loginToken = useAtomValue(loginTokenAtom)
+  const hasToken = !!loginToken
 
   const { data } = useQuery({
     queryKey: ['tree', 'root', hasToken],

@@ -1,8 +1,9 @@
-import { useMemo, useContext, Suspense } from 'react'
+import { useMemo, Suspense } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { Filter } from './Filter/index.jsx'
 import { treeQuery } from './treeQuery.js'
@@ -13,11 +14,11 @@ import { CmTaxonomy } from './contextmenu/Taxonomy.jsx'
 import { CmType } from './contextmenu/Type.jsx'
 import { CmPCFolder } from './contextmenu/PCFolder.jsx'
 import { CmPC } from './contextmenu/PC.jsx'
-import { storeContext } from '../../storeContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
 import { Root } from './Root/index.jsx'
 import { LoadingRow } from './LoadingRow.jsx'
+import { loginUsernameAtom } from '../../jotaiStore/index.ts'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import styles from './index.module.css'
@@ -31,17 +32,17 @@ const getUserIsTaxWriter = (data) => {
   )
 }
 
-export const Tree = observer(() => {
-  const store = useContext(storeContext)
+export const Tree = () => {
+  const loginUsername = useAtomValue(loginUsernameAtom)
 
   const apolloClient = useApolloClient()
 
   const { error, data } = useQuery({
-    queryKey: ['tree', 'userRole', store.login.username],
+    queryKey: ['tree', 'userRole', loginUsername],
     queryFn: () =>
       apolloClient.query({
         query: treeQuery,
-        variables: { username: store.login.username ?? '' },
+        variables: { username: loginUsername ?? '' },
         // seems that react-query cache is not working
         // no idea why
       }),
@@ -88,4 +89,4 @@ export const Tree = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
