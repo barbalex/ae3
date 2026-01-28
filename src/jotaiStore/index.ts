@@ -106,3 +106,13 @@ export type TaxFilter = {
 }
 
 export const exportTaxFiltersAtom = atom<TaxFilter[]>([])
+
+// Export pco filters atom
+export type PcoFilter = {
+  pcname: string | null
+  pname: string | null
+  comparator: string | null
+  value: string | number | null
+}
+
+export const exportPcoFiltersAtom = atom<PcoFilter[]>([])
