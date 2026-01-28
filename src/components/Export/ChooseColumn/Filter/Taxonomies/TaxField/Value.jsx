@@ -11,6 +11,7 @@ import { storeContext } from '../../../../../../storeContext.js'
 import {
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
+  exportRcoPropertiesAtom,
 } from '../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
@@ -63,6 +64,7 @@ export const Value = ({
   const { addFilterFields, setTaxFilters } = store.export
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
+  const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
 
   // Problem with loading data
   // Want to load all data when user focuses on input
@@ -113,7 +115,7 @@ export const Value = ({
       // Check total properties count
       const nrOfPropertiesExported =
         taxProperties.length +
-        (store.export.rcoProperties?.length || 0) +
+        (rcoProperties?.length || 0) +
         (pcoProperties?.length || 0)
       if (nrOfPropertiesExported <= constants.export.maxFields) {
         // Only add if not yet done
