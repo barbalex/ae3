@@ -1,21 +1,20 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import SimpleBar from 'simplebar-react'
 import { useLocation, useNavigate } from 'react-router'
 import { Outlet } from 'react-router'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Sidebar } from './Sidebar/index.jsx'
-import { storeContext } from '../../storeContext.js'
+import { stackedAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-const Docs = observer(({ height }) => {
-  const store = useContext(storeContext)
-  const { stacked } = store
+const Docs = ({ height }) => {
+  const stacked = useAtomValue(stackedAtom)
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -79,6 +78,6 @@ const Docs = observer(({ height }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}
 
 export default Docs
