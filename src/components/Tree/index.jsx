@@ -1,6 +1,5 @@
 import { useMemo, Suspense } from 'react'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
