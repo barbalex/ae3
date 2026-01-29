@@ -1,5 +1,4 @@
-import { useContext, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { Suspense } from 'react'
 import IconButton from '@mui/material/IconButton'
 import { MdEdit as EditIcon, MdVisibility as ViewIcon } from 'react-icons/md'
 import Select from '@mui/material/Select'
@@ -22,7 +21,6 @@ import { DateField } from '../shared/Date.jsx'
 import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { storeContext } from '../../storeContext.js'
 import { editingPCsAtom, loginUsernameAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -80,7 +78,7 @@ const pcQuery = gql`
   }
 `
 
-export const PropertyCollection = observer(() => {
+export const PropertyCollection = () => {
   const { pcId } = useParams()
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
@@ -517,4 +515,4 @@ export const PropertyCollection = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
