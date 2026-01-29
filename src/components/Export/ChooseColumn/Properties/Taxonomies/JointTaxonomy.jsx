@@ -4,7 +4,6 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 
 import { AllChooser } from './Taxonomy/AllChooser.jsx'
 import { Properties } from './Properties.jsx'
@@ -12,7 +11,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 
 import styles from './JointTaxonomy.module.css'
 
-export const JointTaxonomy = observer(({ jointTaxProperties }) => {
+export const JointTaxonomy = ({ jointTaxProperties }) => {
   const [expanded, setExpanded] = useState(false)
   const onClickActions = () => setExpanded(!expanded)
 
@@ -57,4 +56,4 @@ export const JointTaxonomy = observer(({ jointTaxProperties }) => {
       </Card>
     </ErrorBoundary>
   )
-})
+}

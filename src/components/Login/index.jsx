@@ -13,7 +13,6 @@ import {
   MdVisibilityOff as VisibilityOffIcon,
 } from 'react-icons/md'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useNavigate } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,7 +24,7 @@ import { loginTokenAtom, setLoginAtom } from '../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-const Login = observer(() => {
+const Login = () => {
   const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const idb = useContext(idbContext)
@@ -187,6 +186,6 @@ const Login = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
 
 export default Login
