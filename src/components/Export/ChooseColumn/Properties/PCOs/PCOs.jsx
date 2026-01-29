@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { PCO } from './PCO/index.jsx'
@@ -28,7 +27,7 @@ const fallback = (
   </div>
 )
 
-export const PcoList = observer(() => {
+export const PcoList = () => {
   const apolloClient = useApolloClient()
 
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
@@ -58,4 +57,4 @@ export const PcoList = observer(() => {
       ))}
     </Suspense>
   )
-})
+}
