@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, Suspense } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -8,7 +8,6 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useApolloClient } from '@apollo/client/react'
 import { CombinedGraphQLErrors } from '@apollo/client'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
@@ -19,7 +18,6 @@ import { PCs } from './PCs.jsx'
 import { TCs } from './TCs.jsx'
 import { updateUserMutation } from './updateUserMutation.js'
 import { updateUserMutationWithPass } from './updateUserMutationWithPass.js'
-import { storeContext } from '../../storeContext.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import {
@@ -29,13 +27,12 @@ import {
 
 import styles from './index.module.css'
 
-const User = observer(() => {
+const User = () => {
   const { userId } = useParams()
 
   const queryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const store = useContext(storeContext)
   const loginUsername = useAtomValue(loginUsernameAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
@@ -220,6 +217,6 @@ const User = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
 
 export default User

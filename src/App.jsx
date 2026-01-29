@@ -18,8 +18,6 @@ import { setLoginAtom, activeNodeArrayAtom } from './jotaiStore/index.ts'
 import { detectIE } from './modules/detectIE.js'
 import { client } from './client.js'
 import { IdbProvider } from './idbContext.js'
-import { MobxProvider } from './storeContext.js'
-import { store as Store } from './store/index.js'
 import { Router } from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
 const Stacker = lazy(async () => ({
@@ -31,13 +29,9 @@ export const App = () => {
   const setLogin = useSetAtom(setLoginAtom)
   const setActiveNodeArray = useSetAtom(activeNodeArrayAtom)
 
-  const [store, setStore] = useState()
   useEffect(() => {
-    const storeWithoutLogin = Store().create()
-    setLoginFromIdb({ idb, store: storeWithoutLogin, setLogin }).then(
-      (storeWithLogin) => {
-        setStore(storeWithLogin)
-
+    setLoginFromIdb({ idb, setLogin }).then(
+      () => {
         // initiate activeNodeArray
         setActiveNodeArray(getActiveNodeArrayFromPathname())
       },
@@ -54,9 +48,6 @@ export const App = () => {
     Wir empfehlen eine aktuelle Version von Chrome, Edge, Firefox oder Safari`)
   }
 
-  // on first render returns null
-  if (!store) return null
-
   const myClient = client({ idb })
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -68,7 +59,6 @@ export const App = () => {
 
   return (
     <IdbProvider value={idb}>
-      <MobxProvider value={store}>
         <ApolloProvider client={myClient}>
           <QueryClientProvider client={queryClient}>
             <StyledEngineProvider injectFirst>
@@ -83,7 +73,6 @@ export const App = () => {
             </StyledEngineProvider>
           </QueryClientProvider>
         </ApolloProvider>
-      </MobxProvider>
       <Analytics debug={false} />
     </IdbProvider>
   )
