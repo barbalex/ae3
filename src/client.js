@@ -13,7 +13,7 @@ import './index.css'
 import 'react-reflex/styles.css'
 
 import { graphQlUri } from './modules/graphQlUri.js'
-import { jotaiStore, loginTokenAtom, setLoginAtom } from './store/index.ts'
+import { store, loginTokenAtom, setLoginAtom } from './store/index.ts'
 
 export const client = ({ idb }) => {
   /**
@@ -22,7 +22,7 @@ export const client = ({ idb }) => {
    * for reasons unrelated to the database itself and not covered by any other error code
    */
   const authLink = new SetContextLink(async () => {
-    const token = jotaiStore.get(loginTokenAtom)
+    const token = store.get(loginTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma
@@ -37,13 +37,13 @@ export const client = ({ idb }) => {
       } else {
         // token is not valid any more > remove it
         idb.users.clear()
-        jotaiStore.set(setLoginAtom, {
+        store.set(setLoginAtom, {
           username: 'Login abgelaufen',
           token: '',
         })
         setTimeout(
           () =>
-            jotaiStore.set(setLoginAtom, {
+            store.set(setLoginAtom, {
               username: '',
               token: '',
             }),

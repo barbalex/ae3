@@ -8,7 +8,7 @@ import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
 import createPCMutation from '../../PropertyCollection/createPCMutation.js'
 import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
 import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
-import { jotaiStore } from '../../../store/index.ts'
+import { store } from '../../../store/index.ts'
 import { editingTaxonomiesAtom, editingPCsAtom } from '../../../store/index.ts'
 
 const taxonomyTypeConverter = {
@@ -25,7 +25,7 @@ export const onClickContextMenu = async ({
   navigate,
   queryClient,
 }) => {
-  const editingTaxonomies = jotaiStore.get(editingTaxonomiesAtom)
+  const editingTaxonomies = store.get(editingTaxonomiesAtom)
   if (!data) return console.log('no data passed with click')
   if (!target) {
     return console.log('no target passed with click')
@@ -81,7 +81,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editing true
         if (!editingTaxonomies) {
-          jotaiStore.set(editingTaxonomiesAtom, true)
+          store.set(editingTaxonomiesAtom, true)
         }
       }
       if (table === 'taxonomy') {
@@ -99,7 +99,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
-          jotaiStore.set(editingTaxonomiesAtom, true)
+          store.set(editingTaxonomiesAtom, true)
         }
       }
       if (table === 'pc') {
@@ -113,7 +113,7 @@ export const onClickContextMenu = async ({
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editingTaxonomies true
         if (!editingTaxonomies) {
-          jotaiStore.set(editingPCsAtom, true)
+          store.set(editingPCsAtom, true)
         }
       }
       queryClient.invalidateQueries({

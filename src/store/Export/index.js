@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
 import { constants } from '../../modules/constants.js'
 import {
-  jotaiStore,
+  store,
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,

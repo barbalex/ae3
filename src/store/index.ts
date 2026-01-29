@@ -1,7 +1,7 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-export const jotaiStore = createStore()
+export const store = createStore()
 
 // TreeFilter atoms
 export const treeFilterTextAtom = atom<string>('')

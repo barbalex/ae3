@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { jotaiStore, treeFilterTextAtom } from '../../../store/index.ts'
+import { store, treeFilterTextAtom } from '../../../store/index.ts'
 
 const filterSuggestionsQuery = gql`
   query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {
@@ -27,7 +27,7 @@ const filterSuggestionsQuery = gql`
 
 export const buildOptions = async ({ cb, client }) => {
   let resultFilterSuggestionsQuery
-  const treeFilterText = jotaiStore.get(treeFilterTextAtom)
+  const treeFilterText = store.get(treeFilterTextAtom)
   try {
     resultFilterSuggestionsQuery = await client.query({
       query: filterSuggestionsQuery,
