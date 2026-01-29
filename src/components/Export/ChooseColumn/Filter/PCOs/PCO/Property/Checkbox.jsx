@@ -1,27 +1,24 @@
-import { useContext } from 'react'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { observer } from 'mobx-react-lite'
 import { useSetAtom, useAtomValue } from 'jotai'
 
-import { storeContext } from '../../../../../../../storeContext.js'
 import {
   exportPcoPropertiesAtom,
   exportPcoFiltersAtom,
+  exportAddFilterFieldsAtom,
 } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './Checkbox.module.css'
 
-export const PcoCheckbox = observer(({ pname, pcname, value }) => {
-  const store = useContext(storeContext)
-  const { addFilterFields } = store.export
+export const PcoCheckbox = ({ pname, pcname, value }) => {
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const setPcoProperties = useSetAtom(exportPcoPropertiesAtom)
   const pcoFilters = useAtomValue(exportPcoFiltersAtom)
   const setPcoFilters = useSetAtom(exportPcoFiltersAtom)
+  const addFilterFields = useAtomValue(exportAddFilterFieldsAtom)
 
   const onChange = (e, val) => {
     let comparator = '='
@@ -128,4 +125,4 @@ export const PcoCheckbox = observer(({ pname, pcname, value }) => {
       </FormControl>
     </div>
   )
-})
+}
