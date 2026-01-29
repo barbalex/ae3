@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
 import { gql } from '@apollo/client'
@@ -7,12 +7,12 @@ import { useAtom, useAtomValue } from 'jotai'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { readableType } from '../../../../../../modules/readableType.js'
-import { storeContext } from '../../../../../../storeContext.js'
 import {
   exportTaxPropertiesAtom,
   exportPcoPropertiesAtom,
   exportRcoPropertiesAtom,
   exportTaxFiltersAtom,
+  exportAddFilterFieldsAtom,
 } from '../../../../../../jotaiStore/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
@@ -61,12 +61,11 @@ export const Value = ({
   value: propsValue,
 }) => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
-  const { addFilterFields } = store.export
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
   const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
+  const addFilterFields = useAtomValue(exportAddFilterFieldsAtom)
 
   // Problem with loading data
   // Want to load all data when user focuses on input
@@ -106,7 +105,7 @@ export const Value = ({
     let comparatorValue = comparator
     if (!comparator && val) comparatorValue = 'ILIKE'
     if (!val) comparatorValue = null
-    
+
     const taxFilter = taxFilters.find(
       (x) => x.taxname === taxname && x.pname === pname,
     )
@@ -129,7 +128,9 @@ export const Value = ({
     } else {
       // edit = add new one instead of existing
       setTaxFilters([
-        ...taxFilters.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+        ...taxFilters.filter(
+          (x) => !(x.taxname === taxname && x.pname === pname),
+        ),
         {
           taxname,
           pname,

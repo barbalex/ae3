@@ -1,12 +1,10 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { RCO } from './RCO/index.jsx'
-import { storeContext } from '../../../../../../storeContext.js'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../jotaiStore/index.ts'
 
@@ -30,8 +28,7 @@ const fallback = (
   </div>
 )
 
-export const RcList = observer(() => {
-  const store = useContext(storeContext)
+export const RcList = () => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
   const apolloClient = useApolloClient()
 
@@ -63,4 +60,4 @@ export const RcList = observer(() => {
       ))}
     </Suspense>
   )
-})
+}
