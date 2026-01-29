@@ -4,7 +4,6 @@ import Snackbar from '@mui/material/Snackbar'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
 import { useAtomValue } from 'jotai'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
