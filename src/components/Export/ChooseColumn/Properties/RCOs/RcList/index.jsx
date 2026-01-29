@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { RCO } from './RCO/index.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
-import { exportTaxonomiesAtom } from '../../../../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 

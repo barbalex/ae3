@@ -20,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { fetchLogin } from './fetchLogin.js'
 import { idbContext } from '../../idbContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { loginTokenAtom, setLoginAtom } from '../../jotaiStore/index.ts'
+import { loginTokenAtom, setLoginAtom } from '../../store/index.ts'
 
 import styles from './index.module.css'
 

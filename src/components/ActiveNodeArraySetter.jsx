@@ -7,7 +7,7 @@ import { getActiveNodeArrayFromPathname } from '../modules/getActiveNodeArrayFro
 import {
   activeNodeArrayAtom,
   scrollIntoViewAtom,
-} from '../jotaiStore/index.ts'
+} from '../store/index.ts'
 
 const ActiveNodeArraySetter = () => {
   const setActiveNodeArray = useSetAtom(activeNodeArrayAtom)

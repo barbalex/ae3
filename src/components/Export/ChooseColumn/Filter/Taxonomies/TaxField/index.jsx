@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai'
 
 import { Comparator } from './Comparator.jsx'
 import { Value } from './Value.jsx'
-import { exportTaxFiltersAtom } from '../../../../../../jotaiStore/index.ts'
+import { exportTaxFiltersAtom } from '../../../../../../store/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './index.module.css'

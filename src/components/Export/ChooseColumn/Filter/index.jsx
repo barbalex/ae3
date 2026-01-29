@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   exportWithSynonymDataAtom,
   exportAddFilterFieldsAtom,
-} from '../../../../jotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

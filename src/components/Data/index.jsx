@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { stackedAtom } from '../../jotaiStore/index.ts'
+import { stackedAtom } from '../../store/index.ts'
 import { DataFlexed } from './DataFlexed.jsx'
 import { DataStacked } from './DataStacked.jsx'
 

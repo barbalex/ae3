@@ -8,7 +8,7 @@ import { LR } from './LR/index.jsx'
 import { PC } from './PC/index.jsx'
 import { UsersFolder } from './Users/index.jsx'
 import { OrganizationsFolder } from './Organizations/index.jsx'
-import { loginTokenAtom } from '../../../jotaiStore/index.ts'
+import { loginTokenAtom } from '../../../store/index.ts'
 
 export const Root = () => {
   const apolloClient = useApolloClient()

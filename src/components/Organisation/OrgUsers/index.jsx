@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 
 import { createOrgUserMutation } from './createOrgUserMutation.js'
 import { OrgUsersList } from './OrgUsersList/index.jsx'
-import { activeNodeArrayAtom } from '../../../jotaiStore/index.ts'
+import { activeNodeArrayAtom } from '../../../store/index.ts'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 

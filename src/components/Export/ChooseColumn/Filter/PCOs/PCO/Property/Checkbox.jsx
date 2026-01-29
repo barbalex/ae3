@@ -9,7 +9,7 @@ import {
   exportPcoPropertiesAtom,
   exportPcoFiltersAtom,
   exportAddFilterFieldsAtom,
-} from '../../../../../../../jotaiStore/index.ts'
+} from '../../../../../../../store/index.ts'
 
 import styles from './Checkbox.module.css'
 

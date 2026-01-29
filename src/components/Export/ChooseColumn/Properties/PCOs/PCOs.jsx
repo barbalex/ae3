@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { PCO } from './PCO/index.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
-import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './PCOs.module.css'
 

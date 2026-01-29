@@ -10,7 +10,7 @@ import { useAtomValue } from 'jotai'
 
 import { RcList } from './RcList/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 

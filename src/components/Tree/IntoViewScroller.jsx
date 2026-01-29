@@ -6,7 +6,7 @@ import { getLastIdFromUrl } from '../../modules/getLastIdFromUrl.js'
 import {
   scrollIntoViewCounterAtom,
   activeNodeArrayAtom,
-} from '../../jotaiStore/index.ts'
+} from '../../store/index.ts'
 
 export const IntoViewScroller = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)

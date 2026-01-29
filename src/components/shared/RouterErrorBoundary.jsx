@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
 import { idbContext } from '../../idbContext.js'
-import { setLoginAtom } from '../../jotaiStore/index.ts'
+import { setLoginAtom } from '../../store/index.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 

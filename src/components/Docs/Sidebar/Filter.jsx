@@ -5,7 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import { useAtom } from 'jotai'
 
-import { docFilterAtom } from '../../../jotaiStore/index.ts'
+import { docFilterAtom } from '../../../store/index.ts'
 import styles from './Filter.module.css'
 
 export const Filter = () => {

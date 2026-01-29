@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 
-import { exportTaxPropertiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxPropertiesAtom } from '../../../../../store/index.ts'
 import styles from './Item.module.css'
 
 export const Item = ({ properties }) => {

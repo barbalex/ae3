@@ -8,7 +8,7 @@ import { Taxonomies } from './Taxonomies.jsx'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
-} from '../../../../../../jotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'

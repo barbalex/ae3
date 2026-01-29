@@ -8,8 +8,8 @@ import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
 import createPCMutation from '../../PropertyCollection/createPCMutation.js'
 import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
 import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
-import { jotaiStore } from '../../../jotaiStore/index.ts'
-import { editingTaxonomiesAtom, editingPCsAtom } from '../../../jotaiStore/index.ts'
+import { jotaiStore } from '../../../store/index.ts'
+import { editingTaxonomiesAtom, editingPCsAtom } from '../../../store/index.ts'
 
 const taxonomyTypeConverter = {
   Arten: 'ART',

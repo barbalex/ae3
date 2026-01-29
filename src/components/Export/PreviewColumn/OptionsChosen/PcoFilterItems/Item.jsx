@@ -1,7 +1,7 @@
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
-import { exportPcoFiltersAtom } from '../../../../../jotaiStore/index.ts'
+import { exportPcoFiltersAtom } from '../../../../../store/index.ts'
 
 import styles from './Item.module.css'
 

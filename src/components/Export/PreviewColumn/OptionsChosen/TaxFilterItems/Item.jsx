@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 
 import { booleanToJaNein } from '../../../../../modules/booleanToJaNein.js'
-import { exportTaxFiltersAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxFiltersAtom } from '../../../../../store/index.ts'
 
 import styles from './Item.module.css'
 

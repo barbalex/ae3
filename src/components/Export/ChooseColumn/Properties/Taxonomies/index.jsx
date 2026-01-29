@@ -12,7 +12,7 @@ import { useAtomValue } from 'jotai'
 import { TaxonomiesList } from './TaxonomiesList.jsx'
 import { JointTaxonomy } from './JointTaxonomy.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 

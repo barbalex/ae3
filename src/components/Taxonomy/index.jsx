@@ -23,7 +23,7 @@ import {
   editingTaxonomiesAtom,
   scrollIntoViewAtom,
   activeNodeArrayAtom,
-} from '../../jotaiStore/index.ts'
+} from '../../store/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 
 import styles from './index.module.css'

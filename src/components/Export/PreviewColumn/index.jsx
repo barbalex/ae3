@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 
 import { OptionsChosen } from './OptionsChosen/index.jsx'
 import { Preview } from './Preview.jsx'
-import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../store/index.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'

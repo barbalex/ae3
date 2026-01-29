@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { ChooseColumn } from './ChooseColumn/index.jsx'
 import { PreviewColumn } from './PreviewColumn/index.jsx'
-import { windowWidthAtom } from '../../jotaiStore/index.ts'
+import { windowWidthAtom } from '../../store/index.ts'
 
 import styles from './ExportStacked.module.css'
 

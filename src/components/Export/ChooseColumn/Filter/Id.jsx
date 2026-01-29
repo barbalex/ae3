@@ -2,7 +2,7 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import { useSetAtom } from 'jotai'
 
-import { exportIdsAtom } from '../../../../jotaiStore/index.ts'
+import { exportIdsAtom } from '../../../../store/index.ts'
 import styles from './Id.module.css'
 
 export const Id = () => {

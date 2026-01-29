@@ -2,7 +2,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { useAtom } from 'jotai'
 
-import { exportRcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
+import { exportRcoPropertiesAtom } from '../../../../../../../store/index.ts'
 import styles from './AllChooser.module.css'
 
 export const AllChooser = ({ properties, relationtype }) => {

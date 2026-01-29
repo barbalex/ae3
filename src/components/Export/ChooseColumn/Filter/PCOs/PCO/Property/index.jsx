@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { PcoComparator } from './Comparator.jsx'
 import { PcoValue } from './Value.jsx'
 import { PcoCheckbox } from './Checkbox.jsx'
-import { exportPcoFiltersAtom } from '../../../../../../../jotaiStore/index.ts'
+import { exportPcoFiltersAtom } from '../../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 

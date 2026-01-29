@@ -8,7 +8,7 @@ import { useSetAtom } from 'jotai'
 
 import { getUrlForObject } from '../modules/getUrlForObject.js'
 import { getUrlParamByName } from '../modules/getUrlParamByName.js'
-import { scrollIntoViewAtom } from '../jotaiStore/index.ts'
+import { scrollIntoViewAtom } from '../store/index.ts'
 
 const objectQuery = gql`
   query ObjectQuery($id: UUID!, $hasObjectId: Boolean!) {

@@ -17,7 +17,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
 import { Root } from './Root/index.jsx'
 import { LoadingRow } from './LoadingRow.jsx'
-import { loginUsernameAtom } from '../../jotaiStore/index.ts'
+import { loginUsernameAtom } from '../../store/index.ts'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import styles from './index.module.css'

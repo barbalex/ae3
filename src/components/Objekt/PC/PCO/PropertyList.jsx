@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
-import { stackedAtom } from '../../../../jotaiStore/index.ts'
+import { stackedAtom } from '../../../../store/index.ts'
 
 export const PropertyList = ({ propertiesArray }) => {
   const stacked = useAtomValue(stackedAtom)

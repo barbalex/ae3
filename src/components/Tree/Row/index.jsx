@@ -19,7 +19,7 @@ import {
   scrollIntoViewAtom,
   loginUsernameAtom,
   activeNodeArrayAtom,
-} from '../../../jotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

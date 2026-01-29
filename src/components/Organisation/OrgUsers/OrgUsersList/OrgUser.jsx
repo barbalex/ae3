@@ -15,7 +15,7 @@ import { useAtomValue } from 'jotai'
 
 import { updateOrgUserMutation } from './updateOrgUserMutation.js'
 import { deleteOrgUserMutation } from './deleteOrgUserMutation.js'
-import { activeNodeArrayAtom } from '../../../../jotaiStore/index.ts'
+import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './OrgUser.module.css'

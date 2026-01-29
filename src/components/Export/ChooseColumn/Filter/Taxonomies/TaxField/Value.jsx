@@ -13,7 +13,7 @@ import {
   exportRcoPropertiesAtom,
   exportTaxFiltersAtom,
   exportAddFilterFieldsAtom,
-} from '../../../../../../jotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './Value.module.css'

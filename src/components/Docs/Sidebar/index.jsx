@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai'
 import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { constants } from '../../../modules/constants.js'
-import { sidebarWidthAtom } from '../../../jotaiStore/index.ts'
+import { sidebarWidthAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

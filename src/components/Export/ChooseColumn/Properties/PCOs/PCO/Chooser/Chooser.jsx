@@ -2,7 +2,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { useAtom } from 'jotai'
 
-import { exportPcoPropertiesAtom } from '../../../../../../../jotaiStore/index.ts'
+import { exportPcoPropertiesAtom } from '../../../../../../../store/index.ts'
 import { constants } from '../../../../../../../modules/constants.js'
 
 import styles from './Chooser.module.css'

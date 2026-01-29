@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import { activeNodeArrayAtom } from '../../jotaiStore/index.ts'
+import { activeNodeArrayAtom } from '../../store/index.ts'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 

@@ -9,7 +9,7 @@ import { useSetAtom } from 'jotai'
 
 import { updatePropertyMutation } from './updatePropertyMutation.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-import { scrollIntoViewAtom } from '../../jotaiStore/index.ts'
+import { scrollIntoViewAtom } from '../../store/index.ts'
 
 import styles from './Property.module.css'
 

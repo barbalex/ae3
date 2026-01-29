@@ -21,7 +21,7 @@ import { DateField } from '../shared/Date.jsx'
 import { onBlurDo } from './onBlur.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { editingPCsAtom, loginUsernameAtom } from '../../jotaiStore/index.ts'
+import { editingPCsAtom, loginUsernameAtom } from '../../store/index.ts'
 
 import styles from './index.module.css'
 

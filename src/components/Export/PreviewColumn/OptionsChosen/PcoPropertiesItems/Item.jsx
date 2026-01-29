@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 
-import { exportPcoPropertiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportPcoPropertiesAtom } from '../../../../../store/index.ts'
 import styles from './Item.module.css'
 
 export const Item = ({ properties }) => {

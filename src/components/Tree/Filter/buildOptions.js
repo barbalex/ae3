@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { jotaiStore, treeFilterTextAtom } from '../../../jotaiStore/index.ts'
+import { jotaiStore, treeFilterTextAtom } from '../../../store/index.ts'
 
 const filterSuggestionsQuery = gql`
   query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {

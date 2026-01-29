@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { onBlurArten } from './onBlurArten.js'
-import { scrollIntoViewAtom } from '../../jotaiStore/index.ts'
+import { scrollIntoViewAtom } from '../../store/index.ts'
 
 import styles from './PropertyArten.module.css'
 

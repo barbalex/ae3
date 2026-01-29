@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 
-import { exportRcoPropertiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportRcoPropertiesAtom } from '../../../../../store/index.ts'
 import styles from './Item.module.css'
 
 export const Item = ({ properties }) => {

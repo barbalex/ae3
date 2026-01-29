@@ -3,7 +3,7 @@ import FormControl from '@mui/material/FormControl'
 import { useAtom } from 'jotai'
 
 import { ComparatorSelect } from '../../ComparatorSelect.jsx'
-import { exportTaxFiltersAtom } from '../../../../../../jotaiStore/index.ts'
+import { exportTaxFiltersAtom } from '../../../../../../store/index.ts'
 
 import styles from './Comparator.module.css'
 

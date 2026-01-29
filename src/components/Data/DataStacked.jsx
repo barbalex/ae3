@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 import { Outlet } from 'react-router'
 
 import { Tree } from '../Tree/index.jsx'
-import { windowHeightAtom } from '../../jotaiStore/index.ts'
+import { windowHeightAtom } from '../../store/index.ts'
 
 import styles from './DataStacked.module.css'
 

@@ -23,7 +23,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import {
   scrollIntoViewAtom,
   loginUsernameAtom,
-} from '../../jotaiStore/index.ts'
+} from '../../store/index.ts'
 
 import styles from './index.module.css'
 

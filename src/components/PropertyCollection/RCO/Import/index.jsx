@@ -13,7 +13,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { upsertRCOMutation } from './upsertRCOMutation.js'
-import { activeNodeArrayAtom } from '../../../../jotaiStore/index.ts'
+import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { RcoInstructions } from './Instructions.jsx'

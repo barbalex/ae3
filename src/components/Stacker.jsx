@@ -6,7 +6,7 @@ import {
   stackedAtom,
   windowWidthAtom,
   windowHeightAtom,
-} from '../jotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const Stacker = () => {
   const setStacked = useSetAtom(stackedAtom)

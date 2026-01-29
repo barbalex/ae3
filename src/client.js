@@ -13,7 +13,7 @@ import './index.css'
 import 'react-reflex/styles.css'
 
 import { graphQlUri } from './modules/graphQlUri.js'
-import { jotaiStore, loginTokenAtom, setLoginAtom } from './jotaiStore/index.ts'
+import { jotaiStore, loginTokenAtom, setLoginAtom } from './store/index.ts'
 
 export const client = ({ idb }) => {
   /**

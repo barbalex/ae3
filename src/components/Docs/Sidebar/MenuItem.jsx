@@ -3,7 +3,7 @@ import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
 import { useAtom } from 'jotai'
 
-import { sidebarWidthAtom } from '../../../jotaiStore/index.ts'
+import { sidebarWidthAtom } from '../../../store/index.ts'
 
 export const MenuItem = ({ node }) => {
   const [sidebarWidth, setSidebarWidth] = useAtom(sidebarWidthAtom)

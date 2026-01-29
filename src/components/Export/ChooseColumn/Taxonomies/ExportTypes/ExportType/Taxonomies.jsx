@@ -8,7 +8,7 @@ import { useAtom, useSetAtom } from 'jotai'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
-} from '../../../../../../jotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import styles from './Taxonomies.module.css'
 
 export const Taxonomies = ({ type }) => {

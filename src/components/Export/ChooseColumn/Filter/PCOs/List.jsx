@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import { PCO } from './PCO/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
-import { exportTaxonomiesAtom } from '../../../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './List.module.css'
 

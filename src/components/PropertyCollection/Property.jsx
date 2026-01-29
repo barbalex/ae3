@@ -9,7 +9,7 @@ import { useSetAtom } from 'jotai'
 
 import { onBlurDo } from './onBlur.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { scrollIntoViewAtom } from '../../jotaiStore/index.ts'
+import { scrollIntoViewAtom } from '../../store/index.ts'
 
 import styles from './Property.module.css'
 

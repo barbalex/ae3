@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { upsertPCOMutation } from './upsertPCOMutation.js'
-import { activeNodeArrayAtom } from '../../../../jotaiStore/index.ts'
+import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'

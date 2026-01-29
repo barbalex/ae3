@@ -13,7 +13,7 @@ import { NewProperty } from '../../../../shared/NewProperty.jsx'
 import {
   stackedAtom,
   editingTaxonomiesAtom,
-} from '../../../../../jotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 

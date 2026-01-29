@@ -12,7 +12,7 @@ import { Taxonomies } from './Taxonomies/index.jsx'
 import { Properties } from './Properties/index.jsx'
 import { Filter } from './Filter/index.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { exportTaxonomiesAtom } from '../../../jotaiStore/index.ts'
+import { exportTaxonomiesAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
