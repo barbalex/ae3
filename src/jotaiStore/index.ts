@@ -134,3 +134,6 @@ export const exportWithSynonymDataAtom = atom<boolean>(true)
 // Export too many properties atom
 // currently not used anywhere
 export const exportTooManyPropertiesAtom = atom<boolean>(false)
+
+// Export add filter fields atom
+export const exportAddFilterFieldsAtom = atom<boolean>(true)
