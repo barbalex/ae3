@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button'
-import { getSnapshot } from 'mobx-state-tree'
 import { useAtom, useSetAtom, useAtomValue } from 'jotai'
 
 import { TaxFilterItems } from './TaxFilterItems/index.jsx'
