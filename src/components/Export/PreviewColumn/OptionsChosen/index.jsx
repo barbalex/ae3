@@ -8,7 +8,6 @@ import { RcoFilterItems } from './RcoFilterItems/index.jsx'
 import { TaxPropertiesItems } from './TaxPropertiesItems/index.jsx'
 import { PcoPropertiesItems } from './PcoPropertiesItems/index.jsx'
 import { RcoPropertiesItems } from './RcoPropertiesItems/index.jsx'
-import { storeContext } from '../../../../storeContext.js'
 import {
   exportTypeAtom,
   exportTaxonomiesAtom,
