@@ -1,8 +1,6 @@
-import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { Arten } from './Arten/index.jsx'
@@ -10,12 +8,10 @@ import { LR } from './LR/index.jsx'
 import { PC } from './PC/index.jsx'
 import { UsersFolder } from './Users/index.jsx'
 import { OrganizationsFolder } from './Organizations/index.jsx'
-import { storeContext } from '../../../storeContext.js'
 import { loginTokenAtom } from '../../../jotaiStore/index.ts'
 
-export const Root = observer(() => {
+export const Root = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(storeContext)
   const loginToken = useAtomValue(loginTokenAtom)
   const hasToken = !!loginToken
 
@@ -72,4 +68,4 @@ export const Root = observer(() => {
       )}
     </>
   )
-})
+}
