@@ -1,8 +1,7 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { HowTo } from './HowTo.jsx'
@@ -11,17 +10,20 @@ import { Id } from './Id.jsx'
 import { Taxonomies } from './Taxonomies/index.jsx'
 import { PCOs } from './PCOs/index.jsx'
 import { RCOs } from './RCOs/index.jsx'
-import { storeContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { exportWithSynonymDataAtom } from '../../../../jotaiStore/index.ts'
+import {
+  exportWithSynonymDataAtom,
+  exportAddFilterFieldsAtom,
+} from '../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const Filter = observer(() => {
-  const store = useContext(storeContext)
-  const { addFilterFields, setAddFilterFields } = store.export
+export const Filter = () => {
   const [withSynonymData, setWithSynonymData] = useAtom(
     exportWithSynonymDataAtom,
+  )
+  const [addFilterFields, setAddFilterFields] = useAtom(
+    exportAddFilterFieldsAtom,
   )
 
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(false)
@@ -100,4 +102,4 @@ export const Filter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
