@@ -1,13 +1,12 @@
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Outlet } from 'react-router'
-import { observer } from 'mobx-react-lite'
 
 import { Tree } from '../Tree/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 import styles from './DataFlexed.module.css'
 
-export const DataFlexed = observer(() => (
+export const DataFlexed = () => (
   <ErrorBoundary>
     <ReflexContainer orientation="vertical">
       <ReflexElement
@@ -22,4 +21,4 @@ export const DataFlexed = observer(() => (
       </ReflexElement>
     </ReflexContainer>
   </ErrorBoundary>
-))
+)

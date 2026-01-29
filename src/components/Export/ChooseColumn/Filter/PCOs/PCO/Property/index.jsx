@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { PcoComparator } from './Comparator.jsx'
@@ -8,7 +7,7 @@ import { exportPcoFiltersAtom } from '../../../../../../../jotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
+export const PcoProperty = ({ pcname, pname, jsontype }) => {
   const pcoFilters = useAtomValue(exportPcoFiltersAtom)
 
   const pcoFilter = pcoFilters.find(
@@ -48,4 +47,4 @@ export const PcoProperty = observer(({ pcname, pname, jsontype }) => {
       )}
     </div>
   )
-})
+}
