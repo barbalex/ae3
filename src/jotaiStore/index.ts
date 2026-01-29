@@ -130,3 +130,7 @@ export const exportRcoFiltersAtom = atom<RcoFilter[]>([])
 
 // Export with synonym data atom
 export const exportWithSynonymDataAtom = atom<boolean>(true)
+
+// Export too many properties atom
+// currently not used anywhere
+export const exportTooManyPropertiesAtom = atom<boolean>(false)
