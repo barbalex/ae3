@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 
 import { HowTo } from './HowTo.jsx'
 import { Taxonomies } from './Taxonomies/index.jsx'
@@ -9,7 +8,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
 
-export const Properties = observer(() => {
+export const Properties = () => {
   const [taxonomiesExpanded, setTaxonomiesExpanded] = useState(false)
   const [pcoExpanded, setFilterExpanded] = useState(false)
   const [rcoExpanded, setPropertiesExpanded] = useState(false)
@@ -66,4 +65,4 @@ export const Properties = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
