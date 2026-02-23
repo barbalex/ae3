@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { store, treeFilterTextAtom } from '../../../store/index.ts'
-
 const filterSuggestionsQuery = gql`
   query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {
     propertyCollectionByPropertyName(propertyName: $treeFilterText)
@@ -25,9 +23,9 @@ const filterSuggestionsQuery = gql`
   }
 `
 
-export const buildOptions = async ({ cb, client }) => {
+export const buildOptions = async ({ cb, client, val }) => {
   let resultFilterSuggestionsQuery
-  const treeFilterText = store.get(treeFilterTextAtom)
+  const treeFilterText = val?.trim() ?? ''
   try {
     resultFilterSuggestionsQuery = await client.query({
       query: filterSuggestionsQuery,

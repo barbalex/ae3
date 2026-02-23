@@ -175,9 +175,9 @@ export const Filter = () => {
     enabled: !!treeFilterId,
   })
 
-  const onInputChange = (option) => {
-    if (!option) return
-    setTreeFilter({ text: option, id: actualTreeFilterId })
+  const onInputChange = (value, { action }) => {
+    if (action !== 'input-change') return
+    setTreeFilter({ text: value, id: null })
   }
 
   const onChange = (option) => {
