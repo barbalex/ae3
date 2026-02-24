@@ -1,9 +1,7 @@
-import { useContext } from 'react'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
-import { idbContext } from '../../idbContext.js'
 import { setLoginAtom } from '../../store/index.ts'
 
 import styles from './RouterErrorBoundary.module.css'
@@ -11,12 +9,10 @@ import styles from './RouterErrorBoundary.module.css'
 export const RouterErrorBoundary = ({ children }) => {
   const error = useRouteError()
 
-  const idb = useContext(idbContext)
   const setLogin = useSetAtom(setLoginAtom)
 
   const onReset = () => {
     if (typeof window !== 'undefined') {
-      idb.users.clear()
       setLogin({
         username: '',
         token: '',

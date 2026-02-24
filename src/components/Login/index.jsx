@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from 'react'
+import { useState, useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
@@ -12,22 +12,18 @@ import {
   MdVisibility as VisibilityIcon,
   MdVisibilityOff as VisibilityOffIcon,
 } from 'react-icons/md'
-import { useApolloClient } from '@apollo/client/react'
 import { useNavigate } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { fetchLogin } from './fetchLogin.js'
-import { idbContext } from '../../idbContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { loginTokenAtom, setLoginAtom } from '../../store/index.ts'
 
 import styles from './index.module.css'
 
 const Login = () => {
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
-  const idb = useContext(idbContext)
   const token = useAtomValue(loginTokenAtom)
   const setLogin = useSetAtom(setLoginAtom)
 
@@ -45,9 +41,6 @@ const Login = () => {
 
   const doFetchLogin = (namePassed, passPassed, navigate) =>
     fetchLogin({
-      client: apolloClient,
-      queryClient,
-      setLogin,
       changeNameErrorText,
       changePassErrorText,
       name,
@@ -57,13 +50,11 @@ const Login = () => {
       changeLoginSuccessfull,
       namePassed,
       passPassed,
-      idb,
       nameInput,
       passwordInput,
       navigate,
     })
   const onLogout = async () => {
-    await idb.users.clear()
     setLogin({
       username: '',
       token: '',

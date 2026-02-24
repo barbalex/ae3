@@ -28,7 +28,6 @@
     "autosuggest-highlight": "3.3.4",
     "classnames": "2.5.1",
     "date-fns": "4.1.0",
-    "dexie": "4.3.0",
     "exceljs": "4.4.0",
     "file-saver": "2.0.5",
     "graphql": "16.12.0",

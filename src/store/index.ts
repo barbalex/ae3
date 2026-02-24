@@ -1,7 +1,13 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+import type { ApolloClient, NormalizedCacheObject } from '@apollo/client'
+import type { QueryClient } from '@tanstack/react-query'
 
 export const store = createStore()
+
+// Client atoms
+export const apolloClientAtom = atom<ApolloClient<NormalizedCacheObject> | null>(null)
+export const queryClientAtom = atom<QueryClient | null>(null)
 
 // TreeFilter atoms
 export const treeFilterTextAtom = atom<string>('')
@@ -22,9 +28,15 @@ export const scrollIntoViewAtom = atom(null, (get, set) => {
   set(scrollIntoViewCounterAtom, get(scrollIntoViewCounterAtom) + 1)
 })
 
-// Login atoms
-export const loginTokenAtom = atom<string | null>(null)
-export const loginUsernameAtom = atom<string | null>(null)
+// Login atoms with localStorage persistence
+export const loginTokenAtom = atomWithStorage<string | null>(
+  'ae-login-token',
+  null,
+)
+export const loginUsernameAtom = atomWithStorage<string | null>(
+  'ae-login-username',
+  null,
+)
 
 export const setLoginAtom = atom(
   null,

@@ -2,11 +2,9 @@ import { jwtDecode } from 'jwt-decode'
 import { CombinedGraphQLErrors } from '@apollo/client'
 
 import { loginDbMutation } from './loginDbMutation.js'
+import { store, setLoginAtom, apolloClientAtom, queryClientAtom } from '../../store/index.ts'
 
 export const fetchLogin = async ({
-  client,
-  queryClient,
-  setLogin,
   changeNameErrorText,
   changePassErrorText,
   name: propsName,
@@ -16,11 +14,18 @@ export const fetchLogin = async ({
   changeLoginSuccessfull,
   namePassed,
   passPassed,
-  idb,
   nameInput,
   passwordInput,
   navigate,
 }) => {
+  const client = store.get(apolloClientAtom)
+  const queryClient = store.get(queryClientAtom)
+  
+  if (!client || !queryClient) {
+    console.error('Apollo client or Query client not initialized')
+    return
+  }
+  
   // when blurring fields need to pass event value
   // on the other hand when clicking on Anmelden button,
   // need to grab props
@@ -33,8 +38,7 @@ export const fetchLogin = async ({
     return changePassErrorText('Bitte Passwort eingeben')
   }
   // reset existing token
-  await idb.users.clear()
-  setLogin({
+  store.set(setLoginAtom, {
     username: '',
     token: '',
   })
@@ -63,14 +67,9 @@ export const fetchLogin = async ({
   if (jwtToken) {
     const tokenDecoded = jwtDecode(jwtToken)
     const { username } = tokenDecoded
-    // refresh currentUser in idb
-    await idb.users.clear()
-    await idb.users.put({
-      username,
-      token: jwtToken,
-    })
+    // set login state
     try {
-      setLogin({
+      store.set(setLoginAtom, {
         username,
         token: jwtToken,
       })

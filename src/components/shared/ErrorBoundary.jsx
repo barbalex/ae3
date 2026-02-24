@@ -1,9 +1,7 @@
-import { useContext } from 'react'
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
-import { idbContext } from '../../idbContext.js'
 import { setLoginAtom } from '../../store/index.ts'
 
 import styles from './ErrorBoundary.module.css'
@@ -48,12 +46,10 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
 }
 
 export const ErrorBoundary = ({ children }) => {
-  const idb = useContext(idbContext)
   const setLogin = useSetAtom(setLoginAtom)
 
   const onReset = () => {
     if (typeof window !== 'undefined') {
-      idb.users.clear()
       setLogin({
         username: null,
         token: null,

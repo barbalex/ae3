@@ -15,12 +15,7 @@ import 'react-reflex/styles.css'
 import { graphQlUri } from './modules/graphQlUri.js'
 import { store, loginTokenAtom, setLoginAtom } from './store/index.ts'
 
-export const client = ({ idb }) => {
-  /**
-   * On the next line Firefox 45.3.0 errors out with:
-   * Unhandled Rejection (OpenFailedError): UnknownError The operation failed
-   * for reasons unrelated to the database itself and not covered by any other error code
-   */
+export const client = () => {
   const authLink = new SetContextLink(async () => {
     const token = store.get(loginTokenAtom)
     if (token) {
@@ -36,7 +31,6 @@ export const client = ({ idb }) => {
         }
       } else {
         // token is not valid any more > remove it
-        idb.users.clear()
         store.set(setLoginAtom, {
           username: 'Login abgelaufen',
           token: '',
