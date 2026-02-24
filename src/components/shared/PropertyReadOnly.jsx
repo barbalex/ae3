@@ -1,9 +1,9 @@
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import styles from './PropertyReadOnly.module.css'
 
-const linkifyProperties = {
+const linkifyOptions = {
   target: '_blank',
   style: {
     color: 'inherit',
@@ -23,7 +23,7 @@ export const PropertyReadOnly = ({ label, value, url }) => {
 
   return (
     <ErrorBoundary>
-      <Linkify properties={linkifyProperties}>
+      <Linkify options={linkifyOptions}>
         <div className={styles.container}>
           <p className={styles.labelClass}>{`${label}:`}</p>
           <p className={styles.valueClass}>

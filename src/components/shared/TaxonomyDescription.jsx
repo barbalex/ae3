@@ -1,11 +1,11 @@
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 
 import { PropertyReadOnly } from './PropertyReadOnly.jsx'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 import styles from './TaxonomyDescription.module.css'
 
-const linkifyProperties = {
+const linkifyOptions = {
   target: '_blank',
   style: {
     color: 'inherit',
@@ -21,7 +21,7 @@ export const TaxonomyDescription = ({ taxonomy }) => {
 
   return (
     <ErrorBoundary>
-      <Linkify properties={linkifyProperties}>
+      <Linkify options={linkifyOptions}>
         <div className={styles.container}>
           {taxonomy.description && (
             <PropertyReadOnly

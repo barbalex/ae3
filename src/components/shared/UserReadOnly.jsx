@@ -1,11 +1,11 @@
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
 import styles from './UserReadOnly.module.css'
 
-const linkifyProperties = {
+const linkifyOptions = {
   target: '_blank',
   style: {
     color: 'inherit',
@@ -25,7 +25,7 @@ export const UserReadOnly = ({ label, user }) => {
 
   return (
     <ErrorBoundary>
-      <Linkify properties={linkifyProperties}>
+      <Linkify options={linkifyOptions}>
         <div className={styles.container}>
           <p className={styles.labelClass}>{`${label}:`}</p>
           <div className={styles.userContainer}>
