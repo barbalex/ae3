@@ -7,9 +7,7 @@ import {
 } from 'react-icons/md'
 import Icon from '@mui/material/Icon'
 import { isEqual } from 'es-toolkit'
-import { useApolloClient } from '@apollo/client/react'
 import { useNavigate } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { ContextMenuTrigger } from '../../../modules/react-contextmenu/index.js'
@@ -28,9 +26,6 @@ function collect(props) {
 }
 
 export const Row = ({ data }) => {
-  const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
-
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const loginUsername = useAtomValue(loginUsernameAtom)
@@ -85,11 +80,9 @@ export const Row = ({ data }) => {
       e,
       data,
       target,
-      client: apolloClient,
       scrollIntoView,
       loginUsername,
       navigate,
-      queryClient,
     })
 
   //console.log('Row, data:', data)

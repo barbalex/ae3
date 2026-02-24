@@ -234,7 +234,6 @@ export const Filter = () => {
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({
-      client: apolloClient,
       cb,
       val,
     })

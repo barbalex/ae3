@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { store, apolloClientAtom } from '../../../store/index.ts'
 
 const filterSuggestionsQuery = gql`
   query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {
@@ -23,7 +24,14 @@ const filterSuggestionsQuery = gql`
   }
 `
 
-export const buildOptions = async ({ cb, client, val }) => {
+export const buildOptions = async ({ cb, val }) => {
+  const client = store.get(apolloClientAtom)
+  
+  if (!client) {
+    console.error('Apollo client not initialized')
+    return cb([])
+  }
+  
   let resultFilterSuggestionsQuery
   const treeFilterText = val?.trim() ?? ''
   try {

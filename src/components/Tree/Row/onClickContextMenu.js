@@ -8,7 +8,11 @@ import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
 import createPCMutation from '../../PropertyCollection/createPCMutation.js'
 import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
 import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
-import { store } from '../../../store/index.ts'
+import {
+  store,
+  apolloClientAtom,
+  queryClientAtom,
+} from '../../../store/index.ts'
 import { editingTaxonomiesAtom, editingPCsAtom } from '../../../store/index.ts'
 
 const taxonomyTypeConverter = {
@@ -19,13 +23,18 @@ const taxonomyTypeConverter = {
 export const onClickContextMenu = async ({
   data,
   target,
-  client,
   scrollIntoView,
   loginUsername,
   navigate,
-  queryClient,
 }) => {
+  const client = store.get(apolloClientAtom)
+  const queryClient = store.get(queryClientAtom)
   const editingTaxonomies = store.get(editingTaxonomiesAtom)
+
+  if (!client || !queryClient) {
+    console.error('Apollo client or Query client not initialized')
+    return
+  }
   if (!data) return console.log('no data passed with click')
   if (!target) {
     return console.log('no target passed with click')
