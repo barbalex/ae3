@@ -8,7 +8,7 @@ import babel from '@rolldown/plugin-babel'
 export default defineConfig({
   server: { port: 5174 },
   build: {
-    minify: 'esbuild',
+    cssMinify: 'esbuild',
   },
   plugins: [
     svgrPlugin({
