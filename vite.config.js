@@ -7,6 +7,9 @@ import babel from '@rolldown/plugin-babel'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5174 },
+  // this is needed due to an error in vite:
+  // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
+  // TODO: remove this and uninstall esbuild when the issue is fixed
   build: {
     cssMinify: 'esbuild',
   },
