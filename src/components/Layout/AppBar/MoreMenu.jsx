@@ -55,9 +55,9 @@ export const MoreMenu = () => {
 
     const hostname = window.location.hostname
     const uptimeUrl =
-      hostname === 'localhost' ?
-        'https://uptime.artdaten.ch'
-      : `//uptime.${hostname.replace('www.', '')}`
+      hostname === 'localhost'
+        ? 'https://uptime.artdaten.ch'
+        : `//uptime.${hostname.replace('www.', '')}`
     window.open(uptimeUrl)
     setAnchorEl(null)
   }
@@ -82,24 +82,17 @@ export const MoreMenu = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
-        PaperProps={paperProps}
+        slotProps={{
+          paper: paperProps,
+        }}
       >
-        <MenuItem
-          key="ueber"
-          onClick={onClickUeber}
-        >
+        <MenuItem key="ueber" onClick={onClickUeber}>
           über arteigenschaften.ch
         </MenuItem>
-        <MenuItem
-          key="relations"
-          onClick={onClickStruktur}
-        >
+        <MenuItem key="relations" onClick={onClickStruktur}>
           Daten-Struktur
         </MenuItem>
-        <MenuItem
-          key="melden"
-          onClick={onClickMelden}
-        >
+        <MenuItem key="melden" onClick={onClickMelden}>
           Fehler oder Wünsche melden
         </MenuItem>
         <MenuItem onClick={onClickUptime}>

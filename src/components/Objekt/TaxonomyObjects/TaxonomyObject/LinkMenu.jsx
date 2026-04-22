@@ -35,9 +35,8 @@ const LinkMenu = ({ objekt }) => {
 
   const onClickGoogleImages = (e) => {
     e.stopPropagation()
-    const url =
-      einheit ?
-        `https://www.google.ch/search?tbm=isch&q=${einheit}`
+    const url = einheit
+      ? `https://www.google.ch/search?tbm=isch&q=${einheit}`
       : `https://www.google.ch/search?tbm=isch&q="${objekt?.name}"${
           nameDeutsch ? `+OR+"${nameDeutsch}"` : ''
         }`
@@ -46,11 +45,11 @@ const LinkMenu = ({ objekt }) => {
   }
   const onClickWikepedia = (e) => {
     e.stopPropagation()
-    const url =
-      einheit ? `https://www.google.ch/search?q=${einheit} site:wikipedia.org`
-      : nameDeutsch ?
-        `https://www.google.ch/search?q="${nameDeutsch}"+OR+"${objekt?.name}" site:wikipedia.org`
-      : `https://www.google.ch/search?q="${objekt?.name}" site:wikipedia.org`
+    const url = einheit
+      ? `https://www.google.ch/search?q=${einheit} site:wikipedia.org`
+      : nameDeutsch
+        ? `https://www.google.ch/search?q="${nameDeutsch}"+OR+"${objekt?.name}" site:wikipedia.org`
+        : `https://www.google.ch/search?q="${objekt?.name}" site:wikipedia.org`
     typeof window !== 'undefined' && window.open(url)
     setAnchorEl(null)
   }
@@ -101,49 +100,33 @@ const LinkMenu = ({ objekt }) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        PaperProps={paperProps}
+        slotProps={{
+          paper: paperProps,
+        }}
       >
-        <MenuItem
-          key="googleBilder"
-          onClick={onClickGoogleImages}
-        >
+        <MenuItem key="googleBilder" onClick={onClickGoogleImages}>
           Bilder googeln
         </MenuItem>
-        <MenuItem
-          key="wikipedia"
-          onClick={onClickWikepedia}
-        >
+        <MenuItem key="wikipedia" onClick={onClickWikepedia}>
           Wikipedia-Artikel suchen
         </MenuItem>
         {isSisf2 && gattung && art && (
-          <MenuItem
-            key="gbif"
-            onClick={onClickGbifFromSisf2}
-          >
+          <MenuItem key="gbif" onClick={onClickGbifFromSisf2}>
             Im GBIF suchen
           </MenuItem>
         )}
         {isDbTaxref && props?.['Artname vollständig'] && (
-          <MenuItem
-            key="gbif"
-            onClick={onClickGbifFromDbTaxref}
-          >
+          <MenuItem key="gbif" onClick={onClickGbifFromDbTaxref}>
             Im GBIF suchen
           </MenuItem>
         )}
         {isSisf2 && gattung && art && (
-          <MenuItem
-            key="infoflora"
-            onClick={onClickSisf2}
-          >
+          <MenuItem key="infoflora" onClick={onClickSisf2}>
             Bei Info Flora suchen
           </MenuItem>
         )}
         {isDbTaxref && props?.['Taxonomie ID intern'] && (
-          <MenuItem
-            key="db-taxref"
-            onClick={onClickDbTaxref}
-          >
+          <MenuItem key="db-taxref" onClick={onClickDbTaxref}>
             Bei Info Flora suchen
           </MenuItem>
         )}
