@@ -55,9 +55,9 @@ export const MoreMenu = () => {
 
     const hostname = window.location.hostname
     const uptimeUrl =
-      hostname === 'localhost'
-        ? 'https://uptime.artdaten.ch'
-        : `//uptime.${hostname.replace('www.', '')}`
+      hostname === 'localhost' ?
+        'https://uptime.artdaten.ch'
+      : `//uptime.${hostname.replace('www.', '')}`
     window.open(uptimeUrl)
     setAnchorEl(null)
   }
@@ -86,19 +86,28 @@ export const MoreMenu = () => {
           paper: paperProps,
         }}
       >
-        <MenuItem key="ueber" onClick={onClickUeber}>
+        <MenuItem
+          key="ueber"
+          onClick={onClickUeber}
+        >
           über arteigenschaften.ch
         </MenuItem>
-        <MenuItem key="relations" onClick={onClickStruktur}>
+        <MenuItem
+          key="relations"
+          onClick={onClickStruktur}
+        >
           Daten-Struktur
         </MenuItem>
-        <MenuItem key="melden" onClick={onClickMelden}>
+        <MenuItem
+          key="melden"
+          onClick={onClickMelden}
+        >
           Fehler oder Wünsche melden
         </MenuItem>
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <div className={styles.version}>Version: 3.1.60 vom 22.4.2026</div>
+        <div className={styles.version}>Version: 3.1.61 vom 4.5.2026</div>
       </Menu>
     </div>
   )
