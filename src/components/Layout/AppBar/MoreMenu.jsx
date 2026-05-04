@@ -107,7 +107,7 @@ export const MoreMenu = () => {
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <div className={styles.version}>Version: 3.1.63 vom 4.5.2026</div>
+        <div className={styles.version}>Version: 3.1.64 vom 4.5.2026</div>
       </Menu>
     </div>
   )
