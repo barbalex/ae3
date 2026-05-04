@@ -11,9 +11,11 @@ import styles from './index.module.css'
 const Layout = () => (
   <div className={styles.container}>
     <AppBar />
-    <Suspense fallback={<Spinner />}>
-      <Outlet />
-    </Suspense>
+    <main>
+      <Suspense fallback={<Spinner />}>
+        <Outlet />
+      </Suspense>
+    </main>
     <Suspense fallback={<div />}>
       <ActiveNodeArraySetter />
       <IdParameter />

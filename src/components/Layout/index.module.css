@@ -5,3 +5,7 @@
     overflow: visible !important;
   }
 }
+
+.container > main {
+  display: contents;
+}
