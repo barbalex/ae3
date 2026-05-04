@@ -24,6 +24,11 @@ export const DataStacked = () => {
           value={tab}
           onChange={onChangeTab}
           indicatorColor="primary"
+          sx={{
+            '& .MuiTab-root': { fontWeight: 600 },
+            '& .MuiTab-root.Mui-selected': { color: '#c24600' },
+            '& .MuiTabs-indicator': { backgroundColor: '#c24600' },
+          }}
         >
           <Tab label="Navigation" />
           <Tab
