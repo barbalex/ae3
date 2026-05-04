@@ -12,6 +12,41 @@ export default defineConfig({
   // TODO: remove this and uninstall esbuild when the issue is fixed
   build: {
     cssMinify: 'esbuild',
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (
+            id.includes('node_modules/@mui') ||
+            id.includes('node_modules/@emotion')
+          ) {
+            return 'mui'
+          }
+          if (
+            id.includes('node_modules/@apollo') ||
+            id.includes('node_modules/graphql')
+          ) {
+            return 'apollo'
+          }
+          if (id.includes('node_modules/react-router')) {
+            return 'react-router'
+          }
+          if (
+            id.includes('node_modules/react-dom') ||
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-error-boundary') ||
+            id.includes('node_modules/scheduler')
+          ) {
+            return 'react-vendor'
+          }
+          if (
+            id.includes('node_modules/jotai') ||
+            id.includes('node_modules/@tanstack')
+          ) {
+            return 'state'
+          }
+        },
+      },
+    },
   },
   plugins: [
     svgrPlugin({
