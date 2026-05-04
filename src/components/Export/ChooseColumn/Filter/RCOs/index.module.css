@@ -11,6 +11,7 @@
 }
 
 .cardActions {
+  & svg { font-size: 1.8rem; }
   justify-content: space-between;
   cursor: pointer;
   height: auto !important;
