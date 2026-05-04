@@ -59,6 +59,7 @@
 }
 
 .cardTitle {
+  text-shadow: 0 0 4px #fff, 0 0 2px #fff;
   font-weight: 700;
   margin: 0 0 12px 0;
 }
