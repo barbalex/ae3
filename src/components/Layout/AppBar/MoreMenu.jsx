@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router'
 
 import relations from '../../../modules/relations.png'
 import styles from './MoreMenu.module.css'
+import { version as appVersion, versionDate } from '../../../../package.json'
 
 // https://mui.com/material-ui/react-menu/#customization
 const StyledButton = styled((props) => <Button {...props} />)(() => ({
@@ -107,7 +108,9 @@ export const MoreMenu = () => {
         <MenuItem onClick={onClickUptime}>
           {`Verfügbarkeit der Server von ${hostname}`}
         </MenuItem>
-        <div className={styles.version}>Version: 3.1.67 vom 10.6.2026</div>
+        <div className={styles.version}>
+          Version: {appVersion} vom {versionDate}
+        </div>
       </Menu>
     </div>
   )

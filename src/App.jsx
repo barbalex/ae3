@@ -10,6 +10,7 @@ import 'simplebar-react/dist/simplebar.min.css'
 import { theme } from './theme.js'
 import './index.css'
 import 'react-reflex/styles.css'
+import { version as appVersion } from '../package.json'
 
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
 import {
@@ -28,6 +29,11 @@ const Stacker = lazy(async () => ({
 
 export const App = () => {
   const setActiveNodeArray = useSetAtom(activeNodeArrayAtom)
+
+  useEffect(() => {
+    const baseTitle = 'arteigenschaften'
+    document.title = `${baseTitle} ${appVersion}`
+  }, [])
 
   const myClient = useMemo(() => {
     const apolloClient = client()
