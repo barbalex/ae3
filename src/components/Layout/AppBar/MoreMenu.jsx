@@ -57,7 +57,7 @@ export const MoreMenu = () => {
     const hostname = window.location.hostname
     const uptimeUrl =
       hostname === 'localhost' ?
-        'https://uptime.artdaten.ch'
+        'https://uptime.gabriel-software.ch'
       : `//uptime.${hostname.replace('www.', '')}`
     window.open(uptimeUrl)
     setAnchorEl(null)
