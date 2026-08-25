@@ -333,21 +333,15 @@ export const ImportPco = ({ setImport }) => {
           <div className={styles.dropzoneContainer}>
             <Dropzone
               onDrop={onDrop}
-              types={[
-                {
-                  description: 'spreadsheet files',
-                  accept: {
-                    'text/plain': ['.dif'],
-                    'application/dbf': ['.dbf'],
-                    'text/csv': ['.csv'],
-                    'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
-                    'application/vnd.ms-excel': ['.xls'],
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                      ['.xlsx'],
-                  },
-                },
-              ]}
-              excludeAcceptAllOption={true}
+              accept={{
+                'text/plain': ['.dif'],
+                'application/dbf': ['.dbf'],
+                'text/csv': ['.csv'],
+                'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
+                'application/vnd.ms-excel': ['.xls'],
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                  ['.xlsx'],
+              }}
               multiple={false}
             >
               {({
