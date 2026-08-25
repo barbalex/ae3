@@ -309,10 +309,7 @@ export const ImportPco = ({ setImport }) => {
     setImport(false)
     setImporting(false)
     queryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`treePcs`],
+      queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],

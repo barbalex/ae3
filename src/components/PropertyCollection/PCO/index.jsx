@@ -270,12 +270,6 @@ export const PCO = () => {
       queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`treePcs`],
-    })
-    queryClient.invalidateQueries({
       queryKey: [`pcoPreviewQuery`],
     })
   }

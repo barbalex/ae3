@@ -377,10 +377,7 @@ export const ImportRco = ({ setImport }) => {
     }
     await Promise.all(posts)
     queryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`treePcs`],
+      queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
       queryKey: [`rcoPreviewQuery`],

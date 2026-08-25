@@ -286,12 +286,6 @@ export const RCO = () => {
       queryKey: ['tree'],
     })
     queryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`treePcs`],
-    })
-    queryClient.invalidateQueries({
       queryKey: [`rcoPreviewQuery`],
     })
   }
