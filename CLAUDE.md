@@ -12,9 +12,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev        # Vite dev server on http://localhost:5174 (note: not the default 5173)
 npm run build      # production build → dist/
 npm run preview    # serve the production build
+npm test           # vitest: unit tests for src/modules helpers + component smoke tests
+npm run test:watch # vitest in watch mode
+npm run test:e2e   # playwright e2e smoke tests (starts dev server + needs backend-dev running)
 ```
 
-There is **no test runner** and **no `lint`/`format` npm script**. ESLint config exists at [eslint.config.mjs](eslint.config.mjs) — run linter directly with `npx eslint .`. Prettier is a dependency but has no config file (defaults).
+There is **no `lint`/`format` npm script**. ESLint config exists at [eslint.config.mjs](eslint.config.mjs) — run linter directly with `npx eslint .`. Prettier is a dependency but has no config file (defaults).
+
+Testing: [vitest.config.js](vitest.config.js) (jsdom, deliberately separate from vite.config.js — no PWA/svgr/babel plugins). Tests are co-located as `*.test.js(x)` next to the module/component. E2e specs live in [e2e/](e2e/) with [playwright.config.js](playwright.config.js), which starts the dev server itself but needs the graphql backend on localhost:5000 (`cd backend-dev && docker compose up`).
 
 Installing deps: the project pins exact versions and guards against supply-chain risk via `.npmrc` (`force=true`, `save-exact=true`, `allow-git=none`) and updates through `npm run ncu using cooldown` (`ncu --cooldown 5 --interactive` — skips packages released <5 days ago). The canonical install command uses an `sfw` wrapper: `npm run how-to-install-using-sfw`.
 

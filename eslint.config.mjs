@@ -93,4 +93,13 @@ export default [
       ],
     },
   },
+  {
+    // root config files run in node, not the browser
+    files: ['*.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
 ]
