@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // deliberately separate from vite.config.js:
@@ -9,5 +9,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.js'],
+    // e2e tests use playwright and have their own runner: npm run test:e2e
+    exclude: ['e2e/**', ...configDefaults.exclude],
   },
 })
