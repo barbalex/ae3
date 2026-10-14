@@ -1,1 +1,5 @@
-this project has two different production versions: artdaten.ch and arteigenschaften.ch. artdaten.ch is used by the client for testing edits. lets first create artdaten.ch. it is served by vercel where an A record currently points at 167.172.187.231. there may be things that have to be changed inside the backend folder for artdaten.ch. I just built a docker linode at 139.162.190.8 that 
+unattended-upgrades: can we (are they already) activate on the two new servers for artdaten.ch and arteigenschaften.ch?
+
+---
+
+159.89.17.192 > 172.105.79.66
