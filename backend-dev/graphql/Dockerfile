@@ -1,5 +1,7 @@
 FROM node:slim
 
+RUN apt-get update && apt-get install -y dumb-init
+
 ENV NODE_ENV=production
 
 # in v5: v5
@@ -20,4 +22,4 @@ USER node
 
 EXPOSE 5000
 
-ENTRYPOINT ["postgraphile", "-n", "0.0.0.0"]
+ENTRYPOINT ["dumb-init", "postgraphile", "-n", "0.0.0.0"]

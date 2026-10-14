@@ -25,6 +25,9 @@ services:
       - /root/backup/rclone.conf:/root/.config/rclone/rclone.conf:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
+      # give the first-run restore of ae.backup time to finish
+      # before health failures are counted
+      start_period: 5m
       interval: 5s
       timeout: 5s
       retries: 5

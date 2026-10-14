@@ -1,6 +1,7 @@
 # see: https://hub.docker.com/_/postgres
-# DANGER: artdaten.ch runs on postgres:12.8, arteigenschaften.ch on 14.0
-FROM postgres:18.4
+# 2026.10.14: live server (arteigenschaften.ch) still runs postgres 14
+# new production server will run 18
+FROM postgres:18.6
 
 # init db from ae.backup (only runs when no db detected)
 COPY ./init/ /docker-entrypoint-initdb.d/
