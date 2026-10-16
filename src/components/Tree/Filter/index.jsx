@@ -23,11 +23,9 @@ import styles from './index.module.css'
 
 const noOptionsMessage = () => null
 const loadingMessage = () => null
-// react-highlight-words crashes when passing some chars
-const removeBadChars = (str) => str.replaceAll('(', '').replaceAll(')', '')
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter
-    searchWords={[removeBadChars(inputValue)]}
+    searchWords={[inputValue]}
     textToHighlight={label}
   />
 )

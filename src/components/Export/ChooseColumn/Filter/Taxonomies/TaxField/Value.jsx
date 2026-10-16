@@ -44,11 +44,9 @@ const taxFieldPropQuery = gql`
 
 const noOptionsMessage = () => 'Keine Daten entsprechen dem Filter'
 const loadingMessage = () => 'lade...'
-// react-highlight-words crashes when passing some chars
-const removeBadChars = (str) => str.replaceAll('(', '').replaceAll(')', '')
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter
-    searchWords={[removeBadChars(inputValue)]}
+    searchWords={[inputValue]}
     textToHighlight={label}
   />
 )
