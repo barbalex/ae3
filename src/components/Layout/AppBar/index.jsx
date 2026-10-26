@@ -5,9 +5,8 @@ import Icon from '@mui/material/Icon'
 import { MdShare as ShareIcon } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { apiFetch } from '../../../modules/api.js'
 import { useLocation, useNavigate, Link } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -29,35 +28,10 @@ const ShareButton = styled((props) => <Button {...props} />)(() => ({
 
 const getInitials = (name) => name.match(/\b(\w)/g).join('')
 
-const query = gql`
-  query ObjectQuery(
-    $objectId: UUID!
-    $existsObjectId: Boolean!
-    $pCId: UUID!
-    $existsPCId: Boolean!
-    $taxId: UUID!
-    $existsTaxId: Boolean!
-  ) {
-    objectById(id: $objectId) @include(if: $existsObjectId) {
-      id
-      name
-    }
-    propertyCollectionById(id: $pCId) @include(if: $existsPCId) {
-      id
-      name
-    }
-    taxonomyById(id: $taxId) @include(if: $existsTaxId) {
-      id
-      name
-    }
-  }
-`
-
 export const AppBar = () => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const username = useAtomValue(loginUsernameAtom)
-  const apolloClient = useApolloClient()
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -83,18 +57,24 @@ export const AppBar = () => {
 
   const { data } = useQuery({
     queryKey: ['appBarData', objectId, pCId, taxId],
-    queryFn: () =>
-      apolloClient.query({
-        query: query,
-        variables: {
-          objectId: safeObjectId,
-          existsObjectId,
-          pCId,
-          existsPCId,
-          taxId,
-          existsTaxId,
-        },
-      }),
+    queryFn: async () => {
+      const [objects, pcs, taxonomies] = await Promise.all([
+        existsObjectId ?
+          apiFetch(`/object?select=id,name&id=eq.${safeObjectId}`)
+        : Promise.resolve([]),
+        existsPCId ?
+          apiFetch(`/property_collection?select=id,name&id=eq.${pCId}`)
+        : Promise.resolve([]),
+        existsTaxId ?
+          apiFetch(`/taxonomy?select=id,name&id=eq.${taxId}`)
+        : Promise.resolve([]),
+      ])
+      return {
+        objectById: objects?.[0],
+        propertyCollectionById: pcs?.[0],
+        taxonomyById: taxonomies?.[0],
+      }
+    },
     enabled: existsObjectId || existsPCId || existsTaxId,
   })
 
@@ -116,9 +96,9 @@ export const AppBar = () => {
     : wide ? 'Login'
     : 'n.a.'
   const loginTitle = username ? 'abmelden' : 'anmelden'
-  const objektName = data?.data?.objectById?.name
-  const pCName = data?.data?.propertyCollectionById?.name
-  const taxName = data?.data?.taxonomyById?.name
+  const objektName = data?.objectById?.name
+  const pCName = data?.propertyCollectionById?.name
+  const taxName = data?.taxonomyById?.name
 
   const onClickColumnButtonDocs = () => navigate('/Dokumentation')
   const onClickColumnButtonData = () => navigate('/')

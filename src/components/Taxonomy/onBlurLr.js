@@ -1,7 +1,22 @@
-import updateTaxonomyMutationLr from './updateTaxonomyMutationLr.js'
+import { apiFetch } from '../../modules/api.js'
+
+const columnByField = {
+  name: 'name',
+  description: 'description',
+  links: 'links',
+  organizationId: 'organization_id',
+  lastUpdated: 'last_updated',
+  importedBy: 'imported_by',
+  termsOfUse: 'terms_of_use',
+  habitatLabel: 'habitat_label',
+  habitatComments: 'habitat_comments',
+  habitatNrFnsMin: 'habitat_nr_fns_min',
+  habitatNrFnsMax: 'habitat_nr_fns_max',
+}
+
+const numericFields = ['habitatNrFnsMin', 'habitatNrFnsMax']
 
 export const onBlurLr = async ({
-  apolloClient,
   queryClient,
   scrollIntoView,
   field,
@@ -11,29 +26,19 @@ export const onBlurLr = async ({
   refetch,
 }) => {
   if (value !== prevValue) {
-    const lastUpdated = new Date()
-    const variables = {
-      id: taxonomy.id,
-      name: field === 'name' ? value : taxonomy.name,
-      description: field === 'description' ? value : taxonomy.description,
-      links: field === 'links' ? value.split(',') : taxonomy.links,
-      organizationId:
-        field === 'organizationId' ? value : taxonomy.organizationId,
-      lastUpdated,
-      importedBy: field === 'importedBy' ? value : taxonomy.importedBy,
-      termsOfUse: field === 'termsOfUse' ? value : taxonomy.termsOfUse,
-      habitatLabel: field === 'habitatLabel' ? value : taxonomy.habitatLabel,
-      habitatComments:
-        field === 'habitatComments' ? value : taxonomy.habitatComments,
-      habitatNrFnsMin:
-        field === 'habitatNrFnsMin' ? +value : taxonomy.habitatNrFnsMin,
-      habitatNrFnsMax:
-        field === 'habitatNrFnsMax' ? +value : taxonomy.habitatNrFnsMax,
-      type: taxonomy.type,
+    const column = columnByField[field]
+    // like the former implementation: lr changes set lastUpdated
+    const patch = {
+      [column]:
+        field === 'links' ? value.split(',')
+        : numericFields.includes(field) ? +value
+        : value,
+      last_updated: new Date(),
     }
-    await apolloClient.mutate({
-      mutation: updateTaxonomyMutationLr,
-      variables,
+    await apiFetch(`/taxonomy?id=eq.${taxonomy.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
     })
     refetch()
     await queryClient.invalidateQueries({

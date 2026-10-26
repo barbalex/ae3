@@ -1,8 +1,6 @@
 import { useState, Suspense } from 'react'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -10,7 +8,7 @@ import { useAtomValue } from 'jotai'
 
 import { ImportPco } from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'
-import { deletePcoOfPcMutation } from './deletePcoOfPcMutation.js'
+import { apiFetch, apiCount, rpc } from '../../../modules/api.js'
 import { loginUsernameAtom } from '../../../store/index.ts'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
@@ -19,95 +17,33 @@ import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
 import styles from './index.module.css'
 
-export const pcoQuery = gql`
-  query pCOQuery($pCId: UUID!) {
-    propertyCollectionById(id: $pCId) {
-      id
-      vPropertyCollectionKeysByPropertyCollectionId(
-        filter: { propertyCollectionId: { equalTo: $pCId } }
-      ) {
-        totalCount
-        nodes {
-          keys
-        }
-      }
-      organizationByOrganizationId {
-        id
-        name
-        organizationUsersByOrganizationId {
-          nodes {
-            id
-            userId
-            role
-            userByUserId {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-      propertyCollectionObjectsByPropertyCollectionId {
-        totalCount
-        nodes {
-          id
-          objectId
-          objectByObjectId {
-            id
-            name
-          }
-          properties
-        }
-      }
-    }
+// fetch the pc with its keys, organization and pcos;
+// optionally limited to the first n pcos
+export const fetchPcoData = async (pcId, first) => {
+  const limit = first ? `&limit=${first}` : ''
+  const [pcs, totalCount] = await Promise.all([
+    apiFetch(
+      `/property_collection?id=eq.${pcId}&select=id,keys:v_property_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name,email))),propertyCollectionObjectsByPropertyCollectionId:property_collection_object!property_collection_object_property_collection_id_fkey(id,objectId:object_id,objectByObjectId:object_id(id,name),properties)${limit}`,
+    ),
+    apiCount(
+      `/property_collection_object?property_collection_id=eq.${pcId}`,
+    ),
+  ])
+  const pC = pcs?.[0]
+  if (!pC) return null
+  // shape like the former graphql result
+  pC.vPropertyCollectionKeysByPropertyCollectionId = {
+    nodes: pC.keys ?? [],
   }
-`
-export const pcoPreviewQuery = gql`
-  query pCOPreviewQuery($pCId: UUID!, $first: Int!) {
-    propertyCollectionById(id: $pCId) {
-      id
-      vPropertyCollectionKeysByPropertyCollectionId(
-        filter: { propertyCollectionId: { equalTo: $pCId } }
-      ) {
-        totalCount
-        nodes {
-          keys
-        }
-      }
-      organizationByOrganizationId {
-        id
-        name
-        organizationUsersByOrganizationId {
-          nodes {
-            id
-            userId
-            role
-            userByUserId {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-      propertyCollectionObjectsByPropertyCollectionId(first: $first) {
-        totalCount
-        nodes {
-          id
-          objectId
-          objectByObjectId {
-            id
-            name
-          }
-          properties
-        }
-      }
-    }
+  pC.propertyCollectionObjectsByPropertyCollectionId = {
+    totalCount,
+    nodes: pC.propertyCollectionObjectsByPropertyCollectionId ?? [],
   }
-`
+  return { propertyCollectionById: pC }
+}
 
-const getPco = ({ pcoNodes, propKeys, sortDirection, orderBy }) => {
-  const pCORaw = (pcoNodes ?? []).map((p) => {
+const buildPcoRows = ({ pcoNodes, propKeys }) =>
+  (pcoNodes ?? []).map((p) => {
     const nP = {}
     nP['Objekt ID'] = p.objectId
     nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
@@ -129,12 +65,9 @@ const getPco = ({ pcoNodes, propKeys, sortDirection, orderBy }) => {
     }
     return nP
   })
-  return doOrderBy(pCORaw, orderBy, sortDirection)
-}
 
 export const PCO = () => {
   const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
   const { pcId } = useParams()
 
   const username = useAtomValue(loginUsernameAtom)
@@ -147,16 +80,9 @@ export const PCO = () => {
 
   const { data, error } = useQuery({
     queryKey: ['pcoPreviewQuery', pcId, count],
-    queryFn: () =>
-      apolloClient.query({
-        query: pcoPreviewQuery,
-        variables: {
-          pCId: pcId,
-          first: count,
-        },
-      }),
+    queryFn: () => fetchPcoData(pcId, count),
   })
-  const pcoData = data?.data
+  const pcoData = data
 
   // enable sorting
   const [orderBy, setOrderBy] = useState('Objekt Name')
@@ -173,14 +99,16 @@ export const PCO = () => {
       ?.vPropertyCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const pCO = getPco({
-    pcoNodes:
-      pcoData?.propertyCollectionById
-        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
-    propKeys,
-    sortDirection,
+  const pCO = doOrderBy(
+    buildPcoRows({
+      pcoNodes:
+        pcoData?.propertyCollectionById
+          ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
+      propKeys,
+    }),
     orderBy,
-  })
+    sortDirection,
+  )
   // collect all keys and sort property keys by name
   const keys = ['Objekt ID', 'Objekt Name', ...propKeys.sort()]
   const pCOWriters = (
@@ -202,43 +130,14 @@ export const PCO = () => {
       ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount
 
   const fetchAllData = async () => {
-    const { data } = await apolloClient.query({
-      query: pcoQuery,
-      variables: {
-        pCId: pcId,
-      },
+    const data = await fetchPcoData(pcId)
+    const pCOUnsorted = buildPcoRows({
+      pcoNodes:
+        data?.propertyCollectionById
+          ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
+      propKeys,
     })
-
-    // collect all keys
-    const pCOUnsorted = (
-      data?.propertyCollectionById
-        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
-    ).map((p) => {
-      const nP = {}
-      nP['Objekt ID'] = p.objectId
-      nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
-      if (p.properties) {
-        const props = JSON.parse(p.properties)
-        Object.entries(props).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
-            nP[key] = booleanToJaNein(value)
-          } else {
-            nP[key] = value
-          }
-        })
-      }
-      // add keys that may be missing
-      for (const key of propKeys) {
-        if (!exists(nP[key])) {
-          nP[key] = null
-        }
-      }
-
-      return nP
-    })
-    const pCO = doOrderBy(pCOUnsorted, orderBy, sortDirection)
-
-    return pCO
+    return doOrderBy(pCOUnsorted, orderBy, sortDirection)
   }
 
   const onClickXlsx = async () => {
@@ -261,10 +160,7 @@ export const PCO = () => {
 
   const onClickDelete = async () => {
     setDeleteLoading(true)
-    await apolloClient.mutate({
-      mutation: deletePcoOfPcMutation,
-      variables: { pcId: pcId },
-    })
+    await rpc('delete_pco_of_pc', { pc_id: pcId })
     setDeleteLoading(false)
     queryClient.invalidateQueries({
       queryKey: ['tree'],

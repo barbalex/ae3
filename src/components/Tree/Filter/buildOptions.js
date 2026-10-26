@@ -1,80 +1,46 @@
-import { gql } from '@apollo/client'
-import { store, apolloClientAtom } from '../../../store/index.ts'
-
-const filterSuggestionsQuery = gql`
-  query filterSuggestionsQuery($treeFilterText: String!, $run: Boolean!) {
-    propertyCollectionByPropertyName(propertyName: $treeFilterText)
-      @include(if: $run) {
-      nodes {
-        id
-        name
-      }
-    }
-    objectByObjectName(objectName: $treeFilterText) @include(if: $run) {
-      nodes {
-        id
-        name
-        taxonomyByTaxonomyId {
-          id
-          type
-          name
-        }
-      }
-    }
-  }
-`
+import { apiFetch } from '../../../modules/api.js'
 
 export const buildOptions = async ({ cb, val }) => {
-  const client = store.get(apolloClientAtom)
-  
-  if (!client) {
-    console.error('Apollo client not initialized')
+  const treeFilterText = val?.trim() ?? ''
+  if (!treeFilterText) return cb([])
+
+  let objects = []
+  let pcs = []
+  try {
+    ;[objects, pcs] = await Promise.all([
+      apiFetch(
+        `/rpc/object_by_object_name?object_name=${encodeURIComponent(treeFilterText)}&select=id,name,taxonomy:taxonomy_id(id,type,name)`,
+      ),
+      apiFetch(
+        `/rpc/property_collection_by_property_name?property_name=${encodeURIComponent(treeFilterText)}&select=id,name`,
+      ),
+    ])
+  } catch (error) {
+    // TODO: on error surface to user
+    console.log(error)
     return cb([])
   }
-  
-  let resultFilterSuggestionsQuery
-  const treeFilterText = val?.trim() ?? ''
-  try {
-    resultFilterSuggestionsQuery = await client.query({
-      query: filterSuggestionsQuery,
-      variables: {
-        treeFilterText: treeFilterText || 'ZZZZ',
-        run: !!treeFilterText,
-      },
-    })
-  } catch (error) {
-    console.log(error)
-  }
-
-  const filterSuggestionsData = resultFilterSuggestionsQuery?.data
-
-  // TODO: on error surface to user
-
-  const objectByObjectName =
-    filterSuggestionsData?.objectByObjectName?.nodes ?? []
-  const pCByPropertyName =
-    filterSuggestionsData?.propertyCollectionByPropertyName?.nodes ?? []
 
   /**
    * need add type:
    * when suggestion is clicked,
    * url is calculated by id depending on type
    */
-  const suggestionsArt = objectByObjectName
-    .filter((n) => n?.taxonomyByTaxonomyId?.type === 'ART')
+  const suggestionsArt = objects
+    .filter((n) => n?.taxonomy?.type === 'Art')
     .map((o) => ({
       val: o.id,
-      label: `${o?.taxonomyByTaxonomyId?.name ?? ''}: ${o.name}`,
+      label: `${o?.taxonomy?.name ?? ''}: ${o.name}`,
       type: 'art',
     }))
-  const suggestionsLr = objectByObjectName
-    .filter((n) => n?.taxonomyByTaxonomyId?.type === 'LEBENSRAUM')
+  const suggestionsLr = objects
+    .filter((n) => n?.taxonomy?.type === 'Lebensraum')
     .map((o) => ({
       val: o.id,
-      label: `${o?.taxonomyByTaxonomyId?.name ?? ''}: ${o.name}`,
+      label: `${o?.taxonomy?.name ?? ''}: ${o.name}`,
       type: 'lr',
     }))
-  const suggestionsPC = pCByPropertyName.map((s) => ({
+  const suggestionsPC = pcs.map((s) => ({
     ...s,
     type: 'pC',
   }))

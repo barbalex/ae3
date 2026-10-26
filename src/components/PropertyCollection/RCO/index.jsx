@@ -1,123 +1,46 @@
-import { useState, useMemo, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { ImportRco } from './Import/index.jsx'
 import { booleanToJaNein } from '../../../modules/booleanToJaNein.js'
-import { deleteRcoOfPcMutation } from './deleteRcoOfPcMutation.js'
+import { apiFetch, apiCount, rpc } from '../../../modules/api.js'
+import { ImportRco } from './Import/index.jsx'
 import { loginUsernameAtom } from '../../../store/index.ts'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
-import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 import { exists } from '../../../modules/exists.js'
+import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
 import styles from './index.module.css'
 
-export const rcoQuery = gql`
-  query rCOQuery($pCId: UUID!) {
-    propertyCollectionById(id: $pCId) {
-      id
-      vRelationCollectionKeysByPropertyCollectionId(
-        filter: { propertyCollectionId: { equalTo: $pCId } }
-      ) {
-        nodes {
-          keys
-        }
-      }
-      organizationByOrganizationId {
-        id
-        name
-        organizationUsersByOrganizationId {
-          nodes {
-            id
-            userId
-            role
-            userByUserId {
-              id
-              name
-            }
-          }
-        }
-      }
-      relationsByPropertyCollectionId {
-        totalCount
-        nodes {
-          id
-          objectId
-          objectByObjectId {
-            id
-            name
-          }
-          objectIdRelation
-          objectByObjectIdRelation {
-            id
-            name
-          }
-          relationType
-          properties
-        }
-      }
-    }
+// fetch the pc with its keys, organization and relations;
+// optionally limited to the first n relations
+export const fetchRcoData = async (pcId, first) => {
+  const limit = first ? `&limit=${first}` : ''
+  const [pcs, totalCount] = await Promise.all([
+    apiFetch(
+      `/property_collection?id=eq.${pcId}&select=id,keys:v_relation_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name))),relationsByPropertyCollectionId:relation!relation_property_collection_id_fkey(id,objectId:object_id,objectByObjectId:object!relation_object_id_fkey(id,name),objectIdRelation:object_id_relation,objectByObjectIdRelation:object!relation_object_id_relation_fkey(id,name),relationType:relation_type,properties)${limit}`,
+    ),
+    apiCount(`/relation?property_collection_id=eq.${pcId}`),
+  ])
+  const pC = pcs?.[0]
+  if (!pC) return null
+  // shape like the former graphql result
+  pC.vRelationCollectionKeysByPropertyCollectionId = {
+    nodes: pC.keys ?? [],
   }
-`
-export const rcoPreviewQuery = gql`
-  query rcoPreviewQuery($pCId: UUID!, $count: Int!) {
-    propertyCollectionById(id: $pCId) {
-      id
-      vRelationCollectionKeysByPropertyCollectionId(
-        filter: { propertyCollectionId: { equalTo: $pCId } }
-      ) {
-        nodes {
-          keys
-        }
-      }
-      organizationByOrganizationId {
-        id
-        name
-        organizationUsersByOrganizationId {
-          nodes {
-            id
-            userId
-            role
-            userByUserId {
-              id
-              name
-            }
-          }
-        }
-      }
-      relationsByPropertyCollectionId(first: $count) {
-        totalCount
-        nodes {
-          id
-          objectId
-          objectByObjectId {
-            id
-            name
-          }
-          objectIdRelation
-          objectByObjectIdRelation {
-            id
-            name
-          }
-          relationType
-          properties
-        }
-      }
-    }
+  pC.relationsByPropertyCollectionId = {
+    totalCount,
+    nodes: pC.relationsByPropertyCollectionId ?? [],
   }
-`
+  return { propertyCollectionById: pC }
+}
 
-const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
-  const rCOUnsorted = (
-    rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
-    []
-  ).map((p) => {
+const buildRcoRows = ({ rcoNodes, propKeys }) =>
+  (rcoNodes ?? []).map((p) => {
     const nP = {}
     nP['Objekt ID'] = p.objectId
     nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
@@ -126,15 +49,13 @@ const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
     nP['Art der Beziehung'] = p.relationType
     if (p.properties) {
       const props = JSON.parse(p.properties)
-      if (Object.keys(props).length) {
-        Object.defineProperties(props).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
-            nP[key] = booleanToJaNein(value)
-          } else {
-            nP[key] = value
-          }
-        })
-      }
+      Object.entries(props).forEach(([key, value]) => {
+        if (typeof value === 'boolean') {
+          nP[key] = booleanToJaNein(value)
+        } else {
+          nP[key] = value
+        }
+      })
     }
     // add keys that may be missing
     for (const key of propKeys) {
@@ -144,12 +65,9 @@ const getRCO = ({ propKeys, rcoData, sortDirection, orderBy }) => {
     }
     return nP
   })
-  return doOrderBy(rCOUnsorted, orderBy, sortDirection)
-}
 
 export const RCO = () => {
   const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
   const { pcId } = useParams()
 
   const username = useAtomValue(loginUsernameAtom)
@@ -158,13 +76,9 @@ export const RCO = () => {
 
   const { data, error } = useQuery({
     queryKey: ['rcoPreviewQuery', pcId, count],
-    queryFn: () =>
-      apolloClient.query({
-        query: rcoPreviewQuery,
-        variables: { pCId: pcId, count },
-      }),
+    queryFn: () => fetchRcoData(pcId, count),
   })
-  const rcoData = data?.data
+  const rcoData = data
 
   const [orderBy, setOrderBy] = useState('Objekt Name')
   const [sortDirection, setSortDirection] = useState('asc')
@@ -179,12 +93,16 @@ export const RCO = () => {
       ?.vRelationCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const rCO = getRCO({
-    propKeys,
-    rcoData,
-    sortDirection,
+  const rCO = doOrderBy(
+    buildRcoRows({
+      rcoNodes:
+        rcoData?.propertyCollectionById?.relationsByPropertyCollectionId
+          ?.nodes,
+      propKeys,
+    }),
     orderBy,
-  })
+    sortDirection,
+  )
   // collect all keys and sort property keys by name
   const keys = [
     'Objekt ID',
@@ -219,38 +137,11 @@ export const RCO = () => {
 
   // TODO: key in data table should bu unique, thus: objectId + objectIdRelation
   const fetchAllData = async () => {
-    const { data } = await apolloClient.query({
-      query: rcoQuery,
-      variables: {
-        pCId: pcId,
-      },
-    })
-    const rCORaw = (
-      data?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ?? []
-    ).map((p) => {
-      const nP = {}
-      nP['Objekt ID'] = p.objectId
-      nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
-      nP['Beziehung ID'] = p.objectIdRelation
-      nP['Beziehung Name'] = p?.objectByObjectIdRelation?.name ?? null
-      nP['Art der Beziehung'] = p.relationType
-      if (p.properties) {
-        const props = JSON.parse(p.properties)
-        Object.defineProperties(props).forEach(([key, value]) => {
-          if (typeof value === 'boolean') {
-            nP[key] = booleanToJaNein(value)
-          } else {
-            nP[key] = value
-          }
-        })
-      }
-      // add keys that may be missing
-      for (const key of propKeys) {
-        if (!exists(nP[key])) {
-          nP[key] = null
-        }
-      }
-      return nP
+    const data = await fetchRcoData(pcId)
+    const rCORaw = buildRcoRows({
+      rcoNodes:
+        data?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes,
+      propKeys,
     })
     return doOrderBy(rCORaw, orderBy, sortDirection)
   }
@@ -277,10 +168,7 @@ export const RCO = () => {
 
   const onClickDelete = async () => {
     setDeleteLoading(true)
-    await apolloClient.mutate({
-      mutation: deleteRcoOfPcMutation,
-      variables: { pcId: pcId },
-    })
+    await rpc('delete_rco_of_pc', { pc_id: pcId })
     setDeleteLoading(false)
     queryClient.invalidateQueries({
       queryKey: ['tree'],

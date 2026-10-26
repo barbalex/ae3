@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
+import { rpc } from '../../../modules/api.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { CountInput } from './CountInput.jsx'
 import { DataTable } from '../../shared/DataTable.jsx'
@@ -24,45 +23,6 @@ import {
 
 import styles from './Preview.module.css'
 
-const exportMutation = gql`
-  mutation exportDataMutation(
-    $typ: String!
-    $taxonomies: [String]!
-    $taxFields: [TaxFieldInput]!
-    $taxFilters: [TaxFilterInput]!
-    $pcoFilters: [PcoFilterInput]!
-    $pcoProperties: [PcoPropertyInput]!
-    $rcoFilters: [RcoFilterInput]!
-    $rcoProperties: [RcoPropertyInput]!
-    $useSynonyms: Boolean!
-    $count: Int!
-    $objectIds: [UUID]!
-    $sortField: SortFieldInput
-  ) {
-    exportAll(
-      input: {
-        typ: $typ
-        taxonomies: $taxonomies
-        taxFields: $taxFields
-        taxFilters: $taxFilters
-        pcoFilters: $pcoFilters
-        pcoProperties: $pcoProperties
-        rcoFilters: $rcoFilters
-        rcoProperties: $rcoProperties
-        useSynonyms: $useSynonyms
-        count: $count
-        objectIds: $objectIds
-        sortField: $sortField
-      }
-    ) {
-      exportDatum {
-        id
-        count
-        exportData
-      }
-    }
-  }
-`
 
 const removeBadChars = (str) =>
   str
@@ -82,7 +42,6 @@ const getSortFieldForQuery = (sortField) => {
 }
 
 export const Preview = () => {
-  const apolloClient = useApolloClient()
   const taxFilters = useAtomValue(exportTaxFiltersAtom)
   const pcoFilters = useAtomValue(exportPcoFiltersAtom)
   const rcoFilters = useAtomValue(exportRcoFiltersAtom)
@@ -174,23 +133,29 @@ export const Preview = () => {
     queryFn: async () => {
       if (taxonomies.length === 0) return []
 
-      const data = await apolloClient.mutate({
-        mutation: exportMutation,
-        variables: {
-          typ: type.toLowerCase(),
-          taxonomies,
-          taxFields,
-          taxFilters,
-          pcoFilters,
-          pcoProperties,
-          rcoFilters,
-          rcoProperties,
-          useSynonyms: withSynonymData,
-          count,
-          objectIds: exportIds,
-          sortField: sortFieldForQuery,
-        },
-      })
+      const data = await (async () => {
+          const r = await rpc('export_all', {
+            typ: type.toLowerCase(),
+            taxonomies,
+            tax_fields: taxFields,
+            tax_filters: taxFilters,
+            pco_filters: pcoFilters,
+            pco_properties: pcoProperties,
+            rco_filters: rcoFilters,
+            rco_properties: rcoProperties,
+            use_synonyms: withSynonymData,
+            count,
+            object_ids: exportIds,
+            sort_field: sortFieldForQuery,
+          })
+          return {
+            data: {
+              exportAll: {
+                exportDatum: { count: r.count, exportData: r.export_data },
+              },
+            },
+          }
+        })()
       return data
     },
   })
@@ -216,23 +181,27 @@ export const Preview = () => {
   const onClickXlsx = async () => {
     // 1. download the full rows
     // 2. rowsFromObjects
-    const data = await apolloClient.mutate({
-      mutation: exportMutation,
-      variables: {
-        typ: type.toLowerCase(),
-        taxonomies,
-        taxFields,
-        taxFilters,
-        pcoFilters,
-        pcoProperties,
-        rcoFilters,
-        rcoProperties,
-        useSynonyms: withSynonymData,
-        count: 0,
-        objectIds: exportIds,
-        sortField: sortFieldForQuery,
-      },
+    const r = await rpc('export_all', {
+      typ: type.toLowerCase(),
+      taxonomies,
+      tax_fields: taxFields,
+      tax_filters: taxFilters,
+      pco_filters: pcoFilters,
+      pco_properties: pcoProperties,
+      rco_filters: rcoFilters,
+      rco_properties: rcoProperties,
+      use_synonyms: withSynonymData,
+      count: 0,
+      object_ids: exportIds,
+      sort_field: sortFieldForQuery,
     })
+    const data = {
+      data: {
+        exportAll: {
+          exportDatum: { count: r.count, exportData: r.export_data },
+        },
+      },
+    }
     const rows =
       data?.data?.exportAll?.exportDatum?.exportData ?
         JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)

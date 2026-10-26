@@ -1,7 +1,5 @@
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtom, useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies.jsx'
@@ -9,6 +7,7 @@ import {
   exportTypeAtom,
   exportTaxonomiesAtom,
 } from '../../../../../../store/index.ts'
+import { apiFetch } from '../../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import styles from './index.module.css'
@@ -20,27 +19,14 @@ const exportTypeTAXToReadable = {
 }
 
 export const ExportType = ({ type }) => {
-  const apolloClient = useApolloClient()
   const [exportType, setExportType] = useAtom(exportTypeAtom)
   const [exportTaxonomies, setExportTaxonomies] = useAtom(exportTaxonomiesAtom)
 
   const onCheckType = async (event, isChecked) => {
     const { name } = event.target
-    const taxonomiesQuery = gql`
-        query AllTaxonomiesQuery {
-          allTaxonomies(filter: {type: {equalTo: ${
-            type === 'Arten' ? 'ART' : 'LEBENSRAUM'
-          }}}, orderBy: NAME_ASC) {
-            nodes {
-              id
-              name
-              type
-            }
-          }
-        }
-      `
-    const { data } = apolloClient.query({ query: taxonomiesQuery })
-    const taxonomies = data?.allTaxonomies?.nodes
+    const taxonomies = await apiFetch(
+      `/taxonomy?select=id,name,type&type=eq.${type === 'Arten' ? 'Art' : 'Lebensraum'}&order=name`,
+    )
     if (isChecked) {
       setExportType(name)
       // check if only one Taxonomy exists

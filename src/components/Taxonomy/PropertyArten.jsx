@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { format } from 'date-fns'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
@@ -20,7 +19,6 @@ export const Property = ({
   disabled,
   refetch,
 }) => {
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
 
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
@@ -31,7 +29,6 @@ export const Property = ({
   const [fieldError, setFieldError] = useState()
   const onBlur = () =>
     onBlurArten({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field,

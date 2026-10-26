@@ -3,29 +3,19 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { RcList } from './RcList/index.jsx'
+import { rpc } from '../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const query = gql`
-  query exportRcoCountQuery($exportTaxonomies: [String!]) {
-    exportRcoCount(exportTaxonomies: $exportTaxonomies) {
-      propertyCount
-      pcReltypeCount
-    }
-  }
-`
 
 export const RCOs = ({ rcoExpanded, onToggleRco }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-  const apolloClient = useApolloClient()
 
   const {
     data,
@@ -33,13 +23,19 @@ export const RCOs = ({ rcoExpanded, onToggleRco }) => {
     isLoading: loading,
   } = useQuery({
     queryKey: ['exportRcoCount', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query: query,
-        variables: {
-          exportTaxonomies,
+    queryFn: async () => {
+      const r = await rpc('export_rco_count', {
+        export_taxonomies: exportTaxonomies,
+      })
+      return {
+        data: {
+          exportRcoCount: {
+            propertyCount: r.property_count,
+            pcReltypeCount: r.pc_reltype_count,
+          },
         },
-      }),
+      }
+    },
   })
 
   const pcCount = data?.data?.exportRcoCount?.pcReltypeCount ?? 0

@@ -1,6 +1,4 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -10,17 +8,6 @@ import { exportTaxonomiesAtom } from '../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const propsByTaxQuery = gql`
-  query exportRcoListQuery($exportTaxonomies: [String]) {
-    exportRcoList(exportTaxonomies: $exportTaxonomies) {
-      nodes {
-        pcname
-        relationtype
-        count
-      }
-    }
-  }
-`
 
 const fallback = (
   <div className={styles.spinnerContainer}>
@@ -30,17 +17,11 @@ const fallback = (
 
 export const RcList = () => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: ['exportRcoList', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query: propsByTaxQuery,
-        variables: {
-          exportTaxonomies,
-          queryExportTaxonomies: exportTaxonomies.length > 0,
-        },
+    queryFn: async () => ({
+        data: { exportRcoList: { nodes: (await rpc('export_rco_list', { export_taxonomies: exportTaxonomies })) } },
       }),
   })
 

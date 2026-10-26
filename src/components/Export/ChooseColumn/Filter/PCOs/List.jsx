@@ -1,26 +1,15 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { PCO } from './PCO/index.jsx'
+import { rpc } from '../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './List.module.css'
 
-const query = gql`
-  query propsByTaxDataQueryForFilterPCOs($exportTaxonomies: [String!]) {
-    pcoPropertiesByTaxonomiesCountPerPc(exportTaxonomies: $exportTaxonomies) {
-      nodes {
-        name
-        count
-      }
-    }
-  }
-`
 
 const fallback = (
   <div className={styles.spinnerContainer}>
@@ -29,18 +18,13 @@ const fallback = (
 )
 
 export const PcoList = () => {
-  const apolloClient = useApolloClient()
 
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error } = useQuery({
     queryKey: ['filterPcosList', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query,
-        variables: {
-          exportTaxonomies,
-        },
+    queryFn: async () => ({
+        data: { pcoPropertiesByTaxonomiesCountPerPc: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('pco_properties_by_taxonomies_count_per_pc', { export_taxonomies: exportTaxonomies })).map((r) => r) } },
       }),
   })
   const nodes = data?.data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []

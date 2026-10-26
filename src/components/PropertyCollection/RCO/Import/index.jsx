@@ -5,13 +5,11 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
 import isUuid from 'is-uuid'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import SimpleBar from 'simplebar-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import { upsertRCOMutation } from './upsertRCOMutation.js'
+import { apiFetch } from '../../../../modules/api.js'
 import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
@@ -19,33 +17,40 @@ import { RcoInstructions } from './Instructions.jsx'
 
 import styles from './index.module.css'
 
-const importRcoQuery = gql`
-  query rCOQuery(
-    $getObjectIds: Boolean!
-    $getObjectRelationIds: Boolean!
-    $objectRelationIds: [UUID!]
-    $getPCOfOriginIds: Boolean!
-    $pCOfOriginIds: [UUID!]
-  ) {
-    allObjects @include(if: $getObjectIds) {
-      nodes {
-        id
-      }
-    }
-    allObjectRelations: allObjects(filter: { id: { in: $objectRelationIds } })
-      @include(if: $getObjectRelationIds) {
-      nodes {
-        id
-      }
-    }
-    allPropertyCollections(filter: { id: { in: $pCOfOriginIds } })
-      @include(if: $getPCOfOriginIds) {
-      nodes {
-        id
-      }
-    }
+// no unique constraint on (object_id, object_id_relation, property_collection_id)
+// exists, so the former upsert plugin's semantics are a check-then-write
+const upsertRco = async (row) => {
+  const existing = (
+    await apiFetch(
+      `/relation?select=id&object_id=eq.${row.objectId}&object_id_relation=eq.${row.objectIdRelation}&property_collection_id=eq.${row.propertyCollectionId}&limit=1`,
+    )
+  )?.[0]
+  const body = {
+    property_collection_of_origin: row.propertyCollectionOfOrigin,
+    relation_type: row.relationType,
+    properties: row.properties,
   }
-`
+  if (existing) {
+    await apiFetch(`/relation?id=eq.${existing.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } else {
+    await apiFetch('/relation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([
+        {
+          object_id: row.objectId,
+          object_id_relation: row.objectIdRelation,
+          property_collection_id: row.propertyCollectionId,
+          ...body,
+        },
+      ]),
+    })
+  }
+}
 
 const checkStateReducer = (a, state) => state
 
@@ -83,8 +88,7 @@ const getObjectRelationIdsUnreal = ({ data, objectIds }) => {
   return objectIds.filter((i) => !realIds.includes(i))
 }
 
-const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }) => {
-  const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o) => o.id)
+const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }) => {  const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o) => o.id)
 
   return pCOfOriginIds.filter((i) => !realIds.includes(i))
 }
@@ -99,7 +103,6 @@ const getImportDataFields = (importData) => {
 
 export const ImportRco = ({ setImport }) => {
   const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const pCId =
@@ -129,23 +132,31 @@ export const ImportRco = ({ setImport }) => {
       pCOfOriginIds.length,
     ],
     queryFn: async () => {
-      const { data } = await apolloClient.query({
-        query: importRcoQuery,
-        variables: {
-          getObjectIds: objectIds.length > 0,
-          getObjectRelationIds: objectRelationIds.length > 0,
-          objectRelationIds:
-            objectRelationIds.length > 0 ?
-              objectRelationIds
-            : ['99999999-9999-9999-9999-999999999999'],
-          getPCOfOriginIds: pCOfOriginIds.length > 0,
-          pCOfOriginIds:
-            pCOfOriginIds.length > 0 ?
-              pCOfOriginIds
-            : ['99999999-9999-9999-9999-999999999999'],
-        },
-      })
-      return data
+      if (
+        objectIds.length === 0 &&
+        objectRelationIds.length === 0 &&
+        pCOfOriginIds.length === 0
+      ) {
+        return {}
+      }
+      const fetchIds = (ids) =>
+        ids.length > 0 ?
+          apiFetch(`/object?select=id&id=in.(${ids.join(',')})`)
+        : Promise.resolve([])
+      const [objects, objectRelations, pcs] = await Promise.all([
+        fetchIds(objectIds),
+        fetchIds(objectRelationIds),
+        pCOfOriginIds.length > 0 ?
+          apiFetch(
+            `/property_collection?select=id&id=in.(${pCOfOriginIds.join(',')})`,
+          )
+        : Promise.resolve([]),
+      ])
+      return {
+        allObjects: { nodes: objects },
+        allObjectRelations: { nodes: objectRelations },
+        allPropertyCollections: { nodes: pcs },
+      }
     },
   })
 
@@ -351,27 +362,24 @@ export const ImportRco = ({ setImport }) => {
     // need a list of all fields
     // loop all rows, build variables and create pco
     for (const d of importData) {
-      const variables = {
-        objectId: d.objectId || null,
-        objectIdRelation: d.objectIdRelation || null,
-        propertyCollectionId: pCId,
-        propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
-        relationType: d.relationType || null,
-        properties: JSON.stringify(
-          omit(d, [
-            'id',
-            'objectId',
-            'objectIdRelation',
-            'propertyCollectionId',
-            'propertyCollectionOfOrigin',
-            'relationType',
-          ]),
-        ),
-      }
       posts.push(
-        apolloClient
-          .mutate({ mutation: upsertRCOMutation, variables })
-          .then(() => incrementImported()),
+        upsertRco({
+          objectId: d.objectId || null,
+          objectIdRelation: d.objectIdRelation || null,
+          propertyCollectionId: pCId,
+          propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
+          relationType: d.relationType || null,
+          properties: JSON.stringify(
+            omit(d, [
+              'id',
+              'objectId',
+              'objectIdRelation',
+              'propertyCollectionId',
+              'propertyCollectionOfOrigin',
+              'relationType',
+            ]),
+          ),
+        }).then(() => incrementImported()),
       )
     }
     await Promise.all(posts)

@@ -1,41 +1,23 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Row } from '../../Row/index.jsx'
 import { LoadingRow } from '../../LoadingRow.jsx'
+import { apiFetch } from '../../../../modules/api.js'
 import { TopLevelObject } from './TopLevelObject.jsx'
 
 export const Tax = ({ type = 'Lebensräume' }) => {
-  const apolloClient = useApolloClient()
   const { taxId } = useParams()
 
   const { data } = useQuery({
     queryKey: ['tree', 'lrTax', type],
-    queryFn: () => {
-      return apolloClient.query({
-        query: gql`
-          query treeTaxonomiesQuery {
-            allTaxonomies(
-              filter: { type: { equalTo: ${
-                type === 'Lebensräume' ? 'LEBENSRAUM' : 'ART'
-              } } }
-              orderBy: NAME_ASC
-            ) {
-              nodes {
-                id
-                name
-                objectsByTaxonomyId(filter: { parentId: { isNull: true } }) {
-                  totalCount
-                }
-              }
-            }
-          }
-        `,
-      })
-    },
+    queryFn: () =>
+      apiFetch(
+        `/taxonomy?select=id,name,objectCount:object(count)&type=eq.${
+          type === 'Lebensräume' ? 'Lebensraum' : 'Art'
+        }&object.parent_id=is.null&order=name`,
+      ),
     suspense: true,
   })
 
@@ -43,8 +25,8 @@ export const Tax = ({ type = 'Lebensräume' }) => {
 
   const nodes = []
 
-  for (const node of data?.data?.allTaxonomies?.nodes ?? []) {
-    const count = node.objectsByTaxonomyId.totalCount
+  for (const node of data ?? []) {
+    const count = node.objectCount?.[0]?.count ?? 0
     const data = {
       label: node.name ?? node.id,
       id: node.id,

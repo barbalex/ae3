@@ -2,7 +2,6 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
 import { format } from 'date-fns'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetAtom } from 'jotai'
@@ -22,7 +21,6 @@ export const Property = ({
   disabled,
   refetch,
 }) => {
-  const apolloClient = useApolloClient()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -34,7 +32,6 @@ export const Property = ({
   const onChange = (event) => setValue(event.target.value)
   const onBlur = (event) =>
     onBlurDo({
-      apolloClient,
       queryClient,
       field,
       pC,

@@ -70,6 +70,28 @@ services:
         "--retry-on-init-fail",
         "--enhance-graphiql",
       ]
+  postgrest:
+    container_name: ae_postgrest
+    restart: always
+    image: postgrest/postgrest:v12.2.3
+    networks:
+      - network
+    expose:
+      - "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    env_file:
+      - ./.env
+    environment:
+      # same authenticator connection and jwt secret as postgraphile:
+      # tokens issued by ae.login are valid for both apis
+      PGRST_DB_URI: ${DATABASE_URL}
+      PGRST_DB_SCHEMAS: ae
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_SERVER_CORS_ENABLED: true
   caddy:
     build:
       context: ./caddy
@@ -78,6 +100,7 @@ services:
       - network
     depends_on:
       - graphql
+      - postgrest
     restart: always
     # original image downgrades user but that seems not to work
     # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel

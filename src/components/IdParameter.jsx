@@ -1,6 +1,4 @@
 import { useEffect } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import isUuid from 'is-uuid'
 import { useNavigate } from 'react-router'
@@ -8,50 +6,12 @@ import { useSetAtom } from 'jotai'
 
 import { getUrlForObject } from '../modules/getUrlForObject.js'
 import { getUrlParamByName } from '../modules/getUrlParamByName.js'
+import { apiFetch } from '../modules/api.js'
+import { attachParentChain } from '../modules/attachParentChain.js'
 import { scrollIntoViewAtom } from '../store/index.ts'
-
-const objectQuery = gql`
-  query ObjectQuery($id: UUID!, $hasObjectId: Boolean!) {
-    objectById(id: $id) @include(if: $hasObjectId) {
-      id
-      taxonomyByTaxonomyId {
-        id
-        type
-      }
-      objectByParentId {
-        id
-        objectByParentId {
-          id
-          objectByParentId {
-            id
-            objectByParentId {
-              id
-              objectByParentId {
-                id
-                objectByParentId {
-                  id
-                  objectByParentId {
-                    id
-                    objectByParentId {
-                      id
-                      objectByParentId {
-                        id
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
 
 const IdParameter = () => {
   const navigate = useNavigate()
-  const apolloClient = useApolloClient()
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   /**
    * check if old url was passed that contains objectId-Param
@@ -65,24 +25,29 @@ const IdParameter = () => {
   const hasObjectId = !!objectId
   const { error, data } = useQuery({
     queryKey: ['object', objectId],
-    queryFn: () =>
-      apolloClient.query({
-        query: objectQuery,
-        variables: { id: objectId, hasObjectId },
-      }),
+    queryFn: async () => {
+      const objects = await apiFetch(
+        `/object?id=eq.${objectId}&select=id,parentId:parent_id,taxonomyByTaxonomyId:taxonomy_id(id,type)`,
+      )
+      const objekt = objects?.[0]
+      if (!objekt) return null
+      // attach ancestor chain for url building (formerly recursive graphql)
+      await attachParentChain(objekt)
+      return objekt
+    },
     enabled: hasObjectId,
   })
 
   useEffect(() => {
-    if (hasObjectId && data?.data?.objectById) {
+    if (hasObjectId && data) {
       if (error) return null
       // if idParam was passed, open object
-      const url = getUrlForObject(data?.data?.objectById)
+      const url = getUrlForObject(data)
       navigate(`/${url.join('/')}`)
       setTimeout(() => scrollIntoView())
       // remove id param from url. Nope, not needed
     }
-  }, [data?.data?.objectById, error, hasObjectId, navigate, scrollIntoView])
+  }, [data, error, hasObjectId, navigate, scrollIntoView])
   return null
 }
 

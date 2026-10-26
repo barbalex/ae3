@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
-import { updatePropertyMutation } from './updatePropertyMutation.js'
+import { apiFetch } from '../../modules/api.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { scrollIntoViewAtom } from '../../store/index.ts'
 
@@ -16,7 +15,6 @@ export const NewProperty = ({
   properties: propertiesPrevious,
   refetch,
 }) => {
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
 
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
@@ -33,9 +31,10 @@ export const NewProperty = ({
         ...propertiesPrevious,
         ...{ [label]: value },
       }
-      await apolloClient.mutate({
-        mutation: updatePropertyMutation,
-        variables: { properties: JSON.stringify(properties), id },
+      await apiFetch(`/object?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ properties: JSON.stringify(properties) }),
       })
       refetch?.()
       setLabel('')

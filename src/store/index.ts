@@ -1,12 +1,10 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import type { QueryClient } from '@tanstack/react-query'
 
 export const store = createStore()
 
 // Client atoms
-export const apolloClientAtom = atom<ApolloClient<NormalizedCacheObject> | null>(null)
 export const queryClientAtom = atom<QueryClient | null>(null)
 
 // TreeFilter atoms

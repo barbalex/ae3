@@ -1,33 +1,15 @@
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { Row } from '../../Row/index.jsx'
+import { apiFetch } from '../../../../modules/api.js'
 
 export const Organizations = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['tree', 'orgs'],
-    queryFn: () => {
-      // This query is re-run under certain circumstances
-      // when focus was out of app and comes back in
-      // EVENT THOUGH component is not re-rendered
-      // Seems that was a feature of tanstack-query:
+    queryFn: () =>
+      // re-run when app focus comes back in: a tanstack-query feature
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return apolloClient.query({
-        query: gql`
-          query treeOrganizationsQuery {
-            allOrganizations(orderBy: NAME_ASC) {
-              nodes {
-                id
-                name
-              }
-            }
-          }
-        `,
-      })
-    },
+      apiFetch('/organization?select=id,name&order=name'),
     suspense: true,
   })
 
@@ -35,7 +17,7 @@ export const Organizations = () => {
 
   const nodes = []
 
-  for (const node of data?.data?.allOrganizations?.nodes ?? []) {
+  for (const node of data ?? []) {
     const data = {
       label: node.name ?? node.id,
       id: node.id,

@@ -1,42 +1,20 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation } from 'react-router'
 
 import { Row } from '../../Row/index.jsx'
 import { LoadingRow } from '../../LoadingRow.jsx'
+import { apiFetch } from '../../../../modules/api.js'
 
 export const Object = ({ parentData }) => {
-  const apolloClient = useApolloClient()
   const { pathname } = useLocation()
 
   const { data } = useQuery({
     queryKey: ['tree', 'lrObject', parentData.id],
-    queryFn: () => {
-      return apolloClient.query({
-        query: gql`
-          query treeObjectQuery($parentId: UUID!) {
-            objectById(id: $parentId) {
-              id
-              name
-              objectsByParentId(orderBy: NAME_ASC) {
-                totalCount
-                nodes {
-                  id
-                  name
-                  objectsByParentId {
-                    totalCount
-                  }
-                }
-              }
-            }
-          }
-        `,
-        variables: { parentId: parentData.id },
-
-      })
-    },
+    queryFn: () =>
+      apiFetch(
+        `/object?id=eq.${parentData.id}&select=id,name,children:object!object_parent_id_fkey(id,name,objectCount:object!object_parent_id_fkey(count))&children.order=name`,
+      ),
     suspense: true,
   })
 
@@ -44,8 +22,8 @@ export const Object = ({ parentData }) => {
 
   const nodes = []
 
-  for (const node of data?.data?.objectById?.objectsByParentId?.nodes ?? []) {
-    const count = node?.objectsByParentId?.totalCount
+  for (const node of data?.[0]?.children ?? []) {
+    const count = node?.objectCount?.[0]?.count ?? 0
     const nodeData = {
       label: node.name ?? node.id,
       id: node.id,

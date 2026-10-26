@@ -10,8 +10,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import { format } from 'date-fns'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtom, useAtomValue } from 'jotai'
@@ -19,77 +17,27 @@ import { useAtom, useAtomValue } from 'jotai'
 import { Property } from './Property.jsx'
 import { DateField } from '../shared/Date.jsx'
 import { onBlurDo } from './onBlur.js'
+import { apiFetch, apiCount } from '../../modules/api.js'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { editingPCsAtom, loginUsernameAtom } from '../../store/index.ts'
 
 import styles from './index.module.css'
 
-const allUsersQuery = gql`
-  query AllUsersQuery {
-    allUsers {
-      totalCount
-      nodes {
-        id
-        name
-        email
-        organizationUsersByUserId {
-          nodes {
-            id
-            organizationId
-            role
-            organizationByOrganizationId {
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-`
-const pcQuery = gql`
-  query pCQuery($pcId: UUID!) {
-    propertyCollectionById(id: $pcId) {
-      id
-      name
-      description
-      links
-      combining
-      organizationId
-      lastUpdated
-      termsOfUse
-      importedBy
-      organizationByOrganizationId {
-        id
-        name
-      }
-      propertyCollectionObjectsByPropertyCollectionId {
-        totalCount
-      }
-    }
-    # leave this as is only called once more and with more props
-    allPropertyCollections {
-      nodes {
-        id
-        name
-      }
-    }
-  }
-`
-
 export const PropertyCollection = () => {
   const { pcId } = useParams()
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [editingPCs, setEditingPCs] = useAtom(editingPCsAtom)
   const username = useAtomValue(loginUsernameAtom)
 
   const { data: dataAllUsers, error: allUsersError } = useQuery({
-    queryKey: ['allUsersForPc'],
-    queryFn: () => apolloClient.query({ query: allUsersQuery }),
+    queryKey: ['allUsers'],
+    queryFn: () =>
+      apiFetch(
+        '/user?select=id,name,email,organizationUsersByUserId:organization_user(id,organizationId:organization_id,role,organizationByOrganizationId:organization_id(id,name))',
+      ),
   })
-  const allUsers = dataAllUsers?.data?.allUsers?.nodes ?? []
+  const allUsers = dataAllUsers ?? []
 
   const {
     data: dataPc,
@@ -97,13 +45,24 @@ export const PropertyCollection = () => {
     refetch,
   } = useQuery({
     queryKey: ['pc', pcId],
-    queryFn: () =>
-      apolloClient.query({
-        query: pcQuery,
-        variables: { pcId },
-      }),
+    queryFn: async () => {
+      const [pcs, pcoCount] = await Promise.all([
+        apiFetch(
+          `/property_collection?id=eq.${pcId}&select=id,name,description,links,combining,organizationId:organization_id,lastUpdated:last_updated,termsOfUse:terms_of_use,importedBy:imported_by,organizationByOrganizationId:organization_id(id,name)`,
+        ),
+        apiCount(
+          `/property_collection_object?property_collection_id=eq.${pcId}`,
+        ),
+      ])
+      const pC = pcs?.[0]
+      if (!pC) return { propertyCollectionById: {} }
+      pC.propertyCollectionObjectsByPropertyCollectionId = {
+        totalCount: pcoCount,
+      }
+      return { propertyCollectionById: pC }
+    },
   })
-  const pcData = dataPc?.data
+  const pcData = dataPc
 
   const pC = pcData?.propertyCollectionById ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
@@ -138,7 +97,6 @@ export const PropertyCollection = () => {
   }
   const onChangeCombining = (event, isChecked) =>
     onBlurDo({
-      apolloClient,
       field: 'combining',
       pC,
       value: isChecked,
@@ -148,7 +106,6 @@ export const PropertyCollection = () => {
     })
   const onChangeOrganization = (event) =>
     onBlurDo({
-      apolloClient,
       field: 'organizationId',
       pC,
       value: event.target.value,
@@ -158,7 +115,6 @@ export const PropertyCollection = () => {
     })
   const onChangeImportedBy = (event) =>
     onBlurDo({
-      apolloClient,
       field: 'importedBy',
       pC,
       value: event.target.value,
@@ -168,7 +124,6 @@ export const PropertyCollection = () => {
     })
   const onChangeLastUpdated = (event) =>
     onBlurDo({
-      apolloClient,
       field: 'lastUpdated',
       pC,
       value: event.target.value,

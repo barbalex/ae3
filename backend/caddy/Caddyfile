@@ -14,6 +14,10 @@ api.arteigenschaften.ch {
     to ae_graphql:5000
     header_down Access-Control-Allow-Origin *
   }
+  # postgrest handles CORS itself (PGRST_SERVER_CORS_ENABLED)
+  handle_path /postgrest/* {
+    reverse_proxy ae_postgrest:3000
+  }
 }
 
 # api.artdaten.ch {

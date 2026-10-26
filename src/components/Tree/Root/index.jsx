@@ -1,8 +1,7 @@
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
+import { apiCount } from '../../../modules/api.js'
 import { Arten } from './Arten/index.jsx'
 import { LR } from './LR/index.jsx'
 import { PC } from './PC/index.jsx'
@@ -11,42 +10,27 @@ import { OrganizationsFolder } from './Organizations/index.jsx'
 import { loginTokenAtom } from '../../../store/index.ts'
 
 export const Root = () => {
-  const apolloClient = useApolloClient()
   const loginToken = useAtomValue(loginTokenAtom)
   const hasToken = !!loginToken
 
   const { data } = useQuery({
     queryKey: ['tree', 'root', hasToken],
-    queryFn: () => {
+    queryFn: async () => {
       // This query is re-run under certain circumstances
       // when focus was out of app and comes back in
       // EVENT THOUGH component is not re-rendered
       // Seems that was a feature of tanstack-query:
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return apolloClient.query({
-        query: gql`
-          query treeRootQuery($hasToken: Boolean!) {
-            arten: allTaxonomies(filter: { type: { equalTo: ART } }) {
-              totalCount
-            }
-            lebensraeume: allTaxonomies(
-              filter: { type: { equalTo: LEBENSRAUM } }
-            ) {
-              totalCount
-            }
-            allPropertyCollections {
-              totalCount
-            }
-            allUsers @include(if: $hasToken) {
-              totalCount
-            }
-            allOrganizations @include(if: $hasToken) {
-              totalCount
-            }
-          }
-        `,
-        variables: { hasToken },
-      })
+      const [arten, lebensraeume, pcs, users, organizations] =
+        await Promise.all([
+          apiCount('/taxonomy?type=eq.Art'),
+          apiCount('/taxonomy?type=eq.Lebensraum'),
+          apiCount('/property_collection'),
+          ...(hasToken ?
+            [apiCount('/user'), apiCount('/organization')]
+          : [Promise.resolve(0), Promise.resolve(0)]),
+        ])
+      return { arten, lebensraeume, pcs, users, organizations }
     },
     suspense: true,
   })
@@ -55,15 +39,13 @@ export const Root = () => {
 
   return (
     <>
-      <Arten count={data?.data?.arten?.totalCount} />
-      <LR count={data?.data?.lebensraeume?.totalCount} />
-      <PC count={data?.data?.allPropertyCollections?.totalCount} />
+      <Arten count={data?.arten} />
+      <LR count={data?.lebensraeume} />
+      <PC count={data?.pcs} />
       {hasToken && (
         <>
-          <UsersFolder count={data?.data?.allUsers?.totalCount} />
-          <OrganizationsFolder
-            count={data?.data?.allOrganizations?.totalCount}
-          />
+          <UsersFolder count={data?.users} />
+          <OrganizationsFolder count={data?.organizations} />
         </>
       )}
     </>

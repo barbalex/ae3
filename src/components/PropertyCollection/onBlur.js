@@ -1,7 +1,18 @@
-import updatePCMutation from './updatePCMutation.js'
+import { apiFetch } from '../../modules/api.js'
+
+const columnByField = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  links: 'links',
+  combining: 'combining',
+  organizationId: 'organization_id',
+  lastUpdated: 'last_updated',
+  importedBy: 'imported_by',
+  termsOfUse: 'terms_of_use',
+}
 
 export const onBlurDo = async ({
-  apolloClient,
   queryClient,
   field,
   pC,
@@ -14,24 +25,16 @@ export const onBlurDo = async ({
 }) => {
   setError(null)
   if (value !== prevValue) {
-    const variables = {
-      oldId: pC.id,
-      id: field === 'id' ? value : pC.id,
-      name: field === 'name' ? value : pC.name,
-      description: field === 'description' ? value : pC.description,
-      links: field === 'links' ? value.split(',') : pC.links,
-      combining: field === 'combining' ? value : pC.combining,
-      organizationId: field === 'organizationId' ? value : pC.organizationId,
-      lastUpdated: field === 'lastUpdated' ? value : pC.lastUpdated,
-      importedBy: field === 'importedBy' ? value : pC.importedBy,
-      termsOfUse: field === 'termsOfUse' ? value : pC.termsOfUse,
-    }
+    const column = columnByField[field]
+    const patch =
+      field === 'links' ?
+        { [column]: value.split(',') }
+      : { [column]: value }
     try {
-      // TODO
-      // if id is updated, use different mutation
-      await apolloClient.mutate({
-        mutation: updatePCMutation,
-        variables,
+      await apiFetch(`/property_collection?id=eq.${pC.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
       })
       refetch?.()
       queryClient.invalidateQueries({

@@ -1,35 +1,18 @@
 import { Suspense } from 'react'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { activeNodeArrayAtom } from '../../store/index.ts'
+import { apiFetch } from '../../modules/api.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 import styles from './TCs.module.css'
 
-const tcsQuery = gql`
-  query orgTCsQuery($id: UUID!) {
-    organizationById(id: $id) {
-      id
-      taxonomiesByOrganizationId {
-        totalCount
-        nodes {
-          id
-          name
-        }
-      }
-    }
-  }
-`
-
 export const TCs = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
-  const apolloClient = useApolloClient()
   const id =
     activeNodeArray.length > 1 ?
       activeNodeArray[1]
@@ -38,16 +21,12 @@ export const TCs = () => {
   const { data, error } = useQuery({
     queryKey: ['organizationTCs', id],
     queryFn: () =>
-      apolloClient.query({
-        query: tcsQuery,
-        variables: { id },
-      }),
+      apiFetch(
+        `/taxonomy?organization_id=eq.${id}&select=id,name,type`,
+      ),
   })
 
-  const tcs = sortBy(
-    data?.data?.organizationById?.taxonomiesByOrganizationId?.nodes ?? [],
-    ['name'],
-  )
+  const tcs = sortBy(data ?? [], ['name'])
 
   if (error)
     return <div className={styles.container}>{`Fehler: ${error.message}`}</div>
@@ -59,7 +38,7 @@ export const TCs = () => {
           <div className={styles.list}>
             <ul>
               {tcs.map((u) => {
-                const elem2 = u.type === 'ART' ? 'Arten' : 'Lebensräume'
+                const elem2 = u.type === 'Art' ? 'Arten' : 'Lebensräume'
                 const link = `${appBaseUrl}${encodeURIComponent(elem2)}/${u.id}`
 
                 return (

@@ -1,5 +1,4 @@
 import { useEffect, useState, Suspense, lazy, useMemo } from 'react'
-import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { Analytics } from '@vercel/analytics/react'
@@ -13,14 +12,8 @@ import 'react-reflex/styles.css'
 import { version as appVersion } from '../package.json'
 
 import { getActiveNodeArrayFromPathname } from './modules/getActiveNodeArrayFromPathname.js'
-import {
-  store,
-  activeNodeArrayAtom,
-  apolloClientAtom,
-  queryClientAtom,
-} from './store/index.ts'
+import { store, activeNodeArrayAtom, queryClientAtom } from './store/index.ts'
 import { detectIE } from './modules/detectIE.js'
-import { client } from './client.js'
 import { Router } from './components/Router.jsx'
 import { Spinner } from './components/shared/Spinner.jsx'
 const Stacker = lazy(async () => ({
@@ -33,12 +26,6 @@ export const App = () => {
   useEffect(() => {
     const baseTitle = 'arteigenschaften'
     document.title = `${baseTitle} ${appVersion}`
-  }, [])
-
-  const myClient = useMemo(() => {
-    const apolloClient = client()
-    store.set(apolloClientAtom, apolloClient)
-    return apolloClient
   }, [])
 
   const queryClient = useMemo(() => {
@@ -66,21 +53,19 @@ export const App = () => {
 
   return (
     <JotaiProvider store={store}>
-      <ApolloProvider client={myClient}>
-        <QueryClientProvider client={queryClient}>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={theme}>
-              <Suspense fallback={<Spinner />}>
-                <Router />
-              </Suspense>
-            </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <Suspense fallback={<Spinner />}>
+              <Router />
+            </Suspense>
             <Suspense fallback={<div />}>
               <Stacker />
             </Suspense>
-          </StyledEngineProvider>
-        </QueryClientProvider>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </QueryClientProvider>
         <Analytics debug={false} />
-      </ApolloProvider>
-    </JotaiProvider>
+      </JotaiProvider>
   )
 }

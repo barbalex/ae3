@@ -1,23 +1,11 @@
-import { gql } from '@apollo/client'
-import createUserMutation from '../../Benutzer/createUserMutation.js'
-import deleteUserMutation from '../../Benutzer/deleteUserMutation.js'
-import createObjectMutation from '../../Objekt/createObjectMutation.js'
-import createRootObjectMutation from '../../Objekt/createRootObjectMutation.js'
-import deleteObjectMutation from '../../Objekt/deleteObjectMutation.js'
-import createTaxonomyMutation from '../../Taxonomy/createTaxonomyMutation.js'
-import createPCMutation from '../../PropertyCollection/createPCMutation.js'
-import deletePCMutation from '../../PropertyCollection/deletePCMutation.js'
-import deleteTaxonomyMutation from '../../Taxonomy/deleteTaxonomyMutation.js'
-import {
-  store,
-  apolloClientAtom,
-  queryClientAtom,
-} from '../../../store/index.ts'
+import { apiFetch } from '../../../modules/api.js'
+import { store, queryClientAtom } from '../../../store/index.ts'
 import { editingTaxonomiesAtom, editingPCsAtom } from '../../../store/index.ts'
 
+// graphql used the enum values, PostgREST the enum labels
 const taxonomyTypeConverter = {
-  Arten: 'ART',
-  Lebensraeume: 'LEBENSRAUM',
+  Arten: 'Art',
+  Lebensraeume: 'Lebensraum',
 }
 
 export const onClickContextMenu = async ({
@@ -28,12 +16,11 @@ export const onClickContextMenu = async ({
   loginUsername,
   navigate,
 }) => {
-  const client = store.get(apolloClientAtom)
   const queryClient = store.get(queryClientAtom)
   const editingTaxonomies = store.get(editingTaxonomiesAtom)
 
-  if (!client || !queryClient) {
-    console.error('Apollo client or Query client not initialized')
+  if (!queryClient) {
+    console.error('Query client not initialized')
     return
   }
   if (!data) return console.log('no data passed with click')
@@ -44,45 +31,42 @@ export const onClickContextMenu = async ({
       if (table === 'user') {
         let newUser
         try {
-          newUser = await client.mutate({
-            mutation: createUserMutation,
+          newUser = await apiFetch('/user?select=id', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify([{}]),
           })
         } catch (error) {
           console.log(error)
         }
-        const newUserId = newUser?.data?.createUser?.user?.id
+        const newUserId = newUser?.[0]?.id
         if (newUserId) {
           navigate(`/Benutzer/${newUserId}`)
         }
       }
       // get userId
-      const { data: userData } = await client.query({
-        query: gql`
-          query treeRowUserQuery($name: String!) {
-            userByName(name: $name) {
-              id
-            }
-          }
-        `,
-        variables: { name: loginUsername },
-      })
-      const userId = userData?.userByName?.id
+      const users = await apiFetch(
+        `/user?select=id&name=eq.${encodeURIComponent(loginUsername)}`,
+      )
+      const userId = users?.[0]?.id
       if (table === 'object') {
         let newObjectData
         if (url.length === 2) {
           // user clicked on the taxonomy
           // need to create root level object, without parentId
-          newObjectData = await client.mutate({
-            mutation: createRootObjectMutation,
-            variables: { taxonomyId: url[1] },
+          newObjectData = await apiFetch('/object?select=id', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify([{ taxonomy_id: url[1] }]),
           })
         } else {
-          newObjectData = await client.mutate({
-            mutation: createObjectMutation,
-            variables: { taxonomyId: url[1], parentId: id },
+          newObjectData = await apiFetch('/object?select=id', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify([{ taxonomy_id: url[1], parent_id: id }]),
           })
         }
-        const newId = newObjectData?.data?.createObject?.object?.id ?? null
+        const newId = newObjectData?.[0]?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editing true
         if (!editingTaxonomies) {
@@ -91,16 +75,18 @@ export const onClickContextMenu = async ({
       }
       if (table === 'taxonomy') {
         const type = taxonomyTypeConverter[id] ?? 'Art'
-        const newTaxonomyData = await client.mutate({
-          mutation: createTaxonomyMutation,
-          variables: {
-            type: taxonomyTypeConverter[id],
-            importedBy: userId,
-            lastUpdated: new Date(),
-          },
+        const newTaxonomyData = await apiFetch('/taxonomy?select=id', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([
+            {
+              type,
+              imported_by: userId,
+              last_updated: new Date(),
+            },
+          ]),
         })
-        const newId =
-          newTaxonomyData?.data?.createTaxonomy?.taxonomy?.id ?? null
+        const newId = newTaxonomyData?.[0]?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
@@ -108,15 +94,19 @@ export const onClickContextMenu = async ({
         }
       }
       if (table === 'pc') {
-        const newPCData = await client.mutate({
-          mutation: createPCMutation,
-          variables: { importedBy: userId, lastUpdated: new Date() },
+        const newPCData = await apiFetch('/property_collection?select=id', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([
+            {
+              imported_by: userId,
+              last_updated: new Date(),
+            },
+          ]),
         })
-        const newId =
-          newPCData?.data?.createPropertyCollection?.propertyCollection?.id ??
-          null
+        const newId = newPCData?.[0]?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
-        // if not editing, set editingTaxonomies true
+        // if not editing, set editing true
         if (!editingTaxonomies) {
           store.set(editingPCsAtom, true)
         }
@@ -124,98 +114,32 @@ export const onClickContextMenu = async ({
       queryClient.invalidateQueries({
         queryKey: [`tree`],
       })
-      // console.log('will scroll into view')
       setTimeout(() => scrollIntoView())
     },
     delete: async () => {
-      if (table === 'user') {
-        try {
-          await client.mutate({
-            mutation: deleteUserMutation,
-            variables: { id },
-            optimisticResponse: {
-              deleteUserById: {
-                user: {
-                  id,
-                  __typename: 'User',
-                },
-                __typename: 'Mutation',
-              },
-            },
-          })
-        } catch (error) {
-          console.log(error)
-        }
-        navigate('/Benutzer')
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
+      const tableNames = {
+        user: '/user',
+        object: '/object',
+        taxonomy: '/taxonomy',
+        pc: '/property_collection',
       }
-      if (table === 'object') {
-        await client.mutate({
-          mutation: deleteObjectMutation,
-          variables: { id },
-          optimisticResponse: {
-            deleteObjectById: {
-              object: {
-                id,
-                __typename: 'Object',
-              },
-              __typename: 'Mutation',
-            },
-          },
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
-        if (url.includes(id)) {
-          url.length = url.indexOf(id)
-          navigate(`/${url.join('/')}`)
-        }
+      const path = tableNames[table]
+      if (!path) {
+        return console.log(`table "${table}" unknown, therefore not deleted`)
       }
-      if (table === 'taxonomy') {
-        await client.mutate({
-          mutation: deleteTaxonomyMutation,
-          variables: { id },
-          optimisticResponse: {
-            deleteTaxonomyById: {
-              taxonomy: {
-                id,
-                __typename: 'Taxonomy',
-              },
-              __typename: 'Mutation',
-            },
-          },
+      try {
+        await apiFetch(`${path}?id=eq.${id}`, {
+          method: 'DELETE',
         })
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
-        if (url.includes(id)) {
-          url.length = url.indexOf(id)
-          navigate(`/${url.join('/')}`)
-        }
+      } catch (error) {
+        console.log(error)
       }
-      if (table === 'pc') {
-        await client.mutate({
-          mutation: deletePCMutation,
-          variables: { id },
-          optimisticResponse: {
-            deletePropertyCollectionById: {
-              propertyCollection: {
-                id,
-                __typename: 'PropertyCollection',
-              },
-              __typename: 'Mutation',
-            },
-          },
-        })
-        queryClient.invalidateQueries({
-          queryKey: [`tree`],
-        })
-        if (url.includes(id)) {
-          url.length = url.indexOf(id)
-          navigate(`/${url.join('/')}`)
-        }
+      queryClient.invalidateQueries({
+        queryKey: [`tree`],
+      })
+      if (url.includes(id)) {
+        url.length = url.indexOf(id)
+        navigate(`/${url.join('/')}`)
       }
       queryClient.invalidateQueries({
         queryKey: [`tree`],

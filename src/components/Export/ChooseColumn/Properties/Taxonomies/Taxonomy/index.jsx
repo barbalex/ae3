@@ -6,48 +6,26 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { groupBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from '../Properties.jsx'
+import { rpc } from '../../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const propsByTaxQuery = gql`
-  query propsByTaxDataQueryForPropertiesTaxonomy(
-    $queryExportTaxonomies: Boolean!
-    $exportTaxonomies: [String]
-  ) {
-    taxPropertiesOnlyByTaxonomiesFunction(taxonomyNames: $exportTaxonomies)
-      @include(if: $queryExportTaxonomies) {
-      nodes {
-        taxonomyName
-        propertyName
-        count
-      }
-    }
-  }
-`
 
 export const Taxonomy = ({ initiallyExpanded, tax }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-  const apolloClient = useApolloClient()
 
   const { data: propsByTaxData, error: propsByTaxError } = useQuery({
     queryKey: ['taxPropertiesOnlyByTaxonomies', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query: propsByTaxQuery,
-        variables: {
-          exportTaxonomies,
-          queryExportTaxonomies: exportTaxonomies.length > 0,
-        },
+    queryFn: async () => ({
+        data: { taxPropertiesOnlyByTaxonomiesFunction: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('tax_properties_only_by_taxonomies_function', { taxonomy_names: exportTaxonomies })).map((r) => ({taxonomyName: r.taxonomy_name, propertyName: r.property_name, count: r.count})) } },
       }),
   })
 
