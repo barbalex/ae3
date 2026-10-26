@@ -87,9 +87,6 @@
     "vitest": "5.0.5"
   },
   "dependencyComments": {
-    "none": "so far now",
-    "react-contextmenu": "extracted into modules because: archived, caused conflicting peer dependency (old react versions)",
-    "classnames": "used by react-contextmenu",
     "graphql": "peer dependency of @apollo/client",
     "rxjs": "peer dependency of @apollo/client"
   }
