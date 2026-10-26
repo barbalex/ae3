@@ -15,3 +15,7 @@ MUI + Emotion as big bundles: would it make sense to remove them and try using a
 ---
 
 dark and light mode
+
+---
+
+we are currently using react-contextmenu for context menus (I assume only in the nav tree). As we did in apf2, lets replace it with pure css

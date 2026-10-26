@@ -4,7 +4,6 @@ import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
-import { read, utils } from '@e965/xlsx'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import SimpleBar from 'simplebar-react'
@@ -179,9 +178,9 @@ export const ImportPco = ({ setImport }) => {
       const reader = new FileReader()
       reader.onload = async () => {
         const checkState = { ...initialCheckState }
-        const fileAsBinaryString = reader.result
-        const workbook = read(fileAsBinaryString, {
-          type: 'binary',
+        const { read, utils } = await import('@e965/xlsx')
+        const workbook = read(new Uint8Array(reader.result), {
+          type: 'array',
         })
         const sheetName = workbook.SheetNames[0]
         const worksheet = workbook.Sheets[sheetName]
@@ -270,7 +269,7 @@ export const ImportPco = ({ setImport }) => {
       }
       reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
-      reader.readAsBinaryString(file)
+      reader.readAsArrayBuffer(file)
     }
   }
 
