@@ -6,13 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { Filter } from './Filter/index.jsx'
 import { treeQuery } from './treeQuery.js'
-import { CmBenutzerFolder } from './contextmenu/BenutzerFolder.jsx'
-import { CmBenutzer } from './contextmenu/Benutzer.jsx'
-import { CmObject } from './contextmenu/Object.jsx'
-import { CmTaxonomy } from './contextmenu/Taxonomy.jsx'
-import { CmType } from './contextmenu/Type.jsx'
-import { CmPCFolder } from './contextmenu/PCFolder.jsx'
-import { CmPC } from './contextmenu/PC.jsx'
+import { TreeContextMenu } from './contextmenu/TreeContextMenu.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
 import { Root } from './Root/index.jsx'
@@ -74,17 +68,7 @@ export const Tree = () => {
           </Suspense>
         </SimpleBar>
         <IntoViewScroller />
-        <CmBenutzerFolder />
-        <CmBenutzer />
-        {userIsTaxWriter && (
-          <>
-            <CmObject />
-            <CmTaxonomy />
-            <CmType />
-            <CmPCFolder />
-            <CmPC />
-          </>
-        )}
+        <TreeContextMenu userIsTaxWriter={userIsTaxWriter} />
       </div>
     </ErrorBoundary>
   )

@@ -22,7 +22,8 @@ const taxonomyTypeConverter = {
 
 export const onClickContextMenu = async ({
   data,
-  target,
+  id,
+  url,
   scrollIntoView,
   loginUsername,
   navigate,
@@ -36,12 +37,7 @@ export const onClickContextMenu = async ({
     return
   }
   if (!data) return console.log('no data passed with click')
-  if (!target) {
-    return console.log('no target passed with click')
-  }
   const { table, action } = data
-  const id = target.firstElementChild.getAttribute('data-id')
-  const url = target.firstElementChild.getAttribute('data-url').split(',')
 
   const actions = {
     insert: async () => {

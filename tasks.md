@@ -1,12 +1,8 @@
-unattended-upgrades: can we (are they already) activate on the new servers for artdaten.ch, arteigenschaften.ch, vermehrung.ch, apflora.ch?
-
+---
+context menu use in nav tree: is it really useful? Could we move to the form (headers)?
 ---
 
-2026.10.14: 159.89.17.192 > 172.105.79.66
-
----
-
-would moving from graphql to postgrest make sense in this project? 1. reduce bundle size 2. reduce attack surface
+would moving from graphql to postgrest make sense in this project? 1. reduce bundle size 2. reduce attack surface. Other upsides? No one else is currently using the graphql api and this is a one-dev project - so graphql's advantages are not being used here, right?
 
 ---
 
