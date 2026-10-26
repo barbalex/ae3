@@ -27,3 +27,5 @@ vermehrung accesses ae3 two ways: postgres_fdw straight into ae3's Postgres (una
 dark and light mode
 
 ---
+
+'Im GBIF suchen' seems not to work. way to go: https://www.gbif.org/taxon/search?q=test
