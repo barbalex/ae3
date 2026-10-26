@@ -15,6 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { RelationList } from './RelationList/index.jsx'
 import { PropertyList } from './PropertyList.jsx'
 
+import { parseProperties } from '../../../../modules/parseProperties.js'
 import styles from './index.module.css'
 
 export const PcPresentation = ({ pC }) => {
@@ -26,7 +27,7 @@ export const PcPresentation = ({ pC }) => {
 
   const pcname = pC?.name ?? '(Name fehlt)'
   // never pass null to JSON.parse
-  const properties = pCO?.properties ? JSON.parse(pCO.properties) : {}
+  const properties = parseProperties(pCO?.properties)
 
   // never pass null to object.entries
   let propertiesArray = Object.entries(properties)

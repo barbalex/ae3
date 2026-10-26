@@ -15,6 +15,7 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
+import { parseProperties } from '../../../modules/parseProperties.js'
 import styles from './index.module.css'
 
 // fetch the pc with its keys, organization and pcos;
@@ -48,7 +49,7 @@ const buildPcoRows = ({ pcoNodes, propKeys }) =>
     nP['Objekt ID'] = p.objectId
     nP['Objekt Name'] = p?.objectByObjectId?.name ?? null
     if (p.properties) {
-      const props = JSON.parse(p.properties)
+      const props = parseProperties(p.properties)
       Object.entries(props).forEach(([key, value]) => {
         if (typeof value === 'boolean') {
           nP[key] = booleanToJaNein(value)

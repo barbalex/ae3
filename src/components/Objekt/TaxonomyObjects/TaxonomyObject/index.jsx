@@ -24,6 +24,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
+import { parseProperties } from '../../../../modules/parseProperties.js'
 import { apiFetch } from '../../../../modules/api.js'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
@@ -77,7 +78,7 @@ export const TaxonomyObject = ({ objekt, showLink, refetch }) => {
   const taxonomy = objekt?.taxonomyByTaxonomyId ?? {}
   let taxname = taxonomy?.name ?? '(Name fehlt)'
   // never pass null to object.entries!!!
-  const properties = JSON.parse(objekt?.properties ?? '{}')
+  const properties = parseProperties(objekt?.properties)
   if (properties['Artname vollständig']) {
     taxname = `${taxname}: ${properties['Artname vollständig']}`
   }

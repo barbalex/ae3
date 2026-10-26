@@ -14,6 +14,7 @@ import { DataTable } from '../../shared/DataTable.jsx'
 import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
+import { parseProperties } from '../../../modules/parseProperties.js'
 import styles from './index.module.css'
 
 // fetch the pc with its keys, organization and relations;
@@ -48,7 +49,7 @@ const buildRcoRows = ({ rcoNodes, propKeys }) =>
     nP['Beziehung Name'] = p?.objectByObjectIdRelation?.name ?? null
     nP['Art der Beziehung'] = p.relationType
     if (p.properties) {
-      const props = JSON.parse(p.properties)
+      const props = parseProperties(p.properties)
       Object.entries(props).forEach(([key, value]) => {
         if (typeof value === 'boolean') {
           nP[key] = booleanToJaNein(value)

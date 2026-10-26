@@ -42,3 +42,18 @@ test('tree loads and navigating into a taxonomy works', async ({ page }) => {
   })
   expect(await artenHandle.evaluate((el) => el.isConnected)).toBe(true)
 })
+
+test('object page loads its property collections', async ({ page }) => {
+  // this object has property collections (e.g. ZH GIS), unlike the
+  // first object of CSCF (2009) used above - pins the pcs queries
+  await page.goto(
+    '/Arten/c87f19f2-1b77-11ea-8282-bbc40e20aff6/c3d82f63-1c13-11ea-8282-6b46a89d266c/c3d82f64-1c13-11ea-8282-07e5a9d2fa66',
+  )
+
+  await expect(page.getByText('Eigenschaften', { exact: false })).toBeVisible({
+    timeout: 15_000,
+  })
+  await expect(page.getByText('ZH GIS', { exact: true })).toBeVisible({
+    timeout: 15_000,
+  })
+})

@@ -32,9 +32,10 @@ const fetchPcsForObjectIds = async (objectIds) => {
       `/property_collection?select=id,name,property_collection_object!property_collection_object_property_collection_id_fkey!inner(object_id)&property_collection_object.object_id=in.(${ids})`,
     ),
   ])
-  return uniqBy([...(byRelation ?? []), ...(byPco ?? [])], 'id').sort((a, b) =>
-    (a.name ?? '').localeCompare(b.name ?? ''),
-  )
+  return uniqBy(
+    [...(byRelation ?? []), ...(byPco ?? [])],
+    (pc) => pc.id,
+  ).sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
 }
 
 export const Objekt = () => {

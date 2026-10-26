@@ -163,7 +163,7 @@ export const Preview = () => {
   const rowCount = exportData?.data?.exportAll?.exportDatum?.count
   const rows =
     exportData?.data?.exportAll?.exportDatum?.exportData ?
-      JSON.parse(exportData?.data?.exportAll?.exportDatum?.exportData)
+      exportData?.data?.exportAll?.exportDatum?.exportData
     : []
   const [message, setMessage] = useState('')
 
@@ -204,7 +204,7 @@ export const Preview = () => {
     }
     const rows =
       data?.data?.exportAll?.exportDatum?.exportData ?
-        JSON.parse(data?.data?.exportAll?.exportDatum?.exportData)
+        data?.data?.exportAll?.exportDatum?.exportData
       : []
     const { exportXlsx } = await import('../../../modules/exportXlsx.js')
     exportXlsx({ rows, onSetMessage })
