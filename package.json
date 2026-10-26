@@ -36,7 +36,6 @@
     "graphql": "17.0.2",
     "is-uuid": "1.0.2",
     "jotai": "3.0.1",
-    "js-file-download": "0.4.12",
     "jwt-decode": "4.0.0",
     "linkify-react": "4.3.3",
     "linkifyjs": "4.3.3",

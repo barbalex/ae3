@@ -1,21 +1,24 @@
 import { describe, it, expect, vi } from 'vitest'
 
-import fileDownload from 'js-file-download'
+import FileSaver from 'file-saver'
 
 import { exportCsv } from './exportCsv.js'
 
-vi.mock('js-file-download', () => ({ default: vi.fn() }))
+vi.mock('file-saver', () => ({
+  default: { saveAs: vi.fn() },
+}))
 
 describe('exportCsv', () => {
-  it('downloads the rows as csv with a timestamped filename', () => {
+  it('downloads the rows as csv with a timestamped filename', async () => {
     exportCsv([
       { Art: 'Apfel', Gruppe: 'Pflanzen' },
       { Art: 'Birne', Gruppe: 'Pflanzen' },
     ])
 
-    expect(fileDownload).toHaveBeenCalledTimes(1)
-    const [csv, filename] = fileDownload.mock.calls[0]
-    expect(csv).toBe(
+    expect(FileSaver.saveAs).toHaveBeenCalledTimes(1)
+    const [blob, filename] = FileSaver.saveAs.mock.calls[0]
+    expect(blob).toBeInstanceOf(Blob)
+    expect(await blob.text()).toBe(
       '"Art","Gruppe"\n"Apfel","Pflanzen"\n"Birne","Pflanzen"',
     )
     expect(filename).toMatch(
