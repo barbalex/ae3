@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useParams } from 'react-router'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { Roles } from './Roles.jsx'
@@ -33,6 +33,7 @@ const User = () => {
 
   const { data, error, refetch } = useQuery({
     queryKey: ['user', userId],
+    placeholderData: keepPreviousData,
     queryFn: () =>
       apiFetch(
         `/user?id=eq.${userId}&select=id,name,email,organizationUsers:organization_user(id,organizationByOrganizationId:organization_id(id,name),role),propertyCollectionsByImportedBy:property_collection!property_collection_imported_by_fkey(id,name),taxonomiesByImportedBy:taxonomy!taxonomy_imported_by_fkey(id,name)`,

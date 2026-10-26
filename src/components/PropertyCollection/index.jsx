@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import { format } from 'date-fns'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtom, useAtomValue } from 'jotai'
 
@@ -45,6 +45,7 @@ export const PropertyCollection = () => {
     refetch,
   } = useQuery({
     queryKey: ['pc', pcId],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const [pcs, pcoCount] = await Promise.all([
         apiFetch(

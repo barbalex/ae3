@@ -1,7 +1,7 @@
 import { useState, Suspense } from 'react'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -76,6 +76,7 @@ export const RCO = () => {
 
   const { data, error } = useQuery({
     queryKey: ['rcoPreviewQuery', pcId, count],
+    placeholderData: keepPreviousData,
     queryFn: () => fetchRcoData(pcId, count),
   })
   const rcoData = data

@@ -32,8 +32,13 @@ test('tree loads and navigating into a taxonomy works', async ({ page }) => {
   const objectRow = page.locator(`[data-url^="${taxonomyUrl},"]`).first()
   await expect(objectRow).toBeVisible({ timeout: 15_000 })
 
+  // clicking an object must not rebuild the tree from blank:
+  // if any ancestor suspends unscoped, this handle gets disconnected
+  const artenHandle = await artenRow.elementHandle()
+
   await objectRow.click()
   await expect(page).toHaveURL(/\/Arten\/[^/]+\/[^/]+$/, {
     timeout: 15_000,
   })
+  expect(await artenHandle.evaluate((el) => el.isConnected)).toBe(true)
 })

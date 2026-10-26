@@ -7,7 +7,7 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { format } from 'date-fns'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { useAtomValue, useAtom } from 'jotai'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
@@ -52,6 +52,7 @@ export const Taxonomy = () => {
     refetch,
   } = useQuery({
     queryKey: ['taxonomy', taxId],
+    placeholderData: keepPreviousData,
     queryFn: () =>
       apiFetch(
         `/taxonomy?id=eq.${taxId}&select=id,name,description,links,lastUpdated:last_updated,organizationId:organization_id,organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,role,userId:user_id,userByUserId:user_id(id,name))),importedBy:imported_by,userByImportedBy:imported_by(id,name),termsOfUse:terms_of_use,habitatLabel:habitat_label,habitatComments:habitat_comments,habitatNrFnsMin:habitat_nr_fns_min,habitatNrFnsMax:habitat_nr_fns_max,type`,

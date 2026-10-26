@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { uniqBy } from 'es-toolkit'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
@@ -48,6 +48,7 @@ export const Objekt = () => {
     refetch,
   } = useQuery({
     queryKey: ['object', objectId],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const objects = await apiFetch(
         `/object?id=eq.${objectId}&select=id,taxonomyId:taxonomy_id,parentId:parent_id,name,properties,idOld:id_old,${taxonomySelect},synonymsByObjectId:synonym!synonym_object_id_fkey(objectId:object_id,objectIdSynonym:object_id_synonym,objectByObjectIdSynonym:object!synonym_object_id_synonym_fkey(id,taxonomyId:taxonomy_id,parentId:parent_id,name,properties,idOld:id_old,${taxonomySelect}))`,
@@ -68,12 +69,16 @@ export const Objekt = () => {
   const objekt = objectData?.objekt
   const synonyms = objekt?.synonymsByObjectId ?? []
   const synonymIds = synonyms.map((s) => s.objectByObjectIdSynonym.id)
-  const { data: synonymPcs } = useQuery({
+  const { data: synonymData } = useQuery({
     queryKey: ['synonyms', synonymIds],
+    placeholderData: keepPreviousData,
     queryFn: () => fetchPcsForObjectIds(synonymIds),
     enabled: synonymIds.length > 0,
     suspense: true,
   })
+  // guard against keepPreviousData showing pcs of a previous object's
+  // synonyms when the current object has none
+  const synonymPcs = synonymIds.length > 0 ? (synonymData ?? []) : []
 
   const pcs = objectData?.pcs ?? []
 

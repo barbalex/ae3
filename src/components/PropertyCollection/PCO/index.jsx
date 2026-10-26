@@ -1,7 +1,7 @@
 import { useState, Suspense } from 'react'
 import { orderBy as doOrderBy, union } from 'es-toolkit'
 import Button from '@mui/material/Button'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -80,6 +80,7 @@ export const PCO = () => {
 
   const { data, error } = useQuery({
     queryKey: ['pcoPreviewQuery', pcId, count],
+    placeholderData: keepPreviousData,
     queryFn: () => fetchPcoData(pcId, count),
   })
   const pcoData = data

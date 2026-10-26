@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 
 import { PcPresentation } from './PCO/index.jsx'
 import { apiFetch } from '../../../modules/api.js'
@@ -14,6 +14,7 @@ const pcFields =
 export const PC = ({ pcId, objId }) => {
   const { data, error } = useQuery({
     queryKey: ['pc', pcId, objId],
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       const pcs = await apiFetch(
         `/property_collection?id=eq.${pcId}&select=${pcFields},pcos:property_collection_object!property_collection_object_property_collection_id_fkey(id,objectId:object_id,propertyCollectionId:property_collection_id,propertyCollectionOfOrigin:property_collection_of_origin,properties,propertyCollectionByPropertyCollectionId:property_collection_id(${pcFields})),relations:relation!relation_property_collection_id_fkey(id,propertyCollectionId:property_collection_id,objectId:object_id,objectIdRelation:object_id_relation,relationType:relation_type,properties,objectByObjectIdRelation:object!relation_object_id_relation_fkey(id,name,taxonomyByTaxonomyId:taxonomy_id(id,name,type)))&pcos.object_id=eq.${objId}&relations.object_id=eq.${objId}`,

@@ -2,7 +2,19 @@
 context menu use in nav tree: is it really useful? Could we move to the form (headers)?
 ---
 
-would moving from graphql to postgrest make sense in this project? 1. reduce bundle size 2. reduce attack surface. Other upsides? No one else is currently using the graphql api and this is a single-dev project - so graphql's advantages are not being used here, correct?
+loading http://localhost:5174/Arten/c87f19f2-1b77-11ea-8282-bbc40e20aff6/c3d82f63-1c13-11ea-8282-6b46a89d266c/c3d82f64-1c13-11ea-8282-07e5a9d2fa66 errors: 
+
+---
+
+right click on Arten in the nav tree should open a context menu when logged in. does not happen. seems that no context menus open
+
+---
+
+http://localhost:5174/Export checking 'Arten' leads to: 'Fehler beim Laden der Taxonomien: apiFetch is not defined'
+
+---
+
+---
 
 ---
 
