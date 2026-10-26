@@ -13,7 +13,7 @@ export const Object = ({ parentData }) => {
     queryKey: ['tree', 'lrObject', parentData.id],
     queryFn: () =>
       apiFetch(
-        `/object?id=eq.${parentData.id}&select=id,name,children:object!object_parent_id_fkey(id,name,objectCount:object!object_parent_id_fkey(count))&children.order=name`,
+        `/object?id=eq.${parentData.id}&select=id,name,children:object!parent_id(id,name,objectCount:object!parent_id(count))&children.order=name`,
       ),
     suspense: true,
   })

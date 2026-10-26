@@ -20,14 +20,16 @@ const taxonomySelect =
   'taxonomyByTaxonomyId:taxonomy_id(id,name,type,description,links,lastUpdated:last_updated,importedBy:imported_by,termsOfUse:terms_of_use,habitatLabel:habitat_label,habitatComments:habitat_comments,habitatNrFnsMin:habitat_nr_fns_min,habitatNrFnsMax:habitat_nr_fns_max,organizationByOrganizationId:organization_id(id,name))'
 
 // pcs referencing any of the objects via relation OR property_collection_object
+// (the embeds are unaliased on purpose: postgrest only binds embed filters
+// to unaliased hinted embeds)
 const fetchPcsForObjectIds = async (objectIds) => {
   const ids = objectIds.join(',')
   const [byRelation, byPco] = await Promise.all([
     apiFetch(
-      `/property_collection?select=id,name&relations:relation!relation_property_collection_id_fkey!inner(object_id)&relations.object_id=in.(${ids})`,
+      `/property_collection?select=id,name,relation!relation_property_collection_id_fkey!inner(object_id)&relation.object_id=in.(${ids})`,
     ),
     apiFetch(
-      `/property_collection?select=id,name&pcos:property_collection_object!property_collection_object_property_collection_id_fkey!inner(object_id)&pcos.object_id=in.(${ids})`,
+      `/property_collection?select=id,name,property_collection_object!property_collection_object_property_collection_id_fkey!inner(object_id)&property_collection_object.object_id=in.(${ids})`,
     ),
   ])
   return uniqBy([...(byRelation ?? []), ...(byPco ?? [])], 'id').sort((a, b) =>

@@ -24,4 +24,16 @@ test('tree loads and navigating into a taxonomy works', async ({ page }) => {
 
   await taxonomyRow.click()
   await expect(page).toHaveURL(/\/Arten\/[^/]+$/, { timeout: 15_000 })
+
+  // level 3: top level objects of the taxonomy load.
+  // this catches failing list queries: their errors are swallowed by
+  // the error boundary, so only asserting rendered rows proves them
+  const taxonomyUrl = await taxonomyRow.getAttribute('data-url')
+  const objectRow = page.locator(`[data-url^="${taxonomyUrl},"]`).first()
+  await expect(objectRow).toBeVisible({ timeout: 15_000 })
+
+  await objectRow.click()
+  await expect(page).toHaveURL(/\/Arten\/[^/]+\/[^/]+$/, {
+    timeout: 15_000,
+  })
 })

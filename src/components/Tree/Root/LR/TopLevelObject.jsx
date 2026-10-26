@@ -15,7 +15,7 @@ export const TopLevelObject = ({ type = 'Lebensräume' }) => {
     queryKey: ['tree', 'lr', taxId],
     queryFn: () =>
       apiFetch(
-        `/object?taxonomy_id=eq.${taxId}&parent_id=is.null&select=id,name,objectCount:object!object_parent_id_fkey(count)&order=name`,
+        `/object?taxonomy_id=eq.${taxId}&parent_id=is.null&select=id,name,objectCount:object!parent_id(count)&order=name`,
       ),
     suspense: true,
   })
