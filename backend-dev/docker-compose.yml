@@ -91,8 +91,11 @@ services:
       - ./.env
     environment:
       # same authenticator connection and jwt secret as postgraphile:
-      # tokens issued by ae.login are valid for both apis
+      # tokens issued by ae.login are valid for both apis.
+      # the secret contains a dollar sign, so .env escapes it as $$
       PGRST_DB_URI: ${DATABASE_URL}
+      # v12 may otherwise try reading config from the database
+      PGRST_DB_CONFIG: 'false'
       PGRST_DB_SCHEMAS: ae
       PGRST_DB_ANON_ROLE: anon
       PGRST_JWT_SECRET: ${JWT_SECRET}

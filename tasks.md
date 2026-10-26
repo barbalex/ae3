@@ -31,3 +31,7 @@ dark and light mode
 ---
 
 'Im GBIF suchen' seems not to work. way to go: https://www.gbif.org/taxon/search?q=test
+
+---
+
+click on nav tree rows does not immediately close them. used to be same in apf2, was solved a few months ago

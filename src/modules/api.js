@@ -20,7 +20,10 @@ const authHeaders = async () => {
   if (token) {
     try {
       const { exp } = jwtDecode(token)
-      if (exp > Date.now() / 1000) {
+      // ae.login signs no exp claim into the token (it only returns it),
+      // so a token without exp is treated as valid; the server
+      // rejects actually invalid tokens with 401
+      if (exp === undefined || exp > Date.now() / 1000) {
         headers.set('authorization', `Bearer ${token}`)
       } else {
         // token is not valid any more > remove it
