@@ -8,9 +8,11 @@ right click on 'Arten' in the nav tree should open a context menu when logged in
 
 ---
 
-http://localhost:5174/Export checking 'Arten' leads to: 'Fehler beim Laden der Taxonomien: apiFetch is not defined'
+logging in: when ui navigates to home, the menu switches immediately to 'Login abgelaufen'. Maybe that is the reason context menus dont open?
 
 ---
+
+http://localhost:5174/Export checking 'Arten' leads to: 'Fehler beim Laden der Taxonomien: apiFetch is not defined'
 
 ---
 
