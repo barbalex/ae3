@@ -105,9 +105,7 @@ export default defineConfig({
         //enabled: true,
       },
     }),
-    react({
-      jsxImportSource: '@emotion/react',
-    }),
+    react(),
     babel({
       presets: [reactCompilerPreset()],
     }),
