@@ -6,4 +6,12 @@ unattended-upgrades: can we (are they already) activate on the new servers for a
 
 ---
 
-would it make sense to use Tanstack Redact instead of React? https://tanstack.com/redact/latest
+would moving from graphql to postgrest make sense in this project? 1. reduce bundle size 2. reduce attack surface
+
+---
+
+MUI + Emotion as big bundles: would it make sense to remove them and try using a minimal css based approach?
+
+---
+
+dark and light mode
