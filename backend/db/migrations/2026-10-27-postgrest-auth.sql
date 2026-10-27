@@ -60,3 +60,30 @@ $fn$ LANGUAGE plpgsql STABLE;
 -- 3. ensure the jwt secret is long enough (>= 32 chars) and matches .env:
 --    SELECT current_setting('app.jwt_secret');
 --    ALTER DATABASE ae SET app.jwt_secret = '<same 32+ char value as JWT_SECRET in .env>';
+
+-- 4. PostgREST cannot expose ae.export_all (arrays of composite arguments),
+--    so this jsonb wrapper is used by the frontend instead
+CREATE OR REPLACE FUNCTION ae.export_all_json(params jsonb) RETURNS ae.export_data AS $fn$
+DECLARE
+  result ae.export_data;
+BEGIN
+  SELECT * INTO result FROM ae.export_all(
+    params->>'typ',
+    COALESCE(ARRAY(SELECT jsonb_array_elements_text(params->'taxonomies')), ARRAY[]::text[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.tax_field, params->'taxFields') e), ARRAY[]::public.tax_field[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.tax_filter, params->'taxFilters') e), ARRAY[]::public.tax_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.pco_filter, params->'pcoFilters') e), ARRAY[]::public.pco_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.pco_property, params->'pcoProperties') e), ARRAY[]::public.pco_property[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.rco_filter, params->'rcoFilters') e), ARRAY[]::public.rco_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.rco_property, params->'rcoProperties') e), ARRAY[]::public.rco_property[]),
+    COALESCE((params->>'useSynonyms')::boolean, true),
+    COALESCE((params->>'count')::integer, 0),
+    COALESCE(ARRAY(SELECT jsonb_array_elements_text(params->'objectIds'))::uuid[], ARRAY[]::uuid[]),
+    (SELECT e FROM jsonb_populate_recordset(
+       NULL::public.sort_field,
+       CASE WHEN jsonb_typeof(params->'sortField') = 'object' THEN jsonb_build_array(params->'sortField') ELSE '[]'::jsonb END
+     ) e LIMIT 1)
+  );
+  RETURN result;
+END;
+$fn$ LANGUAGE plpgsql;

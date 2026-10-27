@@ -8,7 +8,7 @@ context menu use in nav tree: is it really useful? Could we move to the form (he
 
 ---
 
-http://localhost:5174/Export checking 'Arten' leads to: 'Fehler beim Laden der Taxonomien: apiFetch is not defined'
+http://localhost:5174/Export 'Arten' > 'SISF' > 'Eigenschaften wählen' > 'Eigenschaftensammlungen' becomes after a few seconds: Error fetching data: export_taxonomies is not defined. Same happens at 'Arten' > 'SISF' > 'filtern' > 'Eigenschaftensammlungen'
 
 ---
 

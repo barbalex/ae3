@@ -7,6 +7,7 @@ import {
   exportTypeAtom,
   exportTaxonomiesAtom,
 } from '../../../../../../store/index.ts'
+import { apiFetch } from '../../../../../../modules/api.js'
 import styles from './Taxonomies.module.css'
 
 export const Taxonomies = ({ type }) => {

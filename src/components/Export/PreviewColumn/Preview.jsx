@@ -134,20 +134,25 @@ export const Preview = () => {
       if (taxonomies.length === 0) return []
 
       const data = await (async () => {
-          const r = await rpc('export_all', {
-            typ: type.toLowerCase(),
-            taxonomies,
-            tax_fields: taxFields,
-            tax_filters: taxFilters,
-            pco_filters: pcoFilters,
-            pco_properties: pcoProperties,
-            rco_filters: rcoFilters,
-            rco_properties: rcoProperties,
-            use_synonyms: withSynonymData,
-            count,
-            object_ids: exportIds,
-            sort_field: sortFieldForQuery,
-          })
+          const r = await rpc(
+            'export_all_json',
+            {
+              typ: type.toLowerCase(),
+              taxonomies,
+              taxFields,
+              taxFilters,
+              pcoFilters,
+              pcoProperties,
+              rcoFilters,
+              rcoProperties,
+              useSynonyms: withSynonymData,
+              count,
+              objectIds: exportIds,
+              sortField: sortFieldForQuery,
+            },
+            // the wrapper takes one jsonb parameter
+            { headers: { Prefer: 'params=single-object' } },
+          )
           return {
             data: {
               exportAll: {
@@ -181,20 +186,25 @@ export const Preview = () => {
   const onClickXlsx = async () => {
     // 1. download the full rows
     // 2. rowsFromObjects
-    const r = await rpc('export_all', {
-      typ: type.toLowerCase(),
-      taxonomies,
-      tax_fields: taxFields,
-      tax_filters: taxFilters,
-      pco_filters: pcoFilters,
-      pco_properties: pcoProperties,
-      rco_filters: rcoFilters,
-      rco_properties: rcoProperties,
-      use_synonyms: withSynonymData,
-      count: 0,
-      object_ids: exportIds,
-      sort_field: sortFieldForQuery,
-    })
+    const r = await rpc(
+      'export_all_json',
+      {
+        typ: type.toLowerCase(),
+        taxonomies,
+        taxFields,
+        taxFilters,
+        pcoFilters,
+        pcoProperties,
+        rcoFilters,
+        rcoProperties,
+        useSynonyms: withSynonymData,
+        count: 0,
+        objectIds: exportIds,
+        sortField: sortFieldForQuery,
+      },
+      // the wrapper takes one jsonb parameter
+      { headers: { Prefer: 'params=single-object' } },
+    )
     const data = {
       data: {
         exportAll: {

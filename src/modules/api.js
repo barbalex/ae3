@@ -82,10 +82,14 @@ export const apiFetch = async (path, options = {}) => {
 }
 
 // call a db function, e.g. rpc('login', { username, pass })
-export const rpc = (fn, args) =>
+export const rpc = (fn, args, options = {}) =>
   apiFetch(`/rpc/${fn}`, {
+    ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers ?? {}),
+    },
     body: JSON.stringify(args ?? {}),
   })
 
