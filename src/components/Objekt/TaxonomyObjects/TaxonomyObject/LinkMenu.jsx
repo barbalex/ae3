@@ -56,7 +56,7 @@ const LinkMenu = ({ objekt }) => {
   }
   const onClickGbifFromSisf2 = (e) => {
     e.stopPropagation()
-    const url = `https://www.gbif.org/species/search?q=${encodeURIComponent(
+    const url = `https://www.gbif.org/taxon/search?q=${encodeURIComponent(
       `${gattung} ${art}`,
     )}`
     typeof window !== 'undefined' && window.open(url)
@@ -64,7 +64,7 @@ const LinkMenu = ({ objekt }) => {
   }
   const onClickGbifFromDbTaxref = (e) => {
     e.stopPropagation()
-    const url = `https://www.gbif.org/species/search?q=${encodeURIComponent(
+    const url = `https://www.gbif.org/taxon/search?q=${encodeURIComponent(
       `${props?.['Artname vollständig']}`,
     )}`
     typeof window !== 'undefined' && window.open(url)
