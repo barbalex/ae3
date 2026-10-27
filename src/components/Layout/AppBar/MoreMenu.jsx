@@ -45,10 +45,6 @@ export const MoreMenu = () => {
       window.open('https://github.com/barbalex/ae3/issues')
     setAnchorEl(null)
   }
-  // const onClickGqlQuery = () => {
-  //   navigate('/graphiql')
-  //   setAnchorEl(null)
-  // }
   const hostname =
     typeof window !== 'undefined' ? window.location.hostname : 'artdaten.ch'
   const onClickUptime = () => {

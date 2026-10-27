@@ -151,11 +151,10 @@ const ProjektbeschreibungDoc = () => (
           </li>
           <li>
             über die API für GIS und beliebige weitere Applikationen (da die API
-            mit <a href="https://github.com/facebook/graphql">GraphQL</a>{' '}
-            aufgebaut ist, kann jede Applikation ohne Rückfrage mit der FNS
-            flexibel auf die Daten zugreifen. Rückfragen bzw. entsprechende
-            Benutzer-Rechte sind nur nötig, um Daten von externen Applikationen
-            aus zu verändern)
+            mit <a href="https://postgrest.org/">PostgREST</a> aufgebaut ist,
+            kann jede Applikation ohne Rückfrage mit der FNS flexibel auf die
+            Daten zugreifen. Rückfragen bzw. entsprechende Benutzer-Rechte sind
+            nur nötig, um Daten von externen Applikationen aus zu verändern)
           </li>
         </ul>
       </li>

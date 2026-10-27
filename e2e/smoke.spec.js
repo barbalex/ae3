@@ -11,7 +11,7 @@ test('home page renders', async ({ page }) => {
 test('tree loads and navigating into a taxonomy works', async ({ page }) => {
   await page.goto('/')
 
-  // tree root rows come from graphql; data-url holds the node array
+  // tree root rows come from postgrest; data-url holds the node array
   const artenRow = page.locator('[data-url="Arten"]')
   await expect(artenRow).toBeVisible({ timeout: 15_000 })
 

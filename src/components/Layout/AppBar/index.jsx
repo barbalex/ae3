@@ -51,7 +51,7 @@ export const AppBar = () => {
   }
   const existsTaxId = taxId !== '99999999-9999-9999-9999-999999999999'
 
-  // Ensure objectId is never null or undefined when passed to GraphQL
+  // Ensure objectId is never null or undefined when passed to the api query
   const safeObjectId = objectId ?? '99999999-9999-9999-9999-999999999999'
   const existsObjectId = !!objectId
 

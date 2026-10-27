@@ -31,45 +31,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  graphql:
-    container_name: ae_graphql
-    restart: always
-    build:
-      context: ./graphql
-    networks:
-      - network
-    expose:
-      - "5000"
-    ports:
-      - "5000:5000"
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-    env_file:
-      - ./.env
-    command:
-      [
-        "--connection",
-        "${DATABASE_URL}",
-        "--schema",
-        "ae",
-        "--append-plugins",
-        "postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,postgraphile-upsert-plugin:PgMutationUpsertPlugin",
-        "--jwt-token-identifier",
-        "auth.jwt_token",
-        "--default-role",
-        "anon",
-        "--jwt-secret",
-        "${JWT_SECRET}",
-        "--body-size-limit",
-        "300kb",
-        "--cors",
-        "--disable-query-log",
-        "--enable-query-batching",
-        "--retry-on-init-fail",
-        "--enhance-graphiql",
-      ]
   postgrest:
     container_name: ae_postgrest
     restart: always
@@ -85,8 +46,8 @@ services:
     env_file:
       - ./.env
     environment:
-      # same authenticator connection and jwt secret as postgraphile:
-      # tokens issued by ae.login are valid for both apis.
+      # connects with the same authenticator and jwt secret postgraphile used:
+      # tokens issued by ae.login remain valid.
       # if the secret contains a dollar sign, .env must escape it as $$
       PGRST_DB_URI: ${DATABASE_URL}
       # v12 may otherwise try reading config from the database
@@ -102,7 +63,6 @@ services:
     networks:
       - network
     depends_on:
-      - graphql
       - postgrest
     restart: always
     # original image downgrades user but that seems not to work

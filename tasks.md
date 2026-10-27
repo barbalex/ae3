@@ -1,5 +1,4 @@
 ---
-context menu use in nav tree: is it really useful? Could we move to the form (headers)?
 ---
 
 ---
@@ -12,11 +11,19 @@ context menu use in nav tree: is it really useful? Could we move to the form (he
 
 ---
 
-Deploying means docker compose up -d postgrest caddy on the server with the updated compose files — the frontend can deploy independently since PostGraphile still serves the old endpoint in parallel.
+Deploying cuts production over from PostGraphile to PostgREST directly — no parallel serving. On the server, in backend/:
+
+1. apply db/migrations/2026-10-27-postgrest-auth.sql to the production db: `docker exec -i ae_db psql -U postgres -d ae < db/migrations/2026-10-27-postgrest-auth.sql` (function replacements only, backward compatible — safe while PostGraphile still runs)
+2. check the jwt secret is at least 32 chars and matches JWT_SECRET in .env: `docker exec ae_db psql -U postgres -d ae -c "select length(current_setting('app.jwt_secret'));"` (a dollar sign in the secret must be escaped as $$ in .env)
+3. `docker compose up -d --remove-orphans` — starts ae_postgrest, recreates caddy with only the /postgrest route, stops and removes ae_graphql. From here the old GraphQL frontend is dead until step 4.
+4. build and deploy the new frontend (npm ci && npm run build, upload dist/)
+5. verify: app loads, tree renders, login works, an export runs; https://api.arteigenschaften.ch/postgrest/taxonomy?select=id&limit=1 returns a row; /graphql returns 404.
+
+Rollback: checkout the previous commit on the server, `docker compose up -d graphql caddy` (the image is still cached), redeploy the old frontend. No data rollback needed — the migration only replaced functions.
 
 ---
 
-vermehrung accesses ae3 two ways: postgres_fdw straight into ae3's Postgres (unaffected by any of this) and a Hasura remote schema pointing at https://api.arteigenschaften.ch/graphql. Hasura remote schemas only speak GraphQL, so that one cannot be pointed at PostgREST — it keeps working because PostGraphile stays running, which matches your "not now" decision. When you eventually migrate it, the clean path is serving vermehrung through its existing fdw foreign tables as native Hasura tables, after which PostGraphile can be retired.
+Known consequence of the PostgREST cutover: vermehrung's Hasura remote schema (https://api.arteigenschaften.ch/graphql) breaks; its postgres_fdw access is unaffected. Clean path forward for vermehrung: serve its existing fdw foreign tables as native Hasura tables. Also: users with a PWA-cached old frontend need one reload to get the new build.
 
 ---
 
@@ -24,7 +31,7 @@ lets add a dark mode and a way to switch while per default using system settings
 
 ---
 
-'Im GBIF suchen' seems not to work. way to go: https://www.gbif.org/taxon/search?q=test
+'Im GBIF suchen' seems not to work. url to call: https://www.gbif.org/taxon/search?q=test
 
 ---
 
