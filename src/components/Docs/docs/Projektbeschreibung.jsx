@@ -151,11 +151,10 @@ const ProjektbeschreibungDoc = () => (
           </li>
           <li>
             über die API für GIS und beliebige weitere Applikationen (da die API
-            mit <a href="https://github.com/facebook/graphql">GraphQL</a>{' '}
-            aufgebaut ist, kann jede Applikation ohne Rückfrage mit der FNS
-            flexibel auf die Daten zugreifen. Rückfragen bzw. entsprechende
-            Benutzer-Rechte sind nur nötig, um Daten von externen Applikationen
-            aus zu verändern)
+            mit <a href="https://postgrest.org/">PostgREST</a> aufgebaut ist,
+            kann jede Applikation ohne Rückfrage mit der FNS flexibel auf die
+            Daten zugreifen. Rückfragen bzw. entsprechende Benutzer-Rechte sind
+            nur nötig, um Daten von externen Applikationen aus zu verändern)
           </li>
         </ul>
       </li>
@@ -574,44 +573,20 @@ const ProjektbeschreibungDoc = () => (
         </ul>
       </li>
       <li>
-        <a href="https://github.com/facebook/graphql">GraphQL</a> in Form von{' '}
-        <a href="https://github.com/graphile/postgraphile">PostGraphile</a>
+        <a href="https://postgrest.org/">PostGREST</a>
         <ul>
-          <li>
-            API-Server mit einer Zeile bauen und konfigurieren. Das sind{' '}
-            <em>tausende</em> weniger als bisher!
-          </li>
-          <li>
-            Daten-Logik und Rechte-Verwaltung obliegen der Datenbank - wie es
-            sein sollte
-          </li>
-          <li>
-            GraphQL ist die kommende API-Technologie. Verglichen mit REST ist
-            GraphQL extrem flexibel. Somit steht ein aussergewöhnlich
-            benutzerfreundlicher API-Server zur Verfügung, mit dem jede(r) ganz
-            nach eigenen Bedürfnissen alle öffentlichen Daten aus
-            arteigenschaften.ch abfragen und - im Rahmen der Benutzer-Rechte -
-            bearbeiten kann
-          </li>
+          <li>API-Server mit einer Zeile bauen und konfigurieren.</li>
+          <li>Daten-Logik und Rechte-Verwaltung obliegen der Datenbank</li>
         </ul>
-      </li>
-      <li>
-        <a href="https://www.apollodata.com">Apollo</a>. Komponenten definieren,
-        welche Daten sie brauchen. GraphQL und Apollo kümmern sich um die
-        Bereitstellung. React (siehe unten), GraphQL und Apollo haben die
-        Entwicklung von Anwendungen revolutioniert
       </li>
       <li>
         <a href="https://facebook.github.io/react/index.html">React</a>
         <ul>
           <li>
             Die Benutzeroberfläche ist eine Funktion der anwendungsseitigen
-            Daten,
+            Daten
           </li>
-          <li>viel einfacher zu steuern</li>
-          <li>
-            ...und aus wiederverwertbaren und testbaren Komponenten aufgebaut
-          </li>
+          <li>Aus wiederverwendbaren und testbaren Komponenten aufgebaut</li>
         </ul>
       </li>
     </ul>

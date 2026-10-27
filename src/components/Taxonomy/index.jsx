@@ -7,9 +7,7 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { format } from 'date-fns'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { useAtomValue, useAtom } from 'jotai'
 
 import { PropertyReadOnly } from '../shared/PropertyReadOnly.jsx'
@@ -18,6 +16,7 @@ import { Property } from './PropertyArten.jsx'
 import { PropertyLr } from './PropertyLr.jsx'
 import { onBlurArten } from './onBlurArten.js'
 import { onBlurLr } from './onBlurLr.js'
+import { apiFetch } from '../../modules/api.js'
 import {
   loginUsernameAtom,
   editingTaxonomiesAtom,
@@ -28,70 +27,7 @@ import { Spinner } from '../shared/Spinner.jsx'
 
 import styles from './index.module.css'
 
-const allUsersQuery = gql`
-  query AllUsersQuery {
-    allUsers {
-      totalCount
-      nodes {
-        id
-        name
-        email
-        organizationUsersByUserId {
-          nodes {
-            id
-            organizationId
-            role
-            organizationByOrganizationId {
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-`
-const taxQuery = gql`
-  query taxQuery($taxId: UUID!) {
-    taxonomyById(id: $taxId) {
-      id
-      name
-      description
-      links
-      lastUpdated
-      organizationId
-      organizationByOrganizationId {
-        id
-        name
-        organizationUsersByOrganizationId {
-          nodes {
-            id
-            role
-            userId
-            userByUserId {
-              id
-              name
-            }
-          }
-        }
-      }
-      importedBy
-      userByImportedBy {
-        id
-        name
-      }
-      termsOfUse
-      habitatLabel
-      habitatComments
-      habitatNrFnsMin
-      habitatNrFnsMax
-      type
-    }
-  }
-`
-
 export const Taxonomy = () => {
-  const apolloClient = useApolloClient()
   const scrollIntoView = useAtomValue(scrollIntoViewAtom)
   const [editingTaxonomies, setEditingTaxonomies] = useAtom(
     editingTaxonomiesAtom,
@@ -104,9 +40,9 @@ export const Taxonomy = () => {
   const { data: allUsersData, error: allUsersError } = useQuery({
     queryKey: ['allUsers'],
     queryFn: () =>
-      apolloClient.query({
-        query: allUsersQuery,
-      }),
+      apiFetch(
+        '/user?select=id,name,email,organizationUsersByUserId:organization_user(id,organizationId:organization_id,role,organizationByOrganizationId:organization_id(id,name))',
+      ),
     suspense: true,
   })
 
@@ -116,21 +52,22 @@ export const Taxonomy = () => {
     refetch,
   } = useQuery({
     queryKey: ['taxonomy', taxId],
+    placeholderData: keepPreviousData,
     queryFn: () =>
-      apolloClient.query({
-        query: taxQuery,
-        variables: { taxId },
-      }),
+      apiFetch(
+        `/taxonomy?id=eq.${taxId}&select=id,name,description,links,lastUpdated:last_updated,organizationId:organization_id,organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,role,userId:user_id,userByUserId:user_id(id,name))),importedBy:imported_by,userByImportedBy:imported_by(id,name),termsOfUse:terms_of_use,habitatLabel:habitat_label,habitatComments:habitat_comments,habitatNrFnsMin:habitat_nr_fns_min,habitatNrFnsMax:habitat_nr_fns_max,type`,
+      ),
     suspense: true,
   })
 
-  const tax = taxData?.data?.taxonomyById
+  const tax = taxData?.[0]
   const importedByName = tax?.userByImportedBy?.name
   const organizationName = tax?.organizationByOrganizationId?.name
   const editing = editingTaxonomies
-  const editingArten = editing && tax?.type === 'ART'
-  const editingLr = editing && tax?.type === 'LEBENSRAUM'
-  const allUsers = allUsersData?.data?.allUsers?.nodes ?? []
+  // graphql returned the enum values, PostgREST the enum labels
+  const editingArten = editing && tax?.type === 'Art'
+  const editingLr = editing && tax?.type === 'Lebensraum'
+  const allUsers = allUsersData ?? []
   const user = allUsers.find((u) => u.name === username)
   const orgsUserIsTaxWriter = (user?.organizationUsersByUserId?.nodes ?? [])
     .filter((o) => ['orgTaxonomyWriter', 'orgAdmin'].includes(o.role))
@@ -155,7 +92,6 @@ export const Taxonomy = () => {
 
   const onChangeImportedByArten = (event) =>
     onBlurArten({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field: 'importedBy',
@@ -167,7 +103,6 @@ export const Taxonomy = () => {
 
   const onChangeOrganizationArten = (event) =>
     onBlurArten({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field: 'organizationId',
@@ -179,7 +114,6 @@ export const Taxonomy = () => {
 
   const onChangeImportedByLr = (event) =>
     onBlurLr({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field: 'importedBy',
@@ -191,7 +125,6 @@ export const Taxonomy = () => {
 
   const onChangeOrganizationLr = (event) =>
     onBlurLr({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field: 'organizationId',

@@ -1,14 +1,13 @@
 import { useMemo, Suspense } from 'react'
-import { useApolloClient } from '@apollo/client/react'
 import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Filter } from './Filter/index.jsx'
-import { treeQuery } from './treeQuery.js'
 import { TreeContextMenu } from './contextmenu/TreeContextMenu.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { constants } from '../../modules/constants.js'
+import { apiFetch } from '../../modules/api.js'
 import { Root } from './Root/index.jsx'
 import { LoadingRow } from './LoadingRow.jsx'
 import { loginUsernameAtom } from '../../store/index.ts'
@@ -16,10 +15,8 @@ import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import styles from './index.module.css'
 
-const getUserIsTaxWriter = (data) => {
-  const userRoles = (
-    data?.data?.userByName?.organizationUsersByUserId?.nodes ?? []
-  ).map((r) => r?.role)
+const getUserIsTaxWriter = (users) => {
+  const userRoles = (users?.[0]?.organizationUsers ?? []).map((r) => r?.role)
   return (
     userRoles.includes('orgAdmin') || userRoles.includes('orgTaxonomyWriter')
   )
@@ -28,17 +25,12 @@ const getUserIsTaxWriter = (data) => {
 export const Tree = () => {
   const loginUsername = useAtomValue(loginUsernameAtom)
 
-  const apolloClient = useApolloClient()
-
   const { error, data } = useQuery({
     queryKey: ['tree', 'userRole', loginUsername],
     queryFn: () =>
-      apolloClient.query({
-        query: treeQuery,
-        variables: { username: loginUsername ?? '' },
-        // seems that react-query cache is not working
-        // no idea why
-      }),
+      apiFetch(
+        `/user?select=id,organizationUsers:organization_user(id,role)&name=eq.${encodeURIComponent(loginUsername ?? '')}`,
+      ),
   })
 
   const userIsTaxWriter = getUserIsTaxWriter(data)

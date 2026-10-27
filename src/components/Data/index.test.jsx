@@ -1,53 +1,29 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router'
-import { gql } from '@apollo/client'
-import { MockedProvider } from '@apollo/client/testing/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import { apiFetch, apiCount } from '../../modules/api.js'
 import { Data } from './index.jsx'
 import Home from '../Home.jsx'
-import { treeQuery } from '../Tree/treeQuery.js'
 
-// same query as in Tree/Root/index.jsx, which does not export it
-const treeRootQuery = gql`
-  query treeRootQuery($hasToken: Boolean!) {
-    arten: allTaxonomies(filter: { type: { equalTo: ART } }) {
-      totalCount
-    }
-    lebensraeume: allTaxonomies(
-      filter: { type: { equalTo: LEBENSRAUM } }
-    ) {
-      totalCount
-    }
-    allPropertyCollections {
-      totalCount
-    }
-    allUsers @include(if: $hasToken) {
-      totalCount
-    }
-    allOrganizations @include(if: $hasToken) {
-      totalCount
-    }
-  }
-`
-
-const mocks = [
-  {
-    request: { query: treeQuery, variables: { username: '' } },
-    result: { data: { userByName: null } },
-  },
-  {
-    request: { query: treeRootQuery, variables: { hasToken: false } },
-    result: {
-      data: {
-        arten: { totalCount: 3 },
-        lebensraeume: { totalCount: 2 },
-        allPropertyCollections: { totalCount: 1 },
-      },
-    },
-  },
-]
+// mock the PostgREST api module: the tree asks for the logged-in
+// user's roles, the root for counts of taxonomies/pcs
+vi.mock('../../modules/api.js', () => ({
+  apiFetch: vi.fn(async (path) => {
+    if (path.startsWith('/user?')) return []
+    throw new Error(`unmocked apiFetch: ${path}`)
+  }),
+  apiCount: vi.fn(async (path) => {
+    if (path.startsWith('/taxonomy?type=eq.Art')) return 3
+    if (path.startsWith('/taxonomy?type=eq.Lebensraum')) return 2
+    if (path.startsWith('/property_collection')) return 1
+    if (path.startsWith('/user')) return 0
+    if (path.startsWith('/organization')) return 0
+    throw new Error(`unmocked apiCount: ${path}`)
+  }),
+  rpc: vi.fn(),
+}))
 
 describe('Data', () => {
   it('renders the tree root and the home page', async () => {
@@ -57,15 +33,13 @@ describe('Data', () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <MemoryRouter initialEntries={['/']}>
-            <Routes>
-              <Route path="/" element={<Data />}>
-                <Route index element={<Home />} />
-              </Route>
-            </Routes>
-          </MemoryRouter>
-        </MockedProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <Routes>
+            <Route path="/" element={<Data />}>
+              <Route index element={<Home />} />
+            </Route>
+          </Routes>
+        </MemoryRouter>
       </QueryClientProvider>,
     )
 
@@ -80,5 +54,8 @@ describe('Data', () => {
 
     // the routed home page shows in the outlet
     expect(screen.getByText('...exportieren')).toBeInTheDocument()
+
+    expect(apiFetch).toHaveBeenCalled()
+    expect(apiCount).toHaveBeenCalled()
   })
 })

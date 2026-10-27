@@ -3,50 +3,27 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { PcoList as List } from './PCOs.jsx'
+import { rpc } from '../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const query = gql`
-  query propsByTaxDataQueryForFilterRCOs($exportTaxonomies: [String!]) {
-    pc_count: allPropertyCollections(
-      filter: {
-        propertyCollectionObjectsByPropertyCollectionId: {
-          some: {
-            objectByObjectId: {
-              taxonomyByTaxonomyId: { name: { in: $exportTaxonomies } }
-            }
-          }
-        }
-      }
-    ) {
-      totalCount
-    }
-    property_count: pcoPropertiesByTaxonomiesCountFunction(
-      exportTaxonomies: $exportTaxonomies
-    )
-  }
-`
 
 export const PcoList = ({ pcoExpanded, onTogglePco }) => {
-  const apolloClient = useApolloClient()
 
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnPropertiesPcosList', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query,
-        variables: {
-          exportTaxonomies,
+    queryFn: async () => ({
+        data: {
+          pc_count: { totalCount: (await rpc('pco_properties_by_taxonomies_count_per_pc', { export_taxonomies: exportTaxonomies })).length },
+          property_count: await rpc('pco_properties_by_taxonomies_count_function', { export_taxonomies: exportTaxonomies }),
         },
       }),
   })

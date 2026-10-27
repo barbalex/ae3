@@ -2,8 +2,6 @@ import { useState, Suspense } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -14,69 +12,26 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { OrgUsers } from './OrgUsers/index.jsx'
 import { TCs } from './TCs.jsx'
 import { PCs } from './PCs.jsx'
+import { apiFetch } from '../../modules/api.js'
 
 import styles from './index.module.css'
 
-const orgQuery = gql`
-  query orgQuery($orgId: UUID!) {
-    organizationById(id: $orgId) {
-      id
-      name
-      links
-      contact
-      userByContact {
-        id
-        name
-        email
-      }
-      propertyCollectionsByOrganizationId {
-        totalCount
-        nodes {
-          id
-          name
-        }
-      }
-      taxonomiesByOrganizationId {
-        totalCount
-        nodes {
-          id
-          name
-        }
-      }
-      organizationUsersByOrganizationId {
-        totalCount
-        nodes {
-          id
-          userByUserId {
-            id
-            name
-            email
-          }
-          role
-        }
-      }
-    }
-  }
-`
-
 const Organization = () => {
   const { orgId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: ['organization', orgId],
     queryFn: () =>
-      apolloClient.query({
-        query: orgQuery,
-        variables: { orgId },
-      }),
+      apiFetch(
+        `/organization?id=eq.${orgId}&select=id,name,links,userByContact:contact(id,name,email)`,
+      ),
   })
 
   const [tab, setTab] = useState(0)
 
   const onChangeTab = (event, value) => setTab(value)
 
-  const org = data?.data?.organizationById ?? {}
+  const org = data?.[0] ?? {}
 
   if (error) {
     return <div>{`Fehler: ${error.message}`}</div>

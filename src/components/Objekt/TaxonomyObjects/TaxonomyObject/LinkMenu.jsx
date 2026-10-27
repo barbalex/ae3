@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import { MdLink as LinkIcon } from 'react-icons/md'
 
+import { parseProperties } from '../../../../modules/parseProperties.js'
 import styles from './LinkMenu.module.css'
 
 const ITEM_HEIGHT = 48
@@ -18,7 +19,7 @@ const paperProps = {
 const LinkMenu = ({ objekt }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const props = objekt?.properties ? JSON.parse(objekt?.properties) : null
+  const props = objekt?.properties ? parseProperties(objekt?.properties) : null
   const nameDeutsch = props?.['Name Deutsch'] ?? null
   const einheit = props?.Einheit ?? null
   const gattung = props?.Gattung

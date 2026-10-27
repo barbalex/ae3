@@ -1,7 +1,16 @@
-import updateTaxonomyMutationArten from './updateTaxonomyMutationArten.js'
+import { apiFetch } from '../../modules/api.js'
+
+const columnByField = {
+  name: 'name',
+  description: 'description',
+  links: 'links',
+  organizationId: 'organization_id',
+  lastUpdated: 'last_updated',
+  importedBy: 'imported_by',
+  termsOfUse: 'terms_of_use',
+}
 
 export const onBlurArten = async ({
-  apolloClient,
   queryClient,
   scrollIntoView,
   field,
@@ -12,22 +21,16 @@ export const onBlurArten = async ({
   refetch,
 }) => {
   if (value !== prevValue) {
-    const variables = {
-      id: taxonomy.id,
-      name: field === 'name' ? value : taxonomy.name,
-      description: field === 'description' ? value : taxonomy.description,
-      links: field === 'links' ? value.split(',') : taxonomy.links,
-      organizationId:
-        field === 'organizationId' ? value : taxonomy.organizationId,
-      lastUpdated: field === 'lastUpdated' ? value : taxonomy.lastUpdated,
-      importedBy: field === 'importedBy' ? value : taxonomy.importedBy,
-      termsOfUse: field === 'termsOfUse' ? value : taxonomy.termsOfUse,
-      type: taxonomy.type,
-    }
+    const column = columnByField[field]
+    const patch =
+      field === 'links' ?
+        { [column]: value.split(',') }
+      : { [column]: value }
     try {
-      await apolloClient.mutate({
-        mutation: updateTaxonomyMutationArten,
-        variables,
+      await apiFetch(`/taxonomy?id=eq.${taxonomy.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
       })
     } catch (error) {
       return setFieldError(error)

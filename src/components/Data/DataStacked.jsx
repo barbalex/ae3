@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -6,6 +6,7 @@ import { useAtomValue } from 'jotai'
 import { Outlet } from 'react-router'
 
 import { Tree } from '../Tree/index.jsx'
+import { Spinner } from '../shared/Spinner.jsx'
 import { windowHeightAtom } from '../../store/index.ts'
 
 import styles from './DataStacked.module.css'
@@ -46,7 +47,12 @@ export const DataStacked = () => {
         style={{ height: windowHeight - 103 }}
       >
         {tab === 0 && <Tree />}
-        {tab === 1 && <Outlet />}
+        {tab === 1 && (
+          // scope suspending data panes here so they never blank the tree
+          <Suspense fallback={<Spinner />}>
+            <Outlet />
+          </Suspense>
+        )}
       </div>
     </>
   )

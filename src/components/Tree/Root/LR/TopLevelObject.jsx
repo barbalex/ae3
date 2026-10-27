@@ -1,44 +1,22 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
 
 import { Row } from '../../Row/index.jsx'
 import { LoadingRow } from '../../LoadingRow.jsx'
+import { apiFetch } from '../../../../modules/api.js'
 import { Object } from './Object.jsx'
 
 export const TopLevelObject = ({ type = 'Lebensräume' }) => {
-  const apolloClient = useApolloClient()
   const { taxId } = useParams()
   const { pathname } = useLocation()
 
   const { data } = useQuery({
     queryKey: ['tree', 'lr', taxId],
-    queryFn: () => {
-      return apolloClient.query({
-        query: gql`
-          query treeTopLevelObjectsQuery($taxId: UUID!) {
-            allObjects(
-              filter: {
-                taxonomyId: { equalTo: $taxId }
-                parentId: { isNull: true }
-              }
-              orderBy: NAME_ASC
-            ) {
-              nodes {
-                id
-                name
-                objectsByParentId {
-                  totalCount
-                }
-              }
-            }
-          }
-        `,
-        variables: { taxId },
-      })
-    },
+    queryFn: () =>
+      apiFetch(
+        `/object?taxonomy_id=eq.${taxId}&parent_id=is.null&select=id,name,objectCount:object!parent_id(count)&order=name`,
+      ),
     suspense: true,
   })
 
@@ -46,8 +24,8 @@ export const TopLevelObject = ({ type = 'Lebensräume' }) => {
 
   const nodes = []
 
-  for (const node of data?.data?.allObjects?.nodes ?? []) {
-    const count = node.objectsByParentId.totalCount
+  for (const node of data ?? []) {
+    const count = node.objectCount?.[0]?.count ?? 0
     const data = {
       label: node.name ?? node.id,
       id: node.id,

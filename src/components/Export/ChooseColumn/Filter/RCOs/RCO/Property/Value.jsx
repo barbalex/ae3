@@ -1,8 +1,6 @@
 import { useState, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { readableType } from '../../../../../../../modules/readableType.js'
@@ -12,31 +10,9 @@ import {
   exportAddFilterFieldsAtom,
 } from '../../../../../../../store/index.ts'
 
+import { rpc } from '../../../../../../../modules/api.js'
 import styles from './Value.module.css'
 
-const rcoFieldPropQuery = gql`
-  query propDataQuery(
-    $tableName: String!
-    $propName: String!
-    $pcFieldName: String!
-    $pcTableName: String!
-    $pcName: String!
-    $propValue: String!
-  ) {
-    propValuesFilteredFunction(
-      tableName: $tableName
-      propName: $propName
-      pcFieldName: $pcFieldName
-      pcTableName: $pcTableName
-      pcName: $pcName
-      propValue: $propValue
-    ) {
-      nodes {
-        value
-      }
-    }
-  }
-`
 
 const noOptionsMessage = () => 'Keine Daten entsprechen dem Filter'
 const loadingMessage = () => 'lade...'
@@ -55,7 +31,6 @@ export const Value = ({
   comparator,
   value: propValue,
 }) => {
-  const apolloClient = useApolloClient()
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
   const setRcoProperties = useSetAtom(exportRcoPropertiesAtom)
   const rcoFilters = useAtomValue(exportRcoFiltersAtom)
@@ -75,23 +50,26 @@ export const Value = ({
 
   const loadOptions = async (val) => {
     if (!focusCount) return []
-    const { data, error } = await apolloClient.query({
-      query: rcoFieldPropQuery,
-      variables: {
-        tableName: 'relation',
-        propName: pname,
-        pcFieldName: 'property_collection_id',
-        pcTableName: 'property_collection',
-        pcName: pcname,
-        propValue: val ?? '',
-      },
-    })
-    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+    let rows
+    try {
+      rows = await rpc('prop_values_filtered_function', {
+        table_name: 'relation',
+        prop_name: pname,
+        pc_field_name: 'property_collection_id',
+        pc_table_name: 'property_collection',
+        pc_name: pcname,
+        prop_value: val ?? '',
+      })
+    } catch (err) {
+      setError(err)
+      setValue(val)
+      return []
+    }
+    const returnData = rows?.map((n) => ({
       value: n.value,
       label: n.value,
     }))
     setValue(val)
-    setError(error)
     return returnData
   }
 

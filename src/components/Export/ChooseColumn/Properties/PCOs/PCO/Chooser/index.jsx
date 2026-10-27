@@ -1,6 +1,4 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -9,25 +7,9 @@ import { Properties } from './Properties.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../../store/index.ts'
 
+import { rpc } from '../../../../../../../modules/api.js'
 import styles from './index.module.css'
 
-const query = gql`
-  query propsByTaxDataQueryForFilterPCO(
-    $exportTaxonomies: [String]
-    $pcName: String!
-  ) {
-    pcoPropertiesByTaxonomiesAndPc(
-      taxonomyNames: $exportTaxonomies
-      pcName: $pcName
-    ) {
-      totalCount
-      nodes {
-        property
-        type
-      }
-    }
-  }
-`
 
 const fallback = (
   <div className={styles.spinnerContainer}>
@@ -37,17 +19,11 @@ const fallback = (
 
 export const Chooser = ({ pcName, count }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: ['pcoPropertiesByTaxonomiesAndPc', exportTaxonomies, pcName],
-    queryFn: () =>
-      apolloClient.query({
-        query: query,
-        variables: {
-          exportTaxonomies,
-          pcName,
-        },
+    queryFn: async () => ({
+        data: { pcoPropertiesByTaxonomiesAndPc: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('pco_properties_by_taxonomies_and_pc', { taxonomy_names: exportTaxonomies, pc_name: pcName })).map((r) => r) } },
       }),
   })
 

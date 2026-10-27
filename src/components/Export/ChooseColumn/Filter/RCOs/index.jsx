@@ -3,50 +3,27 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
+import { rpc } from '../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { RcoList } from './List.jsx'
 import { exportTaxonomiesAtom } from '../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const query = gql`
-  query propsByTaxDataQueryForFilterRCOs($exportTaxonomies: [String!]) {
-    pc_count: allPropertyCollections(
-      filter: {
-        relationsByPropertyCollectionId: {
-          some: {
-            objectByObjectId: {
-              taxonomyByTaxonomyId: { name: { in: $exportTaxonomies } }
-            }
-          }
-        }
-      }
-    ) {
-      totalCount
-    }
-    property_count: rcoPropertiesByTaxonomiesCountFunction(
-      exportTaxonomies: $exportTaxonomies
-    )
-  }
-`
 
 export const RCOs = ({ rcoExpanded, onToggleRco }) => {
-  const apolloClient = useApolloClient()
 
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['exportChooseColumnFilterRcos', exportTaxonomies],
-    queryFn: () =>
-      apolloClient.query({
-        query,
-        variables: {
-          exportTaxonomies,
+    queryFn: async () => ({
+        data: {
+          pc_count: { totalCount: [...new Set((await rpc('rco_properties_by_taxonomies_function', { taxonomy_names: exportTaxonomies })).map((r) => r.property_collection_name))].length },
+          property_count: await rpc('rco_properties_by_taxonomies_count_function', { export_taxonomies: exportTaxonomies }),
         },
       }),
   })

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import { format } from 'date-fns'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
@@ -19,7 +18,6 @@ export const PropertyLr = ({
   disabled,
   refetch,
 }) => {
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [value, setValue] = useState(taxonomy[field] || '')
 
@@ -28,7 +26,6 @@ export const PropertyLr = ({
   const onChange = (event) => setValue(event.target.value)
   const onBlur = (event) =>
     onBlurLr({
-      apolloClient,
       queryClient,
       scrollIntoView,
       field,

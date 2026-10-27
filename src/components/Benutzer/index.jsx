@@ -6,18 +6,14 @@ import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useApolloClient } from '@apollo/client/react'
-import { CombinedGraphQLErrors } from '@apollo/client'
 import { useParams } from 'react-router'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useSetAtom, useAtomValue } from 'jotai'
 
-import { query } from './query.js'
 import { Roles } from './Roles.jsx'
 import { PCs } from './PCs.jsx'
 import { TCs } from './TCs.jsx'
-import { updateUserMutation } from './updateUserMutation.js'
-import { updateUserMutationWithPass } from './updateUserMutationWithPass.js'
+import { apiFetch } from '../../modules/api.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import {
@@ -31,22 +27,19 @@ const User = () => {
   const { userId } = useParams()
 
   const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const loginUsername = useAtomValue(loginUsernameAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
 
   const { data, error, refetch } = useQuery({
     queryKey: ['user', userId],
+    placeholderData: keepPreviousData,
     queryFn: () =>
-      apolloClient.query({
-        query,
-        variables: {
-          id: userId,
-        },
-      }),
+      apiFetch(
+        `/user?id=eq.${userId}&select=id,name,email,organizationUsers:organization_user(id,organizationByOrganizationId:organization_id(id,name),role),propertyCollectionsByImportedBy:property_collection!property_collection_imported_by_fkey(id,name),taxonomiesByImportedBy:taxonomy!taxonomy_imported_by_fkey(id,name)`,
+      ),
   })
-  const user = data?.data?.userById ?? {}
+  const user = data?.[0] ?? {}
 
   const [name, setName] = useState(user?.name)
   const [nameErrorText, setNameErrorText] = useState('')
@@ -56,9 +49,9 @@ const User = () => {
   const [tab, setTab] = useState(0)
 
   const id = user?.id
-  const orgUsers = user?.organizationUsersByUserId?.nodes ?? []
-  const pcs = user?.propertyCollectionsByImportedBy?.nodes ?? []
-  const tcs = user?.taxonomiesByImportedBy?.nodes ?? []
+  const orgUsers = user?.organizationUsers ?? []
+  const pcs = user?.propertyCollectionsByImportedBy ?? []
+  const tcs = user?.taxonomiesByImportedBy ?? []
   const saveEnabled =
     passNew ||
     (!!name && !!data && !!user && name !== user?.name) ||
@@ -76,27 +69,18 @@ const User = () => {
   const onChangePassNew = (e) => setPassNew(e.target.value)
 
   const onSave = async () => {
-    const variables =
-      passNew ?
-        {
-          username: name,
-          email,
-          id,
-          pass: passNew,
-        }
-      : {
-          username: name,
-          email,
-          id,
-        }
-    const mutation = passNew ? updateUserMutationWithPass : updateUserMutation
-    const { error } = await apolloClient.mutate({
-      mutation,
-      variables,
-    })
-    if (CombinedGraphQLErrors.is(error)) {
-      const messages = error.graphQLErrors.map((x) => x.message).toString()
-      const isProperEmailError = messages.includes('proper_email')
+    try {
+      await apiFetch(`/user?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+          passNew ?
+            { name, email, pass: passNew }
+          : { name, email },
+        ),
+      })
+    } catch (error) {
+      const isProperEmailError = error.message?.includes('proper_email')
       if (isProperEmailError) {
         const message = 'Email ist nicht gültig'
         return setEmailErrorText(message)
@@ -125,7 +109,7 @@ const User = () => {
     )
   }
 
-  if (!user) return null
+  if (!user?.id) return null
 
   return (
     <ErrorBoundary>

@@ -2,8 +2,6 @@ import { useEffect } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import Highlighter from 'react-highlight-words'
 import Select from 'react-select/async'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useDebouncedCallback } from 'use-debounce'
 import { useNavigate } from 'react-router'
@@ -13,6 +11,7 @@ import { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
+import { apiFetch } from '../../../modules/api.js'
 import {
   treeFilterIdAtom,
   setTreeFilterAtom,
@@ -31,36 +30,34 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
 )
 const formatGroupLabel = (data) => <div>{data.label}</div>
 
-const objectUrlQuery = gql`
-  query objectUrlDataQuery($treeFilterId: UUID!, $run: Boolean!) {
-    objectById(id: $treeFilterId) @include(if: $run) {
-      id
-      objectByParentId {
-        id
-        objectByParentId {
-          id
-          objectByParentId {
-            id
-            objectByParentId {
-              id
-              objectByParentId {
-                id
-                objectByParentId {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-      taxonomyByTaxonomyId {
-        id
-        type
-        name
-      }
-    }
+// fetch the object and walk up its parent chain (formerly a recursive
+// graphql query capped at six levels; this is not capped)
+const getObjectForUrl = async (id) => {
+  const current = (
+    await apiFetch(
+      `/object?id=eq.${id}&select=id,parentId:parent_id,taxonomyByTaxonomyId:taxonomy_id(id,type,name)&limit=1`,
+    )
+  )?.[0]
+  if (!current) return null
+  const root = {
+    id: current.id,
+    taxonomyByTaxonomyId: current.taxonomyByTaxonomyId,
   }
-`
+  let node = root
+  let parentId = current.parentId
+  while (parentId) {
+    const parent = (
+      await apiFetch(
+        `/object?id=eq.${parentId}&select=id,parentId:parent_id&limit=1`,
+      )
+    )?.[0]
+    if (!parent) break
+    node.objectByParentId = { id: parent.id }
+    node = node.objectByParentId
+    parentId = parent.parentId
+  }
+  return root
+}
 
 const getCustomStyles = (singleColumnView) => ({
   control: (provided) => ({
@@ -103,7 +100,7 @@ const getCustomStyles = (singleColumnView) => ({
   }),
   input: (provided) => ({
     ...provided,
-    color: 'rgba(0, 0, 0, 0.8)',
+    color: 'rgba(0,0,0,0.8)',
   }),
   menuList: (provided) => ({
     ...provided,
@@ -150,8 +147,6 @@ const getCustomStyles = (singleColumnView) => ({
 
 export const Filter = () => {
   // TODO: use local state instead of mobx for label, id
-  const apolloClient = useApolloClient()
-
   const treeFilterId = useAtomValue(treeFilterIdAtom)
   const setTreeFilter = useSetAtom(setTreeFilterAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
@@ -162,14 +157,7 @@ export const Filter = () => {
     treeFilterId ?? '99999999-9999-9999-9999-999999999999'
   const { data: objectUrlData } = useQuery({
     queryKey: ['objectUrl', actualTreeFilterId],
-    queryFn: () =>
-      apolloClient.query({
-        query: objectUrlQuery,
-        variables: {
-          treeFilterId: actualTreeFilterId,
-          run: !!treeFilterId,
-        },
-      }),
+    queryFn: () => getObjectForUrl(actualTreeFilterId),
     enabled: !!treeFilterId,
   })
 
@@ -204,7 +192,7 @@ export const Filter = () => {
   }
 
   useEffect(() => {
-    const urlObject = objectUrlData?.data?.objectById ?? {}
+    const urlObject = objectUrlData ?? {}
     /**
      * check if treeFilterId and urlObject exist
      * if true:
@@ -223,12 +211,7 @@ export const Filter = () => {
       setTimeout(() => scrollIntoView())
       setTreeFilter({ id: null, text: '' })
     }
-  }, [
-    actualTreeFilterId,
-    setTreeFilter,
-    objectUrlData?.data?.objectById,
-    navigate,
-  ])
+  }, [actualTreeFilterId, setTreeFilter, objectUrlData, navigate])
 
   const buildOptionsDebounced = useDebouncedCallback(({ cb, val }) => {
     buildOptions({

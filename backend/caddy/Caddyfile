@@ -6,23 +6,14 @@
 }
 
 api.arteigenschaften.ch {
-  reverse_proxy /graphql* {
-    to ae_graphql:5000
-    header_down Access-Control-Allow-Origin *
-  }
-  reverse_proxy /graphiql* {
-    to ae_graphql:5000
-    header_down Access-Control-Allow-Origin *
+  # postgrest handles CORS itself (PGRST_SERVER_CORS_ENABLED)
+  handle_path /postgrest/* {
+    reverse_proxy ae_postgrest:3000
   }
 }
 
 # api.artdaten.ch {
-#   reverse_proxy /graphql* {
-#     to ae_graphql:5000
-#     header_down Access-Control-Allow-Origin *
-#   }
-#   reverse_proxy /graphiql* {
-#     to ae_graphql:5000
-#     header_down Access-Control-Allow-Origin *
+#   handle_path /postgrest/* {
+#     reverse_proxy ae_postgrest:3000
 #   }
 # }

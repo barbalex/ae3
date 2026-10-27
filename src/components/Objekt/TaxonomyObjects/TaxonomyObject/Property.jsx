@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
-import updateObjectMutation from '../../updateObjectMutation.js'
+import { apiFetch } from '../../../../modules/api.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { scrollIntoViewAtom } from '../../../../store/index.ts'
 
 import styles from './Property.module.css'
 
 export const Property = ({ field, label, objekt, disabled, refetch }) => {
-  const apolloClient = useApolloClient()
   const queryClient = useQueryClient()
   const [value, setValue] = useState(objekt?.[field] || '')
 
@@ -22,12 +20,10 @@ export const Property = ({ field, label, objekt, disabled, refetch }) => {
     if (!objekt?.id) return
     const { value } = event.target
     if (value !== 'prevValue') {
-      await apolloClient.mutate({
-        mutation: updateObjectMutation,
-        variables: {
-          name: value,
-          id: objekt.id,
-        },
+      await apiFetch(`/object?id=eq.${objekt.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: value }),
       })
       refetch()
       await queryClient.invalidateQueries({

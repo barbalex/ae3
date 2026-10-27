@@ -4,38 +4,18 @@ import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { AllChooser } from './AllChooser.jsx'
 import { Properties } from './Properties.jsx'
+import { rpc } from '../../../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../../../shared/Spinner.jsx'
 import { exportTaxonomiesAtom } from '../../../../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-const query = gql`
-  query exportRcoPerRcoRelationQuery(
-    $exportTaxonomies: [String!]
-    $pcname: String!
-    $relationtype: String!
-  ) {
-    exportRcoPerRcoRelation(
-      exportTaxonomies: $exportTaxonomies
-      pcname: $pcname
-      relationtype: $relationtype
-    ) {
-      nodes {
-        pcname
-        property
-        jsontype
-      }
-    }
-  }
-`
 
 const fallback = (
   <div className={styles.spinnerContainer}>
@@ -45,7 +25,6 @@ const fallback = (
 
 export const RCO = ({ pcname, relationtype, count }) => {
   const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
-  const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
@@ -54,14 +33,8 @@ export const RCO = ({ pcname, relationtype, count }) => {
       pcname,
       relationtype,
     ],
-    queryFn: () =>
-      apolloClient.query({
-        query: query,
-        variables: {
-          exportTaxonomies,
-          pcname,
-          relationtype,
-        },
+    queryFn: async () => ({
+        data: { exportRcoPerRcoRelation: { nodes: (await rpc('export_rco_per_rco_relation', { export_taxonomies: exportTaxonomies, pcname, relationtype })) } },
       }),
   })
 

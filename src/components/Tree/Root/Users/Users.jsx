@@ -1,28 +1,12 @@
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { Row } from '../../Row/index.jsx'
+import { apiFetch } from '../../../../modules/api.js'
 
 export const Users = () => {
-  const apolloClient = useApolloClient()
-
   const { data } = useQuery({
     queryKey: ['tree', 'users'],
-    queryFn: () => {
-      return apolloClient.query({
-        query: gql`
-          query treeUsersQuery {
-            allUsers(orderBy: NAME_ASC) {
-              nodes {
-                id
-                name
-              }
-            }
-          }
-        `,
-      })
-    },
+    queryFn: () => apiFetch('/user?select=id,name&order=name'),
     suspense: true,
   })
 
@@ -30,7 +14,7 @@ export const Users = () => {
 
   const nodes = []
 
-  for (const node of data?.data?.allUsers?.nodes ?? []) {
+  for (const node of data ?? []) {
     const data = {
       label: node.name ?? node.id,
       id: node.id,

@@ -509,73 +509,51 @@ LANGUAGE plpgsql;
 
 ALTER FUNCTION ae.export_all(typ text, taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field) OWNER TO postgres;
 
--- test from grqphiql:
--- mutation exportDataMutation($taxonomies: [String]!, $taxFields: [TaxFieldInput]!, $taxFilters: [TaxFilterInput]!, $pcoFilters: [PcoFilterInput]!, $pcsOfPcoFilters: [String]!, $pcsOfRcoFilters: [String]!, $pcoProperties: [PcoPropertyInput]!, $rcoFilters: [RcoFilterInput]!, $rcoProperties: [RcoPropertyInput]!, $useSynonyms: Boolean!, $count: Int!, $objectIds: [UUID]!) {
---   export(
---     input: {taxonomies: $taxonomies, taxFields: $taxFields, taxFilters: $taxFilters, pcoFilters: $pcoFilters, pcsOfPcoFilters: $pcsOfPcoFilters, pcsOfRcoFilters: $pcsOfRcoFilters, pcoProperties: $pcoProperties, rcoFilters: $rcoFilters, rcoProperties: $rcoProperties, useSynonyms: $useSynonyms, count: $count, objectIds: $objectIds}
---   ) {
---     exportRows {
---       id
---       properties
---     }
---   }
--- }
---
--- variables:
--- {
---   "taxonomies": [
---     "SISF (2005)",
---     "DB-Taxref (2017)"
---   ],
---   "taxFields": [
---     {
---       "pname": "Artname vollständig",
---       "taxname": "SISF (2005)"
---     }
---   ],
---   "taxFilters": [
---     {
---       "comparator": "ILIKE",
---       "pname": "Art",
---       "taxname": "SISF (2005)",
---       "value": "el"
---     }
---   ],
---   "pcoFilters": [
---     {
---       "pcname": "CH OeQV",
---       "pname": "Art ist Qualitätszeiger Liste A",
---       "comparator": "=",
---       "value": "true"
---     }
---   ],
---   "pcsOfPcoFilters": [
---     "CH OeQV"
---   ],
---   "pcsOfRcoFilters": ["ZH AP FM (2010)"],
---   "pcoProperties": [
---     {
---       "pcname": "CH OeQV",
---       "pname": "Art ist Qualitätszeiger Liste A"
---     }
---   ],
---   "rcoFilters": [
---   {
---     "pcname": "ZH AP FM (2010)",
---     "pname": "Biotopbindung",
---     "relationtype": "Art ist an Lebensraum gebunden",
---     "value": "2",
---     "comparator": "="
---   }
--- ],
---   "rcoProperties": [
---   {
---     "pcname": "ZH AP FM (2010)",
---     "pname": "Biotopbindung",
---     "relationtype": "Art ist an Lebensraum gebunden"
---   }
--- ],
---   "useSynonyms": false,
---   "count": 0,
---   "objectIds": []
--- }
+-- jsonb wrapper: PostgREST cannot pass arrays of composite arguments,
+-- so the frontend calls this via POST /rpc/export_all_json
+-- (with header 'Prefer: params=single-object') instead.
+CREATE OR REPLACE FUNCTION ae.export_all_json(params jsonb)
+  RETURNS ae.export_data
+  AS $fn$
+DECLARE
+  result ae.export_data;
+BEGIN
+  SELECT * INTO result FROM ae.export_all(
+    params->>'typ',
+    COALESCE(ARRAY(SELECT jsonb_array_elements_text(params->'taxonomies')), ARRAY[]::text[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.tax_field, params->'taxFields') e), ARRAY[]::public.tax_field[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.tax_filter, params->'taxFilters') e), ARRAY[]::public.tax_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.pco_filter, params->'pcoFilters') e), ARRAY[]::public.pco_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.pco_property, params->'pcoProperties') e), ARRAY[]::public.pco_property[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.rco_filter, params->'rcoFilters') e), ARRAY[]::public.rco_filter[]),
+    COALESCE(ARRAY(SELECT e FROM jsonb_populate_recordset(NULL::public.rco_property, params->'rcoProperties') e), ARRAY[]::public.rco_property[]),
+    COALESCE((params->>'useSynonyms')::boolean, true),
+    COALESCE((params->>'count')::integer, 0),
+    COALESCE(ARRAY(SELECT jsonb_array_elements_text(params->'objectIds'))::uuid[], ARRAY[]::uuid[]),
+    (SELECT e FROM jsonb_populate_recordset(
+       NULL::public.sort_field,
+       CASE WHEN jsonb_typeof(params->'sortField') = 'object' THEN jsonb_build_array(params->'sortField') ELSE '[]'::jsonb END
+     ) e LIMIT 1)
+  );
+  RETURN result;
+END;
+$fn$
+LANGUAGE plpgsql;
+
+-- example call:
+-- curl -X POST 'https://api.arteigenschaften.ch/postgrest/rpc/export_all_json' \
+--   -H 'Content-Type: application/json' \
+--   -H 'Prefer: params=single-object' \
+--   -d '{
+--     "typ": "Arten",
+--     "taxonomies": ["SISF (2005)"],
+--     "taxFields": [{ "pname": "Artname vollständig", "taxname": "SISF (2005)" }],
+--     "taxFilters": [{ "comparator": "ILIKE", "pname": "Art", "taxname": "SISF (2005)", "value": "el" }],
+--     "pcoFilters": [],
+--     "pcoProperties": [{ "pcname": "CH OeQV", "pname": "Art ist Qualitätszeiger Liste A" }],
+--     "rcoFilters": [],
+--     "rcoProperties": [],
+--     "useSynonyms": false,
+--     "count": 0,
+--     "objectIds": []
+--   }'

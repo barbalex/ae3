@@ -1,8 +1,14 @@
 export const getUrlForObject = (tO) => {
   let url = []
-  const type = (tO?.taxonomyByTaxonomyId?.type ?? '')
-    .replace('ART', 'Arten')
-    .replace('LEBENSRAUM', 'Lebensräume')
+  const rawType = tO?.taxonomyByTaxonomyId?.type ?? ''
+  // graphql returned enum values (ART/LEBENSRAUM),
+  // PostgREST returns the enum labels (Art/Lebensraum)
+  const type =
+    rawType === 'ART' || rawType === 'Art' ?
+      'Arten'
+    : rawType === 'LEBENSRAUM' || rawType === 'Lebensraum' ?
+      'Lebensräume'
+    : ''
   if (type) url.push(type)
   const taxonomyId = tO?.taxonomyByTaxonomyId?.id
   if (taxonomyId) url.push(taxonomyId)

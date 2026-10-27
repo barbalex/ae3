@@ -1,8 +1,5 @@
-import { jwtDecode } from 'jwt-decode'
-import { CombinedGraphQLErrors } from '@apollo/client'
-
-import { loginDbMutation } from './loginDbMutation.js'
-import { store, setLoginAtom, apolloClientAtom, queryClientAtom } from '../../store/index.ts'
+import { rpc } from '../../modules/api.js'
+import { store, setLoginAtom, queryClientAtom } from '../../store/index.ts'
 
 export const fetchLogin = async ({
   changeNameErrorText,
@@ -18,14 +15,13 @@ export const fetchLogin = async ({
   passwordInput,
   navigate,
 }) => {
-  const client = store.get(apolloClientAtom)
   const queryClient = store.get(queryClientAtom)
-  
-  if (!client || !queryClient) {
-    console.error('Apollo client or Query client not initialized')
+
+  if (!queryClient) {
+    console.error('Query client not initialized')
     return
   }
-  
+
   // when blurring fields need to pass event value
   // on the other hand when clicking on Anmelden button,
   // need to grab props
@@ -43,19 +39,14 @@ export const fetchLogin = async ({
     token: '',
   })
   // now acquire new token
-  const { data, error } = await client.mutate({
-    mutation: loginDbMutation,
-    variables: {
-      username: name,
-      pass,
-    },
-  })
-
-  if (CombinedGraphQLErrors.is(error)) {
-    const messages = error.errors.map((x) => x.message)
+  // ae.login returns { token, role, username, exp }
+  let res
+  try {
+    res = await rpc('login', { username: name, pass })
+  } catch (error) {
     const isNamePassError =
-      messages.includes('invalid user or password') ||
-      messages.includes('permission denied for relation user')
+      error.message === 'invalid user or password' ||
+      error.message === 'permission denied for relation user'
     if (isNamePassError) {
       const message = 'Name oder Passwort nicht bekannt'
       changeNameErrorText(message)
@@ -63,10 +54,9 @@ export const fetchLogin = async ({
     }
     return console.log(error)
   }
-  const jwtToken = data?.login?.jwtToken
+  const jwtToken = res?.token
   if (jwtToken) {
-    const tokenDecoded = jwtDecode(jwtToken)
-    const { username } = tokenDecoded
+    const { username } = res
     // set login state
     try {
       store.set(setLoginAtom, {
@@ -78,7 +68,7 @@ export const fetchLogin = async ({
         queryKey: ['tree'],
       })
     } catch (error) {
-      console.log(('Error during mutation', error))
+      console.log(('Error during login', error))
     }
     changeNameErrorText(null)
     changePassErrorText(null)

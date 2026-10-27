@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtom, useAtomValue } from 'jotai'
+import { rpc } from '../../../../../../modules/api.js'
 import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 
 import { readableType } from '../../../../../../modules/readableType.js'
@@ -18,29 +17,6 @@ import { constants } from '../../../../../../modules/constants.js'
 
 import styles from './Value.module.css'
 
-const taxFieldPropQuery = gql`
-  query propDataQuery(
-    $tableName: String!
-    $propName: String!
-    $pcFieldName: String!
-    $pcTableName: String!
-    $pcName: String!
-    $propValue: String!
-  ) {
-    propValuesFilteredFunction(
-      tableName: $tableName
-      propName: $propName
-      pcFieldName: $pcFieldName
-      pcTableName: $pcTableName
-      pcName: $pcName
-      propValue: $propValue
-    ) {
-      nodes {
-        value
-      }
-    }
-  }
-`
 
 const noOptionsMessage = () => 'Keine Daten entsprechen dem Filter'
 const loadingMessage = () => 'lade...'
@@ -58,7 +34,6 @@ export const Value = ({
   comparator,
   value: propsValue,
 }) => {
-  const apolloClient = useApolloClient()
   const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
   const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
   const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
@@ -78,23 +53,26 @@ export const Value = ({
 
   const loadOptions = async (val) => {
     if (!focusCount) return []
-    const { data, error } = await apolloClient.query({
-      query: taxFieldPropQuery,
-      variables: {
-        tableName: 'object',
-        propName: pname,
-        pcFieldName: 'taxonomy_id',
-        pcTableName: 'taxonomy',
-        pcName: taxname,
-        propValue: val ?? '',
-      },
-    })
-    const returnData = data?.propValuesFilteredFunction?.nodes?.map((n) => ({
+    let rows
+    try {
+      rows = await rpc('prop_values_filtered_function', {
+        table_name: 'object',
+        prop_name: pname,
+        pc_field_name: 'taxonomy_id',
+        pc_table_name: 'taxonomy',
+        pc_name: taxname,
+        prop_value: val ?? '',
+      })
+    } catch (err) {
+      setError(err)
+      setValue(val)
+      return []
+    }
+    const returnData = rows?.map((n) => ({
       value: n.value,
       label: n.value,
     }))
     setValue(val)
-    setError(error)
     return returnData
   }
 

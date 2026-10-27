@@ -3,18 +3,16 @@ import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import { MdClear } from 'react-icons/md'
 import { omit } from 'es-toolkit'
-import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
-import { updatePropertyMutation } from './updatePropertyMutation.js'
+import { apiFetch } from '../../modules/api.js'
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 import { scrollIntoViewAtom } from '../../store/index.ts'
 
 import styles from './Property.module.css'
 
 export const Property = ({ id, properties: propertiesPrevious, field: key, refetch }) => {
-    const apolloClient = useApolloClient()
     const queryClient = useQueryClient()
     const [value, setValue] = useState(propertiesPrevious[key] || '')
 
@@ -30,9 +28,10 @@ export const Property = ({ id, properties: propertiesPrevious, field: key, refet
           ...propertiesPrevious,
           ...{ [key]: value },
         }
-        await apolloClient.mutate({
-          mutation: updatePropertyMutation,
-          variables: { properties: JSON.stringify(properties), id },
+        await apiFetch(`/object?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ properties: JSON.stringify(properties) }),
         })
         refetch?.()
         await queryClient.invalidateQueries({
@@ -44,9 +43,10 @@ export const Property = ({ id, properties: propertiesPrevious, field: key, refet
 
     const onDelete = async () => {
       const properties = omit(propertiesPrevious, [key])
-      await apolloClient.mutate({
-        mutation: updatePropertyMutation,
-        variables: { properties: JSON.stringify(properties), id },
+      await apiFetch(`/object?id=eq.${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ properties: JSON.stringify(properties) }),
       })
       refetch?.()
       queryClient.invalidateQueries({

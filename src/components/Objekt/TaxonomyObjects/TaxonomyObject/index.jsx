@@ -20,11 +20,12 @@ import {
   MdInfoOutline as InfoOutlineIcon,
   MdInfo as InfoIcon,
 } from 'react-icons/md'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
+
+import { parseProperties } from '../../../../modules/parseProperties.js'
+import { apiFetch } from '../../../../modules/api.js'
 
 import { PropertyReadOnly } from '../../../shared/PropertyReadOnly.jsx'
 import { PropertyReadOnlyStacked } from '../../../shared/PropertyReadOnlyStacked.jsx'
@@ -44,24 +45,6 @@ import {
 
 import styles from './index.module.css'
 
-const organizationUsersQuery = gql`
-  query AllOrganizationUsersQuery {
-    allOrganizationUsers {
-      nodes {
-        id
-        nodeId
-        organizationId
-        userId
-        role
-        userByUserId {
-          id
-          name
-        }
-      }
-    }
-  }
-`
-
 export const TaxonomyObject = ({ objekt, showLink, refetch }) => {
   const queryClient = useQueryClient()
   const [editingTaxonomies, setEditingTaxonomies] = useAtom(
@@ -70,22 +53,21 @@ export const TaxonomyObject = ({ objekt, showLink, refetch }) => {
   const stacked = useAtomValue(stackedAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)
   const username = useAtomValue(loginUsernameAtom)
-  const apolloClient = useApolloClient()
 
   const navigate = useNavigate()
 
   const { data, error } = useQuery({
     queryKey: ['organizationUsers'],
     queryFn: () =>
-      apolloClient.query({
-        query: organizationUsersQuery,
-      }),
+      apiFetch(
+        '/organization_user?select=id,organizationId:organization_id,userId:user_id,role,userByUserId:user_id(id,name)',
+      ),
   })
 
   const [expanded, setExpanded] = useState(showLink ? false : true)
   const [taxExpanded, setTaxExpanded] = useState(false)
 
-  const organizationUsers = data?.data?.allOrganizationUsers?.nodes ?? []
+  const organizationUsers = data ?? []
   const editing = editingTaxonomies
   const userRoles = organizationUsers
     .filter((oU) => username === (oU?.userByUserId?.name ?? ''))
@@ -96,7 +78,7 @@ export const TaxonomyObject = ({ objekt, showLink, refetch }) => {
   const taxonomy = objekt?.taxonomyByTaxonomyId ?? {}
   let taxname = taxonomy?.name ?? '(Name fehlt)'
   // never pass null to object.entries!!!
-  const properties = JSON.parse(objekt?.properties ?? '{}')
+  const properties = parseProperties(objekt?.properties)
   if (properties['Artname vollständig']) {
     taxname = `${taxname}: ${properties['Artname vollständig']}`
   }

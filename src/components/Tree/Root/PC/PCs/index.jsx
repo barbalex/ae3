@@ -1,42 +1,21 @@
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Row } from '../../../Row/index.jsx'
+import { apiFetch } from '../../../../../modules/api.js'
 import { Folders } from './Folders.jsx'
 
 export const PCs = () => {
   const { pcId } = useParams()
-  const apolloClient = useApolloClient()
 
   const { data } = useQuery({
     queryKey: ['tree', 'pcs'],
-    queryFn: () => {
-      // This query is re-run under certain circumstances
-      // when focus was out of app and comes back in
-      // EVENT THOUGH component is not re-rendered
-      // Seems that was a feature of tanstack-query:
+    queryFn: () =>
+      // re-run when app focus comes back in: a tanstack-query feature
       // https://tanstack.com/query/latest/docs/react/guides/window-focus-refetching
-      return apolloClient.query({
-        query: gql`
-          query treePcsQuery {
-            allPropertyCollections(orderBy: NAME_ASC) {
-              nodes {
-                id
-                name
-                propertyCollectionObjectsByPropertyCollectionId {
-                  totalCount
-                }
-                relationsByPropertyCollectionId {
-                  totalCount
-                }
-              }
-            }
-          }
-        `,
-      })
-    },
+      apiFetch(
+        '/property_collection?select=id,name,pcoCount:property_collection_object!property_collection_object_property_collection_id_fkey(count),relCount:relation!relation_property_collection_id_fkey(count)&order=name',
+      ),
     suspense: true,
   })
 
@@ -44,10 +23,9 @@ export const PCs = () => {
 
   const nodes = []
 
-  for (const node of data?.data?.allPropertyCollections?.nodes ?? []) {
-    const pcoCount =
-      node.propertyCollectionObjectsByPropertyCollectionId?.totalCount ?? 0
-    const relCount = node.relationsByPropertyCollectionId?.totalCount ?? 0
+  for (const node of data ?? []) {
+    const pcoCount = node.pcoCount?.[0]?.count ?? 0
+    const relCount = node.relCount?.[0]?.count ?? 0
 
     const data = {
       label: node.name ?? node.id,

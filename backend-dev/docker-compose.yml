@@ -31,48 +31,33 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  graphql:
-    container_name: ae_graphql
+  postgrest:
+    container_name: ae_postgrest
     restart: always
-    build:
-      context: ./graphql
+    image: postgrest/postgrest:v12.2.3
     networks:
       - network
     expose:
-      - "5000"
+      - "3000"
     ports:
-      - "5000:5000"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
         restart: true
-    # this is on linux to connect from docker to localhost
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     env_file:
       - ./.env
-    command:
-      [
-        "--connection",
-        "${DATABASE_URL}",
-        "--schema",
-        "ae",
-        "--append-plugins",
-        "postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,postgraphile-upsert-plugin:PgMutationUpsertPlugin",
-        "--jwt-token-identifier",
-        "auth.jwt_token",
-        "--default-role",
-        "anon",
-        "--jwt-secret",
-        "${JWT_SECRET}",
-        "--body-size-limit",
-        "300kb",
-        "--cors",
-        "--disable-query-log",
-        "--enable-query-batching",
-        "--retry-on-init-fail",
-        "--enhance-graphiql",
-      ]
+    environment:
+      # connects with the same authenticator and jwt secret postgraphile used:
+      # tokens issued by ae.login remain valid.
+      # the secret contains a dollar sign, so .env escapes it as $$
+      PGRST_DB_URI: ${DATABASE_URL}
+      # v12 may otherwise try reading config from the database
+      PGRST_DB_CONFIG: 'false'
+      PGRST_DB_SCHEMAS: ae
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_SERVER_CORS_ENABLED: true
 volumes:
   db_data:
   sik_data:

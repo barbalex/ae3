@@ -70,46 +70,61 @@ $$;
 
 -- Login function which takes an user name and password
 -- and returns JWT if the credentials match a user in the internal table
--- TODO: role is not needed, remove
 CREATE OR REPLACE FUNCTION ae.login(username text, pass text)
   RETURNS auth.jwt_token
-  AS $$
-DECLARE
+  AS $fn$
+declare
   _role name;
   result auth.jwt_token;
-BEGIN
-  -- check username and password
-  SELECT
-    auth.user_role($1, $2) INTO _role;
-  IF _role IS NULL THEN
-    RAISE invalid_password
-    USING message = 'invalid user or password';
-  END IF;
-    SELECT
-      auth.sign(row_to_json(r), current_setting('app.jwt_secret')) AS token
-    FROM (
-      SELECT
-        _role AS role
-        --$1 as username,
-        --extract(epoch from now())::integer + 60*60*24*30 as exp
-) r INTO result;
-    RETURN (result.token,
-      _role,
-      $1,
-      extract(epoch FROM (now() + interval '1 week')))::auth.jwt_token;
-END;
-$$
+begin
+  select auth.user_role($1, $2) into _role;
+  if _role is null then
+    raise invalid_password using message = 'invalid user or password';
+  end if;
+
+  select auth.sign(
+      row_to_json(r), current_setting('app.jwt_secret')
+    ) as token
+    from (
+      select
+        _role as role,
+        $1 as username,
+        extract(epoch from (now() + interval '1 week'))::integer as exp,
+        'postgraphile' as aud
+    ) r
+    into result;
+  return (result.token,
+    _role,
+    $1,
+    extract(epoch FROM (now() + interval '1 week')))::auth.jwt_token;
+end;
+$fn$
 LANGUAGE plpgsql;
 
+-- Reads the username from the JWT claims.
+-- PostgREST (v12) sets the 'request.jwt.claims' GUC with the full claim json,
+-- older PostGraphile versions set one GUC per claim.
 CREATE OR REPLACE FUNCTION current_user_name()
   RETURNS text
-  AS $$
-  SELECT
-    nullif(current_setting('jwt.claims.username', TRUE), '')::text;
-$$
-LANGUAGE sql
-STABLE
-SECURITY DEFINER;
+  AS $fn$
+declare
+  claims text;
+begin
+  claims := nullif(current_setting('request.jwt.claims', true), '');
+  if claims is not null then
+    begin
+      if claims::json->>'username' is not null then
+        return nullif(claims::json->>'username', '');
+      end if;
+    exception when others then
+      null;
+    end;
+  end if;
+  return nullif(current_setting('request.jwt.claim.username', true), '');
+end;
+$fn$
+LANGUAGE plpgsql
+STABLE;
 
 -- 1.2: pgjwt
 CREATE OR REPLACE FUNCTION auth.url_encode(data bytea)

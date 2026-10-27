@@ -3,11 +3,12 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.jsx'
 import { PropertyList } from './PropertyList.jsx'
 import { getUrlForObject } from '../../../../../../modules/getUrlForObject.js'
 
+import { parseProperties } from '../../../../../../modules/parseProperties.js'
 import styles from './index.module.css'
 
 export const Relation = ({ relation, intermediateRelation }) => {
   // never pass null to Object.entries!!!
-  const properties = JSON.parse(relation.properties) || {}
+  const properties = parseProperties(relation.properties)
   const taxType = (
     relation?.objectByObjectIdRelation?.taxonomyByTaxonomyId?.type ?? 'Objekt'
   )

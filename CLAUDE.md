@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**arteigenschaften.ch** — German-language (de-CH) Swiss SPA for looking up, importing, and exporting the *properties* of flora, fauna, mosses, and habitats (Lebensräume). Full-stack: a React PWA frontend talks to a PostGraphile/Postgres backend. Most UI strings, route segments, and domain identifiers are German words (e.g. `Arten`, `Lebensräume`, `Eigenschaften-Sammlungen`) — preserve this when adding routes, labels, or SQL.
+**arteigenschaften.ch** — German-language (de-CH) Swiss SPA for looking up, importing, and exporting the *properties* of flora, fauna, mosses, and habitats (Lebensräume). Full-stack: a React PWA frontend talks to a PostgREST/Postgres backend. Most UI strings, route segments, and domain identifiers are German words (e.g. `Arten`, `Lebensräume`, `Eigenschaften-Sammlungen`) — preserve this when adding routes, labels, or SQL.
 
 ## Commands
 
@@ -19,7 +19,7 @@ npm run test:e2e   # playwright e2e smoke tests (starts dev server + needs backe
 
 There is **no `lint`/`format` npm script**. ESLint config exists at [eslint.config.mjs](eslint.config.mjs) — run linter directly with `npx eslint .`. Prettier is a dependency but has no config file (defaults).
 
-Testing: [vitest.config.js](vitest.config.js) (jsdom, deliberately separate from vite.config.js — no PWA/svgr/babel plugins). Tests are co-located as `*.test.js(x)` next to the module/component. E2e specs live in [e2e/](e2e/) with [playwright.config.js](playwright.config.js), which starts the dev server itself but needs the graphql backend on localhost:5000 (`cd backend-dev && docker compose up`).
+Testing: [vitest.config.js](vitest.config.js) (jsdom, deliberately separate from vite.config.js — no PWA/svgr/babel plugins). Tests are co-located as `*.test.js(x)` next to the module/component. E2e specs live in [e2e/](e2e/) with [playwright.config.js](playwright.config.js), which starts the dev server itself but needs the PostgREST backend on localhost:3000 (`cd backend-dev && docker compose up`).
 
 Installing deps: the project pins exact versions and guards against supply-chain risk via `.npmrc` (`force=true`, `save-exact=true`, `allow-git=none`) and updates through `npm run ncu using cooldown` (`ncu --cooldown 5 --interactive` — skips packages released <5 days ago). The canonical install command uses an `sfw` wrapper: `npm run how-to-install-using-sfw`.
 
@@ -27,34 +27,34 @@ Installing deps: the project pins exact versions and guards against supply-chain
 
 Two compose stacks under [backend/](backend/) (production) and [backend-dev/](backend-dev/) (local dev):
 
-- **`db`** (container `ae_db`) — Postgres 18, schema `ae`. Initialized from `ae.backup` via `pg_restore` ([db/init/](backend/db/init/)), only on first start. Exposed on port **5432**.
-- **`graphql`** (container `ae_graphql`) — PostGraphile 4.14 auto-generating the GraphQL API from the `ae` schema, on port **5000**. Plugins: `connection-filter`, `pg-order-by-related`, `upsert`. JWT auth type `auth.jwt_token`, default role `anon`, query batching + 300kb body limit.
-- **`caddy`** — only in [backend/](backend/), terminates TLS and reverse-proxies `api.arteigenschaften.ch/{graphql,graphiql}` → `ae_graphql:5000`. [backend-dev/](backend-dev/) omits Caddy and exposes graphql/db directly with `host.docker.internal` for localhost connectivity.
+- **`db`** (container `ae_db`) — Postgres 18, schema `ae`. Initialized from `ae.backup` via `pg_restore` ([db/init/](backend/db/init/)), only on first start. Exposed on port **5432**. Date-stamped SQL migrations live in [backend/db/migrations/](backend/db/migrations/) and are applied manually.
+- **`postgrest`** (container `ae_postgrest`) — PostgREST v12.2.3 exposing the `ae` schema as a REST API, on port **3000**. Stock image configured via `PGRST_*` env (`PGRST_DB_SCHEMAS: ae`, `PGRST_DB_ANON_ROLE: anon`, `PGRST_JWT_SECRET` from the shared `JWT_SECRET`, CORS enabled). Tokens issued by `ae.login` are Bearer tokens for this API; the JWT secret must be ≥32 chars (PostgREST's jose library rejects shorter HMAC secrets).
+- **`caddy`** — only in [backend/](backend/), terminates TLS and reverse-proxies `api.arteigenschaften.ch/postgrest/*` → `ae_postgrest:3000`. [backend-dev/](backend-dev/) omits Caddy and exposes db (5432) and postgrest (3000) directly, with `DATABASE_URL` pointing at `host.docker.internal`.
 
-Local backend: `cd backend-dev && docker compose up`. The frontend's [graphQlUri.js](src/modules/graphQlUri.js) targets `http://localhost:5000/graphql` on localhost, else `https://api.<hostname>/graphql`. DB roles: `anon`, `authenticator`, `org_admin`, `org_writer`, plus `orgTaxonomyWriter` (grants taxonomy write access).
+Local backend: `cd backend-dev && docker compose up`. The frontend's [api.js](src/modules/api.js) (`postgrestUri()`) targets `http://localhost:3000` on localhost, else `https://api.<hostname>/postgrest`. DB roles: `anon`, `authenticator`, `org_admin`, `org_writer`. `orgTaxonomyWriter` is *not* a DB role — it is an application-level role on `ae.organization_user.role` granting taxonomy write access.
 
 Credentials/secrets live in `.env` (`JWT_SECRET`, `DATABASE_URL`, `POSTGRES_PASSWORD`, `AUTHENTICATOR_PASSWORD`).
 
 ## Source of truth for the database schema
 
-[src/sql/](src/sql/) holds the canonical Postgres DDL/functions — **not** applied by the build, but the reference for the `ae` schema behind PostGraphile:
+[src/sql/](src/sql/) holds the canonical Postgres DDL/functions — **not** applied by the build, but the reference for the `ae` schema behind PostgREST:
 - `createTables.sql`, `createTypes.sql`, `createRoles.sql`, `createPolicies.sql` (row-level security), `createViews.sql`, `createFunctions.sql`
 - `exportFunction.sql` — the server-side export query (large; drives the Export UI)
 - `treeFunction.sql` / `tree_*.sql` — builds the navigation tree
 - [src/sql/one-offs/](src/sql/one-offs/) — dated migration scripts
 
-When the data model changes, update these files (and re-restore the backup or run the migration), since PostGraphile exposes whatever the live schema contains.
+When the data model changes, update these files (and re-restore the backup or run the migration), since PostgREST exposes whatever the live schema contains.
 
 ## Frontend architecture
 
 **Entry chain:** [index.html](index.html) → [src/main.jsx](src/main.jsx) → [src/App.jsx](src/App.jsx) → [src/components/Router.jsx](src/components/Router.jsx).
 
-**Provider stack** (App.jsx, outer→inner): `JotaiProvider` (custom store) → `ApolloProvider` → `QueryClientProvider` (React Query) → `StyledEngineProvider` → `ThemeProvider` (MUI). `Stacker.jsx` is also rendered to track window size.
+**Provider stack** (App.jsx, outer→inner): `JotaiProvider` (custom store) → `QueryClientProvider` (React Query) → `StyledEngineProvider` → `ThemeProvider` (MUI). `Stacker.jsx` is also rendered to track window size.
 
-**Three cooperating clients, all wired to the same Jotai store:**
-- **Apollo Client** ([client.js](src/client.js)) — the GraphQL client. `BatchHttpLink` + an auth link that injects the JWT from `loginTokenAtom`; deliberately `fetchPolicy: 'no-cache'` everywhere. The instance is stored in `apolloClientAtom` *and* provided via context.
-- **TanStack React Query** — used for component data fetching (e.g. the tree). `refetchOnWindowFocus: false`. Stored in `queryClientAtom` and provided via context.
-- **Jotai** ([src/store/index.ts](src/store/index.ts)) — global UI state. Notable pattern: the Apollo and React Query *instances themselves* are atoms, so non-React modules (e.g. [client.js](src/client.js)) read them via `store.get(...)` instead of hooks. Login token/username persist to `localStorage` via `atomWithStorage`.
+**Three cooperating layers, all wired to the same Jotai store:**
+- **PostgREST client** ([api.js](src/modules/api.js)) — all backend access goes through it. `postgrestUri()` picks `http://localhost:3000` vs `https://api.<hostname>/postgrest`; `apiFetch(path, options)` is the general wrapper (throws `Error` with `.code`/`.status` from the PostgREST error body); `rpc(fn, args)` calls DB functions via `POST /rpc/<fn>`; `apiCount(path)` reads totals from `content-range` via `Prefer: count=exact`. `authHeaders()` injects the JWT from `loginTokenAtom` as a Bearer header and clears the login on expired tokens.
+- **TanStack React Query** — component data fetching (e.g. the tree; query keys are inline arrays like `['tree', 'root', hasToken]`). `refetchOnWindowFocus: false`. Stored in `queryClientAtom` and provided via context.
+- **Jotai** ([src/store/index.ts](src/store/index.ts)) — global UI state. Notable pattern: the React Query *instance itself* is an atom, so non-React modules (e.g. [api.js](src/modules/api.js)) read it via `store.get(...)` instead of hooks. Login token/username persist to `localStorage` via `atomWithStorage`.
 
 **URL is the navigation state.** Routes (react-router data router in [Router.jsx](src/components/Router.jsx)) encode the active node as path segments, and `activeNodeArrayAtom` is derived from the pathname ([getActiveNodeArrayFromPathname.js](src/modules/getActiveNodeArrayFromPathname.js)). Top-level routes mirror the domain: `/Arten/:taxId/:objId`, `/Lebensräume/...`, `/Eigenschaften-Sammlungen/:pcId/{Eigenschaften|Beziehungen}`, `/Benutzer/:userId`, `/Organisationen/:orgId`, plus `/Export`, `/Login`, `/Dokumentation/...`.
 

@@ -4,13 +4,11 @@ import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
-import { gql } from '@apollo/client'
-import { useApolloClient } from '@apollo/client/react'
 import SimpleBar from 'simplebar-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import { upsertPCOMutation } from './upsertPCOMutation.js'
+import { apiFetch } from '../../../../modules/api.js'
 import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
@@ -18,26 +16,6 @@ import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
 import { PcoInstructions } from './Instructions.jsx'
 
 import styles from './index.module.css'
-
-const importPcoQuery = gql`
-  query pCOQuery(
-    $getObjectIds: Boolean!
-    $getPCOfOriginIds: Boolean!
-    $pCOfOriginIds: [UUID!]
-  ) {
-    allObjects @include(if: $getObjectIds) {
-      nodes {
-        id
-      }
-    }
-    allPropertyCollections(filter: { id: { in: $pCOfOriginIds } })
-      @include(if: $getPCOfOriginIds) {
-      nodes {
-        id
-      }
-    }
-  }
-`
 
 const checkStateReducer = (a, state) => state
 
@@ -73,9 +51,41 @@ const getImportDataFields = (importData) => {
   return fields
 }
 
+// no unique constraint on (object_id, property_collection_id) exists,
+// so the former upsert plugin's semantics are a check-then-write
+const upsertPco = async (row) => {
+  const existing = (
+    await apiFetch(
+      `/property_collection_object?select=id&object_id=eq.${row.objectId}&property_collection_id=eq.${row.propertyCollectionId}&limit=1`,
+    )
+  )?.[0]
+  const body = {
+    property_collection_of_origin: row.propertyCollectionOfOrigin,
+    properties: row.properties,
+  }
+  if (existing) {
+    await apiFetch(`/property_collection_object?id=eq.${existing.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+  } else {
+    await apiFetch('/property_collection_object', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([
+        {
+          object_id: row.objectId,
+          property_collection_id: row.propertyCollectionId,
+          ...body,
+        },
+      ]),
+    })
+  }
+}
+
 export const ImportPco = ({ setImport }) => {
   const queryClient = useQueryClient()
-  const apolloClient = useApolloClient()
 
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const pCId =
@@ -100,23 +110,27 @@ export const ImportPco = ({ setImport }) => {
   const {
     isLoading,
     error,
-    data: rawData,
+    data,
   } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
-    queryFn: () =>
-      apolloClient.query({
-        query: importPcoQuery,
-        variables: {
-          getObjectIds: objectIds.length > 0,
-          getPCOfOriginIds: pCOfOriginIds.length > 0,
-          pCOfOriginIds:
-            pCOfOriginIds.length > 0 ?
-              pCOfOriginIds
-            : ['99999999-9999-9999-9999-999999999999'],
-        },
-      }),
+    queryFn: async () => {
+      if (objectIds.length === 0 && pCOfOriginIds.length === 0) return {}
+      const [objects, pcs] = await Promise.all([
+        objectIds.length > 0 ?
+          apiFetch(`/object?select=id&id=in.(${objectIds.join(',')})`)
+        : Promise.resolve([]),
+        pCOfOriginIds.length > 0 ?
+          apiFetch(
+            `/property_collection?select=id&id=in.(${pCOfOriginIds.join(',')})`,
+          )
+        : Promise.resolve([]),
+      ])
+      return {
+        allObjects: { nodes: objects },
+        allPropertyCollections: { nodes: pcs },
+      }
+    },
   })
-  const data = rawData?.data
 
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
@@ -281,27 +295,21 @@ export const ImportPco = ({ setImport }) => {
     // loop all rows, build variables and create pco
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const d of importData) {
-      const variables = {
-        objectId: d.objectId || null,
-        propertyCollectionId: pCId,
-        propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
-        properties: JSON.stringify(
-          omit(d, [
-            'id',
-            'objectId',
-            'propertyCollectionId',
-            'propertyCollectionOfOrigin',
-          ]),
-        ),
-      }
 
       posts.push(
-        apolloClient
-          .mutate({
-            mutation: upsertPCOMutation,
-            variables,
-          })
-          .then(() => incrementImported()),
+        upsertPco({
+          objectId: d.objectId || null,
+          propertyCollectionId: pCId,
+          propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
+          properties: JSON.stringify(
+            omit(d, [
+              'id',
+              'objectId',
+              'propertyCollectionId',
+              'propertyCollectionOfOrigin',
+            ]),
+          ),
+        }).then(() => incrementImported()),
       )
     }
     await Promise.all(posts)
