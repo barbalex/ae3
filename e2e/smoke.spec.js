@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test'
 
+const iconOf = (page, url) =>
+  page.locator(`[data-url="${url}"] > div:nth-child(2) svg`)
+
 test('home page renders', async ({ page }) => {
   await page.goto('/')
 
@@ -56,4 +59,64 @@ test('object page loads its property collections', async ({ page }) => {
   await expect(page.getByText('ZH GIS', { exact: true })).toBeVisible({
     timeout: 15_000,
   })
+})
+
+test('open icon closes the node even with a lower level active', async ({
+  page,
+}) => {
+  await page.goto('/')
+
+  // open Arten, first taxonomy, first object
+  await page.locator('[data-url="Arten"]').click()
+  await page.waitForURL(/\/Arten$/)
+  const taxUrl = await page
+    .locator('[data-url^="Arten,"]')
+    .first()
+    .getAttribute('data-url')
+  await page.locator(`[data-url="${taxUrl}"]`).first().click()
+  await page.waitForURL(/\/Arten\/[^/]+$/)
+  const objUrl = await page
+    .locator(`[data-url^="${taxUrl},"]`)
+    .first()
+    .getAttribute('data-url')
+  await page.locator(`[data-url="${objUrl}"]`).first().click()
+  await page.waitForURL(/\/Arten\/[^/]+\/[^/]+$/)
+
+  // clicking the OPEN icon of the taxonomy while the object below is active:
+  // the taxonomy must close and its parent (Arten) become active
+  await iconOf(page, taxUrl).click()
+  await page.waitForURL(/\/Arten$/)
+  await expect(page.locator(`[data-url="${objUrl}"]`).first()).toBeHidden()
+})
+
+test('clicking a row text activates the element and closes deeper levels', async ({
+  page,
+}) => {
+  await page.goto('/')
+
+  await page.locator('[data-url="Arten"]').click()
+  await page.waitForURL(/\/Arten$/)
+  const taxUrl = await page
+    .locator('[data-url^="Arten,"]')
+    .first()
+    .getAttribute('data-url')
+  await page.locator(`[data-url="${taxUrl}"]`).first().click()
+  await page.waitForURL(/\/Arten\/[^/]+$/)
+  const objUrl = await page
+    .locator(`[data-url^="${taxUrl},"]`)
+    .first()
+    .getAttribute('data-url')
+  await page.locator(`[data-url="${objUrl}"]`).first().click()
+  await page.waitForURL(/\/Arten\/[^/]+\/[^/]+$/)
+  // the object's children are listed
+  await expect(
+    page.locator(`[data-url^="${objUrl},"]`).first(),
+  ).toBeVisible({ timeout: 15_000 })
+
+  // clicking the taxonomy row's TEXT: it becomes active,
+  // the object stays visible, the object's children close
+  await page.locator(`[data-url="${taxUrl}"] > div:nth-child(3)`).click()
+  await page.waitForURL(new RegExp(`/Arten/[^/]+$`))
+  await expect(page.locator(`[data-url="${objUrl}"]`).first()).toBeVisible()
+  await expect(page.locator(`[data-url^="${objUrl},"]`).first()).toBeHidden()
 })

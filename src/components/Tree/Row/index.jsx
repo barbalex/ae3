@@ -61,13 +61,12 @@ export const Row = ({ data }) => {
   }
 
   const onClickExpandMore = (event) => {
-    if (isEqual(url, activeNodeArray)) {
-      // close node if its expand more symbol was clicked
-      const newUrl = url.toSpliced(-1)
-      navigate(`/${newUrl.join('/')}`)
-      // prevent onClick on node
-      event.preventDefault()
-    }
+    // clicking the open symbol always closes the node
+    // and activates it's parent
+    // stop the row's onClick from navigating back into the node
+    event.stopPropagation()
+    const newUrl = url.toSpliced(-1)
+    navigate(`/${newUrl.join('/')}`)
   }
 
   // holding the left mouse button (or touch) opens the menu, as before
