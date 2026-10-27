@@ -2,8 +2,8 @@
   "name": "arteigenschaften",
   "description": "Eigenschaften von Flora, Fauna, Moosen und Lebensräumen: Sichten, exportieren, importieren",
   "private": true,
-  "version": "3.1.86",
-  "versionDate": "26.10.2026",
+  "version": "3.1.87",
+  "versionDate": "27.10.2026",
   "author": {
     "name": "Alexander Gabriel",
     "email": "alex@gabriel-software.ch",
