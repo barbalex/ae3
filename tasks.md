@@ -12,7 +12,9 @@ context menu use in nav tree: is it really useful? Could we move to the form (he
 
 ---
 
-What I recommend before deploying: run the dev app (npm run dev — backend containers are already up) and manually exercise one flow per domain I converted — login, a tree context-menu create/delete, an object edit, a PCO/RCO import, and an xlsx export with filters. The unit and e2e suites cover the spine, but the mutation-heavy screens (imports, exports with composite filters) deserve one human pass. Deploying means docker compose up -d postgrest caddy on the server with the updated compose files — the frontend can deploy independently since PostGraphile still serves the old endpoint in parallel.
+What I recommend before deploying: run the dev app (npm run dev — backend containers are already up) and manually exercise one flow per domain I converted — login, a tree context-menu create/delete, an object edit, a PCO/RCO import, and an xlsx export with filters. The unit and e2e suites cover the spine, but the mutation-heavy screens (imports, exports with composite filters) deserve one human pass.
+
+Deploying means docker compose up -d postgrest caddy on the server with the updated compose files — the frontend can deploy independently since PostGraphile still serves the old endpoint in parallel.
 
 ---
 
