@@ -10,6 +10,8 @@ api.arteigenschaften.ch {
   handle_path /postgrest/* {
     reverse_proxy ae_postgrest:3000
   }
+  # the graphql/graphiql endpoints were removed with postgraphile
+  respond 404
 }
 
 # api.artdaten.ch {
