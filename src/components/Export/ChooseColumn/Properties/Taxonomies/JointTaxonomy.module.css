@@ -1,6 +1,6 @@
 .card {
   margin: 0;
-  background-color: rgb(255, 243, 224) !important;
+  background-color: var(--ae-bg-surface) !important;
 }
 
 .cardActions {
@@ -8,12 +8,12 @@
   justify-content: space-between;
   cursor: pointer;
   height: auto !important;
-  background-color: #fff3e0;
-  border-bottom: 1px solid #ebebeb;
+  background-color: var(--ae-bg-surface);
+  border-bottom: 1px solid var(--ae-border);
 }
 
 .cardActionTitle {
-  text-shadow: 0 0 4px #fff, 0 0 2px #fff;
+  text-shadow: 0 0 4px var(--ae-text-shadow-color), 0 0 2px var(--ae-text-shadow-color);
   padding-left: 8px;
   font-weight: bold;
   word-break: break-word;

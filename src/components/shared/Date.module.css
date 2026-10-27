@@ -9,13 +9,13 @@
     width: 100%;
   }
   .react-datepicker__header {
-    background-color: rgba(74, 20, 140, 0.1) !important;
+    background-color: var(--ae-date-header-bg) !important;
   }
 }
 
 .labelClass {
   font-size: 12px !important;
-  color: rgb(0, 0, 0, 0.54);
+  color: var(--ae-text-secondary);
   position: relative !important;
   transform: none !important;
 }
@@ -23,12 +23,12 @@
 .datePicker {
   width: 100%;
   padding: 0.25rem 0;
-  background-color: #fff;
+  background-color: var(--ae-bg-paper);
   background-clip: padding-box;
   transition:
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid var(--ae-text-soft);
   border-top: none;
   border-left: none;
   border-right: none;
@@ -36,10 +36,10 @@
   background-color: transparent;
   font-size: 1rem;
   &:focus {
-    color: #495057;
-    background-color: #fff;
+    color: var(--ae-text-secondary);
+    background-color: var(--ae-bg-paper);
     outline: 0;
-    border-bottom: 2px solid #4a148c;
+    border-bottom: 2px solid var(--ae-date-accent);
     box-shadow: none;
     background-color: transparent;
   }

@@ -28,11 +28,16 @@ export const DataStacked = () => {
           sx={{
             '& .MuiTab-root': {
               fontWeight: 600,
-              color: 'rgba(0,0,0,1)',
-              textShadow: '0 0 4px #fff, 0 0 2px #fff',
+              color: 'var(--ae-text-primary)',
+              textShadow:
+                '0 0 4px var(--ae-text-shadow-color), 0 0 2px var(--ae-text-shadow-color)',
             },
-            '& .MuiTab-root.Mui-selected': { color: '#c24600' },
-            '& .MuiTabs-indicator': { backgroundColor: '#c24600' },
+            '& .MuiTab-root.Mui-selected': {
+              color: 'var(--ae-tab-selected)',
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'var(--ae-tab-selected)',
+            },
           }}
         >
           <Tab label="Navigation" />

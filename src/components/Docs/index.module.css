@@ -30,7 +30,7 @@
 }
 
 .paper {
-  background-color: #ffcc80 !important;
+  background-color: var(--ae-bg-highlight) !important;
 }
 
 .content {

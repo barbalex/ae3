@@ -1,30 +1,33 @@
-Minimal fix for vermehrung's arteigenschaften.ch connection: delete the dangling remote-schema config from Hasura metadata (frontend never used it), apply to the live Hasura, and verify the fdw data path still works.
+Port the ps dark-mode pattern to ae3: `system | light | dark` mode defaulting to the OS preference, persisted, flash-free, with a cycling icon button — plus a full conversion of all hardcoded light colors to theme variables.
 
-## 1. Repo edit (vermehrung)
+## 1. Mode plumbing (ps pattern)
 
-Surgically remove from `src/hasuraMetadata/metadata.json` (510 KB JSON — edited with jq, not string edits):
-- `metadata.remote_schemas` (the single `ae` entry pointing at https://api.arteigenschaften.ch/graphql)
-- the `remote_relationships` block (`arteigenschaften`) on table `public.art` in `sources[0]`
+- **`src/store/index.ts`**: `export type ThemeMode = 'system' | 'light' | 'dark'` and `themeModeAtom = atomWithStorage<ThemeMode>('ae-theme-mode', 'system', undefined, { getOnInit: true })` (follows the existing `ae-` key convention; `getOnInit` reads storage synchronously).
+- **`src/theme.js`**: export `lightTheme` (the current theme, untouched) and `darkTheme` — `createTheme` with `palette.mode: 'dark'`, primary orange, secondary green, error red, MUI dark defaults for background/paper.
+- **`src/App.jsx`**: `themeMode` read with `useAtomValue(themeModeAtom, { store })` (like ps — App renders the JotaiProvider inside itself, so the custom store must be passed explicitly); `systemPrefersDark` lazy `useState` from `matchMedia('(prefers-color-scheme: dark)')` + `change` listener; `isDark = mode === 'dark' || (mode === 'system' && systemPrefersDark)`; `useEffect` mirrors it to `document.documentElement.dataset.theme`, `style.colorScheme`, and the `<meta name="theme-color">` content (#943400 ↔ dark background); `ThemeProvider theme={isDark ? darkTheme : lightTheme}`.
+- **`index.html`**: pre-paint inline script at the end of `<head>` (ps pattern): `JSON.parse(localStorage['ae-theme-mode'])` (jotai JSON-encodes), resolve against `prefers-color-scheme`, set `html[data-theme]` + `color-scheme` — no light→dark flash.
 
-Validate the result with jq; diff to confirm only those blocks changed.
+## 2. Global CSS dark variants + theme variables (`src/index.css`)
 
-## 2. Apply to the live Hasura — drift-safe
+- `html { color-scheme: light }` / `html[data-theme='dark'] { color-scheme: dark; scrollbar-color: … }`; dark `body` background override; dark variants for webkit/simplebar scrollbars and react-reflex splitters.
+- Define CSS custom properties on `html` (light values) and `html[data-theme='dark']` (dark values) for the recurring palette: `--ae-bg-page`, `--ae-bg-surface` (#fff3e0), `--ae-bg-highlight` (#ffcc80), `--ae-bg-highlight-strong` (#ffe0b2), `--ae-text-primary/secondary/faint`, `--ae-border`, `--ae-brand-accent` (#D84315→lighter in dark), `--ae-green`, `--ae-text-shadow-color`, `--ae-tab-selected`.
 
-The repo metadata is a hand-versioned export (resource_version 83); the live server (139.162.172.14, container `v_graphql`, Hasura v2.51.0) may have drifted since. So:
-1. `export_metadata` from the live server (ssh + curl to localhost:8080 with the admin secret from the server's `.env`).
-2. Diff live export vs repo file. If they match (ignoring resource_version), apply the repo file; if live drifted, apply the same two jq deletions to the live export instead — never clobber live-only changes.
-3. `replace_metadata` with `allow_inconsistent_metadata: false` (atomic — fails loudly rather than leaving broken state), then `get_inconsistent_metadata` (expect empty) and `/healthz`.
+## 3. Full sweep of hardcoded colors
 
-## 3. Verify the surviving data path
+- **~68 `*.module.css` files**: replace hardcoded cream/white/black/grey literals with the variables (mechanical mapping, done with sed per color + manual review). Deliberately unchanged: AppBar `#c24600` brand bar with white text (stays orange in dark, like ps's colored headers), the already-dark TreeContextMenu, MoreMenu hover.
+- **Inline JSX colors**: Tree Row `#D84315` → `var(--ae-brand-accent)`; stacked Tabs in DataStacked/Docs/ExportStacked → text/selected/indicator vars; DataTable `white` → surface var, `#ffcc80` cells → highlight var.
+- **Tree Filter react-select** (`getCustomStyles`): derive its hardcoded blacks/oranges from `useTheme()` palette instead of literals.
+- PWA manifest stays brand `#943400`; only the runtime meta theme-color switches.
 
-- GraphQL through the live API: `query { ae_art(limit: 1) { id name taxonomy } }` — the table the app subscribes to.
-- fdw round-trip: `select count(*) from public.ae_art_live;` on vermehrung's prod db (`docker exec v_db psql …`) — this actually connects through to ae3's Postgres as fdw_user, proving the remaining arteigenschaften connection survived the cutover.
+## 4. Toggle UI (ps pattern)
 
-## 4. Local dev + bookkeeping
+- **`src/components/Layout/AppBar/ThemeChooser.jsx`**: icon-only cycling button system → light → dark → system, icons `MdBrightnessAuto`/`MdLightMode`/`MdDarkMode` (verify availability in ae3's react-icons version), `title`/`aria-label` "Darstellung: wie System / hell / dunkel", placed in the AppBar buttons row before the share button/more menu, `color="inherit"`. (Verify icon existence; fall back to closest equivalents if missing.)
 
-- If vermehrung's local dev Hasura is running, apply the same metadata there.
-- Update the ae3 `tasks.md` note (vermehrung connection fixed). Both repos' changes stay uncommitted for your review.
+## 5. Verification
 
-Rollback: git checkout the metadata file / re-apply the old export — harmless since nothing used the removed blocks.
+- `npm test`, `npm run build`, eslint on touched files.
+- New e2e test in smoke.spec.js: clicking the chooser cycles `html[data-theme]` (light→dark on a light-preferring runner) and the choice survives reload (localStorage).
+- Visual check: Playwright screenshots of Home, tree + object page, and Export in dark mode — I'll read the images and tune the dark variable values where surfaces look wrong.
+- Remove the dark-mode entry from tasks.md.
 
-Note (pre-existing, out of scope): the refresh of `ae_art` from `ae_art_live` was a manual one-off in 2023 — no cron exists. If you want fresher ae3 data in vermehrung, that refresh SQL needs a run/schedule; I'll flag it but not touch it.
+Notes: the light theme keeps its existing quirks (misplaced `background` key is harmless and out of scope). The existing `useSetAtom(activeNodeArrayAtom)` in App.jsx uses the default store — I will not touch it; the new atom reads pass `{ store }` explicitly like ps does.

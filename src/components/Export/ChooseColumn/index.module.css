@@ -1,13 +1,13 @@
 .snackbar {
   div {
     min-width: auto;
-    background-color: #2e7d32 !important;
+    background-color: var(--ae-green) !important;
   }
 }
 
 .card {
   margin: 10px 0;
-  background-color: rgb(255, 243, 224) !important;
+  background-color: var(--ae-bg-surface) !important;
 }
 
 .cardActions {
@@ -15,11 +15,11 @@
   justify-content: space-between;
   cursor: pointer;
   height: auto !important;
-  background-color: #ffcc80;
+  background-color: var(--ae-bg-highlight);
 }
 
 .cardActionTitle {
-  text-shadow: 0 0 4px #fff, 0 0 2px #fff;
+  text-shadow: 0 0 4px var(--ae-text-shadow-color), 0 0 2px var(--ae-text-shadow-color);
   padding-left: 8px;
   font-weight: bold;
   word-break: break-word;

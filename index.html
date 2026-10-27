@@ -54,6 +54,30 @@
       content="Naturschutz, Artenschutz, Flora, Pflanzen, Pilze, Moose"
     />
     <title>arteigenschaften</title>
+    <script>
+      // Runs before first paint. Resolves the stored theme mode
+      // ('system' | 'light' | 'dark', JSON-encoded by jotai's
+      // atomWithStorage) against the OS preference and sets html[data-theme]
+      // + color-scheme, so dark mode does not flash. App.jsx keeps both in
+      // sync afterwards.
+      ;(() => {
+        let storedThemeMode
+        try {
+          storedThemeMode = JSON.parse(
+            localStorage.getItem('ae-theme-mode') ?? 'null',
+          )
+        } catch {
+          storedThemeMode = null
+        }
+        const isDark =
+          storedThemeMode === 'dark' ||
+          (storedThemeMode !== 'light' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        const html = document.documentElement
+        html.dataset.theme = isDark ? 'dark' : 'light'
+        html.style.colorScheme = isDark ? 'dark' : 'light'
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

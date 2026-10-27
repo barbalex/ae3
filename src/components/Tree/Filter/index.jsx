@@ -64,7 +64,7 @@ const getCustomStyles = (singleColumnView) => ({
     ...provided,
     border: 'none',
     borderRadius: '3px',
-    backgroundColor: '#FFCC8042',
+    backgroundColor: 'var(--ae-bg-highlight-soft)',
     marginLeft: 0,
     paddingLeft: singleColumnView ? '2px' : '25px',
   }),
@@ -75,11 +75,11 @@ const getCustomStyles = (singleColumnView) => ({
   }),
   singleValue: (provided) => ({
     ...provided,
-    color: 'rgba(0,0,0,0.8)',
+    color: 'var(--ae-text-strong)',
   }),
   option: (provided) => ({
     ...provided,
-    color: 'rgba(0,0,0,0.8)',
+    color: 'var(--ae-text-strong)',
     fontSize: '0.8em',
     paddingTop: '5px',
     paddingBottom: '5px',
@@ -93,14 +93,14 @@ const getCustomStyles = (singleColumnView) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    color: 'rgba(0, 0, 0, 0.8)',
+    color: 'var(--ae-text-strong)',
     fontWeight: '700',
     userSelect: 'none',
     textTransform: 'none',
   }),
   input: (provided) => ({
     ...provided,
-    color: 'rgba(0,0,0,0.8)',
+    color: 'var(--ae-text-strong)',
   }),
   menuList: (provided) => ({
     ...provided,
@@ -129,7 +129,7 @@ const getCustomStyles = (singleColumnView) => ({
   }),
   placeholder: (provided) => ({
     ...provided,
-    color: 'rgba(0,0,0,0.4)',
+    color: 'var(--ae-text-soft)',
   }),
   indicatorSeparator: (provided) => ({
     ...provided,
@@ -141,7 +141,7 @@ const getCustomStyles = (singleColumnView) => ({
   }),
   clearIndicator: (provided) => ({
     ...provided,
-    color: 'rgba(0,0,0,0.8)',
+    color: 'var(--ae-text-strong)',
   }),
 })
 

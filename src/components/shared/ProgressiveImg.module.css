@@ -5,6 +5,11 @@
   object-fit: cover;
 }
 
+/* tone the photo down in dark mode so text over it stays readable */
+:global(html[data-theme='dark']) .img {
+  filter: brightness(0.65);
+}
+
 .imgLoading {
   filter: blur(0px);
   clip-path: inset(0);

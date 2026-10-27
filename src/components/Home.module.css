@@ -40,12 +40,12 @@
     margin-top: 10px !important;
   }
   position: relative;
-  color: black !important;
+  color: var(--ae-text-primary) !important;
 }
 
 .card {
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.6) !important;
+  background-color: var(--ae-bg-card) !important;
   font-weight: 700;
   ul {
     margin-bottom: 0;
@@ -59,14 +59,14 @@
 }
 
 .cardTitle {
-  text-shadow: 0 0 4px #fff, 0 0 2px #fff;
+  text-shadow: 0 0 4px var(--ae-text-shadow-color), 0 0 2px var(--ae-text-shadow-color);
   font-weight: 700;
   margin: 0 0 12px 0;
 }
 
 .dokuLink {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--ae-text-primary);
   &:hover {
     text-decoration: underline;
   }

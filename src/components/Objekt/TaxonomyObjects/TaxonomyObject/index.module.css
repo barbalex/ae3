@@ -8,7 +8,7 @@
 
 .card {
   margin: 0;
-  background-color: #fff3e0 !important;
+  background-color: var(--ae-bg-surface) !important;
 }
 
 .cardActions {
@@ -16,7 +16,7 @@
   justify-content: space-between;
   cursor: pointer;
   height: auto !important;
-  background-color: #ffcc80 !important;
+  background-color: var(--ae-bg-highlight) !important;
 }
 
 .cardActionsButtons {
@@ -24,7 +24,7 @@
 }
 
 .cardActionTitle {
-  text-shadow: 0 0 4px #fff, 0 0 2px #fff;
+  text-shadow: 0 0 4px var(--ae-text-shadow-color), 0 0 2px var(--ae-text-shadow-color);
   padding-left: 8px;
   font-weight: bold;
   white-space: nowrap;

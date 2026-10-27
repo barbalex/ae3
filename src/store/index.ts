@@ -36,6 +36,18 @@ export const loginUsernameAtom = atomWithStorage<string | null>(
   null,
 )
 
+// Theme mode: 'system' follows the OS prefers-color-scheme preference
+// (the default), 'light' and 'dark' force a mode. index.html resolves the
+// same storage key before first paint to set html[data-theme] without a
+// flash
+export type ThemeMode = 'system' | 'light' | 'dark'
+export const themeModeAtom = atomWithStorage<ThemeMode>(
+  'ae-theme-mode',
+  'system',
+  undefined,
+  { getOnInit: true },
+)
+
 export const setLoginAtom = atom(
   null,
   (

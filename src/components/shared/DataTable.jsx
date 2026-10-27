@@ -52,7 +52,7 @@ export const DataTable = ({
           sx={{
             minWidth: 650,
             fontSize: 'small !important',
-            backgroundColor: 'white',
+            backgroundColor: 'var(--ae-bg-paper)',
             marginBottom: 0,
           }}
           size="small"
@@ -71,7 +71,7 @@ export const DataTable = ({
                       sx={{
                         minWidth: 270,
                         '&:first-of-type': { paddingLeft: '6px !important' },
-                        backgroundColor: '#ffcc80 !important',
+                        backgroundColor: 'var(--ae-bg-highlight) !important',
                       }}
                     >
                       {name}
@@ -85,7 +85,7 @@ export const DataTable = ({
                     sortDirection={active ? order.toLowerCase() : false}
                     sx={{
                       '&:first-of-type': { paddingLeft: '6px !important' },
-                      backgroundColor: '#ffcc80 !important',
+                      backgroundColor: 'var(--ae-bg-highlight) !important',
                       // prevent hideous high headers
                       minWidth: 200,
                     }}

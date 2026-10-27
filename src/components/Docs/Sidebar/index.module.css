@@ -1,7 +1,7 @@
 .menu {
   height: calc(100vh - 64px);
   padding: 25px 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid var(--ae-divider);
   container-type: size;
 }
 
@@ -13,7 +13,7 @@
   font-size: 21px;
   font-weight: 700;
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--ae-text-primary);
   &:hover {
     text-decoration: underline;
   }

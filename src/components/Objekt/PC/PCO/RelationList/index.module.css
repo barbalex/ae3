@@ -1,6 +1,6 @@
 .title {
   font-weight: bold;
-  border-bottom: 1px solid #c6c6c6;
+  border-bottom: 1px solid var(--ae-border);
   padding: 5px;
   border-radius: 4px 4px 0 0;
   margin-bottom: 10px;

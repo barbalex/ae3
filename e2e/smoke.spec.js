@@ -120,3 +120,38 @@ test('clicking a row text activates the element and closes deeper levels', async
   await expect(page.locator(`[data-url="${objUrl}"]`).first()).toBeVisible()
   await expect(page.locator(`[data-url^="${objUrl},"]`).first()).toBeHidden()
 })
+
+test('theme chooser cycles light/dark/system and persists', async ({ page }) => {
+  await page.goto('/')
+  // pre-paint script sets the attribute before the app renders
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  const chooser = page.getByRole('button', { name: 'Darstellung: wie System' })
+
+  // system > light > dark
+  await chooser.click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await expect(
+    page.getByRole('button', { name: 'Darstellung: hell' }),
+  ).toBeVisible()
+
+  await page.getByRole('button', { name: 'Darstellung: hell' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(
+    page.getByRole('button', { name: 'Darstellung: dunkel' }),
+  ).toBeVisible()
+
+  // the choice survives a reload (localStorage + pre-paint script)
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+  // dark mode paints the page background dark
+  const bg = await page.evaluate(
+    () => getComputedStyle(document.body).backgroundColor,
+  )
+  expect(bg).toBe('rgb(18, 18, 18)')
+
+  // back to system for other tests
+  await page.getByRole('button', { name: 'Darstellung: dunkel' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+})

@@ -3,7 +3,7 @@
     width: calc(100% - 20px) !important;
   }
   &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom-color: var(--ae-divider) !important;
   }
 }
 
@@ -11,5 +11,5 @@
   cursor: pointer;
   pointer-events: auto;
   padding-top: 5px;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--ae-text-strong);
 }

@@ -10,13 +10,13 @@
     overflow: hidden;
   }
   .react-grid-HeaderCell:not(:first-of-type) {
-    border-left: #c7c7c7 solid 1px !important;
+    border-left: var(--ae-border) solid 1px !important;
   }
   .react-grid-HeaderCell__draggable {
     right: 16px !important;
   }
   .react-grid-Cell {
-    border: #ddd solid 1px !important;
+    border: var(--ae-border) solid 1px !important;
   }
 }
 
@@ -32,7 +32,7 @@
 .dropzone {
   padding: 8px;
   border-width: 2px;
-  border-color: rgb(102, 102, 102);
+  border-color: var(--ae-border-strong);
   border-style: dashed;
   border-radius: 5px;
 }
@@ -40,10 +40,10 @@
 .dropzoneActive {
   padding: 8px;
   border-width: 2px;
-  border-color: rgb(102, 102, 102);
+  border-color: var(--ae-border-strong);
   border-style: dashed;
   border-radius: 5px;
-  background-color: rgba(255, 224, 178, 0.2);
+  background-color: var(--ae-bg-highlight-soft);
 }
 
 .button {
@@ -60,6 +60,6 @@
 .snackbar {
   div {
     min-width: auto;
-    background-color: #2e7d32 !important;
+    background-color: var(--ae-green) !important;
   }
 }

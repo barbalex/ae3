@@ -132,7 +132,7 @@ export const Row = ({ data }) => {
       onPointerLeave={clearHoldToDisplay}
       style={{
         gridTemplateColumns: `${level * 23 - 23}px 23px 1fr`,
-        color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+        color: nodeIsInActiveNodePath ? 'var(--ae-brand-accent)' : 'inherit',
       }}
     >
       <div className={styles.spacer} />
@@ -144,7 +144,7 @@ export const Row = ({ data }) => {
             style={{
               fontSize: nodeIsInActiveNodePath ? 26 : 23,
               fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
-              color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+              color: nodeIsInActiveNodePath ? 'var(--ae-brand-accent)' : 'inherit',
             }}
           >
             {symbol === 'Loading' && <LoadingIcon />}

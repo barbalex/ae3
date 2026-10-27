@@ -28,7 +28,7 @@
 }
 
 .emSpan {
-  background-color: #8d8c8c40;
+  background-color: var(--ae-bg-wash);
   padding: 1px 3px;
   border-radius: 4px;
 }

@@ -1,5 +1,5 @@
 .filterValue {
-  background-color: #dadada;
+  background-color: var(--ae-bg-neutral);
   padding: 1px 8px;
   margin-left: 5px;
   border-radius: 3px;
@@ -10,5 +10,5 @@
   font-weight: 100;
   font-style: italic;
   cursor: pointer;
-  text-decoration: underline dotted rgba(0, 0, 0, 0.3);
+  text-decoration: underline dotted var(--ae-text-faint);
 }

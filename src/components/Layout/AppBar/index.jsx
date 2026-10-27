@@ -13,6 +13,7 @@ import { useAtomValue } from 'jotai'
 import { getActiveObjectIdFromNodeArray } from '../../../modules/getActiveObjectIdFromNodeArray.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { MoreMenu } from './MoreMenu.jsx'
+import { ThemeChooser } from './ThemeChooser.jsx'
 import {
   loginUsernameAtom,
   singleColumnViewAtom,
@@ -202,6 +203,7 @@ export const AppBar = () => {
                     Dokumentation
                   </Button>
                 </div>
+                <ThemeChooser className={styles.shareButton} />
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
                     <ShareButton

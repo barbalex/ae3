@@ -15,6 +15,6 @@
 .a {
   color: inherit;
   cursor: pointer;
-  text-decoration-color: rgba(0, 0, 0, 0.3);
+  text-decoration-color: var(--ae-text-faint);
   text-decoration-style: dotted;
 }

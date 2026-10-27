@@ -34,7 +34,7 @@
 
 .item:hover,
 .itemSelected {
-  color: #f57c00;
+  color: var(--ae-brand-hover);
   border-color: #0275d8;
   text-decoration: none;
 }

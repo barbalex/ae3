@@ -7,10 +7,10 @@
     font-size: small;
   }
   .react-grid-HeaderCell:not(:first-of-type) {
-    border-left: #c7c7c7 solid 1px !important;
+    border-left: var(--ae-border) solid 1px !important;
   }
   .react-grid-Cell {
-    border: #ddd solid 1px !important;
+    border: var(--ae-border) solid 1px !important;
   }
   .react-grid-Canvas {
     ::-webkit-scrollbar {

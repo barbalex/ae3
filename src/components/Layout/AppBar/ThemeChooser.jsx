@@ -1,0 +1,48 @@
+import { useAtom } from 'jotai'
+import IconButton from '@mui/material/IconButton'
+import {
+  MdBrightnessAuto,
+  MdLightMode,
+  MdDarkMode,
+} from 'react-icons/md'
+
+import { themeModeAtom } from '../../../store/index.ts'
+
+// cycling order: system > light > dark > system
+const NEXT_MODE = {
+  system: 'light',
+  light: 'dark',
+  dark: 'system',
+}
+
+const MODE_ICONS = {
+  system: MdBrightnessAuto,
+  light: MdLightMode,
+  dark: MdDarkMode,
+}
+
+const MODE_LABELS = {
+  system: 'Darstellung: wie System',
+  light: 'Darstellung: hell',
+  dark: 'Darstellung: dunkel',
+}
+
+export const ThemeChooser = ({ className }) => {
+  const [themeMode, setThemeMode] = useAtom(themeModeAtom)
+
+  const label = MODE_LABELS[themeMode]
+  const Icon = MODE_ICONS[themeMode]
+
+  return (
+    <IconButton
+      className={className}
+      title={label}
+      aria-label={label}
+      onClick={() => setThemeMode(NEXT_MODE[themeMode])}
+      color="inherit"
+      size="large"
+    >
+      <Icon />
+    </IconButton>
+  )
+}
