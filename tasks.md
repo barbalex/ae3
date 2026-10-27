@@ -12,8 +12,6 @@ context menu use in nav tree: is it really useful? Could we move to the form (he
 
 ---
 
-What I recommend before deploying: run the dev app (npm run dev — backend containers are already up) and manually exercise one flow per domain I converted — login, a tree context-menu create/delete, an object edit, a PCO/RCO import, and an xlsx export with filters. The unit and e2e suites cover the spine, but the mutation-heavy screens (imports, exports with composite filters) deserve one human pass.
-
 Deploying means docker compose up -d postgrest caddy on the server with the updated compose files — the frontend can deploy independently since PostGraphile still serves the old endpoint in parallel.
 
 ---
@@ -22,7 +20,7 @@ vermehrung accesses ae3 two ways: postgres_fdw straight into ae3's Postgres (una
 
 ---
 
-dark and light mode
+lets add a dark mode and a way to switch while per default using system settings
 
 ---
 
@@ -30,4 +28,4 @@ dark and light mode
 
 ---
 
-click on nav tree rows does not immediately close them. used to be same in apf2, was solved a few months ago
+click on nav tree rows does not immediately close them if a lower level element is active - but it should (First the lower level is closed). used to be same in apf2, was solved a few months ago. Please have a look how it is solved in apf2 and apply it here too
