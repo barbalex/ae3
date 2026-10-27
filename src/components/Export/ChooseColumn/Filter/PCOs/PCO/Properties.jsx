@@ -23,7 +23,7 @@ export const Properties = ({ pc }) => {
   const { data, error } = useQuery({
     queryKey: ['exportFilterPcos', exportTaxonomies, pc],
     queryFn: async () => ({
-        data: { pcoPropertiesByTaxonomiesAndPc: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('pco_properties_by_taxonomies_and_pc', { taxonomy_names: exportTaxonomies, pc_name: pcName ?? pc })).map((r) => r) } },
+        data: { pcoPropertiesByTaxonomiesAndPc: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('pco_properties_by_taxonomies_and_pc', { taxonomy_names: exportTaxonomies, pc_name: pc })).map((r) => r) } },
       }),
   })
 

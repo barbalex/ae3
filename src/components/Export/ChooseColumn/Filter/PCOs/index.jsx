@@ -22,7 +22,7 @@ export const PCOs = ({ pcoExpanded, onTogglePco }) => {
     queryKey: ['pcos', exportTaxonomies],
     queryFn: async () => ({
         data: {
-          pc_count: { totalCount: (await rpc('pco_properties_by_taxonomies_count_per_pc', { export_taxonomies })).length },
+          pc_count: { totalCount: (await rpc('pco_properties_by_taxonomies_count_per_pc', { export_taxonomies: exportTaxonomies })).length },
           property_count: await rpc('pco_properties_by_taxonomies_count_function', { export_taxonomies: exportTaxonomies }),
         },
       }),
