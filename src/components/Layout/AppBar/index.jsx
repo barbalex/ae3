@@ -203,7 +203,7 @@ export const AppBar = () => {
                     Dokumentation
                   </Button>
                 </div>
-                <ThemeChooser className={styles.shareButton} />
+                <ThemeChooser className={styles.themeChooser} />
                 {typeof navigator !== 'undefined' &&
                   navigator.share !== undefined && (
                     <ShareButton

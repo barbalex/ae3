@@ -46,6 +46,11 @@
   color: white !important;
 }
 
+.themeChooser {
+  color: rgb(255, 255, 255) !important;
+  margin: 8px;
+}
+
 .titleContainer {
   flex: 1;
   margin-left: -20px;
