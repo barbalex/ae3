@@ -29,19 +29,18 @@ export const onClickContextMenu = async ({
   const actions = {
     insert: async () => {
       if (table === 'user') {
-        let newUser
+        // ids are generated client-side: rls hides the new row from
+        // being returned (it has no name yet)
+        const newUserId = crypto.randomUUID()
         try {
-          newUser = await apiFetch('/user?select=id', {
+          await apiFetch('/user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([{}]),
+            body: JSON.stringify([{ id: newUserId }]),
           })
+          navigate(`/Benutzer/${newUserId}`)
         } catch (error) {
           console.log(error)
-        }
-        const newUserId = newUser?.[0]?.id
-        if (newUserId) {
-          navigate(`/Benutzer/${newUserId}`)
         }
       }
       // get userId
@@ -50,23 +49,18 @@ export const onClickContextMenu = async ({
       )
       const userId = users?.[0]?.id
       if (table === 'object') {
-        let newObjectData
-        if (url.length === 2) {
-          // user clicked on the taxonomy
-          // need to create root level object, without parentId
-          newObjectData = await apiFetch('/object?select=id', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([{ taxonomy_id: url[1] }]),
-          })
-        } else {
-          newObjectData = await apiFetch('/object?select=id', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify([{ taxonomy_id: url[1], parent_id: id }]),
-          })
-        }
-        const newId = newObjectData?.[0]?.id ?? null
+        const newId = crypto.randomUUID()
+        await apiFetch('/object', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([
+            url.length === 2 ?
+              // user clicked on the taxonomy:
+              // create root level object, without parentId
+              { id: newId, taxonomy_id: url[1] }
+            : { id: newId, taxonomy_id: url[1], parent_id: id },
+          ]),
+        })
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editing true
         if (!editingTaxonomies) {
@@ -75,18 +69,19 @@ export const onClickContextMenu = async ({
       }
       if (table === 'taxonomy') {
         const type = taxonomyTypeConverter[id] ?? 'Art'
-        const newTaxonomyData = await apiFetch('/taxonomy?select=id', {
+        const newId = crypto.randomUUID()
+        await apiFetch('/taxonomy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify([
             {
+              id: newId,
               type,
               imported_by: userId,
               last_updated: new Date(),
             },
           ]),
         })
-        const newId = newTaxonomyData?.[0]?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
         // if not editingTaxonomies, set editingTaxonomies true
         if (!editingTaxonomies) {
@@ -94,17 +89,18 @@ export const onClickContextMenu = async ({
         }
       }
       if (table === 'pc') {
-        const newPCData = await apiFetch('/property_collection?select=id', {
+        const newId = crypto.randomUUID()
+        await apiFetch('/property_collection', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify([
             {
+              id: newId,
               imported_by: userId,
               last_updated: new Date(),
             },
           ]),
         })
-        const newId = newPCData?.[0]?.id ?? null
         navigate(`/${[...url, newId].join('/')}`)
         // if not editing, set editing true
         if (!editingTaxonomies) {

@@ -4,11 +4,7 @@ context menu use in nav tree: is it really useful? Could we move to the form (he
 
 ---
 
-right click on 'Arten' in the nav tree should open a context menu when logged in. does not happen. seems that no context menus open
-
 ---
-
-logging in: when ui navigates to home, the menu switches immediately to 'Login abgelaufen'. Maybe that is the reason context menus dont open?
 
 ---
 

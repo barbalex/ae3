@@ -60,6 +60,13 @@ const buildError = async (res) => {
  */
 export const apiFetch = async (path, options = {}) => {
   const headers = await authHeaders()
+  const method = options.method?.toUpperCase() ?? 'GET'
+  // mutations return no body by default: rls often hides the affected
+  // rows, and an empty 2xx body would fail res.json(). rpc calls
+  // (like login) DO return a body, so they are excluded
+  if (method !== 'GET' && !path.startsWith('/rpc/')) {
+    headers.set('Prefer', 'return=minimal')
+  }
   Object.entries(options.headers ?? {}).forEach(([k, v]) =>
     headers.set(k, v),
   )
@@ -68,8 +75,10 @@ export const apiFetch = async (path, options = {}) => {
     headers,
   })
   if (!res.ok) throw await buildError(res)
-  if (res.status === 204) return null
-  return res.json()
+  // mutations can answer 204 or 201 with an empty body
+  // (e.g. when rls hides the affected rows)
+  const text = await res.text()
+  return text ? JSON.parse(text) : null
 }
 
 // call a db function, e.g. rpc('login', { username, pass })
