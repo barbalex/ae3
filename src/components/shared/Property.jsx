@@ -31,7 +31,7 @@ export const Property = ({ id, properties: propertiesPrevious, field: key, refet
         await apiFetch(`/object?id=eq.${id}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ properties: JSON.stringify(properties) }),
+          body: JSON.stringify({ properties }),
         })
         refetch?.()
         await queryClient.invalidateQueries({
@@ -46,7 +46,7 @@ export const Property = ({ id, properties: propertiesPrevious, field: key, refet
       await apiFetch(`/object?id=eq.${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ properties: JSON.stringify(properties) }),
+        body: JSON.stringify({ properties }),
       })
       refetch?.()
       queryClient.invalidateQueries({

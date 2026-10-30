@@ -56,10 +56,10 @@ const getObjectIdsUnreal = ({ data, objectIds }) => {
   return objectIds.filter((i) => !realIds.includes(i))
 }
 
-const getObjectRelationIdsUnreal = ({ data, objectIds }) => {
+const getObjectRelationIdsUnreal = ({ data, objectRelationIds }) => {
   const realIds = (data?.allObjectRelations?.nodes ?? []).map((o) => o.id)
 
-  return objectIds.filter((i) => !realIds.includes(i))
+  return objectRelationIds.filter((i) => !realIds.includes(i))
 }
 
 const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }) => {  const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o) => o.id)
@@ -155,7 +155,7 @@ export const ImportRco = ({ setImport }) => {
     : undefined
   const objectRelationIdsUnreal = getObjectRelationIdsUnreal({
     data,
-    objectIds,
+    objectRelationIds,
   })
   const objectRelationIdsAreReal =
     !isLoading && objectRelationIds.length > 0 ?
@@ -197,6 +197,7 @@ export const ImportRco = ({ setImport }) => {
     [
       Object.values(checkState),
       importData.length,
+      objectIdsAreReal,
       objectRelationIdsAreReal,
       pCOfOriginIdsAreReal,
     ],
@@ -333,16 +334,16 @@ export const ImportRco = ({ setImport }) => {
       property_collection_id: pCId,
       property_collection_of_origin: d.propertyCollectionOfOrigin || null,
       relation_type: d.relationType || null,
-      properties: JSON.stringify(
-        omit(d, [
-          'id',
-          'objectId',
-          'objectIdRelation',
-          'propertyCollectionId',
-          'propertyCollectionOfOrigin',
-          'relationType',
-        ]),
-      ),
+      // send the object: the properties column is jsonb, a string
+      // here would be stored as a jsonb string (double serialized)
+      properties: omit(d, [
+        'id',
+        'objectId',
+        'objectIdRelation',
+        'propertyCollectionId',
+        'propertyCollectionOfOrigin',
+        'relationType',
+      ]),
     }))
     try {
       await bulkUpsert({

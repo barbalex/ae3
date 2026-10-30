@@ -260,14 +260,14 @@ export const ImportPco = ({ setImport }) => {
       object_id: d.objectId || null,
       property_collection_id: pCId,
       property_collection_of_origin: d.propertyCollectionOfOrigin || null,
-      properties: JSON.stringify(
-        omit(d, [
-          'id',
-          'objectId',
-          'propertyCollectionId',
-          'propertyCollectionOfOrigin',
-        ]),
-      ),
+      // send the object: the properties column is jsonb, a string
+      // here would be stored as a jsonb string (double serialized)
+      properties: omit(d, [
+        'id',
+        'objectId',
+        'propertyCollectionId',
+        'propertyCollectionOfOrigin',
+      ]),
     }))
     try {
       await bulkUpsert({
