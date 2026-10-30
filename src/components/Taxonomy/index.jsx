@@ -69,7 +69,9 @@ export const Taxonomy = () => {
   const editingLr = editing && tax?.type === 'Lebensraum'
   const allUsers = allUsersData ?? []
   const user = allUsers.find((u) => u.name === username)
-  const orgsUserIsTaxWriter = (user?.organizationUsersByUserId?.nodes ?? [])
+  // PostgREST returns the org users as a plain array (no .nodes
+  // wrapper like the former graphql result)
+  const orgsUserIsTaxWriter = (user?.organizationUsersByUserId ?? [])
     .filter((o) => ['orgTaxonomyWriter', 'orgAdmin'].includes(o.role))
     .map((o) => ({
       id: o.organizationId,

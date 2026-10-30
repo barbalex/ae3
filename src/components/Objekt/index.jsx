@@ -144,8 +144,7 @@ export const Objekt = () => {
               <PC
                 key={pc.id}
                 pcId={pc.id}
-                objId={objekt?.synonymsByObjectId?.nodes?.[0]?.objectIdSynonym ??
-                  synonyms?.[0]?.objectIdSynonym}
+                objId={synonyms?.[0]?.objectIdSynonym}
               />
             ))}
           </Suspense>

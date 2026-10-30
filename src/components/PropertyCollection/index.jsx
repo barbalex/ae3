@@ -68,7 +68,9 @@ export const PropertyCollection = () => {
   const pC = pcData?.propertyCollectionById ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
   const user = allUsers.find((u) => u.name === username)
-  const orgsUserIsPCWriter = (user?.organizationUsersByUserId?.nodes ?? [])
+  // PostgREST returns the org users as a plain array (no .nodes
+  // wrapper like the former graphql result)
+  const orgsUserIsPCWriter = (user?.organizationUsersByUserId ?? [])
     .filter((o) => ['orgCollectionWriter', 'orgAdmin'].includes(o.role))
     .map((o) => ({
       id: o.organizationId,
