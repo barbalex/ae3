@@ -1,14 +1,16 @@
 // deploys production by updating the artdaten and ae branches from main:
 // commits the version bump (scripts/bumpVersion.mjs) on main and pushes main,
-// then fast-forwards both deploy branches to main. pushing artdaten deploys
+// then fast-forwards the deploy branches to main. pushing artdaten deploys
 // artdaten.ch, pushing ae deploys arteigenschaften.ch (both on Vercel).
 // the working tree and uncommitted changes to other files are left alone.
-// usage: npm run deploy [patch|minor|major] (default: patch)
+// usage: npm run deploy [patch|minor|major] [ae|artdaten]
+//   both arguments optional: bump type defaults to patch, branch to both
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
-const deployBranches = ['artdaten', 'ae']
+const allDeployBranches = ['artdaten', 'ae']
+const domains = { artdaten: 'artdaten.ch', ae: 'arteigenschaften.ch' }
 
 const run = (cmd, args) => {
   console.log(`$ ${cmd} ${args.join(' ')}`)
@@ -18,11 +20,23 @@ const run = (cmd, args) => {
   }).trim()
 }
 
-const type = process.argv[2] ?? 'patch'
-if (!['patch', 'minor', 'major'].includes(type)) {
-  console.error(`unknown bump type "${type}" — use patch, minor or major`)
+const args = process.argv.slice(2)
+const unknownArgs = args.filter(
+  (arg) =>
+    !['patch', 'minor', 'major'].includes(arg) && !allDeployBranches.includes(arg),
+)
+if (unknownArgs.length > 0) {
+  console.error(
+    `unknown argument(s) ${unknownArgs.join(', ')} — use patch, minor, major, ae or artdaten`,
+  )
   process.exit(1)
 }
+const type = args.find((arg) => ['patch', 'minor', 'major'].includes(arg)) ?? 'patch'
+const deployBranches = [
+  ...new Set(args.filter((arg) => allDeployBranches.includes(arg))),
+]
+const branches =
+  deployBranches.length > 0 ? deployBranches : [...allDeployBranches]
 
 const branch = run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
 if (branch !== 'main') {
@@ -46,7 +60,7 @@ if (run('git', ['diff', '--cached', '--name-only'])) {
 run('git', ['push', 'origin', 'main'])
 
 // fast-forward the deploy branches to main
-for (const deployBranch of deployBranches) {
+for (const deployBranch of branches) {
   try {
     run('git', ['push', 'origin', `main:${deployBranch}`])
   } catch {
@@ -58,5 +72,5 @@ for (const deployBranch of deployBranches) {
   }
 }
 console.log(
-  `artdaten.ch (branch artdaten) and arteigenschaften.ch (branch ae) deploys triggered`,
+  `${branches.map((branch) => `${domains[branch]} (branch ${branch})`).join(' and ')} deploy${branches.length > 1 ? 's' : ''} triggered`,
 )

@@ -17,6 +17,7 @@ npm run test:watch # vitest in watch mode
 npm run test:e2e   # playwright e2e smoke tests (starts dev server + needs backend-dev running)
 npm run deploy     # deploy production: bump patch version + date, push main, fast-forward the artdaten + ae branches (Vercel deploys artdaten.ch + arteigenschaften.ch)
 npm run deploy minor # same with a minor bump (or: major)
+npm run deploy major ae # same with a major bump, but only fast-forward the ae branch (or: artdaten; default: both)
 ```
 
 There is **no `lint`/`format` npm script**. ESLint config exists at [eslint.config.mjs](eslint.config.mjs) — run linter directly with `npx eslint .`. Prettier is a dependency but has no config file (defaults).
