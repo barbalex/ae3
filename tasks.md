@@ -12,33 +12,20 @@ for details). Done first:
 
 Remaining, in priority order:
 
-## 1. Bulk upsert for PCO/RCO imports
-
-Imports write row by row: for every row a GET check, then PATCH or
-POST, all fired via `Promise.all`
-(`src/components/PropertyCollection/PCO/Import/index.jsx` ~290-315,
-same in `RCO/Import/index.jsx`). PostgREST supports upsert in one
-request: `POST` the whole (chunked) array with
-`Prefer: resolution=merge-duplicates` — conflicts resolve against the
-primary key. Replaces hundreds of round-trips with a handful. Watch
-out: `api.js` sets `Prefer: return=minimal` for non-GET requests
-(override, don't duplicate, the header); chunk large imports
-(~1000 rows) to keep request sizes sane; errors currently surface per
-row — decide how to report partial failures of a chunk.
+- [x] bulk upsert for PCO/RCO imports (branch `bulk-upsert`:
+  `src/modules/bulkUpsert.js`, chunked POST with
+  `Prefer: resolution=merge-duplicates` on the tables' unique
+  constraints; also fixed the pre-existing `.nodes` writer bug that
+  had made the import UI unreachable)
 
 ## 2. Move export/import processing into a web worker
 
-All heavy library work runs synchronously on the main thread and
-freezes the UI on big exports/imports: exceljs workbook build
-(`src/modules/getXlsxBuffer.js`), `@json2csv` parse
-(`src/modules/exportCsv.js`), `@e965/xlsx` read + validation loops
-(`PCO/Import/index.jsx` ~195ff, `RCO/Import/index.jsx` ~242ff). The
-TODO at `src/modules/exportXlsx.js:4-8` planned exactly this once
-worker modules were universally supported — they now are; no need for
-the `import-from-worker` shim. The dynamic-import boundaries already
-isolate these code paths, so a worker is contained. Pass rows in,
-receive an ArrayBuffer/CSV string back; keep the loading spinners
-honest (they can't repaint while the main thread is busy today).
+Done (branch `web-workers`): exceljs workbook build, `@json2csv`
+parse and `@e965/xlsx` file parsing each run in their own worker
+(`src/workers/*.worker.js`, one-shot rpc via
+`src/modules/runInWorker.js`; the heavy libraries load inside the
+workers only). `worker.format: 'es'` keeps the libraries in shared
+lazy chunks instead of one inlined copy per worker.
 
 ## 3. Single RPC for the filter's ancestor path
 

@@ -1,11 +1,7 @@
 import FileSaver from 'file-saver'
 import format from 'date-fns/format'
 
-/**
- * TODO:
- * use https://github.com/GoogleChromeLabs/import-from-worker
- * once firefox has implemented worker modules too: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
- */
+// the workbook is built off the main thread (see getXlsxBuffer.js)
 
 export const exportXlsx = async ({ rows, onSetMessage }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.js')

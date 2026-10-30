@@ -7,6 +7,11 @@ import babel from '@rolldown/plugin-babel'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5174 },
+  // es workers keep their dynamic imports (exceljs, xlsx) as shared
+  // chunks instead of inlining them into every worker bundle
+  worker: {
+    format: 'es',
+  },
   // cssMinify is needed due to an error in vite:
   // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
   // TODO: remove this and uninstall esbuild when the issue is fixed

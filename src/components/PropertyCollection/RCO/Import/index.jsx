@@ -11,6 +11,7 @@ import { useAtomValue } from 'jotai'
 
 import { apiFetch } from '../../../../modules/api.js'
 import { bulkUpsert } from '../../../../modules/bulkUpsert.js'
+import { parseImportFile } from '../../../../modules/parseImportFile.js'
 import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
@@ -212,15 +213,7 @@ export const ImportRco = ({ setImport }) => {
     if (file) {
       const reader = new FileReader()
       reader.onload = async () => {
-        const { read, utils } = await import('@e965/xlsx')
-        const workbook = read(new Uint8Array(reader.result), {
-            type: 'array',
-          }),
-          sheetName = workbook.SheetNames[0],
-          worksheet = workbook.Sheets[sheetName]
-        const data = utils
-          .sheet_to_json(worksheet)
-          .map((d) => omit(d, ['__rowNum__']))
+        const data = await parseImportFile(reader.result)
         // test the data
         setImportData(data)
         let importDataFields = []
