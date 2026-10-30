@@ -29,14 +29,15 @@ lazy chunks instead of one inlined copy per worker.
 
 ## 3. Single RPC for the filter's ancestor path
 
-Selecting a search result walks the object's parent chain one request
-per level (`getObjectForUrl` in
-`src/components/Tree/Filter/index.jsx` ~35-60), then the tree expands
-level by level. Replace with one RPC (recursive CTE, e.g.
-`get_object_path(id)`) returning the whole ancestor chain in one go;
-add it to `src/sql/createFunctions.sql` and apply as a migration in
-`backend/db/migrations/`. Collapses a visible sequential-loading
-stutter into a single request.
+Done (branch `filter-rpc`): `ae.object_path(uuid)` (recursive CTE,
+in `src/sql/createFunctions.sql` + migration
+`2026-10-30-object-path.sql` — PostgREST needs `NOTIFY pgrst,
+'reload schema'` or a restart after creating it) returns the ancestor
+ids root-first. `attachParentChain` and the tree filter's
+`getObjectForUrl` use it — one request instead of one per parent
+level. Also fixes the old `?id=` redirect (IdParameter) and object
+page chains the same way. Guarded by a smoke e2e that asserts no
+per-level parent fetches run.
 
 ## 4. Stop precaching exceljs/xlsx in the service worker
 

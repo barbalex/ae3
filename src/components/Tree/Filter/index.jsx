@@ -11,7 +11,8 @@ import { getUrlForObject } from '../../../modules/getUrlForObject.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { buildOptions } from './buildOptions.js'
 import { constants } from '../../../modules/constants.js'
-import { apiFetch } from '../../../modules/api.js'
+import { apiFetch, rpc } from '../../../modules/api.js'
+import { attachParentIds } from '../../../modules/attachParentChain.js'
 import {
   treeFilterIdAtom,
   setTreeFilterAtom,
@@ -30,33 +31,18 @@ const formatOptionLabel = ({ label }, { inputValue }) => (
 )
 const formatGroupLabel = (data) => <div>{data.label}</div>
 
-// fetch the object and walk up its parent chain (formerly a recursive
-// graphql query capped at six levels; this is not capped)
+// fetch the object and its ancestor path in two parallel requests
+// (formerly a recursive graphql query, then one request per parent)
 const getObjectForUrl = async (id) => {
-  const current = (
-    await apiFetch(
-      `/object?id=eq.${id}&select=id,parentId:parent_id,taxonomyByTaxonomyId:taxonomy_id(id,type,name)&limit=1`,
-    )
-  )?.[0]
-  if (!current) return null
-  const root = {
-    id: current.id,
-    taxonomyByTaxonomyId: current.taxonomyByTaxonomyId,
-  }
-  let node = root
-  let parentId = current.parentId
-  while (parentId) {
-    const parent = (
-      await apiFetch(
-        `/object?id=eq.${parentId}&select=id,parentId:parent_id&limit=1`,
-      )
-    )?.[0]
-    if (!parent) break
-    node.objectByParentId = { id: parent.id }
-    node = node.objectByParentId
-    parentId = parent.parentId
-  }
-  return root
+  const [current, path] = await Promise.all([
+    apiFetch(
+      `/object?id=eq.${id}&select=id,taxonomyByTaxonomyId:taxonomy_id(id,type)&limit=1`,
+    ),
+    rpc('object_path', { p_object_id: id }),
+  ])
+  if (!current?.[0]) return null
+  const rootFirst = path.map((row) => row.object_id)
+  return attachParentIds(current[0], rootFirst.slice(0, -1).reverse())
 }
 
 const getCustomStyles = (singleColumnView) => ({

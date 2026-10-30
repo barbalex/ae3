@@ -156,3 +156,58 @@ test('theme chooser cycles light/dark/system and persists', async ({ page }) => 
   await page.getByRole('button', { name: 'Darstellung: dunkel' }).click()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
 })
+
+test('filter search navigates to the deep object url in one rpc', async ({
+  page,
+}) => {
+  const objectPathRequests = []
+  page.on('request', (r) => {
+    if (r.url().includes('object_path')) objectPathRequests.push(r.url())
+    // the former implementation fetched parents one per level with
+    // exactly this select; page loads legitimately fetch objects
+    // with parentId among other fields
+    if (
+      r.url().includes('object?id=eq.') &&
+      r.url().includes('select=id,parentId:parent_id&limit=1')
+    )
+      objectPathRequests.push(`LEGACY-PARENT-FETCH ${r.url().slice(0, 80)}`)
+  })
+
+  await page.goto('/')
+
+  const search = page.getByRole('combobox', { name: 'treeFilter' })
+  await search.click()
+  await search.fill('Pulsatilla vulgaris')
+
+  // the debounced (600ms) search offers the object and its child;
+  // the child has a real ancestor chain to walk
+  const option = page.getByRole('option', {
+    name: 'DB-TAXREF (2017): Pulsatilla vulgaris Mill. subsp. vulgaris',
+    exact: true,
+  })
+  await expect(option).toBeVisible({ timeout: 10_000 })
+  await option.click()
+
+  // navigation to the deep url happens through the parent chain
+  await expect(page).toHaveURL(
+    /\/Arten\/[^/]+\/c3d82f63-1c13-11ea-8282-6b46a89d266c\/c3d82f64-1c13-11ea-8282-07e5a9d2fa66/,
+    { timeout: 30_000 },
+  )
+
+  // the tree shows and scrolled to the active object row
+  await expect(
+    page.locator(
+      '[data-url$="c3d82f64-1c13-11ea-8282-07e5a9d2fa66"]',
+    ),
+  ).toBeVisible({ timeout: 15_000 })
+
+  // the path was built with the rpc only (2 calls are normal in dev:
+  // StrictMode remounts refetch) - and none of the former per-level
+  // parent fetches ran
+  const rpcCalls = objectPathRequests.filter((u) => u.includes('object_path'))
+  expect(rpcCalls.length).toBeGreaterThan(0)
+  expect(rpcCalls.length).toBeLessThanOrEqual(2)
+  expect(
+    objectPathRequests.filter((u) => u.startsWith('LEGACY-PARENT-FETCH')),
+  ).toEqual([])
+})
