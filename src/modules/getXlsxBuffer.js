@@ -7,7 +7,7 @@ const createWorker = () =>
 
 /**
  * writes a dataArray to an Excel workbook - off the main thread, so
- * big exports cannot freeze the ui. exceljs is loaded inside the
+ * big exports cannot freeze the ui. @e965/xlsx is loaded inside the
  * worker only (see xlsxWork.js for the actual work)
  */
 export const getXlsxBuffer = (jsonArray) =>

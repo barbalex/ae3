@@ -3,7 +3,10 @@ import { sortBy } from 'es-toolkit'
 
 /**
  * writes a dataArray to an Excel workbook. Runs inside
- * workers/xlsxExport.worker.js - exceljs is loaded only there
+ * workers/xlsxExport.worker.js - @e965/xlsx is loaded only there
+ * (same library as the import worker).
+ * note: the community edition writes no cell styles and no frozen
+ * panes - the exceljs header styling and frozen header row are gone
  */
 export const buildXlsxBuffer = async (jsonArray) => {
   const columns = [
@@ -23,47 +26,13 @@ export const buildXlsxBuffer = async (jsonArray) => {
     ),
   )
   const dataArray = [columns, ...values]
-  // https://github.com/exceljs/exceljs/issues/1236#issuecomment-643023969
-  const { Workbook } = await import('exceljs')
-  const workbook = new Workbook()
-  const worksheet = workbook.addWorksheet('Daten', {
-    views: [
-      {
-        state: 'frozen',
-        xSplit: 0,
-        ySplit: 1,
-      },
-    ],
-    autoFilter: {
-      from: {
-        row: 1,
-        column: 1,
-      },
-      to: {
-        row: 1,
-        column: columns.length,
-      },
-    },
-  })
-  worksheet.addRows(dataArray)
-  worksheet.getRow(1).fill = {
-    type: 'gradient',
-    gradient: 'angle',
-    degree: 0,
-    stops: [
-      { position: 0, color: { argb: 'FFD3D3D3' } },
-      { position: 1, color: { argb: 'FFD3D3D3' } },
-    ],
+  const XLSX = await import('@e965/xlsx')
+  const worksheet = XLSX.utils.aoa_to_sheet(dataArray)
+  // autofilter over the header row, like exceljs did before
+  worksheet['!autofilter'] = {
+    ref: `A1:${XLSX.utils.encode_col(columns.length - 1)}1`,
   }
-  worksheet.getRow(1).font = {
-    bold: true,
-  }
-  worksheet.getRow(1).border = {
-    bottom: {
-      style: 'thin',
-    },
-  }
-  const buffer = await workbook.xlsx.writeBuffer()
-
-  return buffer
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Daten')
+  return XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
 }
