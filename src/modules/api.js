@@ -7,7 +7,9 @@ export const postgrestUri = () => {
     typeof window !== 'undefined' ?
       window.location.hostname.replace('www.', '')
     : ''
-  if (hostnameWithoutWww === 'localhost') return 'http://localhost:3000'
+  // 8093: ae3 dev port block (5433/8093), lets this stack coexist with
+  // other local projects claiming 3000
+  if (hostnameWithoutWww === 'localhost') return 'http://localhost:8093'
 
   return `https://api.${hostnameWithoutWww}/postgrest`
 }

@@ -17,8 +17,10 @@ services:
     expose:
       - "5432"
     ports:
-      # make the Postgres database accessible from outside the Docker container on port 5432
-      - "5432:5432"
+      # host port 5433 (not 5432): this stack must coexist with other local
+      # projects claiming 5432 (apf2, bb4, ps). Ae3 dev port block: 5433/8093.
+      # Update DATABASE_URL in .env when changing this.
+      - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
@@ -40,7 +42,11 @@ services:
     expose:
       - "3000"
     ports:
-      - "3000:3000"
+      # host port 8093 (not 3000): this stack must coexist with other local
+      # projects claiming 3000 (apf2, ps). Ae3 dev port block: 5433/8093.
+      # Update src/modules/api.js, playwright.config.js and CLAUDE.md when
+      # changing this.
+      - "8093:3000"
     depends_on:
       db:
         condition: service_healthy

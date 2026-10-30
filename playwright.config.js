@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './e2e',
   timeout: 30_000,
-  // the tests talk to the real PostgREST backend on localhost:3000
+  // the tests talk to the real PostgREST backend on localhost:8093
   // (cd backend-dev && docker compose up)
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
