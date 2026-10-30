@@ -7,8 +7,11 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
 import SimpleBar from 'simplebar-react'
+import { VGrid } from 'virtua'
 
 import styles from './DataTable.module.css'
+
+const virtualizeAfterRows = 100
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -37,17 +40,81 @@ export const DataTable = ({
     console.log('no setOrder function provided')
   },
   idKey = 'id',
+  sorted = false,
   // uniqueKeyCombo is an array of keys to use to create a unique key
   // needed for relations as only combination of objectId, objectIdRelation and pcId is unique
   uniqueKeyCombo,
 }) => {
-  const columnNames = Object.keys(data[0])
+  const columnNames = Object.keys(data[0] ?? {})
+  const direction = order.toLowerCase()
+  const sortedData =
+    sorted ? data : data.toSorted(getComparator(direction, orderBy))
+  const isVirtualized = sortedData.length > virtualizeAfterRows
+  const gridColumns = columnNames.map((name) => ({
+    name,
+    width: name === idKey ? 270 : 200,
+  }))
+  const gridRows = [null, ...sortedData]
 
-  // console.log('DataTable, data: ', data)
+  const onSort = (name) => {
+    const nextDirection =
+      orderBy === name ? (direction === 'asc' ? 'desc' : 'asc') : direction
+    setOrder({ orderBy: name, direction: nextDirection })
+  }
+
+  const renderVirtualCell = (row, column, cell) => {
+    const isHeader = cell.rowIndex === 0
+    const cellClass =
+      isHeader ? `${styles.virtualCell} ${styles.virtualHeader}`
+      : styles.virtualCell
+    if (isHeader) {
+      if (column.name === idKey) {
+        return <div className={cellClass}>{column.name}</div>
+      }
+      return (
+        <div className={cellClass}>
+          <TableSortLabel
+            active={orderBy === column.name}
+            direction={orderBy === column.name ? direction : 'asc'}
+            onClick={() => onSort(column.name)}
+          >
+            {column.name}
+            {orderBy === column.name && (
+              <Box component="span" sx={visuallyHidden}>
+                {direction === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            )}
+          </TableSortLabel>
+        </div>
+      )
+    }
+    const value = row?.[column.name]
+    return (
+      <div
+        className={cellClass}
+        title={typeof value === 'string' ? value : undefined}
+      >
+        {value}
+      </div>
+    )
+  }
 
   return (
     <div className={styles.container}>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      {isVirtualized ?
+        <div className={styles.virtualContainer}>
+          <VGrid
+            rows={gridRows}
+            cols={gridColumns}
+            rowHeight={44}
+            colWidth="width"
+            headerRows={1}
+            aria-label="Export Vorschau"
+          >
+            {renderVirtualCell}
+          </VGrid>
+        </div>
+      : <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
         <Table
           sx={{
             minWidth: 650,
@@ -63,7 +130,6 @@ export const DataTable = ({
             <TableRow className={styles.tableRow}>
               {columnNames.map((name) => {
                 const active = orderBy === name
-                // console.log('DataTable ', { name, orderBy, active })
                 if (name === idKey) {
                   return (
                     <TableCell
@@ -92,20 +158,8 @@ export const DataTable = ({
                   >
                     <TableSortLabel
                       active={active}
-                      direction={active ? order.toLowerCase() : 'asc'}
-                      onClick={() => {
-                        // if this is the active sorted column, switch sort direction
-                        const direction =
-                          active ?
-                            order === 'asc' ?
-                              'desc'
-                            : 'asc'
-                          : order
-                        setOrder({
-                          orderBy: name,
-                          direction,
-                        })
-                      }}
+                      direction={active ? direction : 'asc'}
+                      onClick={() => onSort(name)}
                     >
                       {name}
                       {orderBy === name ?
@@ -113,7 +167,7 @@ export const DataTable = ({
                           component="span"
                           sx={visuallyHidden}
                         >
-                          {order === 'DESC' ?
+                          {direction === 'desc' ?
                             'sorted descending'
                           : 'sorted ascending'}
                         </Box>
@@ -125,7 +179,7 @@ export const DataTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.sort(getComparator(order, orderBy)).map((row) => (
+            {sortedData.map((row) => (
               <TableRow
                 className={styles.tableRow}
                 key={
@@ -162,7 +216,7 @@ export const DataTable = ({
             ))}
           </TableBody>
         </Table>
-      </SimpleBar>
+      </SimpleBar>}
     </div>
   )
 }

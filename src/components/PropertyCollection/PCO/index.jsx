@@ -1,5 +1,5 @@
 import { useState, Suspense } from 'react'
-import { orderBy as doOrderBy, union } from 'es-toolkit'
+import { union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
@@ -148,16 +148,12 @@ export const PCO = () => {
       ?.vPropertyCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const pCO = doOrderBy(
-    buildPcoRows({
-      pcoNodes:
-        pcoData?.propertyCollectionById
-          ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
-      propKeys,
-    }),
-    orderBy,
-    sortDirection,
-  )
+  const pCO = buildPcoRows({
+    pcoNodes:
+      pcoData?.propertyCollectionById
+        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
+    propKeys,
+  })
   // collect all keys and sort property keys by name
   const keys = ['Objekt ID', 'Objekt Name', ...propKeys.sort()]
   // PostgREST returns the org users as a plain array (no .nodes
@@ -266,6 +262,7 @@ export const PCO = () => {
           <>
             <DataTable
               data={pCO}
+              sorted
               idKey="Objekt ID"
               keys={keys}
               setOrder={setOrder}

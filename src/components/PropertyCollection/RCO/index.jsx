@@ -1,5 +1,5 @@
 import { useState, Suspense } from 'react'
-import { orderBy as doOrderBy, union } from 'es-toolkit'
+import { union } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { useQueryClient, useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -146,16 +146,12 @@ export const RCO = () => {
       ?.vRelationCollectionKeysByPropertyCollectionId?.nodes ?? []
   ).map((k) => k?.keys)
 
-  const rCO = doOrderBy(
-    buildRcoRows({
-      rcoNodes:
-        rcoData?.propertyCollectionById?.relationsByPropertyCollectionId
-          ?.nodes,
-      propKeys,
-    }),
-    orderBy,
-    sortDirection,
-  )
+  const rCO = buildRcoRows({
+    rcoNodes:
+      rcoData?.propertyCollectionById?.relationsByPropertyCollectionId
+        ?.nodes,
+    propKeys,
+  })
   // collect all keys and sort property keys by name
   const keys = [
     'Objekt ID',
@@ -279,6 +275,7 @@ export const RCO = () => {
           <>
             <DataTable
               data={rCO}
+              sorted
               idKey="Objekt ID"
               keys={keys}
               setOrder={setOrder}
