@@ -211,3 +211,26 @@ test('filter search navigates to the deep object url in one rpc', async ({
     objectPathRequests.filter((u) => u.startsWith('LEGACY-PARENT-FETCH')),
   ).toEqual([])
 })
+
+test('xlsx export downloads a real workbook', async ({ page }) => {
+  // guards the worker-based export: a broken worker used to save a
+  // 9-byte file containing the string "undefined"
+  const { readFile } = await import('node:fs/promises')
+
+  await page.goto(
+    '/Eigenschaften-Sammlungen/bdf7f7e8-7b0e-11e8-a16e-833996057b4d/Eigenschaften',
+  )
+  await expect(
+    page.getByRole('button', { name: 'xlsx exportieren' }),
+  ).toBeVisible({ timeout: 15_000 })
+
+  const downloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'xlsx exportieren' }).click()
+  const download = await downloadPromise
+
+  const bytes = await readFile(await download.path())
+  // xlsx files are zips (PK magic) with real size
+  expect(bytes[0]).toBe(0x50)
+  expect(bytes[1]).toBe(0x4b)
+  expect(bytes.length).toBeGreaterThan(1000)
+})

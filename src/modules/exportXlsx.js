@@ -11,6 +11,8 @@ export const exportXlsx = async ({ rows, onSetMessage }) => {
   } catch (error) {
     console.log(error)
     onSetMessage(error)
+    // do not save a file built from undefined
+    return
   }
   FileSaver.saveAs(
     new Blob([buffer], {
