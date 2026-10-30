@@ -20,9 +20,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          if (id.includes('node_modules/@mui') || id.includes('node_modules/@emotion')) {
-            return 'mui'
-          }
           if (id.includes('node_modules/react-router')) {
             return 'react-router'
           }
