@@ -17,6 +17,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "bump": "node scripts/bumpVersion.mjs",
+    "deploy": "node scripts/deploy.mjs",
     "how-to-install-using-sfw": "sfw npm install -f",
     "ncu using cooldown": "ncu --cooldown 5 --interactive"
   },
