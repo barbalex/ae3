@@ -78,19 +78,19 @@ test('excel chunks are not precached but runtime-cache on first fetch', async ({
     const cache = await caches.open(precache)
     return (await cache.keys()).map((r) => r.url)
   })
-  const exceljsChunk = readdirSync('dist/assets').find((f) =>
-    /^exceljs\.min-.*\.js$/.test(f),
+  const excelChunks = readdirSync('dist/assets').filter((f) =>
+    /^(xlsx-|exceljs\.min-).*\.js$/.test(f),
   )
-  const xlsxChunk = readdirSync('dist/assets').find((f) => /^xlsx-.*\.js$/.test(f))
-  expect(exceljsChunk).toBeTruthy()
-  expect(xlsxChunk).toBeTruthy()
+  // the excel libraries are lazily imported, so chunks must exist
+  // (since cee3c53 there may be several xlsx- chunks and no exceljs)
+  expect(excelChunks.length).toBeGreaterThan(0)
   expect(
-    precacheUrls.filter((u) => u.includes(exceljsChunk) || u.includes(xlsxChunk)),
+    precacheUrls.filter((u) => excelChunks.some((c) => u.includes(c))),
   ).toEqual([])
 
   // fetching them through the service worker returns 200 and populates
   // the runtime cache (workbox writes the entry asynchronously)
-  for (const chunk of [exceljsChunk, xlsxChunk]) {
+  for (const chunk of excelChunks) {
     const status = await page.evaluate(
       async (c) => (await fetch(`assets/${c}`)).status,
       chunk,
@@ -107,9 +107,10 @@ test('excel chunks are not precached but runtime-cache on first fetch', async ({
     }
     const cache = await caches.open('excel-chunks')
     return (await cache.keys()).map((r) => r.url)
-  }, [exceljsChunk, xlsxChunk])
-  expect(runtimeUrls).toContain(`${base}/assets/${exceljsChunk}`)
-  expect(runtimeUrls).toContain(`${base}/assets/${xlsxChunk}`)
+  }, excelChunks)
+  for (const chunk of excelChunks) {
+    expect(runtimeUrls).toContain(`${base}/assets/${chunk}`)
+  }
 
   expect(errors).toEqual([])
 })
