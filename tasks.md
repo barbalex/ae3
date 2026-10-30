@@ -4,19 +4,19 @@ Performance optimizations identified in the 2026-10 analysis (see chat
 for details). Done first:
 
 - [x] virtualize the tree + bound its list queries (branch
-  `virtual-tree`: flat-row model in `Tree/treeModel.js`, `virtua`
-  VList, 500-row pages with auto-load, path-hole pagination for deep
-  links). The original note below preferred
-  https://tanstack.com/virtual — `virtua` was used instead (same
-  problem class, smaller); swapping later is an option if wanted.
+      `virtual-tree`: flat-row model in `Tree/treeModel.js`, `virtua`
+      VList, 500-row pages with auto-load, path-hole pagination for deep
+      links). The original note below preferred
+      https://tanstack.com/virtual — `virtua` was used instead (same
+      problem class, smaller); swapping later is an option if wanted.
 
 Remaining, in priority order:
 
 - [x] bulk upsert for PCO/RCO imports (branch `bulk-upsert`:
-  `src/modules/bulkUpsert.js`, chunked POST with
-  `Prefer: resolution=merge-duplicates` on the tables' unique
-  constraints; also fixed the pre-existing `.nodes` writer bug that
-  had made the import UI unreachable)
+      `src/modules/bulkUpsert.js`, chunked POST with
+      `Prefer: resolution=merge-duplicates` on the tables' unique
+      constraints; also fixed the pre-existing `.nodes` writer bug that
+      had made the import UI unreachable)
 
 ## 2. Move export/import processing into a web worker
 
@@ -54,3 +54,7 @@ Still open from earlier, whenever you get to it: the repo changes are
 uncommitted for your review, and I'd suggest rotating the arteigenschaften
 JWT secret at some point since part of it was echoed into this session's
 output during the failed first attempt.
+
+---
+
+what do you think about the issues listed on github.com/barbalex/ae3/security/dependabot?
