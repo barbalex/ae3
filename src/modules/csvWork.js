@@ -5,3 +5,8 @@ import { Parser } from '@json2csv/plainjs'
  * @json2csv is loaded only there
  */
 export const buildCsv = (jsonData) => new Parser().parse(jsonData)
+
+export const buildCsvChunk = (jsonData, fields, includeHeader) => {
+	const csv = new Parser({ fields, header: includeHeader }).parse(jsonData)
+	return includeHeader || !csv ? csv : `\n${csv}`
+}

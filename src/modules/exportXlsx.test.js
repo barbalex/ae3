@@ -2,14 +2,18 @@ import { describe, it, expect, vi } from 'vitest'
 
 import FileSaver from 'file-saver'
 
-import { exportXlsx } from './exportXlsx.js'
+import { exportXlsx, exportXlsxFromPages } from './exportXlsx.js'
 import { getXlsxBuffer } from './getXlsxBuffer.js'
+import { runInWorkerStream } from './runInWorker.js'
 
 vi.mock('file-saver', () => ({
   default: { saveAs: vi.fn() },
 }))
 vi.mock('./getXlsxBuffer.js', () => ({
   getXlsxBuffer: vi.fn(),
+}))
+vi.mock('./runInWorker.js', () => ({
+  runInWorkerStream: vi.fn(),
 }))
 
 describe('exportXlsx', () => {
@@ -35,5 +39,22 @@ describe('exportXlsx', () => {
     expect(onSetMessage).toHaveBeenCalledWith(expect.objectContaining({
       message: 'boom',
     }))
+  })
+
+  it('saves the buffer built from streamed pages', async () => {
+    runInWorkerStream.mockResolvedValue(new ArrayBuffer(8))
+    const pages = (async function* () {
+      yield [{ Art: 'Apfel' }]
+      yield [{ Art: 'Birne' }]
+    })()
+
+    await exportXlsxFromPages({ columns: ['Art'], pages })
+
+    expect(runInWorkerStream).toHaveBeenCalledWith(
+      expect.objectContaining({ columns: ['Art'], pages }),
+    )
+    const [blob, filename] = FileSaver.saveAs.mock.calls.at(-1)
+    expect(blob).toBeInstanceOf(Blob)
+    expect(filename).toMatch(/\.xlsx$/)
   })
 })

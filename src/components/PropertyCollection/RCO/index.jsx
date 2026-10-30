@@ -15,27 +15,78 @@ import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
 import { parseProperties } from '../../../modules/parseProperties.js'
+import {
+  collectionOrder,
+  collectionSortDirection,
+  fetchCollectionPages,
+} from '../../../modules/collectionExport.js'
 import styles from './index.module.css'
+
+const rcoRowsPath = (pcId, orderBy, sortDirection) => {
+  const params = new URLSearchParams({
+    property_collection_id: `eq.${pcId}`,
+    select:
+      'id,objectId:object_id,objectByObjectId:object!relation_object_id_fkey(id,name),objectIdRelation:object_id_relation,objectByObjectIdRelation:object!relation_object_id_relation_fkey(id,name),relationType:relation_type,properties',
+    order: collectionOrder(orderBy, sortDirection, {
+      'Objekt ID': 'object_id',
+      'Objekt Name': 'objectByObjectId(name)',
+      'Beziehung ID': 'object_id_relation',
+      'Beziehung Name': 'objectByObjectIdRelation(name)',
+      'Art der Beziehung': 'relation_type',
+    }),
+  })
+  return `/relation?${params}`
+}
 
 // fetch the pc with its keys, organization and relations;
 // optionally limited to the first n relations
-export const fetchRcoData = async (pcId, first) => {
-  const limit = first ? `&limit=${first}` : ''
-  const [pcs, totalCount] = await Promise.all([
+export const fetchRcoData = async (
+  pcId,
+  first = 15,
+  orderBy = 'Objekt Name',
+  sortDirection = 'asc',
+) => {
+  const firstPagePath = rcoRowsPath(pcId, orderBy, sortDirection)
+  const firstPageParams = new URLSearchParams(firstPagePath.split('?')[1])
+  firstPageParams.set('limit', String(first))
+  firstPageParams.set('offset', '0')
+  const [pcs, totalCount, initialRows] = await Promise.all([
     apiFetch(
-      `/property_collection?id=eq.${pcId}&select=id,keys:v_relation_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name))),relationsByPropertyCollectionId:relation!relation_property_collection_id_fkey(id,objectId:object_id,objectByObjectId:object!relation_object_id_fkey(id,name),objectIdRelation:object_id_relation,objectByObjectIdRelation:object!relation_object_id_relation_fkey(id,name),relationType:relation_type,properties)${limit}`,
+      `/property_collection?id=eq.${pcId}&select=id,keys:v_relation_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name)))`,
     ),
     apiCount(`/relation?property_collection_id=eq.${pcId}`),
+    apiFetch(`/relation?${firstPageParams}`),
   ])
   const pC = pcs?.[0]
   if (!pC) return null
+  const propKeys = (pC.keys ?? []).map((key) => key.keys)
+  const apiSortDirection = collectionSortDirection(
+    orderBy,
+    sortDirection,
+    propKeys,
+    initialRows,
+  )
+  const relationNodes =
+    apiSortDirection === sortDirection ? initialRows
+    : await apiFetch(
+        `/relation?${new URLSearchParams({
+          ...Object.fromEntries(firstPageParams),
+          order: collectionOrder(orderBy, apiSortDirection, {
+            'Objekt ID': 'object_id',
+            'Objekt Name': 'objectByObjectId(name)',
+            'Beziehung ID': 'object_id_relation',
+            'Beziehung Name': 'objectByObjectIdRelation(name)',
+            'Art der Beziehung': 'relation_type',
+          }),
+        })}`,
+      )
   // shape like the former graphql result
   pC.vRelationCollectionKeysByPropertyCollectionId = {
     nodes: pC.keys ?? [],
   }
   pC.relationsByPropertyCollectionId = {
     totalCount,
-    nodes: pC.relationsByPropertyCollectionId ?? [],
+    nodes: relationNodes ?? [],
   }
   return { propertyCollectionById: pC }
 }
@@ -74,16 +125,16 @@ export const RCO = () => {
   const username = useAtomValue(loginUsernameAtom)
 
   const [count, setCount] = useState(15)
+  const [orderBy, setOrderBy] = useState('Objekt Name')
+  const [sortDirection, setSortDirection] = useState('asc')
 
   const { data, error } = useQuery({
-    queryKey: ['rcoPreviewQuery', pcId, count],
+    queryKey: ['rcoPreviewQuery', pcId, count, orderBy, sortDirection],
     placeholderData: keepPreviousData,
-    queryFn: () => fetchRcoData(pcId, count),
+    queryFn: () => fetchRcoData(pcId, count, orderBy, sortDirection),
   })
   const rcoData = data
 
-  const [orderBy, setOrderBy] = useState('Objekt Name')
-  const [sortDirection, setSortDirection] = useState('asc')
   const [importing, setImport] = useState(false)
 
   const [xlsxExportLoading, setXlsxExportLoading] = useState(false)
@@ -123,10 +174,8 @@ export const RCO = () => {
   const writerNames = union(rCOWriters.map((w) => w.userByUserId.name))
   const userIsWriter = !!username && writerNames.includes(username)
   const showImportRco =
-    ((
-      rcoData?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes ??
-      []
-    ).length === 0 &&
+    (rcoData?.propertyCollectionById?.relationsByPropertyCollectionId
+      ?.totalCount === 0 &&
       userIsWriter) ||
     importing
 
@@ -139,35 +188,52 @@ export const RCO = () => {
     setSortDirection(direction.toLowerCase())
   }
 
-  // TODO: key in data table should bu unique, thus: objectId + objectIdRelation
-  const fetchAllData = async () => {
-    const data = await fetchRcoData(pcId)
-    const rCORaw = buildRcoRows({
-      rcoNodes:
-        data?.propertyCollectionById?.relationsByPropertyCollectionId?.nodes,
+  // TODO: key in data table should be unique, thus: objectId + objectIdRelation
+  const exportPages = async function* () {
+    const nodePage =
+      rcoData?.propertyCollectionById?.relationsByPropertyCollectionId
+        ?.nodes ?? []
+    const exportDirection = collectionSortDirection(
+      orderBy,
+      sortDirection,
       propKeys,
-    })
-    return doOrderBy(rCORaw, orderBy, sortDirection)
+      nodePage,
+    )
+    for await (const nodes of fetchCollectionPages(
+      rcoRowsPath(pcId, orderBy, exportDirection),
+      { totalCount },
+    )) {
+      yield buildRcoRows({ rcoNodes: nodes, propKeys })
+    }
   }
 
   const onClickXlsx = async () => {
     setXlsxExportLoading(true)
-    const data = await fetchAllData()
-    const { exportXlsx } = await import('../../../modules/exportXlsx.js')
-    exportXlsx({
-      rows: data,
-      onSetMessage: console.log,
-    })
-    setXlsxExportLoading(false)
+    try {
+      const { exportXlsxFromPages } = await import(
+        '../../../modules/exportXlsx.js'
+      )
+      await exportXlsxFromPages({
+        columns: keys,
+        pages: exportPages(),
+        onSetMessage: console.log,
+      })
+    } finally {
+      setXlsxExportLoading(false)
+    }
   }
 
   const onClickCsv = async () => {
     // download all data
     setCsvExportLoading(true)
-    const data = await fetchAllData()
-    const { exportCsv } = await import('../../../modules/exportCsv.js')
-    exportCsv(data)
-    setCsvExportLoading(false)
+    try {
+      const { exportCsvFromPages } = await import(
+        '../../../modules/exportCsv.js'
+      )
+      await exportCsvFromPages({ columns: keys, pages: exportPages() })
+    } finally {
+      setCsvExportLoading(false)
+    }
   }
 
   const onClickDelete = async () => {

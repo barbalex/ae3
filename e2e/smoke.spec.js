@@ -234,3 +234,50 @@ test('xlsx export downloads a real workbook', async ({ page }) => {
   expect(bytes[1]).toBe(0x4b)
   expect(bytes.length).toBeGreaterThan(1000)
 })
+
+test('rco xlsx export pages through the full collection', async ({ page }) => {
+  const { readFile } = await import('node:fs/promises')
+  const { read, utils } = await import('@e965/xlsx')
+  const collectionId = 'bdf5c7c1-7b0e-11e8-b9a5-bd4f79edbcc4'
+  const exportOffsets = []
+
+  page.on('request', (request) => {
+    const url = new URL(request.url())
+    if (
+      url.pathname.endsWith('/relation') &&
+      url.searchParams.get('property_collection_id') === `eq.${collectionId}` &&
+      url.searchParams.get('limit') === '500'
+    ) {
+      exportOffsets.push(url.searchParams.get('offset'))
+    }
+  })
+
+  await page.goto(
+    `/Eigenschaften-Sammlungen/${collectionId}/Beziehungen`,
+  )
+  await expect(
+    page.getByRole('button', { name: 'xlsx exportieren' }),
+  ).toBeVisible({ timeout: 15_000 })
+
+  const downloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'xlsx exportieren' }).click()
+  const download = await downloadPromise
+  const bytes = await readFile(await download.path())
+  const workbook = read(bytes, { type: 'buffer' })
+  const rows = utils.sheet_to_json(workbook.Sheets.Daten, { header: 1 })
+
+  expect(rows).toHaveLength(1547)
+
+  const csvDownloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'csv exportieren' }).click()
+  const csvDownload = await csvDownloadPromise
+  const csvBytes = await readFile(await csvDownload.path())
+  const csvWorkbook = read(csvBytes, { type: 'buffer' })
+  const csvRows = utils.sheet_to_json(csvWorkbook.Sheets.Sheet1, { header: 1 })
+
+  expect(exportOffsets).toEqual([
+    '0', '500', '1000', '1500',
+    '0', '500', '1000', '1500',
+  ])
+  expect(csvRows).toHaveLength(1547)
+})

@@ -65,3 +65,7 @@ output during the failed first attempt.
 ---
 
 replace all simplebar usages with narrow native bar?
+
+---
+
+can we reduce dependencies?

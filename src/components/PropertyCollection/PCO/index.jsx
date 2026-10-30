@@ -16,29 +16,76 @@ import { exists } from '../../../modules/exists.js'
 import { CountInput } from '../../Export/PreviewColumn/CountInput.jsx'
 
 import { parseProperties } from '../../../modules/parseProperties.js'
+import {
+  collectionOrder,
+  collectionSortDirection,
+  fetchCollectionPages,
+} from '../../../modules/collectionExport.js'
 import styles from './index.module.css'
+
+const pcoRowsPath = (pcId, orderBy, sortDirection) => {
+  const params = new URLSearchParams({
+    property_collection_id: `eq.${pcId}`,
+    select:
+      'id,objectId:object_id,objectByObjectId:object_id(id,name),properties',
+    order: collectionOrder(orderBy, sortDirection, {
+      'Objekt ID': 'object_id',
+      'Objekt Name': 'objectByObjectId(name)',
+    }),
+  })
+  return `/property_collection_object?${params}`
+}
 
 // fetch the pc with its keys, organization and pcos;
 // optionally limited to the first n pcos
-export const fetchPcoData = async (pcId, first) => {
-  const limit = first ? `&limit=${first}` : ''
-  const [pcs, totalCount] = await Promise.all([
+export const fetchPcoData = async (
+  pcId,
+  first = 15,
+  orderBy = 'Objekt Name',
+  sortDirection = 'asc',
+) => {
+  const firstPagePath = pcoRowsPath(pcId, orderBy, sortDirection)
+  const firstPageParams = new URLSearchParams(firstPagePath.split('?')[1])
+  firstPageParams.set('limit', String(first))
+  firstPageParams.set('offset', '0')
+  const [pcs, totalCount, initialRows] = await Promise.all([
     apiFetch(
-      `/property_collection?id=eq.${pcId}&select=id,keys:v_property_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name,email))),propertyCollectionObjectsByPropertyCollectionId:property_collection_object!property_collection_object_property_collection_id_fkey(id,objectId:object_id,objectByObjectId:object_id(id,name),properties)${limit}`,
+      `/property_collection?id=eq.${pcId}&select=id,keys:v_property_collection_keys(keys),organizationByOrganizationId:organization_id(id,name,organizationUsersByOrganizationId:organization_user(id,userId:user_id,role,userByUserId:user_id(id,name,email)))`,
     ),
     apiCount(
       `/property_collection_object?property_collection_id=eq.${pcId}`,
     ),
+    apiFetch(
+      `/property_collection_object?${firstPageParams}`,
+    ),
   ])
   const pC = pcs?.[0]
   if (!pC) return null
+  const propKeys = (pC.keys ?? []).map((key) => key.keys)
+  const apiSortDirection = collectionSortDirection(
+    orderBy,
+    sortDirection,
+    propKeys,
+    initialRows,
+  )
+  const pcoNodes =
+    apiSortDirection === sortDirection ? initialRows
+    : await apiFetch(
+        `/property_collection_object?${new URLSearchParams({
+          ...Object.fromEntries(firstPageParams),
+          order: collectionOrder(orderBy, apiSortDirection, {
+            'Objekt ID': 'object_id',
+            'Objekt Name': 'objectByObjectId(name)',
+          }),
+        })}`,
+      )
   // shape like the former graphql result
   pC.vPropertyCollectionKeysByPropertyCollectionId = {
     nodes: pC.keys ?? [],
   }
   pC.propertyCollectionObjectsByPropertyCollectionId = {
     totalCount,
-    nodes: pC.propertyCollectionObjectsByPropertyCollectionId ?? [],
+    nodes: pcoNodes ?? [],
   }
   return { propertyCollectionById: pC }
 }
@@ -74,21 +121,21 @@ export const PCO = () => {
   const username = useAtomValue(loginUsernameAtom)
 
   const [count, setCount] = useState(15)
+  const [orderBy, setOrderBy] = useState('Objekt Name')
+  const [sortDirection, setSortDirection] = useState('asc')
 
   const [xlsxExportLoading, setXlsxExportLoading] = useState(false)
   const [csvExportLoading, setCsvExportLoading] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
   const { data, error } = useQuery({
-    queryKey: ['pcoPreviewQuery', pcId, count],
+    queryKey: ['pcoPreviewQuery', pcId, count, orderBy, sortDirection],
     placeholderData: keepPreviousData,
-    queryFn: () => fetchPcoData(pcId, count),
+    queryFn: () => fetchPcoData(pcId, count, orderBy, sortDirection),
   })
   const pcoData = data
 
   // enable sorting
-  const [orderBy, setOrderBy] = useState('Objekt Name')
-  const [sortDirection, setSortDirection] = useState('asc')
   const setOrder = ({ orderBy, direction }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
@@ -122,10 +169,8 @@ export const PCO = () => {
   const writerNames = union(pCOWriters.map((w) => w.userByUserId.name))
   const userIsWriter = !!username && writerNames.includes(username)
   const showImportPco =
-    ((
-      pcoData?.propertyCollectionById
-        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
-    ).length === 0 &&
+    (pcoData?.propertyCollectionById
+      ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount === 0 &&
       userIsWriter) ||
     importing
 
@@ -133,33 +178,49 @@ export const PCO = () => {
     pcoData?.propertyCollectionById
       ?.propertyCollectionObjectsByPropertyCollectionId?.totalCount
 
-  const fetchAllData = async () => {
-    const data = await fetchPcoData(pcId)
-    const pCOUnsorted = buildPcoRows({
-      pcoNodes:
-        data?.propertyCollectionById
-          ?.propertyCollectionObjectsByPropertyCollectionId?.nodes,
+  const exportPages = async function* () {
+    const nodePage =
+      pcoData?.propertyCollectionById
+        ?.propertyCollectionObjectsByPropertyCollectionId?.nodes ?? []
+    const exportDirection = collectionSortDirection(
+      orderBy,
+      sortDirection,
       propKeys,
-    })
-    return doOrderBy(pCOUnsorted, orderBy, sortDirection)
+      nodePage,
+    )
+    for await (const nodes of fetchCollectionPages(
+      pcoRowsPath(pcId, orderBy, exportDirection),
+      { totalCount },
+    )) {
+      yield buildPcoRows({ pcoNodes: nodes, propKeys })
+    }
   }
 
   const onClickXlsx = async () => {
     setXlsxExportLoading(true)
-    const data = await fetchAllData()
-    const { exportXlsx } = await import('../../../modules/exportXlsx.js')
-    exportXlsx({
-      rows: data,
-      onSetMessage: console.log,
-    })
-    setXlsxExportLoading(false)
+    try {
+      const { exportXlsxFromPages } = await import(
+        '../../../modules/exportXlsx.js'
+      )
+      await exportXlsxFromPages({
+        columns: keys,
+        pages: exportPages(),
+        onSetMessage: console.log,
+      })
+    } finally {
+      setXlsxExportLoading(false)
+    }
   }
   const onClickCsv = async () => {
     setCsvExportLoading(true)
-    const data = await fetchAllData()
-    const { exportCsv } = await import('../../../modules/exportCsv.js')
-    exportCsv(data)
-    setCsvExportLoading(false)
+    try {
+      const { exportCsvFromPages } = await import(
+        '../../../modules/exportCsv.js'
+      )
+      await exportCsvFromPages({ columns: keys, pages: exportPages() })
+    } finally {
+      setCsvExportLoading(false)
+    }
   }
 
   const onClickDelete = async () => {
