@@ -100,7 +100,11 @@ export const DataTable = ({
   }
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${
+        isVirtualized ? styles.virtualized : ''
+      }`}
+    >
       {isVirtualized ?
         <div className={styles.virtualContainer}>
           <VGrid

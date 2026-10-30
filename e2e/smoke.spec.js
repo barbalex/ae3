@@ -298,4 +298,28 @@ test('large collection previews virtualize table rows', async ({ page }) => {
   await expect
     .poll(() => table.getByRole('row').count())
     .toBeLessThan(121)
+  const tableBox = await table.boundingBox()
+  const viewport = page.viewportSize()
+  expect(tableBox.height).toBeGreaterThan(viewport.height * 0.7)
+})
+
+test('large relation previews apply Enter and fill the available height', async ({ page }) => {
+  const collectionId = 'bdf5c7c1-7b0e-11e8-b9a5-bd4f79edbcc4'
+  await page.goto(
+    `/Eigenschaften-Sammlungen/${collectionId}/Beziehungen`,
+  )
+
+  const countInput = page.locator('input[type="number"]')
+  await expect(countInput).toBeVisible({ timeout: 15_000 })
+  await countInput.fill('120')
+  await countInput.press('Enter')
+
+  const table = page.getByRole('table', { name: 'Export Vorschau' })
+  await expect(table).toHaveAttribute('aria-rowcount', '121')
+  await expect
+    .poll(() => table.getByRole('row').count())
+    .toBeLessThan(121)
+  const tableBox = await table.boundingBox()
+  const viewport = page.viewportSize()
+  expect(tableBox.height).toBeGreaterThan(viewport.height * 0.7)
 })
