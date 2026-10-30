@@ -51,6 +51,8 @@ land in the `excel-chunks` runtime cache.
 
 ---
 
+TODO:
+
 Still open from earlier, whenever you get to it: the repo changes are
 uncommitted for your review, and I'd suggest rotating the arteigenschaften
 JWT secret at some point since part of it was echoed into this session's
@@ -58,4 +60,8 @@ output during the failed first attempt.
 
 ---
 
-what do you think about the issues listed on github.com/barbalex/ae3/security/dependabot?
+---
+
+---
+
+replace all simplebar usages with narrow native bar?
