@@ -7,37 +7,26 @@ import {
   scrollIntoViewCounterAtom,
   activeNodeArrayAtom,
 } from '../../store/index.ts'
+import { useTreeScroll } from './treeScrollContext.js'
 
 export const IntoViewScroller = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const scrollIntoViewCounter = useAtomValue(scrollIntoViewCounterAtom)
+  const scrollIntoViewById = useTreeScroll()
 
   const scroller = () => {
     // 1. Get id from url
     const id = getLastIdFromUrl(activeNodeArray)
-    // console.log('IntoViewScroller, id:', id)
-    if (!id) {
-      // console.log('IntoViewScroller, no id, return')
-      return
-    }
-    // 2. Get its element
+    if (!id) return
+    // 2. Mounted (virtualization keeps offscreen rows unmounted) and
+    // visible? do not scroll
     const element = document.getElementById(id)
-    // console.log('IntoViewScroller, element:', element)
-    // 3. No element yet? Tree may still be loading > try later
-    if (!element) return setTimeout(scroller, 150)
-    // 4. Got an element but it is visible? do not scroll
-    // console.log(
-    //   'IntoViewScroller, element is in viewport',
-    //   isElementInViewport(element),
-    // )
-    if (isElementInViewport(element)) return
-    // console.log('IntoViewScroller, will scroll id into view:', id)
-    // 5. Got an element and it is not visible? scroll it into view
-    // console.log('IntoViewScroller, will scroll into view')
-    element?.scrollIntoView?.({
-      block: 'center',
-      inline: 'center',
-    })
+    if (element && isElementInViewport(element)) return
+    // 3. Resolve the id to a row index and let the virtualized list
+    // scroll it into view. Not found? The tree may still be loading
+    // deeper levels > try later
+    const scrolled = scrollIntoViewById?.(id)
+    if (!scrolled) setTimeout(scroller, 150)
   }
 
   useEffect(() => {

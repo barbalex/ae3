@@ -1,17 +1,12 @@
-import { useMemo, Suspense } from 'react'
-import SimpleBar from 'simplebar-react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Filter } from './Filter/index.jsx'
 import { TreeContextMenu } from './contextmenu/TreeContextMenu.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { constants } from '../../modules/constants.js'
 import { apiFetch } from '../../modules/api.js'
-import { Root } from './Root/index.jsx'
-import { LoadingRow } from './LoadingRow.jsx'
+import { VirtualizedTree } from './VirtualizedTree.jsx'
 import { loginUsernameAtom } from '../../store/index.ts'
-import { IntoViewScroller } from './IntoViewScroller.jsx'
 
 import styles from './index.module.css'
 
@@ -47,19 +42,7 @@ export const Tree = () => {
     <ErrorBoundary>
       <div className="tree-container">
         <Filter />
-        <SimpleBar
-          style={{
-            height: `calc(100vh - ${constants.appBarHeight}px - 39px)`,
-            flex: '1 1 auto',
-            overflowY: 'auto',
-            contain: 'paint layout style',
-          }}
-        >
-          <Suspense fallback={<LoadingRow level={1} />}>
-            <Root />
-          </Suspense>
-        </SimpleBar>
-        <IntoViewScroller />
+        <VirtualizedTree />
         <TreeContextMenu userIsTaxWriter={userIsTaxWriter} />
       </div>
     </ErrorBoundary>

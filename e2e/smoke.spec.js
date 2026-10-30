@@ -53,9 +53,10 @@ test('object page loads its property collections', async ({ page }) => {
     '/Arten/c87f19f2-1b77-11ea-8282-bbc40e20aff6/c3d82f63-1c13-11ea-8282-6b46a89d266c/c3d82f64-1c13-11ea-8282-07e5a9d2fa66',
   )
 
-  await expect(page.getByText('Eigenschaften', { exact: false })).toBeVisible({
-    timeout: 15_000,
-  })
+  // 'ZH GIS' is the real content assertion. A former substring
+  // assertion on 'Eigenschaften' matched the site title
+  // 'Arteigenschaften' (and the tree's 'Eigenschaften-Sammlungen'
+  // row), so it asserted nothing and raced the tree render
   await expect(page.getByText('ZH GIS', { exact: true })).toBeVisible({
     timeout: 15_000,
   })

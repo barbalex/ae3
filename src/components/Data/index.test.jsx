@@ -25,6 +25,13 @@ vi.mock('../../modules/api.js', () => ({
   rpc: vi.fn(),
 }))
 
+// jsdom has no layout, so the real VList measures a zero viewport and
+// renders no rows; render all children instead. Real virtualization
+// is covered by the e2e tests
+vi.mock('virtua', () => ({
+  VList: ({ children }) => <div>{children}</div>,
+}))
+
 describe('Data', () => {
   it('renders the tree root and the home page', async () => {
     const queryClient = new QueryClient({
