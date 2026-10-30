@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { apiFetch } from '../../../../modules/api.js'
+import { bulkUpsert } from '../../../../modules/bulkUpsert.js'
 import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { DataTable } from '../../../shared/DataTable.jsx'
 import { CountInput } from '../../../Export/PreviewColumn/CountInput.jsx'
@@ -17,40 +18,12 @@ import { RcoInstructions } from './Instructions.jsx'
 
 import styles from './index.module.css'
 
-// no unique constraint on (object_id, object_id_relation, property_collection_id)
-// exists, so the former upsert plugin's semantics are a check-then-write
-const upsertRco = async (row) => {
-  const existing = (
-    await apiFetch(
-      `/relation?select=id&object_id=eq.${row.objectId}&object_id_relation=eq.${row.objectIdRelation}&property_collection_id=eq.${row.propertyCollectionId}&limit=1`,
-    )
-  )?.[0]
-  const body = {
-    property_collection_of_origin: row.propertyCollectionOfOrigin,
-    relation_type: row.relationType,
-    properties: row.properties,
-  }
-  if (existing) {
-    await apiFetch(`/relation?id=eq.${existing.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } else {
-    await apiFetch('/relation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify([
-        {
-          object_id: row.objectId,
-          object_id_relation: row.objectIdRelation,
-          property_collection_id: row.propertyCollectionId,
-          ...body,
-        },
-      ]),
-    })
-  }
-}
+// rows are matched by the unique constraint (property_collection_id,
+// object_id, object_id_relation, relation_type) in a single bulk
+// upsert per chunk. The former check-then-write matched without
+// relation_type, so importing a different type for an existing pair
+// overwrote it - now it inserts a second relation, which is what the
+// constraint models
 
 const checkStateReducer = (a, state) => state
 
@@ -163,7 +136,7 @@ export const ImportRco = ({ setImport }) => {
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
   const [imported, setImported] = useState(0)
-  const incrementImported = () => setImported(() => imported + 1)
+  const [importError, setImportError] = useState(null)
 
   const [checkState, dispatch] = useReducer(
     checkStateReducer,
@@ -358,39 +331,46 @@ export const ImportRco = ({ setImport }) => {
 
   const onClickImport = async () => {
     setImporting(true)
-    const posts = []
+    setImportError(null)
     // need a list of all fields
-    // loop all rows, build variables and create pco
-    for (const d of importData) {
-      posts.push(
-        upsertRco({
-          objectId: d.objectId || null,
-          objectIdRelation: d.objectIdRelation || null,
-          propertyCollectionId: pCId,
-          propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
-          relationType: d.relationType || null,
-          properties: JSON.stringify(
-            omit(d, [
-              'id',
-              'objectId',
-              'objectIdRelation',
-              'propertyCollectionId',
-              'propertyCollectionOfOrigin',
-              'relationType',
-            ]),
-          ),
-        }).then(() => incrementImported()),
-      )
+    // loop all rows, build variables and create rco
+    const rows = importData.map((d) => ({
+      object_id: d.objectId || null,
+      object_id_relation: d.objectIdRelation || null,
+      property_collection_id: pCId,
+      property_collection_of_origin: d.propertyCollectionOfOrigin || null,
+      relation_type: d.relationType || null,
+      properties: JSON.stringify(
+        omit(d, [
+          'id',
+          'objectId',
+          'objectIdRelation',
+          'propertyCollectionId',
+          'propertyCollectionOfOrigin',
+          'relationType',
+        ]),
+      ),
+    }))
+    try {
+      await bulkUpsert({
+        path: '/relation',
+        onConflict: 'property_collection_id,object_id,object_id_relation,relation_type',
+        rows,
+        onChunkDone: (chunkSize) => setImported((count) => count + chunkSize),
+      })
+      setImport(false)
+      queryClient.invalidateQueries({
+        queryKey: ['tree'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`rcoPreviewQuery`],
+      })
+    } catch (error) {
+      // keep the dialog open so the failed import can be retried
+      setImportError(error.message)
+    } finally {
+      setImporting(false)
     }
-    await Promise.all(posts)
-    queryClient.invalidateQueries({
-      queryKey: ['tree'],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`rcoPreviewQuery`],
-    })
-    setImport(false)
-    setImporting(false)
   }
 
   const completedFraction = imported / importData.length
@@ -510,6 +490,11 @@ export const ImportRco = ({ setImport }) => {
         <Snackbar
           open={isLoading}
           message="lade Daten..."
+          className={styles.snackbar}
+        />
+        <Snackbar
+          open={!!importError}
+          message={`Import fehlgeschlagen: ${importError}`}
           className={styles.snackbar}
         />
       </div>

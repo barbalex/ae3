@@ -9,6 +9,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { apiFetch } from '../../../../modules/api.js'
+import { bulkUpsert } from '../../../../modules/bulkUpsert.js'
 import { activeNodeArrayAtom } from '../../../../store/index.ts'
 import { isUuid } from '../../../../modules/isUuid.js'
 import { DataTable } from '../../../shared/DataTable.jsx'
@@ -51,39 +52,9 @@ const getImportDataFields = (importData) => {
   return fields
 }
 
-// no unique constraint on (object_id, property_collection_id) exists,
-// so the former upsert plugin's semantics are a check-then-write
-const upsertPco = async (row) => {
-  const existing = (
-    await apiFetch(
-      `/property_collection_object?select=id&object_id=eq.${row.objectId}&property_collection_id=eq.${row.propertyCollectionId}&limit=1`,
-    )
-  )?.[0]
-  const body = {
-    property_collection_of_origin: row.propertyCollectionOfOrigin,
-    properties: row.properties,
-  }
-  if (existing) {
-    await apiFetch(`/property_collection_object?id=eq.${existing.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } else {
-    await apiFetch('/property_collection_object', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify([
-        {
-          object_id: row.objectId,
-          property_collection_id: row.propertyCollectionId,
-          ...body,
-        },
-      ]),
-    })
-  }
-}
-
+// rows are matched by the unique constraint
+// (object_id, property_collection_id) - the former check-then-write
+// per row is a single bulk upsert request per chunk now
 export const ImportPco = ({ setImport }) => {
   const queryClient = useQueryClient()
 
@@ -135,7 +106,7 @@ export const ImportPco = ({ setImport }) => {
   const [importData, setImportData] = useState([])
   const [importing, setImporting] = useState(false)
   const [imported, setImported] = useState(0)
-  const incrementImported = () => setImported(() => imported + 1)
+  const [importError, setImportError] = useState(null)
 
   const [checkState, dispatch] = useReducer(
     checkStateReducer,
@@ -289,38 +260,43 @@ export const ImportPco = ({ setImport }) => {
 
   const onClickImport = async () => {
     setImporting(true)
-
-    const posts = []
+    setImportError(null)
     // need a list of all fields
     // loop all rows, build variables and create pco
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const d of importData) {
-
-      posts.push(
-        upsertPco({
-          objectId: d.objectId || null,
-          propertyCollectionId: pCId,
-          propertyCollectionOfOrigin: d.propertyCollectionOfOrigin || null,
-          properties: JSON.stringify(
-            omit(d, [
-              'id',
-              'objectId',
-              'propertyCollectionId',
-              'propertyCollectionOfOrigin',
-            ]),
-          ),
-        }).then(() => incrementImported()),
-      )
+    const rows = importData.map((d) => ({
+      object_id: d.objectId || null,
+      property_collection_id: pCId,
+      property_collection_of_origin: d.propertyCollectionOfOrigin || null,
+      properties: JSON.stringify(
+        omit(d, [
+          'id',
+          'objectId',
+          'propertyCollectionId',
+          'propertyCollectionOfOrigin',
+        ]),
+      ),
+    }))
+    try {
+      await bulkUpsert({
+        path: '/property_collection_object',
+        onConflict: 'object_id,property_collection_id',
+        rows,
+        onChunkDone: (chunkSize) =>
+          setImported((count) => count + chunkSize),
+      })
+      setImport(false)
+      queryClient.invalidateQueries({
+        queryKey: ['tree'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`pcoPreviewQuery`],
+      })
+    } catch (error) {
+      // keep the dialog open so the failed import can be retried
+      setImportError(error.message)
+    } finally {
+      setImporting(false)
     }
-    await Promise.all(posts)
-    setImport(false)
-    setImporting(false)
-    queryClient.invalidateQueries({
-      queryKey: ['tree'],
-    })
-    queryClient.invalidateQueries({
-      queryKey: [`pcoPreviewQuery`],
-    })
   }
 
   const completedFraction = imported / importData.length
@@ -436,6 +412,11 @@ export const ImportPco = ({ setImport }) => {
           className={styles.snackbar}
           open={isLoading}
           message="lade Daten..."
+        />
+        <Snackbar
+          className={styles.snackbar}
+          open={!!importError}
+          message={`Import fehlgeschlagen: ${importError}`}
         />
       </div>
     </SimpleBar>

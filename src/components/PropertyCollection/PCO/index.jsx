@@ -113,9 +113,11 @@ export const PCO = () => {
   )
   // collect all keys and sort property keys by name
   const keys = ['Objekt ID', 'Objekt Name', ...propKeys.sort()]
+  // PostgREST returns the org users as a plain array (no .nodes
+  // wrapper like the former graphql result)
   const pCOWriters = (
     pcoData?.propertyCollectionById?.organizationByOrganizationId
-      ?.organizationUsersByOrganizationId?.nodes ?? []
+      ?.organizationUsersByOrganizationId ?? []
   ).filter((u) => ['orgAdmin', 'orgCollectionWriter'].includes(u.role))
   const writerNames = union(pCOWriters.map((w) => w.userByUserId.name))
   const userIsWriter = !!username && writerNames.includes(username)
