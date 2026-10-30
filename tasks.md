@@ -7,9 +7,6 @@ lets build lists using https://tanstack.com/virtual/latest / https://github.com/
 
 ---
 
-tree building: basic building method optimizable?
-seperately: using a virtual list tool (tanstack)?
-
 ---
 
 ---
