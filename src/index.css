@@ -80,50 +80,40 @@ body {
 
 /* newer syntax for firefox */
 html {
-  scrollbar-color: #fcf4ef#e65100;
+  /* thumb = header orange (#c24600), dark variant follows --ae-tab-selected */
+  scrollbar-color: var(--ae-tab-selected) #fcf4ef;
   scrollbar-width: thin;
 }
 
-.reflex-element {
+html[data-theme='dark'] {
+  scrollbar-color: var(--ae-tab-selected) #1e1e1e;
+}
+
+/* scrollbar-width needs to reach every scroller: Chromium does not
+   inherit it from html (Firefox does). simplebar's own
+   scrollbar-width: none still wins by specificity */
+* {
   scrollbar-width: thin;
 }
 
 /* own syntax for webkit */
 
 ::-webkit-scrollbar {
-  width: 12px;
-  background: rgba(255, 253, 231, 0.1);
-}
-
-html[data-theme='dark'] ::-webkit-scrollbar {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.simplebar-scrollbar:before {
-  background: #e65100 !important;
+  width: 8px;
 }
 
 ::-webkit-scrollbar:horizontal {
-  height: 12px;
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.4);
-}
-
-html[data-theme='dark'] ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.7);
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  box-shadow: inset 0 0 7px var(--ae-tab-selected);
   background: rgba(85, 85, 85, 0.05);
 }
 
-html[data-theme='dark'] ::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.8);
-  background: rgba(255, 255, 255, 0.05);
+.simplebar-scrollbar:before {
+  background: var(--ae-tab-selected) !important;
 }
 /* ::-webkit-scrollbar-thumb:hover {
   background: '#6B2500';

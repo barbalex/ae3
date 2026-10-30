@@ -96,7 +96,7 @@ const getCustomStyles = (singleColumnView) => ({
     },
     '::-webkit-scrollbar-thumb': {
       borderRadius: '4px',
-      boxShadow: 'inset 0 0 7px #e65100',
+      boxShadow: 'inset 0 0 7px var(--ae-tab-selected)',
       background: 'rgba(85, 85, 85, 0.05)',
     },
     '::-webkit-scrollbar-track': {
