@@ -94,8 +94,8 @@ export default [
     },
   },
   {
-    // root config files run in node, not the browser
-    files: ['*.config.js'],
+    // root config files and e2e specs run in node, not the browser
+    files: ['*.config.js', 'e2e/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,

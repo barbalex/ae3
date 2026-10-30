@@ -57,6 +57,23 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,jsx,ts,tsx,css,html,ico,png,jpg,svg,webp,json,woff2,woff}',
         ],
+        // exceljs and xlsx (~1.3 MB combined) are lazily imported on
+        // first export/import; don't make every first visit download
+        // them. They are runtime-cached below after first use
+        globIgnores: ['**/exceljs.min-*.js', '**/xlsx-*.js'],
+        runtimeCaching: [
+          {
+            urlPattern: /\/assets\/(exceljs\.min|xlsx)-[^/]+\.js$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'excel-chunks',
+              expiration: {
+                maxEntries: 6,
+                purgeOnQuotaError: true,
+              },
+            },
+          },
+        ],
         maximumFileSizeToCacheInBytes: 1000000000,
       },
       registerType: 'autoUpdate',

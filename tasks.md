@@ -41,12 +41,13 @@ per-level parent fetches run.
 
 ## 4. Stop precaching exceljs/xlsx in the service worker
 
-`vite.config.js` VitePWA `globPatterns` precaches ALL build output
-with a 1 GB size cap — including `exceljs.min-*.js` (~930 KB) and
-`xlsx-*.js` (~360 KB) that most users never load (they're lazily
-imported on first export/import). Every first visit downloads
-~1.3 MB of Excel code. Exclude those chunks from precaching so they
-fetch on demand. Tradeoff: export/import stops working offline.
+Done (branch `sw-precache`): `globIgnores` in `vite.config.js` keeps
+`exceljs.min-*.js` and `xlsx-*.js` out of the precache (first visit
+downloads 1.7 MB instead of 3.0 MB). A `CacheFirst` runtime route
+caches them on first export/import, so repeated offline exports keep
+working after all. Guarded by `e2e/sw-precache.spec.js`, which serves
+the built app and asserts the chunks are absent from the precache but
+land in the `excel-chunks` runtime cache.
 
 ---
 
