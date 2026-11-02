@@ -4,7 +4,6 @@ import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
-import SimpleBar from 'simplebar-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -336,7 +335,7 @@ export const ImportPco = ({
   const completedFraction = imported / importData.length
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <div style={{ maxHeight: '100%', height: '100%', overflow: 'auto' }}>
       <div className={styles.container}>
         <PcoInstructions
           {...checkState}
@@ -453,6 +452,6 @@ export const ImportPco = ({
           message={`Import fehlgeschlagen: ${importError}`}
         />
       </div>
-    </SimpleBar>
+    </div>
   )
 }

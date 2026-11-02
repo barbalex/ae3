@@ -5,7 +5,6 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import Snackbar from '@mui/material/Snackbar'
-import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
 import { Taxonomies } from './Taxonomies'
@@ -61,7 +60,7 @@ export const ChooseColumn = () => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <div style={{ maxHeight: '100%', height: '100%', overflow: 'auto' }}>
         <div className={styles.container}>
           <Card className={styles.card}>
             <CardActions
@@ -148,7 +147,7 @@ export const ChooseColumn = () => {
             className={styles.snackbar}
           />
         </div>
-      </SimpleBar>
+      </div>
     </ErrorBoundary>
   )
 }

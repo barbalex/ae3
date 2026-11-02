@@ -1,5 +1,4 @@
 import { Link } from 'react-router'
-import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
 import { MenuItems } from './MenuItems'
@@ -27,7 +26,7 @@ export const Sidebar = ({ stacked }: SidebarProps) => {
         minWidth: constants.sidebar.width,
       }}
     >
-      <SimpleBar className={styles.simpleBar}>
+      <div className={styles.scrollContainer}>
         <div className={styles.menuTitle}>
           <Link
             to={`/Dokumentation/`}
@@ -38,7 +37,7 @@ export const Sidebar = ({ stacked }: SidebarProps) => {
           <Filter />
         </div>
         <MenuItems />
-      </SimpleBar>
+      </div>
     </div>
   )
 }

@@ -4,8 +4,6 @@ import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { Analytics } from '@vercel/analytics/react'
 import { useSetAtom, useAtomValue, Provider as JotaiProvider } from 'jotai'
 
-import 'simplebar-react/dist/simplebar.min.css'
-
 import { lightTheme, darkTheme } from './theme'
 import './index.css'
 import 'react-reflex/styles.css'
@@ -45,7 +43,8 @@ export const App = () => {
     return () => mediaQuery.removeEventListener('change', onChange)
   }, [])
 
-  const isDark = themeMode === 'dark' || (themeMode === 'system' && systemPrefersDark)
+  const isDark =
+    themeMode === 'dark' || (themeMode === 'system' && systemPrefersDark)
 
   // mirror the resolved mode onto <html> so plain CSS (index.css, component
   // modules) can define dark variants via [data-theme='dark'];
@@ -104,7 +103,7 @@ export const App = () => {
           </ThemeProvider>
         </StyledEngineProvider>
       </QueryClientProvider>
-        <Analytics debug={false} />
-      </JotaiProvider>
+      <Analytics debug={false} />
+    </JotaiProvider>
   )
 }

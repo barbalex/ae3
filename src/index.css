@@ -90,8 +90,7 @@ html[data-theme='dark'] {
 }
 
 /* scrollbar-width needs to reach every scroller: Chromium does not
-   inherit it from html (Firefox does). simplebar's own
-   scrollbar-width: none still wins by specificity */
+   inherit it from html (Firefox does) */
 * {
   scrollbar-width: thin;
 }
@@ -112,9 +111,6 @@ html[data-theme='dark'] {
   background: rgba(85, 85, 85, 0.05);
 }
 
-.simplebar-scrollbar:before {
-  background: var(--ae-tab-selected) !important;
-}
 /* ::-webkit-scrollbar-thumb:hover {
   background: '#6B2500';
 } */

@@ -3,7 +3,6 @@ import type { SyntheticEvent } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import SimpleBar from 'simplebar-react'
 import { useLocation, useNavigate } from 'react-router'
 import { Outlet } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -83,13 +82,18 @@ const Docs = ({ height }: DocsProps) => {
         <div className={styles.content}>
           {tab === 0 && <Sidebar stacked={true} />}
           {tab === 1 && (
-            <SimpleBar
-              style={{ maxHeight: height, height: '100%', width: '100%' }}
+            <div
+              style={{
+                maxHeight: height,
+                height: '100%',
+                width: '100%',
+                overflow: 'auto',
+              }}
             >
               <div className={styles.doku}>
                 <Outlet />
               </div>
-            </SimpleBar>
+            </div>
           )}
         </div>
       </ErrorBoundary>
@@ -100,11 +104,18 @@ const Docs = ({ height }: DocsProps) => {
     <ErrorBoundary>
       <div className={styles.container}>
         <Sidebar />
-        <SimpleBar style={{ maxHeight: height, height: '100%', width: '100%' }}>
+        <div
+          style={{
+            maxHeight: height,
+            height: '100%',
+            width: '100%',
+            overflow: 'auto',
+          }}
+        >
           <div className={styles.doku}>
             <Outlet />
           </div>
-        </SimpleBar>
+        </div>
       </div>
     </ErrorBoundary>
   )

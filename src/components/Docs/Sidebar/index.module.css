@@ -19,6 +19,7 @@
   }
 }
 
-.simpleBar {
+.scrollContainer {
   height: calc(100cqh - 25px);
+  overflow: auto;
 }

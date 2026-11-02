@@ -5,7 +5,6 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
 import isUuid from 'is-uuid'
-import SimpleBar from 'simplebar-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
@@ -430,7 +429,7 @@ export const ImportRco = ({
   const completedFraction = imported / importData.length
 
   return (
-    <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+    <div style={{ maxHeight: '100%', height: '100%', overflow: 'auto' }}>
       <div className={styles.container}>
         <RcoInstructions
           objectIdsAreReal={objectIdsAreReal}
@@ -552,6 +551,6 @@ export const ImportRco = ({
           className={styles.snackbar}
         />
       </div>
-    </SimpleBar>
+    </div>
   )
 }

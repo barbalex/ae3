@@ -1,4 +1,3 @@
-import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
 import { OptionsChosen } from './OptionsChosen/index'
@@ -13,7 +12,7 @@ export const PreviewColumn = () => {
 
   return (
     <ErrorBoundary>
-      <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
+      <div style={{ maxHeight: '100%', height: '100%', overflow: 'auto' }}>
         <div className={styles.container}>
           <OptionsChosen />
           <Preview />
@@ -23,7 +22,7 @@ export const PreviewColumn = () => {
             </div>
           )}
         </div>
-      </SimpleBar>
+      </div>
     </ErrorBoundary>
   )
 }

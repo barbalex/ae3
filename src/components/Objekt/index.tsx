@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import { uniqBy } from 'es-toolkit'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import SimpleBar from 'simplebar-react'
 import { useAtomValue } from 'jotai'
 
 import { TaxonomyObjects } from './TaxonomyObjects'
@@ -32,10 +31,9 @@ const fetchPcsForObjectIds = async (objectIds: (string | number)[]) => {
       `/property_collection?select=id,name,property_collection_object!property_collection_object_property_collection_id_fkey!inner(object_id)&property_collection_object.object_id=in.(${ids})`,
     ),
   ])
-  return uniqBy(
-    [...(byRelation ?? []), ...(byPco ?? [])],
-    (pc) => pc.id,
-  ).sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
+  return uniqBy([...(byRelation ?? []), ...(byPco ?? [])], (pc) => pc.id).sort(
+    (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
+  )
 }
 
 export const Objekt = () => {
@@ -96,7 +94,7 @@ export const Objekt = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <SimpleBar style={{ maxHeight: '100%' }}>
+        <div style={{ maxHeight: '100%', overflow: 'auto' }}>
           <h3 className={styles.firstTitle}>Taxonomie</h3>
           <Suspense fallback={<Spinner />}>
             <TaxonomyObject
@@ -148,7 +146,7 @@ export const Objekt = () => {
               />
             ))}
           </Suspense>
-        </SimpleBar>
+        </div>
       </div>
     </ErrorBoundary>
   )

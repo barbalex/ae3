@@ -6,7 +6,6 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
-import SimpleBar from 'simplebar-react'
 import { VGrid } from 'virtua'
 
 import styles from './DataTable.module.css'
@@ -32,7 +31,7 @@ function getComparator(order: string, orderBy: string) {
       (a: Record<string, any>, b: Record<string, any>) =>
         descendingComparator(a, b, orderBy)
     : (a: Record<string, any>, b: Record<string, any>) =>
-      -descendingComparator(a, b, orderBy)
+        -descendingComparator(a, b, orderBy)
 }
 
 type GridColumn = { name: string; width: number }
@@ -76,7 +75,11 @@ export const DataTable = ({
 
   const onSort = (name: string) => {
     const nextDirection =
-      orderBy === name ? (direction === 'asc' ? 'desc' : 'asc') : direction
+      orderBy === name ?
+        direction === 'asc' ?
+          'desc'
+        : 'asc'
+      : direction
     setOrder({ orderBy: name, direction: nextDirection })
   }
 
@@ -87,7 +90,8 @@ export const DataTable = ({
   ) => {
     const isHeader = cell.rowIndex === 0
     const cellClass =
-      isHeader ? `${styles.virtualCell} ${styles.virtualHeader}`
+      isHeader ?
+        `${styles.virtualCell} ${styles.virtualHeader}`
       : styles.virtualCell
     if (isHeader) {
       if (column.name === idKey) {
@@ -102,8 +106,13 @@ export const DataTable = ({
           >
             {column.name}
             {orderBy === column.name && (
-              <Box component="span" sx={visuallyHidden}>
-                {direction === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              <Box
+                component="span"
+                sx={visuallyHidden}
+              >
+                {direction === 'desc' ?
+                  'sorted descending'
+                : 'sorted ascending'}
               </Box>
             )}
           </TableSortLabel>
@@ -140,109 +149,110 @@ export const DataTable = ({
             {renderVirtualCell}
           </VGrid>
         </div>
-      : <SimpleBar style={{ maxHeight: '100%', height: '100%' }}>
-        <Table
-          sx={{
-            minWidth: 650,
-            fontSize: 'small !important',
-            backgroundColor: 'var(--ae-bg-paper)',
-            marginBottom: 0,
-          }}
-          size="small"
-          aria-label="Export Vorschau"
-          stickyHeader={true}
-        >
-          <TableHead>
-            <TableRow className={styles.tableRow}>
-              {columnNames.map((name) => {
-                const active = orderBy === name
-                if (name === idKey) {
+      : <div style={{ maxHeight: '100%', height: '100%', overflow: 'auto' }}>
+          <Table
+            sx={{
+              minWidth: 650,
+              fontSize: 'small !important',
+              backgroundColor: 'var(--ae-bg-paper)',
+              marginBottom: 0,
+            }}
+            size="small"
+            aria-label="Export Vorschau"
+            stickyHeader={true}
+          >
+            <TableHead>
+              <TableRow className={styles.tableRow}>
+                {columnNames.map((name) => {
+                  const active = orderBy === name
+                  if (name === idKey) {
+                    return (
+                      <TableCell
+                        key={`${name}/header`}
+                        sx={{
+                          minWidth: 270,
+                          '&:first-of-type': { paddingLeft: '6px !important' },
+                          backgroundColor: 'var(--ae-bg-highlight) !important',
+                        }}
+                      >
+                        {name}
+                      </TableCell>
+                    )
+                  }
+
                   return (
                     <TableCell
                       key={`${name}/header`}
+                      sortDirection={active ? direction : false}
                       sx={{
-                        minWidth: 270,
                         '&:first-of-type': { paddingLeft: '6px !important' },
                         backgroundColor: 'var(--ae-bg-highlight) !important',
+                        // prevent hideous high headers
+                        minWidth: 200,
                       }}
                     >
-                      {name}
-                    </TableCell>
-                  )
-                }
-
-                return (
-                  <TableCell
-                    key={`${name}/header`}
-                    sortDirection={active ? direction : false}
-                    sx={{
-                      '&:first-of-type': { paddingLeft: '6px !important' },
-                      backgroundColor: 'var(--ae-bg-highlight) !important',
-                      // prevent hideous high headers
-                      minWidth: 200,
-                    }}
-                  >
-                    <TableSortLabel
-                      active={active}
-                      direction={active ? direction : 'asc'}
-                      onClick={() => onSort(name)}
-                    >
-                      {name}
-                      {orderBy === name ?
-                        <Box
-                          component="span"
-                          sx={visuallyHidden}
-                        >
-                          {direction === 'desc' ?
-                            'sorted descending'
-                          : 'sorted ascending'}
-                        </Box>
-                      : null}
-                    </TableSortLabel>
-                  </TableCell>
-                )
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedData.map((row) => (
-              <TableRow
-                className={styles.tableRow}
-                key={
-                  uniqueKeyCombo ?
-                    uniqueKeyCombo.map((key) => row[key]).join('/')
-                  : row[idKey]
-                }
-                sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                }}
-              >
-                {columnNames.map((key) => {
-                  if (key === idKey)
-                    return (
-                      <TableCell
-                        key={`${row[idKey]}/${key}/cell`}
-                        component="th"
-                        scope="row"
-                        sx={{
-                          fontSize: '0.8rem',
-                          paddingLeft: '6px !important',
-                        }}
+                      <TableSortLabel
+                        active={active}
+                        direction={active ? direction : 'asc'}
+                        onClick={() => onSort(name)}
                       >
-                        {row[idKey]}
-                      </TableCell>
-                    )
-                  return (
-                    <TableCell key={`${row[idKey]}/${key}/cell`}>
-                      {row[key]}
+                        {name}
+                        {orderBy === name ?
+                          <Box
+                            component="span"
+                            sx={visuallyHidden}
+                          >
+                            {direction === 'desc' ?
+                              'sorted descending'
+                            : 'sorted ascending'}
+                          </Box>
+                        : null}
+                      </TableSortLabel>
                     </TableCell>
                   )
                 })}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </SimpleBar>}
+            </TableHead>
+            <TableBody>
+              {sortedData.map((row) => (
+                <TableRow
+                  className={styles.tableRow}
+                  key={
+                    uniqueKeyCombo ?
+                      uniqueKeyCombo.map((key) => row[key]).join('/')
+                    : row[idKey]
+                  }
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                  }}
+                >
+                  {columnNames.map((key) => {
+                    if (key === idKey)
+                      return (
+                        <TableCell
+                          key={`${row[idKey]}/${key}/cell`}
+                          component="th"
+                          scope="row"
+                          sx={{
+                            fontSize: '0.8rem',
+                            paddingLeft: '6px !important',
+                          }}
+                        >
+                          {row[idKey]}
+                        </TableCell>
+                      )
+                    return (
+                      <TableCell key={`${row[idKey]}/${key}/cell`}>
+                        {row[key]}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      }
     </div>
   )
 }
