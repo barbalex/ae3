@@ -1,35 +1,17 @@
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import pluginImport from 'eslint-plugin-import'
-import { fixupConfigRules } from '@eslint/compat'
+import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
 
 export default [
   {
     ignores: ['**/dist', '**/node_modules/'],
   },
-  ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      // 'plugin:@typescript-eslint/recommended',
-      // 'plugin:@typescript-eslint/stylistic',
-      // 'plugin:react/recommended',
-      'plugin:react-hooks/recommended',
-    ),
-  ),
+  js.configs.recommended,
+  reactHooks.configs.flat.recommended,
   {
     plugins: {
       'react-refresh': pluginReactRefresh,
@@ -55,7 +37,6 @@ export default [
 
     rules: {
       strict: 0,
-      'react/display-name': 'off',
       'no-console': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
@@ -68,8 +49,6 @@ export default [
           allowEmptyCatch: true,
         },
       ],
-
-      'react/react-in-jsx-scope': 'off',
 
       'react-refresh/only-export-components': [
         'warn',
