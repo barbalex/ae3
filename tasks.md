@@ -13,8 +13,4 @@ output during the failed first attempt.
 
 ---
 
-replace all simplebar usages with narrow native bar? docs, export tables
-
 ---
-
-can we reduce dependencies?
