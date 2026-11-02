@@ -1,5 +1,4 @@
 import pluginReactRefresh from 'eslint-plugin-react-refresh'
-import pluginImport from 'eslint-plugin-import'
 import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
@@ -15,18 +14,6 @@ export default [
   {
     plugins: {
       'react-refresh': pluginReactRefresh,
-      import: pluginImport,
-    },
-
-    settings: {
-      // teach the import resolver the extensions this project resolves
-      // (matches vite's bundler resolution; keeps import/extensions
-      // quiet about extensionless local imports)
-      'import/resolver': {
-        node: {
-          extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.json'],
-        },
-      },
     },
 
     languageOptions: {
@@ -54,16 +41,6 @@ export default [
         'warn',
         {
           allowConstantExport: true,
-        },
-      ],
-
-      'import/extensions': [
-        'warn',
-        'ignorePackages',
-        {
-          jsx: 'never',
-          ts: 'never',
-          tsx: 'never',
         },
       ],
     },
