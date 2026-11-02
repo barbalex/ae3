@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react'
+import type { ComponentProps } from 'react'
 
 import styles from './ProgressiveImg.module.css'
 
-export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
+type ProgressiveImgProps = Omit<ComponentProps<'img'>, 'src'> & {
+  placeholderSrc?: string
+  src: string
+}
+
+export const ProgressiveImg = ({
+  placeholderSrc,
+  src,
+  ...props
+}: ProgressiveImgProps) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
 
   useEffect(() => {
@@ -23,7 +33,7 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
    */
   return (
     <img
-      {...{ src: imgSrc, ...props }}
+      {...{ src: imgSrc ?? src, ...props }}
       alt={props.alt || ''}
       className={`${styles.img} ${isLoading ? styles.imgLoading : ''}`}
     />

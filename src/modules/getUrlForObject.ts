@@ -1,0 +1,50 @@
+type ObjectNode = {
+  id?: string | null
+  taxonomyByTaxonomyId?: {
+    id?: string | null
+    type?: string | null
+  } | null
+  objectByParentId?: ObjectNode | null
+}
+
+export const getUrlForObject = (tO?: ObjectNode): string[] => {
+  let url: string[] = []
+  const rawType = tO?.taxonomyByTaxonomyId?.type ?? ''
+  // graphql returned enum values (ART/LEBENSRAUM),
+  // PostgREST returns the enum labels (Art/Lebensraum)
+  const type =
+    rawType === 'ART' || rawType === 'Art' ?
+      'Arten'
+    : rawType === 'LEBENSRAUM' || rawType === 'Lebensraum' ?
+      'Lebensräume'
+    : ''
+  if (type) url.push(type)
+  const taxonomyId = tO?.taxonomyByTaxonomyId?.id
+  if (taxonomyId) url.push(taxonomyId)
+  const tOIdsArray: string[] = []
+  const level4Id = tO?.id
+  if (level4Id) tOIdsArray.unshift(level4Id)
+  const level5Id = tO?.objectByParentId?.id
+  if (level5Id) tOIdsArray.unshift(level5Id)
+  const level6Id = tO?.objectByParentId?.objectByParentId?.id
+  if (level6Id) tOIdsArray.unshift(level6Id)
+  const level7Id = tO?.objectByParentId?.objectByParentId?.objectByParentId?.id
+  if (level7Id) tOIdsArray.unshift(level7Id)
+  const level8Id =
+    tO?.objectByParentId?.objectByParentId?.objectByParentId?.objectByParentId
+      ?.id
+  if (level8Id) tOIdsArray.unshift(level8Id)
+  const level9Id =
+    tO?.objectByParentId?.objectByParentId?.objectByParentId?.objectByParentId
+      ?.objectByParentId?.id
+  if (level9Id) tOIdsArray.unshift(level9Id)
+  const level10Id =
+    tO?.objectByParentId?.objectByParentId?.objectByParentId?.objectByParentId
+      ?.objectByParentId?.objectByParentId?.id
+  if (level10Id) tOIdsArray.unshift(level10Id)
+
+  if (tOIdsArray.length > 0) {
+    url = [...url, ...tOIdsArray]
+  }
+  return url
+}

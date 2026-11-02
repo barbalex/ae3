@@ -1,0 +1,60 @@
+import { useState } from 'react'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import Collapse from '@mui/material/Collapse'
+import IconButton from '@mui/material/IconButton'
+import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
+
+import { Properties } from './Properties'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary'
+
+import styles from './index.module.css'
+
+type PCOProps = {
+  pc: string
+  count: number
+}
+
+export const PCO = ({ pc, count }: PCOProps) => {
+  const [expanded, setExpanded] = useState(false)
+
+  const onClickAction = () => setExpanded(!expanded)
+
+  return (
+    <ErrorBoundary>
+      <Card
+        key={pc}
+        className={styles.card}
+      >
+        <CardActions
+          disableSpacing
+          onClick={onClickAction}
+          className={styles.cardActions}
+        >
+          <div className={styles.cardActionTitle}>
+            {pc}
+            <span
+              className={styles.countClass}
+            >{`(${count} ${count === 1 ? 'Feld' : 'Felder'})`}</span>
+          </div>
+          <IconButton
+            aria-expanded={expanded}
+            aria-label="Show more"
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
+          <div className={styles.propertiesContainer}>
+            <Properties pc={pc} />
+          </div>
+        </Collapse>
+      </Card>
+    </ErrorBoundary>
+  )
+}

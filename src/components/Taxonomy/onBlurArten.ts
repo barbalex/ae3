@@ -1,0 +1,58 @@
+import { apiFetch } from '../../modules/api'
+import type { QueryClient } from '@tanstack/react-query'
+
+const columnByField: Record<string, string> = {
+  name: 'name',
+  description: 'description',
+  links: 'links',
+  organizationId: 'organization_id',
+  lastUpdated: 'last_updated',
+  importedBy: 'imported_by',
+  termsOfUse: 'terms_of_use',
+}
+
+type OnBlurArtenProps = {
+  queryClient: QueryClient
+  scrollIntoView: () => void
+  field: string
+  // PostgREST row, dynamic
+  taxonomy: any
+  value: any
+  prevValue: any
+  setFieldError?: (error?: any) => void
+  refetch: () => void
+}
+
+export const onBlurArten = async ({
+  queryClient,
+  scrollIntoView,
+  field,
+  taxonomy,
+  value,
+  prevValue,
+  setFieldError = () => {},
+  refetch,
+}: OnBlurArtenProps) => {
+  if (value !== prevValue) {
+    const column = columnByField[field]
+    const patch =
+      field === 'links' ?
+        { [column]: value.split(',') }
+      : { [column]: value }
+    try {
+      await apiFetch(`/taxonomy?id=eq.${taxonomy.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      })
+    } catch (error) {
+      return setFieldError(error)
+    }
+    refetch()
+    setFieldError(undefined)
+    await queryClient.invalidateQueries({
+      queryKey: ['tree'],
+    })
+    scrollIntoView()
+  }
+}

@@ -1,0 +1,212 @@
+import { useState, useRef } from 'react'
+import Select from 'react-select/async'
+import Highlighter from 'react-highlight-words'
+import type { SelectInstance, FormatOptionLabelMeta, ActionMeta } from 'react-select'
+import { useAtom, useAtomValue } from 'jotai'
+import { rpc } from '../../../../../../modules/api'
+import { ErrorBoundary } from '../../../../../shared/ErrorBoundary'
+
+import { readableType } from '../../../../../../modules/readableType'
+import {
+  exportTaxPropertiesAtom,
+  exportPcoPropertiesAtom,
+  exportRcoPropertiesAtom,
+  exportTaxFiltersAtom,
+  exportAddFilterFieldsAtom,
+} from '../../../../../../store'
+import { constants } from '../../../../../../modules/constants'
+
+import styles from './Value.module.css'
+
+
+type Option = { value: any; label: any }
+
+const noOptionsMessage = () => 'Keine Daten entsprechen dem Filter'
+const loadingMessage = () => 'lade...'
+const formatOptionLabel = (
+  { label }: Option,
+  { inputValue }: FormatOptionLabelMeta<Option>,
+) => (
+  <Highlighter
+    searchWords={[inputValue]}
+    textToHighlight={label}
+  />
+)
+
+type ValueProps = {
+  taxname: string
+  pname: string
+  jsontype: string
+  comparator: string | null
+  value: string | number | null
+}
+
+export const Value = ({
+  taxname,
+  pname,
+  jsontype,
+  comparator,
+  value: propsValue,
+}: ValueProps) => {
+  const [taxProperties, setTaxProperties] = useAtom(exportTaxPropertiesAtom)
+  const pcoProperties = useAtomValue(exportPcoPropertiesAtom)
+  const rcoProperties = useAtomValue(exportRcoPropertiesAtom)
+  const [taxFilters, setTaxFilters] = useAtom(exportTaxFiltersAtom)
+  const addFilterFields = useAtomValue(exportAddFilterFieldsAtom)
+
+  // Problem with loading data
+  // Want to load all data when user focuses on input
+  // But is not possible to programmatically call loadOptions (https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911824)
+  // So need to set key on Select and update it on focus
+  // Maybe better to not use AsyncSelect? https://github.com/JedWatson/react-select/discussions/5389#discussioncomment-3911837
+  const ref = useRef<SelectInstance<Option>>(null)
+  const [focusCount, setFocusCount] = useState(0)
+
+  const [value, setValue] = useState(propsValue ?? '')
+  const [error, setError] = useState<Error | undefined>(undefined)
+
+  const loadOptions = async (val: string) => {
+    if (!focusCount) return []
+    let rows
+    try {
+      rows = await rpc('prop_values_filtered_function', {
+        table_name: 'object',
+        prop_name: pname,
+        pc_field_name: 'taxonomy_id',
+        pc_table_name: 'taxonomy',
+        pc_name: taxname,
+        prop_value: val ?? '',
+      })
+    } catch (err) {
+      setError(err)
+      setValue(val)
+      return []
+    }
+    const returnData = rows?.map((n: any) => ({
+      value: n.value,
+      label: n.value,
+    }))
+    setValue(val)
+    return returnData
+  }
+
+  const setFilter = (val: string | number) => {
+    // 1. change filter value
+    let comparatorValue = comparator
+    if (!comparator && val) comparatorValue = 'ILIKE'
+    if (!val) comparatorValue = null
+
+    const taxFilter = taxFilters.find(
+      (x) => x.taxname === taxname && x.pname === pname,
+    )
+    if (!comparatorValue && !val && val !== 0) {
+      // remove
+      setTaxFilters(
+        taxFilters.filter((x) => !(x.taxname === taxname && x.pname === pname)),
+      )
+    } else if (!taxFilter) {
+      // add new one
+      setTaxFilters([
+        ...taxFilters,
+        {
+          taxname,
+          pname,
+          comparator: comparatorValue,
+          value: val,
+        },
+      ])
+    } else {
+      // edit = add new one instead of existing
+      setTaxFilters([
+        ...taxFilters.filter(
+          (x) => !(x.taxname === taxname && x.pname === pname),
+        ),
+        {
+          taxname,
+          pname,
+          comparator: comparatorValue,
+          value: val,
+        },
+      ])
+    }
+    // 2. if value and field not chosen, choose it
+    if (addFilterFields && val) {
+      // Check total properties count
+      const nrOfPropertiesExported =
+        taxProperties.length +
+        (rcoProperties?.length || 0) +
+        (pcoProperties?.length || 0)
+      if (nrOfPropertiesExported <= constants.export.maxFields) {
+        // Only add if not yet done
+        const taxProperty = taxProperties.find(
+          (t) => t.taxname === taxname && t.pname === pname,
+        )
+        if (!taxProperty) {
+          setTaxProperties([...taxProperties, { taxname, pname }])
+        }
+      }
+    }
+  }
+
+  const onBlur = () => setFilter(value)
+
+  const onChange = (newValue: any, actionMeta: ActionMeta<Option>) => {
+    let value
+    switch (actionMeta.action) {
+      case 'clear':
+        value = ''
+        break
+      default:
+        value = newValue?.value
+        break
+    }
+    setValue(value)
+    setFilter(value)
+  }
+
+  if (error) {
+    return `Error loading data: ${error.message}`
+  }
+
+  const valueToShow = value ? { value, label: value } : undefined
+
+  return (
+    <ErrorBoundary>
+      <div className={styles.container}>
+        <div
+          className={styles.label}
+        >{`${pname} (${readableType(jsontype)})`}</div>
+        <Select<Option>
+          key={focusCount}
+          ref={ref}
+          value={valueToShow}
+          defaultOptions={true}
+          onChange={onChange}
+          onBlur={onBlur}
+          onFocus={() => {
+            if (focusCount === 0) {
+              setFocusCount(1)
+              setTimeout(() => {
+                ref.current!.onMenuOpen()
+                ref.current!.focus()
+              })
+            }
+          }}
+          formatOptionLabel={formatOptionLabel}
+          placeholder={''}
+          noOptionsMessage={noOptionsMessage}
+          loadingMessage={loadingMessage}
+          classNamePrefix="react-select"
+          loadOptions={loadOptions}
+          cacheOptions
+          isClearable
+          openMenuOnFocus={true}
+          {...{ spellCheck: false }}
+          // ensure the menu always is on top
+          menuPortalTarget={document.body}
+          className={styles.select}
+        />
+      </div>
+    </ErrorBoundary>
+  )
+}

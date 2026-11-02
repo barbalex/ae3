@@ -1,0 +1,53 @@
+import { Suspense } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+
+import { PCO } from './PCO'
+import { rpc } from '../../../../../modules/api'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary'
+import { Spinner } from '../../../../shared/Spinner'
+import { exportTaxonomiesAtom } from '../../../../../store'
+
+import styles from './List.module.css'
+
+
+const fallback = (
+  <div className={styles.spinnerContainer}>
+    <Spinner message="" />
+  </div>
+)
+
+export const PcoList = () => {
+
+  const exportTaxonomies = useAtomValue(exportTaxonomiesAtom)
+
+  const { data, error } = useQuery({
+    queryKey: ['filterPcosList', exportTaxonomies],
+    queryFn: async () => ({
+        data: { pcoPropertiesByTaxonomiesCountPerPc: { nodes: exportTaxonomies.length === 0 ? [] : (await rpc('pco_properties_by_taxonomies_count_per_pc', { export_taxonomies: exportTaxonomies })).map((r: any) => r) } },
+      }),
+  })
+  const nodes = data?.data?.pcoPropertiesByTaxonomiesCountPerPc?.nodes ?? []
+
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        `Error loading data: ${error.message}`
+      </div>
+    )
+  }
+
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={fallback}>
+        {nodes.map(({ name, count }: any) => (
+          <PCO
+            key={name}
+            pc={name}
+            count={count}
+          />
+        ))}
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
