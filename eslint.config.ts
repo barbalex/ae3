@@ -71,16 +71,6 @@ export default [
 
       'react/react-in-jsx-scope': 'off',
 
-      // these four flag real debt in code that predates the ts
-      // migration: .jsx files were never linted before (flat config
-      // only lints .js/.mjs/.cjs unless a files pattern matches), so
-      // the issues only surfaced when the files became .tsx.
-      // warnings, not errors, until they are paid down
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/use-memo': 'warn',
-      'react-hooks/refs': 'warn',
-      'no-useless-assignment': 'warn',
-
       'react-refresh/only-export-components': [
         'warn',
         {

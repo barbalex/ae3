@@ -198,7 +198,8 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
       pCOfOriginIdsUnreal.length === 0
     : undefined
 
-  // keep this memo due to Object.values(checkState) dependency
+  // depending on the checkState object itself (not Object.values of
+  // it, which has a new identity every render and defeated the memo)
   const showImportButton = useMemo(
     () =>
       importData.length > 0 &&
@@ -226,7 +227,7 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
       checkState.propertyValuesDontContainApostroph &&
       checkState.propertyValuesDontContainBackslash,
     [
-      Object.values(checkState),
+      checkState,
       importData.length,
       objectIdsAreReal,
       objectRelationIdsAreReal,

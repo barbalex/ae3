@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -53,9 +53,14 @@ export const DateField = ({
   helperText,
 }: DateFieldProps) => {
   const [stateValue, setStateValue] = useState(valuePassed)
-  useEffect(() => {
+  // keep the picker in sync when the passed value changes — during
+  // render instead of in an effect
+  // (https://react.dev/learn/you-might-not-need-an-effect)
+  const [prevValuePassed, setPrevValuePassed] = useState(valuePassed)
+  if (valuePassed !== prevValuePassed) {
+    setPrevValuePassed(valuePassed)
     setStateValue(valuePassed)
-  }, [valuePassed])
+  }
 
   const onChangeDatePicker = (date: Date | null) => {
     const newValue =

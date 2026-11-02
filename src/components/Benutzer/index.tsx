@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from 'react'
+import { useState, Suspense, useMemo } from 'react'
 import type { ChangeEvent, SyntheticEvent } from 'react'
 import TextField from '@mui/material/TextField'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -40,7 +40,8 @@ const User = () => {
         `/user?id=eq.${userId}&select=id,name,email,organizationUsers:organization_user(id,organizationByOrganizationId:organization_id(id,name),role),propertyCollectionsByImportedBy:property_collection!property_collection_imported_by_fkey(id,name),taxonomiesByImportedBy:taxonomy!taxonomy_imported_by_fkey(id,name)`,
       ),
   })
-  const user = data?.[0] ?? {}
+  // stable identity: only changes when the query data changes
+  const user = useMemo(() => data?.[0] ?? {}, [data])
 
   const [name, setName] = useState(user?.name)
   const [nameErrorText, setNameErrorText] = useState('')
@@ -60,10 +61,15 @@ const User = () => {
   const userIsLoggedIn =
     !!user && !!loginUsername && user?.name === loginUsername
 
-  useEffect(() => {
+  // sync the form fields when the fetched user changes — during
+  // render instead of in an effect
+  // (https://react.dev/learn/you-might-not-need-an-effect)
+  const [prevUser, setPrevUser] = useState(user)
+  if (user !== prevUser) {
+    setPrevUser(user)
     setName(user?.name)
     setEmail(user?.email)
-  }, [user])
+  }
   const onChangeTab = (event: SyntheticEvent, value: number) => setTab(value)
   const onChangeName = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setName(e.target.value)

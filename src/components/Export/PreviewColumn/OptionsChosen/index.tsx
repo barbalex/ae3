@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import { useAtom, useSetAtom, useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 
 import { TaxFilterItems } from './TaxFilterItems/index'
 import { PcoFilterItems } from './PcoFilterItems/index'

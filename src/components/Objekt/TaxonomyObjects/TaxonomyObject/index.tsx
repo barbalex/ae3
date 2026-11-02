@@ -21,7 +21,7 @@ import {
   MdInfoOutline as InfoOutlineIcon,
   MdInfo as InfoIcon,
 } from 'react-icons/md'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
@@ -53,7 +53,6 @@ type TaxonomyObjectProps = {
 }
 
 export const TaxonomyObject = ({ objekt, showLink, refetch }: TaxonomyObjectProps) => {
-  const queryClient = useQueryClient()
   const [editingTaxonomies, setEditingTaxonomies] = useAtom(
     editingTaxonomiesAtom,
   )

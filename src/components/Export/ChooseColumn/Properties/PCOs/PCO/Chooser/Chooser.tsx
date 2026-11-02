@@ -4,7 +4,6 @@ import Checkbox from '@mui/material/Checkbox'
 import { useAtom } from 'jotai'
 
 import { exportPcoPropertiesAtom } from '../../../../../../../store'
-import { constants } from '../../../../../../../modules/constants'
 
 import styles from './Chooser.module.css'
 

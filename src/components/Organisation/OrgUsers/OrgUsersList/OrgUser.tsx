@@ -52,7 +52,6 @@ export const OrgUser = ({ orgUser, orgUsersRefetch }: OrgUserProps) => {
   const [role, setRole] = useState(orgUser.role || null)
 
   const users = allUsersData ?? []
-  const orgName = orgData?.org?.name ?? ''
   const user = users.find((user: any) => user.id === userId)
   const userName = user ? user.name || '' : ''
   const userNames = users.map((u: any) => u.name).sort()

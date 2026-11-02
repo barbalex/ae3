@@ -42,7 +42,7 @@ const pcoRowsPath = (
 
 // fetch the pc with its keys, organization and pcos;
 // optionally limited to the first n pcos
-export const fetchPcoData = async (
+const fetchPcoData = async (
   pcId: string | undefined,
   first: number = 15,
   orderBy: string = 'Objekt Name',

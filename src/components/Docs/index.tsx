@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { SyntheticEvent } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
@@ -23,7 +23,10 @@ const Docs = ({ height }: DocsProps) => {
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const pathElements = pathname.split('/').filter((p) => !!p)
+  const pathElements = useMemo(
+    () => pathname.split('/').filter((p) => !!p),
+    [pathname],
+  )
 
   const [tab, setTab] = useState(0)
   const onChangeTab = (event: SyntheticEvent, value: number) => {
@@ -36,10 +39,14 @@ const Docs = ({ height }: DocsProps) => {
     }
   }
 
-  useEffect(() => {
-    pathElements.length > 1 && tab === 0 && setTab(1)
-    pathElements.length === 1 && tab === 1 && setTab(0)
-  }, [pathElements, tab])
+  // keep the tab in sync with the url depth — during render instead
+  // of in an effect (https://react.dev/learn/you-might-not-need-an-effect)
+  const [prevPathElements, setPrevPathElements] = useState(pathElements)
+  if (pathElements !== prevPathElements) {
+    setPrevPathElements(pathElements)
+    if (pathElements.length > 1 && tab === 0) setTab(1)
+    if (pathElements.length === 1 && tab === 1) setTab(0)
+  }
 
   if (stacked) {
     return (

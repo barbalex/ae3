@@ -2,7 +2,6 @@ import { useAtomValue } from 'jotai'
 
 import { Comparator } from './Comparator'
 import { Value } from './Value'
-import { constants } from '../../../../../../../modules/constants'
 import { exportRcoFiltersAtom } from '../../../../../../../store'
 
 import styles from './index.module.css'

@@ -214,7 +214,7 @@ export const Filter = () => {
       setTimeout(() => scrollIntoView())
       setTreeFilter({ id: null, text: '' })
     }
-  }, [actualTreeFilterId, setTreeFilter, objectUrlData, navigate])
+  }, [actualTreeFilterId, setTreeFilter, objectUrlData, navigate, scrollIntoView])
 
   const buildOptionsDebounced = useDebouncedCallback(
     ({ cb, val }: { cb: (options: any[]) => void; val?: string | null }) => {

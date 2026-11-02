@@ -1,4 +1,4 @@
-import { lazy, Children } from 'react'
+import { lazy } from 'react'
 import {
   Route,
   createBrowserRouter,

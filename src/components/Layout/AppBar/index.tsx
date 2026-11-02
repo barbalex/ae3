@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import type { ComponentProps } from 'react'
 import MuiAppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -82,15 +81,8 @@ export const AppBar = () => {
     enabled: existsObjectId || existsPCId || existsTaxId,
   })
 
-  const [wide, setWide] = useState(false)
-  useEffect(() => {
-    if (!singleColumnView && !wide) {
-      setWide(true)
-    }
-    if (singleColumnView && wide) {
-      setWide(false)
-    }
-  }, [wide, singleColumnView])
+  // wide is fully derived: it mirrors the viewport mode
+  const wide = !singleColumnView
 
   const url0 = activeNodeArray[0] && (activeNodeArray[0] as string).toLowerCase()
   const loginLabel =

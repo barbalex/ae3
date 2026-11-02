@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai'
 import { Comparator } from './Comparator'
 import { Value } from './Value'
 import { exportTaxFiltersAtom } from '../../../../../../store'
-import { constants } from '../../../../../../modules/constants'
 
 import styles from './index.module.css'
 

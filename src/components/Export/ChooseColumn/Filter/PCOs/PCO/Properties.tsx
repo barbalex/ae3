@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { PcoProperty } from './Property'

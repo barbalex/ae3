@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs -- the tree walk intentionally reads/writes refs during render; see the algorithm comment inside the component */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -64,14 +65,18 @@ export const VirtualizedTree = () => {
   const { rows, queries: neededQueries, pathHoles } = buildTreeRows(buildArgs)
 
   // liveness: when the fresh walk needs queries that are not
-  // subscribed yet, re-render so useQueries picks them up
+  // subscribed yet, re-render so useQueries picks them up.
+  // deliberate synchronous setState in an effect - it is the
+  // re-render trigger itself and stops as soon as the subscriptions
+  // cover the walk
   const [, setTick] = useState(0)
   useEffect(() => {
     const subscribed = new Set(entries.map((entry) => keyId(entry.queryKey)))
     if (neededQueries.some((def) => !subscribed.has(keyId(def.queryKey)))) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTick((tick) => tick + 1)
     }
-  })
+  }, [entries, neededQueries])
 
   // deep links into paginated levels: the url expects a child that
   // the loaded pages do not contain - fetch further pages until it

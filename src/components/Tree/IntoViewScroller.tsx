@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useAtomValue } from 'jotai'
 
 import { isElementInViewport } from '../../modules/isElementInViewport'
@@ -14,7 +14,7 @@ export const IntoViewScroller = () => {
   const scrollIntoViewCounter = useAtomValue(scrollIntoViewCounterAtom)
   const scrollIntoViewById = useTreeScroll()
 
-  const scroller = () => {
+  const scroller = useCallback(function attempt() {
     // 1. Get id from url
     const id = getLastIdFromUrl(activeNodeArray)
     if (!id) return
@@ -26,8 +26,8 @@ export const IntoViewScroller = () => {
     // scroll it into view. Not found? The tree may still be loading
     // deeper levels > try later
     const scrolled = scrollIntoViewById?.(id)
-    if (!scrolled) setTimeout(scroller, 150)
-  }
+    if (!scrolled) setTimeout(attempt, 150)
+  }, [activeNodeArray, scrollIntoViewById])
 
   useEffect(() => {
     scroller()

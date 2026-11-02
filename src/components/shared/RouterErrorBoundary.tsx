@@ -6,7 +6,7 @@ import { setLoginAtom } from '../../store'
 
 import styles from './RouterErrorBoundary.module.css'
 
-export const RouterErrorBoundary = ({ children }: { children?: React.ReactNode }) => {
+export const RouterErrorBoundary = () => {
   const error = useRouteError() as Error
 
   const setLogin = useSetAtom(setLoginAtom)

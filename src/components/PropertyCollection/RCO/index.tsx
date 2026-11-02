@@ -44,7 +44,7 @@ const rcoRowsPath = (
 
 // fetch the pc with its keys, organization and relations;
 // optionally limited to the first n relations
-export const fetchRcoData = async (
+const fetchRcoData = async (
   pcId: string | undefined,
   first: number = 15,
   orderBy: string = 'Objekt Name',

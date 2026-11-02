@@ -1,5 +1,4 @@
 import { sortBy } from 'es-toolkit'
-import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { PropertyReadOnly } from '../../../../shared/PropertyReadOnly'
@@ -17,8 +16,6 @@ type PropertyListProps = {
 
 export const PropertyList = ({ propertiesArray, properties, editing, id, refetch }: PropertyListProps) => {
   const stacked = useAtomValue(stackedAtom)
-
-  const queryClient = useQueryClient()
 
   return sortBy(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

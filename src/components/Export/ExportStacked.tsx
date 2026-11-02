@@ -3,16 +3,13 @@ import type { SyntheticEvent } from 'react'
 import Paper from '@mui/material/Paper'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { useAtomValue } from 'jotai'
 
 import { ChooseColumn } from './ChooseColumn/index'
 import { PreviewColumn } from './PreviewColumn/index'
-import { windowWidthAtom } from '../../store'
 
 import styles from './ExportStacked.module.css'
 
 export const ExportStacked = () => {
-  const windowWidth = useAtomValue(windowWidthAtom)
   const [tab, setTab] = useState(0)
 
   const onChangeTab = (event: SyntheticEvent, value: number) => setTab(value)

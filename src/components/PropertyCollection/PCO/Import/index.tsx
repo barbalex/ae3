@@ -153,7 +153,8 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
     : undefined
   const importDataFields = getImportDataFields(importData)
 
-  // keep this explicit memo because of the Object.values(checkState) dependency
+  // depending on the checkState object itself (not Object.values of
+  // it, which has a new identity every render and defeated the memo)
   const showImportButton = useMemo(
     () =>
       importData.length > 0 &&
@@ -174,7 +175,7 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
       checkState.propertyKeysDontContainBackslash &&
       checkState.propertyValuesDontContainApostroph &&
       checkState.propertyValuesDontContainBackslash,
-    [Object.values(checkState), importData.length, objectIdsAreReal],
+    [checkState, importData.length, objectIdsAreReal, pCOfOriginIdsAreReal],
   )
   const showPreview = importData.length > 0
   const propertyFields = importDataFields.filter(

@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 
 import { Taxonomies } from './Taxonomies'
 import {

@@ -10,8 +10,8 @@ export const buildOptions = async ({
   const treeFilterText = val?.trim() ?? ''
   if (!treeFilterText) return cb([])
 
-  let objects: any[] = []
-  let pcs: any[] = []
+  let objects: any[]
+  let pcs: any[]
   try {
     ;[objects, pcs] = await Promise.all([
       apiFetch(

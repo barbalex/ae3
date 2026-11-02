@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 
 import { Property } from './Property'
 
@@ -7,8 +6,6 @@ type PropertiesProps = {
 }
 
 export const Properties = ({ properties }: PropertiesProps) => {
-  const queryClient = useQueryClient()
-
   return properties.map((p) => (
     <Property
       key={`${p.propertyName}|${p.relationType}|${p.jsontype}`}

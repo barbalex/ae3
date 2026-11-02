@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback, useMemo } from 'react'
 import { debounce } from 'es-toolkit'
 import { useSetAtom } from 'jotai'
 
@@ -13,7 +13,7 @@ export const Stacker = () => {
   const setWindowWidth = useSetAtom(windowWidthAtom)
   const setWindowHeight = useSetAtom(windowHeightAtom)
 
-  const updateStacked = () => {
+  const updateStacked = useCallback(() => {
     if (typeof window === 'undefined') return
     const w = window
     const d = document
@@ -25,20 +25,27 @@ export const Stacker = () => {
     setStacked(shouldBeStacked)
     setWindowWidth(windowWidth)
     setWindowHeight(windowHeight)
-  }
+  }, [setStacked, setWindowWidth, setWindowHeight])
+
+  // one stable debounced handler so the effect can actually remove
+  // what it registered (the former cleanup removed the undebounced
+  // function, which never matched)
+  const debouncedUpdateStacked = useMemo(
+    () => debounce(updateStacked, 100),
+    [updateStacked],
+  )
 
   useEffect(() => {
     updateStacked()
   }, [updateStacked])
 
   useEffect(() => {
-    typeof window !== 'undefined' &&
-      window.addEventListener('resize', debounce(updateStacked, 100))
+    if (typeof window === 'undefined') return
+    window.addEventListener('resize', debouncedUpdateStacked)
     return () => {
-      typeof window !== 'undefined' &&
-        window.removeEventListener('resize', updateStacked)
+      window.removeEventListener('resize', debouncedUpdateStacked)
     }
-  }, [updateStacked])
+  }, [debouncedUpdateStacked])
 
   return null
 }
