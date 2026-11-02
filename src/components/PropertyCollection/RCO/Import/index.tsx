@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo } from 'react'
+import { useState, useReducer } from 'react'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
@@ -75,7 +75,10 @@ const initialCheckState: CheckState = {
   propertyValuesDontContainBackslash: undefined,
 }
 
-const getObjectIdsUnreal = ({ data, objectIds }: {
+const getObjectIdsUnreal = ({
+  data,
+  objectIds,
+}: {
   data: any
   objectIds: string[]
 }) => {
@@ -84,7 +87,10 @@ const getObjectIdsUnreal = ({ data, objectIds }: {
   return objectIds.filter((i) => !realIds.includes(i))
 }
 
-const getObjectRelationIdsUnreal = ({ data, objectRelationIds }: {
+const getObjectRelationIdsUnreal = ({
+  data,
+  objectRelationIds,
+}: {
   data: any
   objectRelationIds: string[]
 }) => {
@@ -93,7 +99,16 @@ const getObjectRelationIdsUnreal = ({ data, objectRelationIds }: {
   return objectRelationIds.filter((i) => !realIds.includes(i))
 }
 
-const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }: { data: any; pCOfOriginIds: string[] }) => {  const realIds = (data?.allPropertyCollections?.nodes ?? []).map((o: any) => o.id)
+const getPCOfOriginIdsUnreal = ({
+  data,
+  pCOfOriginIds,
+}: {
+  data: any
+  pCOfOriginIds: string[]
+}) => {
+  const realIds = (data?.allPropertyCollections?.nodes ?? []).map(
+    (o: any) => o.id,
+  )
 
   return pCOfOriginIds.filter((i) => !realIds.includes(i))
 }
@@ -101,12 +116,19 @@ const getPCOfOriginIdsUnreal = ({ data, pCOfOriginIds }: { data: any; pCOfOrigin
 const getImportDataFields = (importData: any[]) => {
   let fields: string[] = []
   importData.forEach((d) => {
-    fields = (union as unknown as (arr: any[]) => any[])([...fields, ...Object.keys(d)])
+    fields = (union as unknown as (arr: any[]) => any[])([
+      ...fields,
+      ...Object.keys(d),
+    ])
   })
   return fields
 }
 
-export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => void }) => {
+export const ImportRco = ({
+  setImport,
+}: {
+  setImport: (importing: boolean) => void
+}) => {
   const queryClient = useQueryClient()
 
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -123,7 +145,13 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
 
   const [orderBy, setOrderBy] = useState('objectId')
   const [sortDirection, setSortDirection] = useState('asc')
-  const setOrder = ({ orderBy, direction }: { orderBy: string; direction: string }) => {
+  const setOrder = ({
+    orderBy,
+    direction,
+  }: {
+    orderBy: string
+    direction: string
+  }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
   }
@@ -198,42 +226,30 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
       pCOfOriginIdsUnreal.length === 0
     : undefined
 
-  // depending on the checkState object itself (not Object.values of
-  // it, which has a new identity every render and defeated the memo)
-  const showImportButton = useMemo(
-    () =>
-      importData.length > 0 &&
-      checkState.existsNoDataWithoutKey &&
-      (checkState.idsExist ?
-        checkState.idsAreUnique && checkState.idsAreUuids
-      : true) &&
-      (checkState.objectIdsExist ?
-        checkState.objectIdsAreUuid &&
-        (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
-      : false) &&
-      (checkState.objectRelationIdsExist ?
-        checkState.objectRelationIdsAreUuid &&
-        (objectRelationIdsAreReal ||
-          checkState.objectRelationIdsAreRealNotTested)
-      : false) &&
-      checkState.relationTypeExist &&
-      (checkState.pCOfOriginIdsExist ?
-        checkState.pCOfOriginIdsAreUuid &&
-        (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
-      : true) &&
-      checkState.existsPropertyKey &&
-      checkState.propertyKeysDontContainApostroph &&
-      checkState.propertyKeysDontContainBackslash &&
-      checkState.propertyValuesDontContainApostroph &&
-      checkState.propertyValuesDontContainBackslash,
-    [
-      checkState,
-      importData.length,
-      objectIdsAreReal,
-      objectRelationIdsAreReal,
-      pCOfOriginIdsAreReal,
-    ],
-  )
+  const showImportButton =
+    importData.length > 0 &&
+    checkState.existsNoDataWithoutKey &&
+    (checkState.idsExist ?
+      checkState.idsAreUnique && checkState.idsAreUuids
+    : true) &&
+    (checkState.objectIdsExist ?
+      checkState.objectIdsAreUuid &&
+      (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
+    : false) &&
+    (checkState.objectRelationIdsExist ?
+      checkState.objectRelationIdsAreUuid &&
+      (objectRelationIdsAreReal || checkState.objectRelationIdsAreRealNotTested)
+    : false) &&
+    checkState.relationTypeExist &&
+    (checkState.pCOfOriginIdsExist ?
+      checkState.pCOfOriginIdsAreUuid &&
+      (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
+    : true) &&
+    checkState.existsPropertyKey &&
+    checkState.propertyKeysDontContainApostroph &&
+    checkState.propertyKeysDontContainBackslash &&
+    checkState.propertyValuesDontContainApostroph &&
+    checkState.propertyValuesDontContainBackslash
   const showPreview = importData.length > 0
 
   const importDataFields = getImportDataFields(importData)
@@ -260,7 +276,9 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
           importDataFields.includes('objectId')
         checkState.existsNoDataWithoutKey =
           data.filter((d: any) => !!d.__EMPTY).length === 0
-        const ids = data.map((d: any) => d.id).filter((d: any) => d !== undefined)
+        const ids = data
+          .map((d: any) => d.id)
+          .filter((d: any) => d !== undefined)
         const _idsExist = ids.length > 0
         checkState.idsExist = _idsExist
         checkState.idsAreUuid =
@@ -288,7 +306,9 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
           objectRelationIdFieldExistsAndIsCorrectlySpelled
         checkState.objectRelationIdsAreUuid =
           objectRelationIdFieldExistsAndIsCorrectlySpelled ?
-            !_objectRelationIds.map((d: any) => isUuid.anyNonNil(d)).includes(false)
+            !_objectRelationIds
+              .map((d: any) => isUuid.anyNonNil(d))
+              .includes(false)
           : undefined
         setObjectRelationIds(_objectRelationIds)
 
@@ -309,12 +329,16 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
         checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
         checkState.pCOfOriginIdsAreUuid =
           _pCOfOriginIdsExist ?
-            !uniquePCOfOriginIds.map((d: any) => isUuid.anyNonNil(d)).includes(false)
+            !uniquePCOfOriginIds
+              .map((d: any) => isUuid.anyNonNil(d))
+              .includes(false)
           : undefined
         setPCOfOriginIds(uniquePCOfOriginIds)
 
         const propertyKeys = (union as unknown as (arr: any[]) => any[])(
-          data.map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
+          data
+            .map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))
+            ?.flat?.(),
         )
         const _existsPropertyKey = propertyKeys.length > 0
         checkState.existsPropertyKey = _existsPropertyKey
@@ -383,7 +407,8 @@ export const ImportRco = ({ setImport }: { setImport: (importing: boolean) => vo
     try {
       await bulkUpsert({
         path: '/relation',
-        onConflict: 'property_collection_id,object_id,object_id_relation,relation_type',
+        onConflict:
+          'property_collection_id,object_id,object_id_relation,relation_type',
         rows,
         onChunkDone: (chunkSize) => setImported((count) => count + chunkSize),
       })

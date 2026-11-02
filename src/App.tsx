@@ -63,6 +63,9 @@ export const App = () => {
     document.title = `${baseTitle} ${appVersion}`
   }, [])
 
+  // created once for the app's lifetime and registered in the
+  // queryClientAtom: useMemo as the run-once idiom, independent of
+  // the react compiler
   const queryClient = useMemo(() => {
     const qc = new QueryClient({
       defaultOptions: {

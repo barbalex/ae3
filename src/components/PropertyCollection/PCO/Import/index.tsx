@@ -1,4 +1,4 @@
-import { useState, useReducer, useMemo } from 'react'
+import { useState, useReducer } from 'react'
 import { omit, union } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
@@ -59,7 +59,10 @@ const initialCheckState: CheckState = {
   existsPropertyKey: undefined,
 }
 
-const getobjectIdsUnreal = ({ data, objectIds }: {
+const getobjectIdsUnreal = ({
+  data,
+  objectIds,
+}: {
   data: any
   objectIds: string[]
 }) => {
@@ -71,7 +74,10 @@ const getobjectIdsUnreal = ({ data, objectIds }: {
 const getImportDataFields = (importData: any[]) => {
   let fields: string[] = []
   importData.forEach((d) => {
-    fields = (union as unknown as (arr: any[]) => any[])([...fields, ...Object.keys(d)])
+    fields = (union as unknown as (arr: any[]) => any[])([
+      ...fields,
+      ...Object.keys(d),
+    ])
   })
   return fields
 }
@@ -79,7 +85,11 @@ const getImportDataFields = (importData: any[]) => {
 // rows are matched by the unique constraint
 // (object_id, property_collection_id) - the former check-then-write
 // per row is a single bulk upsert request per chunk now
-export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => void }) => {
+export const ImportPco = ({
+  setImport,
+}: {
+  setImport: (importing: boolean) => void
+}) => {
   const queryClient = useQueryClient()
 
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -97,16 +107,18 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
 
   const [orderBy, setOrderBy] = useState('objectId')
   const [sortDirection, setSortDirection] = useState('asc')
-  const setOrder = ({ orderBy, direction }: { orderBy: string; direction: string }) => {
+  const setOrder = ({
+    orderBy,
+    direction,
+  }: {
+    orderBy: string
+    direction: string
+  }) => {
     setOrderBy(orderBy)
     setSortDirection(direction.toLowerCase())
   }
 
-  const {
-    isLoading,
-    error,
-    data,
-  } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ['importPcoQuery', pCId, objectIds.length, pCOfOriginIds.length],
     queryFn: async () => {
       if (objectIds.length === 0 && pCOfOriginIds.length === 0) return {}
@@ -153,30 +165,25 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
     : undefined
   const importDataFields = getImportDataFields(importData)
 
-  // depending on the checkState object itself (not Object.values of
-  // it, which has a new identity every render and defeated the memo)
-  const showImportButton = useMemo(
-    () =>
-      importData.length > 0 &&
-      checkState.existsNoDataWithoutKey &&
-      (checkState.idsExist ?
-        checkState.idsAreUnique && checkState.idsAreUuids
-      : true) &&
-      (checkState.objectIdsExist ?
-        checkState.objectIdsAreUuid &&
-        (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
-      : false) &&
-      (checkState.pCOfOriginIdsExist ?
-        checkState.pCOfOriginIdsAreUuid &&
-        (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
-      : true) &&
-      checkState.existsPropertyKey &&
-      checkState.propertyKeysDontContainApostroph &&
-      checkState.propertyKeysDontContainBackslash &&
-      checkState.propertyValuesDontContainApostroph &&
-      checkState.propertyValuesDontContainBackslash,
-    [checkState, importData.length, objectIdsAreReal, pCOfOriginIdsAreReal],
-  )
+  const showImportButton =
+    importData.length > 0 &&
+    checkState.existsNoDataWithoutKey &&
+    (checkState.idsExist ?
+      checkState.idsAreUnique && checkState.idsAreUuids
+    : true) &&
+    (checkState.objectIdsExist ?
+      checkState.objectIdsAreUuid &&
+      (objectIdsAreReal || checkState.objectIdsAreRealNotTested)
+    : false) &&
+    (checkState.pCOfOriginIdsExist ?
+      checkState.pCOfOriginIdsAreUuid &&
+      (pCOfOriginIdsAreReal || checkState.pCOfOriginIdsAreRealNotTested)
+    : true) &&
+    checkState.existsPropertyKey &&
+    checkState.propertyKeysDontContainApostroph &&
+    checkState.propertyKeysDontContainBackslash &&
+    checkState.propertyValuesDontContainApostroph &&
+    checkState.propertyValuesDontContainBackslash
   const showPreview = importData.length > 0
   const propertyFields = importDataFields.filter(
     (f) => !['id', 'objectId', 'propertyCollectionOfOrigin'].includes(f),
@@ -202,11 +209,15 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
           importDataFields.includes('objectId')
         checkState.existsNoDataWithoutKey =
           data.filter((d: any) => !!d.__EMPTY).length === 0
-        const ids = data.map((d: any) => d.id).filter((d: any) => d !== undefined)
+        const ids = data
+          .map((d: any) => d.id)
+          .filter((d: any) => d !== undefined)
         const _idsExist = ids.length > 0
         checkState.idsExist = _idsExist
         checkState.idsAreUuid =
-          _idsExist ? !ids.map((d: any) => isUuid(d)).includes(false) : undefined
+          _idsExist ?
+            !ids.map((d: any) => isUuid(d)).includes(false)
+          : undefined
         checkState.idsAreUnique =
           _idsExist ? ids.length === new Set(ids).size : undefined
         const _objectIds = data
@@ -214,7 +225,9 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
           .filter((d: any) => d !== undefined)
 
         checkState.objectIdsExist = objectIdFieldExistsAndIsCorrectlySpelled
-        const _objectsIdsAreNotUuid = data.filter((d: any) => !isUuid(d.objectId))
+        const _objectsIdsAreNotUuid = data.filter(
+          (d: any) => !isUuid(d.objectId),
+        )
         checkState.objectIdsAreUuid =
           objectIdFieldExistsAndIsCorrectlySpelled ?
             _objectsIdsAreNotUuid.length === 0
@@ -234,7 +247,9 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
         setPCOfOriginIds(uniquePCOfOriginIds)
 
         const propertyKeys = (union as unknown as (arr: any[]) => any[])(
-          data.map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))?.flat?.(),
+          data
+            .map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))
+            ?.flat?.(),
         )
         const _existsPropertyKey = propertyKeys.length > 0
         checkState.existsPropertyKey = _existsPropertyKey
@@ -301,8 +316,7 @@ export const ImportPco = ({ setImport }: { setImport: (importing: boolean) => vo
         path: '/property_collection_object',
         onConflict: 'object_id,property_collection_id',
         rows,
-        onChunkDone: (chunkSize) =>
-          setImported((count) => count + chunkSize),
+        onChunkDone: (chunkSize) => setImported((count) => count + chunkSize),
       })
       setImport(false)
       queryClient.invalidateQueries({

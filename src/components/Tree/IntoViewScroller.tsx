@@ -14,6 +14,8 @@ export const IntoViewScroller = () => {
   const scrollIntoViewCounter = useAtomValue(scrollIntoViewCounterAtom)
   const scrollIntoViewById = useTreeScroll()
 
+  // stable identity so the effect below fires on real changes only;
+  // vitest runs without the react compiler, so not left to it
   const scroller = useCallback(function attempt() {
     // 1. Get id from url
     const id = getLastIdFromUrl(activeNodeArray)

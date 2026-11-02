@@ -40,7 +40,11 @@ const User = () => {
         `/user?id=eq.${userId}&select=id,name,email,organizationUsers:organization_user(id,organizationByOrganizationId:organization_id(id,name),role),propertyCollectionsByImportedBy:property_collection!property_collection_imported_by_fkey(id,name),taxonomiesByImportedBy:taxonomy!taxonomy_imported_by_fkey(id,name)`,
       ),
   })
-  // stable identity: only changes when the query data changes
+  // stable identity: only changes when the query data changes.
+  // load-bearing for the prevUser comparison below — without it
+  // (and without the react compiler, which vitest deliberately does
+  // not run), the render-time sync would loop on a fresh `{}` per
+  // render
   const user = useMemo(() => data?.[0] ?? {}, [data])
 
   const [name, setName] = useState(user?.name)

@@ -13,6 +13,9 @@ export const Stacker = () => {
   const setWindowWidth = useSetAtom(windowWidthAtom)
   const setWindowHeight = useSetAtom(windowHeightAtom)
 
+  // manual memoization stays despite the react compiler: vitest
+  // runs without it, and the listener pairing below needs these
+  // stable identities
   const updateStacked = useCallback(() => {
     if (typeof window === 'undefined') return
     const w = window

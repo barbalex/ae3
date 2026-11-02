@@ -98,6 +98,10 @@ export const VirtualizedTree = () => {
   rowsRef.current = rows
   const listRef = useRef<VListHandle>(null)
 
+  // the react compiler skips this component (refs during render,
+  // see the top of the file) — these manual hooks are the only
+  // memoization here; scrollToId is the scroll-context value and
+  // must keep a stable identity
   const scrollToId = useCallback((id: string) => {
     const index = rowsRef.current.findIndex(
       (row) => row.type === 'row' && row.data.id === id,

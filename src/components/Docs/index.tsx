@@ -23,6 +23,10 @@ const Docs = ({ height }: DocsProps) => {
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  // stable identity per pathname: the prevPathElements comparison
+  // below depends on it, and without the memo a fresh array every
+  // render would loop the render-time sync (vitest runs without the
+  // react compiler, so this cannot be left to it)
   const pathElements = useMemo(
     () => pathname.split('/').filter((p) => !!p),
     [pathname],
