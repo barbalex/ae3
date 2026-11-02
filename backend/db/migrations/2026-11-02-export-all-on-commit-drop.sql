@@ -1,0 +1,434 @@
+CREATE OR REPLACE FUNCTION ae.export_all(typ text, taxonomies text[], tax_fields tax_field[], tax_filters tax_filter[], pco_filters pco_filter[], pco_properties pco_property[], rco_filters rco_filter[], rco_properties rco_property[], use_synonyms boolean, count integer, object_ids uuid[], sort_field sort_field)
+ RETURNS ae.export_data
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+  taxonomy text;
+  rows_sql text;
+  count_sql text;
+  count_count_sql text;
+  row_count integer;
+  sql text;
+  sql2 text;
+  taxfilter tax_filter;
+  taxfield tax_field;
+  pcofilter pco_filter;
+  rcofilter rco_filter;
+  pc_of_pco_filters text;
+  pcs_of_pco_filters text[] :=(
+    SELECT
+      ARRAY ( SELECT DISTINCT
+          _row.pcname
+        FROM
+          unnest(pco_filters) AS _row(comparator,
+            pname,
+            pcname,
+            value)));
+  pcs_of_rco_filters text[] :=(
+    SELECT
+      ARRAY ( SELECT DISTINCT
+          _row.pcname
+        FROM
+          unnest(rco_filters) AS _row(comparator,
+            pname,
+            pcname,
+            value)));
+  pc_of_rco_filters text;
+  name text;
+  pc_name text;
+  pc_name2 text;
+  pco_name text;
+  pcoo_name text;
+  pco_name2 text;
+  rco_name text;
+  rco_name2 text;
+  pcoproperty pco_property;
+  rcoproperty rco_property;
+  tmprow record;
+  tmprow2 record;
+  object record;
+  fieldname text;
+  tablename text;
+  taxfield_sql text;
+  taxfield_sql2 text;
+  object_id uuid;
+  return_query text;
+  return_data ae.export_data;
+  return_data_json jsonb;
+  orderby_sql_in_insert text;
+  orderby_sql_in_select text;
+  rco_properties_non_beziehungspartner rco_property[] :=(
+    SELECT
+      ARRAY (
+        SELECT
+          _row
+        FROM
+          unnest(rco_properties) AS _row(pname,
+            pcname,
+            relationtype)
+        WHERE
+          pname != 'Beziehungspartner'));
+  rco_properties_beziehungspartner_of_this_pc_bp rco_property[];
+BEGIN
+  -- RAISE EXCEPTION 'rco_properties_non_beziehungspartner: %, rco_properties: %:', rco_properties_non_beziehungspartner, rco_properties;
+  -- create table
+  DROP TABLE IF EXISTS _tmp;
+  CREATE TEMPORARY TABLE _tmp(
+    id uuid PRIMARY KEY
+  ) ON COMMIT DROP;
+  DROP TABLE IF EXISTS _tmp_count;
+  CREATE TEMPORARY TABLE _tmp_count(
+    id uuid PRIMARY KEY
+  ) ON COMMIT DROP;
+  -- insert object_ids
+  FOREACH taxonomy IN ARRAY taxonomies LOOP
+    -- select
+    rows_sql := 'INSERT INTO _tmp (id) select object.id from ae.object object';
+    count_sql := 'INSERT INTO _tmp_count (id) select object.id from ae.object object';
+    -- join
+    sql := ' inner join ae.taxonomy tax on tax.id = object.taxonomy_id';
+    rows_sql := rows_sql || sql;
+    count_sql := count_sql || sql;
+    -- join to filter by pcos
+    IF cardinality(pcs_of_pco_filters) > 0 THEN
+      FOREACH pc_of_pco_filters IN ARRAY pcs_of_pco_filters LOOP
+        name := ae.remove_bad_chars(pc_of_pco_filters);
+        pc_name := 'pc_' || name;
+        pco_name := 'pco_' || name;
+        pcoo_name := 'pcoo_' || name;
+        IF use_synonyms = TRUE THEN
+          -- if synonyms are used, filter pcos via pco_of_object
+          sql := format(' INNER JOIN ae.pco_of_object %4$s ON %4$s.object_id = object.id
+                          INNER JOIN ae.property_collection_object %1$s ON %1$s.id = %4$s.pco_id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id and %2$s.name = %3$L', pco_name, pc_name, pc_of_pco_filters, pcoo_name);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        ELSE
+          -- filter directly by property_collection_object
+          sql := format(' INNER JOIN ae.property_collection_object %1$s ON %1$s.object_id = object.id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id and %2$s.name = %3$L', pco_name, pc_name, pc_of_pco_filters);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        END IF;
+      END LOOP;
+    END IF;
+    -- if sorted, left join to pco if not already joined due to filtering
+    IF sort_field IS NOT NULL THEN
+      CASE sort_field.tname
+      WHEN 'property_collection_object' THEN
+        -- only join if not already joined due to filtering
+        IF cardinality(pcs_of_pco_filters) = 0 THEN
+            name := ae.remove_bad_chars(sort_field.pcname); pc_name := 'pc_' || name; pco_name := 'pco_' || name; pcoo_name := 'pcoo_' || name; IF use_synonyms = TRUE THEN
+                sql := format(' LEFT JOIN ae.pco_of_object %3$s ON %3$s.object_id = object.id
+                          INNER JOIN ae.property_collection_object %1$s ON %1$s.id = %3$s.pco_id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id', pco_name, pc_name, pcoo_name); rows_sql := rows_sql || sql;
+              ELSE
+                sql := format(' LEFT JOIN ae.property_collection_object %1$s ON %1$s.object_id = object.id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id', pco_name, pc_name); rows_sql := rows_sql || sql;
+              END IF;
+        END IF;
+      WHEN 'relation' THEN
+        -- only join if not already joined due to filtering
+        IF cardinality(pcs_of_rco_filters) = 0 THEN
+          name := ae.remove_bad_chars(sort_field.pcname);
+          pc_name2 := 'rpc_' || name;
+          rco_name := 'rco_' || name;
+          IF use_synonyms = TRUE THEN
+            sql := format(' INNER JOIN ae.rco_of_object rcoo ON rcoo.object_id = object.id
+                          INNER JOIN ae.relation %1$s ON %1$s.id = rcoo.rco_id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id', rco_name, pc_name2, sort_field.pcname);
+            rows_sql := rows_sql || sql;
+          ELSE
+            -- filter directly by relation
+            sql := format(' INNER JOIN ae.relation %1$s ON %1$s.object_id = object.id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id', rco_name, pc_name2, sort_field.pcname);
+            rows_sql := rows_sql || sql;
+          END IF;
+        END IF;
+    ELSE
+      -- no need to join, data is in object
+      rows_sql := rows_sql || '';
+      END CASE;
+    END IF;
+    -- join to filter by rcos
+    IF cardinality(pcs_of_rco_filters) > 0 THEN
+      FOREACH pc_of_rco_filters IN ARRAY pcs_of_rco_filters LOOP
+        name := ae.remove_bad_chars(pc_of_rco_filters);
+        pc_name2 := 'rpc_' || name;
+        rco_name := 'rco_' || name;
+        IF use_synonyms = TRUE THEN
+          sql := format(' INNER JOIN ae.rco_of_object rcoo ON rcoo.object_id = object.id
+                          INNER JOIN ae.relation %1$s ON %1$s.id = rcoo.rco_id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id and %2$s.name = %3$L', rco_name, pc_name2, pc_of_rco_filters);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        ELSE
+          -- filter directly by relation
+          sql := format(' INNER JOIN ae.relation %1$s ON %1$s.object_id = object.id
+                          INNER JOIN ae.property_collection %2$s ON %2$s.id = %1$s.property_collection_id and %2$s.name = %3$L', rco_name, pc_name2, pc_of_rco_filters);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        END IF;
+      END LOOP;
+    END IF;
+    -- add where clauses
+    -- for taxonomies
+    sql := ' WHERE tax.name = ANY ($1)';
+    rows_sql := rows_sql || sql;
+    count_sql := count_sql || sql;
+    IF typ = 'arten' THEN
+      -- include only objects with Taxonomie ID (exclude objects added for hierarchy)
+      sql := format(' AND object.properties->>%L is not null', 'Taxonomie ID');
+      rows_sql := rows_sql || sql;
+      count_sql := count_sql || sql;
+    END IF;
+    IF cardinality(tax_filters) > 0 THEN
+      FOREACH taxfilter IN ARRAY tax_filters LOOP
+        IF taxfilter.comparator IN ('ILIKE', 'LIKE') THEN
+          sql := format(' AND object.properties->>%1$L %2$s %3$L', taxfilter.pname, taxfilter.comparator, '%' || taxfilter.value || '%');
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        ELSE
+          sql := format(' AND object.properties->>%1$L %2$s %3$L', taxfilter.pname, taxfilter.comparator, taxfilter.value);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        END IF;
+      END LOOP;
+    END IF;
+    -- add where clauses for pco_filters
+    IF cardinality(pco_filters) > 0 THEN
+      FOREACH pcofilter IN ARRAY pco_filters LOOP
+        pco_name2 := 'pco_' || ae.remove_bad_chars(pcofilter.pcname);
+        IF pcofilter.comparator IN ('ILIKE', 'LIKE') THEN
+          sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', pco_name2, pcofilter.pname, pcofilter.comparator, '%' || pcofilter.value || '%');
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        ELSE
+          sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', pco_name2, pcofilter.pname, pcofilter.comparator, pcofilter.value);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        END IF;
+      END LOOP;
+    END IF;
+    -- add where clauses for rco_filters
+    IF cardinality(rco_filters) > 0 THEN
+      FOREACH rcofilter IN ARRAY rco_filters LOOP
+        rco_name2 := 'rco_' || ae.remove_bad_chars(rcofilter.pcname);
+        IF rcofilter.comparator IN ('ILIKE', 'LIKE') THEN
+          sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', rco_name2, rcofilter.pname, rcofilter.comparator, '%' || rcofilter.value || '%');
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        ELSE
+          sql := format(' AND %1$s.properties->>%2$L %3$s %4$L', rco_name2, rcofilter.pname, rcofilter.comparator, rcofilter.value);
+          rows_sql := rows_sql || sql;
+          count_sql := count_sql || sql;
+        END IF;
+        sql := format(' AND %1$s.relation_type = %2$L', rco_name2, rcofilter.relationtype);
+        rows_sql := rows_sql || sql;
+        count_sql := count_sql || sql;
+      END LOOP;
+    END IF;
+    --
+    -- if object_ids were passed, only use them
+    IF cardinality(object_ids) > 0 THEN
+      sql := ' AND object.id = ANY ($2)';
+      rows_sql := rows_sql || sql;
+      count_sql := count_sql || sql;
+    END IF;
+    -- enable limiting for previews
+    -- need to join to enable sorting before limiting
+    IF sort_field IS NOT NULL THEN
+      CASE sort_field.tname
+      WHEN 'property_collection_object' THEN
+        tablename := 'pco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := substring(ae.remove_bad_chars(sort_field.pcname)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(sort_field.pname);
+      WHEN 'relation' THEN
+        tablename := 'rco_' || ae.remove_bad_chars(sort_field.pcname); fieldname := substring(ae.remove_bad_chars(sort_field.pcname)
+          FROM 1 FOR 20) || '__' || substring(ae.remove_bad_chars(sort_field.relationtype)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(sort_field.pname);
+      WHEN 'object' THEN
+        tablename := 'object'; IF cardinality(taxonomies) > 1 THEN
+            fieldname := 'taxonomie__' || ae.remove_bad_chars(sort_field.pname);
+          ELSE
+            fieldname := ae.remove_bad_chars(sort_field.pcname || '__' || sort_field.pname);
+          END IF;
+      END CASE;
+      -- deal with fieldname length max 64
+      orderby_sql_in_insert := format(' ORDER BY %1$s.properties->>%2$L %3$s NULLS LAST', tablename, sort_field.pname, sort_field.direction);
+      orderby_sql_in_select := format(' ORDER BY %1$s %2$s NULLS LAST', fieldname, sort_field.direction);
+      rows_sql := rows_sql || orderby_sql_in_insert;
+    END IF;
+    IF count > 0 THEN
+      rows_sql := rows_sql || ' LIMIT ' || count;
+    END IF;
+    -- prevent duplicates
+    sql := ' ON CONFLICT DO NOTHING';
+    rows_sql := rows_sql || sql;
+    count_sql := count_sql || sql;
+    -- create _tmp with all object_ids
+    -- RAISE EXCEPTION 'rows_sql: %:', rows_sql;
+    EXECUTE rows_sql
+    USING taxonomies, object_ids;
+    EXECUTE count_sql
+    USING taxonomies, object_ids;
+    count_count_sql := 'SELECT count(*) FROM _tmp_count';
+    EXECUTE count_count_sql INTO row_count;
+  END LOOP;
+    -- add tax_fields and insert values
+    IF cardinality(tax_fields) > 0 THEN
+      FOREACH taxfield IN ARRAY tax_fields LOOP
+        -- several fieldnames exist in many taxonomies, so need not add taxonmy-name if multiple taxonomies are used
+        -- if only one taxonomy is used, do add taxonomy-name
+        IF cardinality(taxonomies) > 1 THEN
+          fieldname := 'taxonomie__' || ae.remove_bad_chars(taxfield.pname);
+        ELSE
+          fieldname := ae.remove_bad_chars(taxonomies[1] || '__' || taxfield.pname);
+        END IF;
+        -- TODO: Error fetching data: $Spalte »ch_bafu_2001__trockenwiesen_und_weiden_von_nationaler_bedeutung« von Relation »_tmp« existiert bereits
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
+        EXECUTE format('UPDATE _tmp SET %1$s = (SELECT properties ->> %2$L FROM ae.object WHERE id = _tmp.id)', fieldname, taxfield.pname);
+      END LOOP;
+    END IF;
+    -- add property fields as extra columns and insert values
+    IF cardinality(pco_properties) > 0 THEN
+      FOREACH pcoproperty IN ARRAY pco_properties LOOP
+        fieldname := substring(ae.remove_bad_chars(pcoproperty.pcname)
+          FROM 1 FOR 20) || '__' || ae.remove_bad_chars(pcoproperty.pname);
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
+        -- join for synonyms if used
+        IF use_synonyms = TRUE THEN
+          sql2 := format('
+            UPDATE _tmp SET %1$s = (
+            SELECT distinct on (pcoo.object_id) pco.properties ->> %2$L 
+            FROM ae.pco_of_object pcoo
+              INNER JOIN ae.property_collection_object pco on pco.id = pcoo.pco_id
+              INNER JOIN ae.property_collection pc on pc.id = pco.property_collection_id and pc.name = %3$L
+            WHERE 
+              pcoo.object_id = _tmp.id)', fieldname, pcoproperty.pname, pcoproperty.pcname);
+        ELSE
+          sql2 := format('
+            UPDATE _tmp SET %1$s = (
+            SELECT properties ->> %2$L 
+            FROM ae.property_collection_object pco 
+            inner join ae.property_collection pc on pc.id = pco.property_collection_id and pc.name = %3$L
+            WHERE pco.object_id = _tmp.id)', fieldname, pcoproperty.pname, pcoproperty.pcname);
+        END IF;
+        EXECUTE sql2;
+      END LOOP;
+    END IF;
+    -- add rco-property fields and insert values
+    IF cardinality(rco_properties) > 0 THEN
+      FOREACH rcoproperty IN ARRAY rco_properties LOOP
+        rco_properties_beziehungspartner_of_this_pc_bp :=(
+          SELECT
+            ARRAY (
+              SELECT
+                _row
+              FROM
+                unnest(rco_properties) AS _row(pname,
+                  pcname,
+                  relationtype)
+              WHERE
+                pname != 'Beziehungspartner'
+                AND pcname = rcoproperty.pcname
+                AND relationtype = rcoproperty.relationtype));
+        -- field naming: pcname__relationtype__pname
+        IF rcoproperty.pname = 'Beziehungspartner' AND cardinality(rco_properties_beziehungspartner_of_this_pc_bp) > 0 THEN
+          -- skip this column
+          CONTINUE;
+        ELSE
+          fieldname := substring(ae.remove_bad_chars(rcoproperty.pcname)
+            FROM 1 FOR 20) || '__' || substring(ae.remove_bad_chars(rcoproperty.relationtype)
+            FROM 1 FOR 20) || '__' || ae.remove_bad_chars(rcoproperty.pname);
+        END IF;
+        EXECUTE format('ALTER TABLE _tmp ADD COLUMN if not exists %I text', fieldname);
+        -- join for synonyms if used
+        IF use_synonyms = TRUE THEN
+          IF rcoproperty.pname = 'Beziehungspartner' AND cardinality(rco_properties_beziehungspartner_of_this_pc_bp) = 0 THEN
+            sql2 := format('
+            UPDATE _tmp SET %1$s = (
+              SELECT distinct
+                string_agg(rel_object.name || '' ('' || rel_object.id || '')'', '' | '')
+              FROM ae.rco_of_object rcoo
+                INNER JOIN ae.relation rco on rco.id = rcoo.rco_id
+                INNER JOIN ae.property_collection pc on pc.id = rco.property_collection_id and pc.name = %2$L
+                INNER JOIN ae.object rel_object ON rel_object.id = rco.object_id_relation
+              WHERE
+                rco.object_id = _tmp.id
+                AND rco.relation_type = %3$L 
+              GROUP BY rco.object_id)', fieldname, rcoproperty.pcname, rcoproperty.relationtype);
+          ELSE
+            sql2 := format('
+            UPDATE _tmp SET %1$s = (
+              SELECT distinct
+                string_agg(rel_object.name || '' ('' || rel_object.id || ''): '' || (rco.properties ->> %2$L), '' | '' ORDER BY (rco.properties ->> %2$L))
+              FROM ae.rco_of_object rcoo
+                INNER JOIN ae.relation rco on rco.id = rcoo.rco_id
+                INNER JOIN ae.property_collection pc on pc.id = rco.property_collection_id and pc.name = %3$L
+                INNER JOIN ae.object rel_object ON rel_object.id = rco.object_id_relation
+              WHERE
+                rco.object_id = _tmp.id
+                AND rco.relation_type = %4$L 
+              GROUP BY rco.object_id)', fieldname, rcoproperty.pname, rcoproperty.pcname, rcoproperty.relationtype);
+          END IF;
+        ELSE
+          IF rcoproperty.pname = 'Beziehungspartner' AND cardinality(rco_properties_beziehungspartner_of_this_pc_bp) = 0 THEN
+            sql2 := format(' UPDATE
+              _tmp
+            SET
+              %1$s = (
+                SELECT distinct
+                  string_agg(rel_object.name || '' ('' || rel_object.id || '')'', '' | '')
+                FROM ae.relation rco
+                  INNER JOIN ae.property_collection pc ON pc.id = rco.property_collection_id
+                  INNER JOIN ae.object rel_object ON rel_object.id = rco.object_id_relation
+                WHERE
+                  rco.object_id = _tmp.id
+                  AND rco.relation_type = %3$L 
+                  AND pc.name = %2$L 
+                GROUP BY rco.object_id)', fieldname, rcoproperty.pcname, rcoproperty.relationtype);
+          ELSE
+            sql2 := format(' UPDATE
+              _tmp
+            SET
+              %1$s = (
+                SELECT distinct
+                  string_agg(rel_object.name || '' ('' || rel_object.id || ''): '' || (rco.properties ->> %2$L), '' | '' ORDER BY (rco.properties ->> %2$L))
+                FROM ae.relation rco
+                  INNER JOIN ae.property_collection pc ON pc.id = rco.property_collection_id
+                  INNER JOIN ae.object rel_object ON rel_object.id = rco.object_id_relation
+                WHERE
+                  rco.object_id = _tmp.id
+                  AND rco.relation_type = %4$L 
+                  AND pc.name = %3$L 
+                GROUP BY rco.object_id)', fieldname, rcoproperty.pname, rcoproperty.pcname, rcoproperty.relationtype);
+          END IF;
+        END IF;
+        EXECUTE sql2;
+      END LOOP;
+    END IF;
+    -- RAISE EXCEPTION 'taxonomies: %, tax_fields: %, tax_filters: %, pco_filters: %, pcs_of_pco_filters: %, pco_properties: %, use_synonyms: %, count: %, object_ids: %, rows_sql: %, fieldname: %, taxfield_sql2: %', taxonomies, tax_fields, tax_filters, pco_filters, pcs_of_pco_filters, pco_properties, use_synonyms, count, object_ids, rows_sql, fieldname, taxfield_sql2;
+    --RAISE EXCEPTION 'rows_sql: %:', rows_sql;
+    return_data.id := gen_random_uuid()::uuid;
+    return_data.count = row_count;
+    -- need to sort again here
+    IF orderby_sql_in_select IS NOT NULL THEN
+      return_query := format('
+      SELECT
+        json_agg(ROW)
+      FROM
+        (select * from _tmp %s) ROW', orderby_sql_in_select);
+    ELSE
+      return_query := '
+      SELECT
+        json_agg(ROW)
+      FROM
+        _tmp ROW';
+    END IF;
+    EXECUTE return_query INTO return_data.export_data;
+    RETURN return_data;
+    DROP TABLE _tmp;
+    DROP TABLE _tmp_count;
+END
+$function$
+

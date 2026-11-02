@@ -149,11 +149,11 @@ BEGIN
   DROP TABLE IF EXISTS _tmp;
   CREATE TEMPORARY TABLE _tmp(
     id uuid PRIMARY KEY
-  );
+  ) ON COMMIT DROP;
   DROP TABLE IF EXISTS _tmp_count;
   CREATE TEMPORARY TABLE _tmp_count(
     id uuid PRIMARY KEY
-  );
+  ) ON COMMIT DROP;
   -- insert object_ids
   FOREACH taxonomy IN ARRAY taxonomies LOOP
     -- select
