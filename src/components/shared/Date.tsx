@@ -2,7 +2,7 @@ import { useState } from 'react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
-import { DateTime } from 'luxon'
+import { format, isValid, parseISO } from 'date-fns'
 import DatePicker, { type DatePickerProps } from 'react-datepicker'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -63,8 +63,7 @@ export const DateField = ({
   }
 
   const onChangeDatePicker = (date: Date | null) => {
-    const newValue =
-      date === null ? null : DateTime.fromJSDate(date).toFormat('yyyy-LL-dd')
+    const newValue = date === null ? null : format(date, 'yyyy-MM-dd')
     setStateValue(newValue)
     saveToDb({
       target: {
@@ -74,8 +73,8 @@ export const DateField = ({
     })
   }
 
-  const isValid = DateTime.fromSQL(stateValue).isValid
-  const selected = isValid ? DateTime.fromSQL(stateValue).toJSDate() : null
+  const parsed = stateValue ? parseISO(stateValue) : null
+  const selected = parsed && isValid(parsed) ? parsed : null
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
