@@ -1,0 +1,144 @@
+import { useState } from 'react'
+import type { MouseEvent } from 'react'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
+import { MdLink as LinkIcon } from 'react-icons/md'
+
+import { parseProperties } from '../../../../modules/parseProperties'
+import styles from './LinkMenu.module.css'
+
+const ITEM_HEIGHT = 48
+
+const paperProps = {
+  style: {
+    maxHeight: ITEM_HEIGHT * 4.5,
+    width: 200,
+  },
+}
+
+type LinkMenuProps = {
+  objekt?: any
+}
+
+const LinkMenu = ({ objekt }: LinkMenuProps) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  const props = objekt?.properties ? parseProperties(objekt?.properties) : null
+  const nameDeutsch = props?.['Name Deutsch'] ?? null
+  const einheit = props?.Einheit ?? null
+  const gattung = props?.Gattung
+  const art = props?.Art
+  const taxName = objekt?.taxonomyByTaxonomyId?.name
+  const isSisf2 = taxName?.toLowerCase?.().includes?.('sisf')
+  const isDbTaxref = taxName?.toLowerCase?.().includes?.('db-taxref')
+
+  const onClickIcon = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    setAnchorEl(e.currentTarget)
+  }
+  const handleClose = () => setAnchorEl(null)
+
+  const onClickGoogleImages = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = einheit
+      ? `https://www.google.ch/search?tbm=isch&q=${einheit}`
+      : `https://www.google.ch/search?tbm=isch&q="${objekt?.name}"${
+          nameDeutsch ? `+OR+"${nameDeutsch}"` : ''
+        }`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+  const onClickWikepedia = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = einheit
+      ? `https://www.google.ch/search?q=${einheit} site:wikipedia.org`
+      : nameDeutsch
+        ? `https://www.google.ch/search?q="${nameDeutsch}"+OR+"${objekt?.name}" site:wikipedia.org`
+        : `https://www.google.ch/search?q="${objekt?.name}" site:wikipedia.org`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+  const onClickGbifFromSisf2 = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = `https://www.gbif.org/taxon/search?q=${encodeURIComponent(
+      `${gattung} ${art}`,
+    )}`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+  const onClickGbifFromDbTaxref = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = `https://www.gbif.org/taxon/search?q=${encodeURIComponent(
+      `${props?.['Artname vollständig']}`,
+    )}`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+  const onClickSisf2 = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = `https://www.infoflora.ch/de/flora/${`${gattung?.toLowerCase?.()}-${art?.toLowerCase?.()}.html`}`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+  const onClickDbTaxref = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    const url = `https://www.infoflora.ch/de/flora/${props?.['Taxonomie ID intern']}`
+    typeof window !== 'undefined' && window.open(url)
+    setAnchorEl(null)
+  }
+
+  return (
+    <div>
+      <Button
+        aria-label="Externe Links"
+        title="Externe Links"
+        aria-owns={anchorEl ? 'menu' : undefined}
+        aria-haspopup="true"
+        onClick={onClickIcon}
+        color="inherit"
+        className={styles.button}
+      >
+        <LinkIcon className={styles.linkIcon} />
+      </Button>
+      <Menu
+        id="menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        slotProps={{
+          paper: paperProps,
+        }}
+      >
+        <MenuItem key="googleBilder" onClick={onClickGoogleImages}>
+          Bilder googeln
+        </MenuItem>
+        <MenuItem key="wikipedia" onClick={onClickWikepedia}>
+          Wikipedia-Artikel suchen
+        </MenuItem>
+        {isSisf2 && gattung && art && (
+          <MenuItem key="gbif" onClick={onClickGbifFromSisf2}>
+            Im GBIF suchen
+          </MenuItem>
+        )}
+        {isDbTaxref && props?.['Artname vollständig'] && (
+          <MenuItem key="gbif" onClick={onClickGbifFromDbTaxref}>
+            Im GBIF suchen
+          </MenuItem>
+        )}
+        {isSisf2 && gattung && art && (
+          <MenuItem key="infoflora" onClick={onClickSisf2}>
+            Bei Info Flora suchen
+          </MenuItem>
+        )}
+        {isDbTaxref && props?.['Taxonomie ID intern'] && (
+          <MenuItem key="db-taxref" onClick={onClickDbTaxref}>
+            Bei Info Flora suchen
+          </MenuItem>
+        )}
+      </Menu>
+    </div>
+  )
+}
+
+export default LinkMenu

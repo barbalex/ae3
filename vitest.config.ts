@@ -1,0 +1,15 @@
+import { configDefaults, defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+
+// deliberately separate from vite.config.ts:
+// tests need neither the PWA build nor svgr/babel react-compiler,
+// only jsx (same as the app)
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    // e2e tests use playwright and have their own runner: npm run test:e2e
+    exclude: ['e2e/**', ...configDefaults.exclude],
+  },
+})
