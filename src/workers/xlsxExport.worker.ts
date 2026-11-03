@@ -17,7 +17,7 @@ self.onmessage = async (event) => {
       return
     }
     if (action === 'finish') {
-      const buffer = builder!.toBuffer()
+      const buffer = await builder!.toBuffer()
       builder = undefined
       self.postMessage({ id, result: buffer }, [buffer])
       return

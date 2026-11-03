@@ -50,7 +50,8 @@
     "react-router": "8.5.0",
     "react-select": "5.10.2",
     "use-debounce": "10.1.1",
-    "virtua": "0.54.0"
+    "virtua": "0.54.0",
+    "write-excel-file": "4.1.1"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -54,13 +54,14 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,jsx,ts,tsx,css,html,ico,png,jpg,svg,webp,json,woff2,woff}',
         ],
-        // exceljs and xlsx (~1.3 MB combined) are lazily imported on
-        // first export/import; don't make every first visit download
-        // them. They are runtime-cached below after first use
-        globIgnores: ['**/exceljs.min-*.js', '**/xlsx-*.js'],
+        // xlsx (@e965/xlsx, ~1 MB, import worker) is lazily imported on
+        // first import; don't make every first visit download it.
+        // It is runtime-cached below after first use.
+        // write-excel-file (export, ~71 KB) is small enough to precache
+        globIgnores: ['**/xlsx-*.js'],
         runtimeCaching: [
           {
-            urlPattern: /\/assets\/(exceljs\.min|xlsx)-[^/]+\.js$/,
+            urlPattern: /\/assets\/xlsx-[^/]+\.js$/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'excel-chunks',

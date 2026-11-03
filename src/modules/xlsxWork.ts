@@ -1,22 +1,24 @@
+import type { SheetData } from 'write-excel-file/browser'
+
+import { autoFilterFeature } from './autoFilterFeature'
+
 type XlsxBuilder = {
   appendRows: (jsonArray: any[]) => void
-  toBuffer: () => ArrayBuffer
+  toBuffer: () => Promise<ArrayBuffer>
 }
 
 /**
  * writes a dataArray to an Excel workbook. Runs inside
- * workers/xlsxExport.worker.ts - @e965/xlsx is loaded only there
- * (same library as the import worker).
- * note: the community edition writes no cell styles and no frozen
- * panes - the exceljs header styling and frozen header row are gone
+ * workers/xlsxExport.worker.ts - write-excel-file is loaded only there.
+ * the header row is frozen, styled and filterable - like the old
+ * exceljs exports (before the @e965/xlsx interlude, which could
+ * write neither cell styles nor frozen panes)
  */
 export const createXlsxBuilder = async (
   columns: string[],
 ): Promise<XlsxBuilder> => {
-  const XLSX = await import('@e965/xlsx')
-  const worksheet = XLSX.utils.aoa_to_sheet([columns])
-  const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Daten')
+  const writeXlsxFile = (await import('write-excel-file/browser')).default
+  const rows: any[][] = []
 
   return {
     appendRows: (jsonArray: any[]) => {
@@ -25,17 +27,23 @@ export const createXlsxBuilder = async (
           column in object ? object[column] : '',
         ),
       )
-      if (values.length) {
-        XLSX.utils.sheet_add_aoa(worksheet, values, { origin: -1 })
-      }
+      rows.push(...values)
     },
-    toBuffer: () => {
-      if (columns.length) {
-        worksheet['!autofilter'] = {
-          ref: `A1:${XLSX.utils.encode_col(columns.length - 1)}1`,
-        }
-      }
-      return XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+    toBuffer: async () => {
+      const data: SheetData = [
+        columns.map((column) => ({
+          value: column,
+          fontWeight: 'bold',
+          backgroundColor: '#D3D3D3',
+          bottomBorderStyle: 'thin',
+        })),
+        ...rows,
+      ]
+      const blob = await writeXlsxFile(
+        [{ sheet: 'Daten', stickyRowsCount: 1, data }],
+        { features: [autoFilterFeature] },
+      ).toBlob()
+      return blob.arrayBuffer()
     },
   }
 }

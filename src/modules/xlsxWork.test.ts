@@ -21,11 +21,14 @@ describe('buildXlsxBuffer', () => {
     builder.appendRows([{ Art: 'Apfel', Gruppe: 'Pflanzen' }])
     builder.appendRows([{ Art: 'Birne' }])
 
-    const workbook = read(builder.toBuffer(), { type: 'array' })
+    const workbook = read(await builder.toBuffer(), { type: 'array' })
+    // write-excel-file skips empty cells entirely - alignment is kept
+    // because cells are address-positioned. Trailing empty cells
+    // therefore do not appear when reading back
     expect(utils.sheet_to_json(workbook.Sheets.Daten, { header: 1 })).toEqual([
       ['Art', 'Gruppe'],
       ['Apfel', 'Pflanzen'],
-      ['Birne', ''],
+      ['Birne'],
     ])
   })
 })
