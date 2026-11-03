@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Outlet } from 'react-router'
 
-import { Tree } from '../Tree/index'
+import { LazyTree } from './LazyTree'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 import { Spinner } from '../shared/Spinner'
 
@@ -15,7 +15,9 @@ export const DataFlexed = () => (
         flex={0.35}
         className="tree-reflex-element"
       >
-        <Tree />
+        <Suspense fallback={<Spinner />}>
+          <LazyTree />
+        </Suspense>
       </ReflexElement>
       <ReflexSplitter key="treeSplitter" />
       <ReflexElement className={styles.dataElement}>

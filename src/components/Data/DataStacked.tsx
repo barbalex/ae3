@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab'
 import { useAtomValue } from 'jotai'
 import { Outlet } from 'react-router'
 
-import { Tree } from '../Tree/index'
+import { LazyTree } from './LazyTree'
 import { Spinner } from '../shared/Spinner'
 import { windowHeightAtom } from '../../store'
 
@@ -53,7 +53,11 @@ export const DataStacked = () => {
         // the following height is needed for home to scroll
         style={{ height: windowHeight - 103 }}
       >
-        {tab === 0 && <Tree />}
+        {tab === 0 && (
+          <Suspense fallback={<Spinner />}>
+            <LazyTree />
+          </Suspense>
+        )}
         {tab === 1 && (
           // scope suspending data panes here so they never blank the tree
           <Suspense fallback={<Spinner />}>
