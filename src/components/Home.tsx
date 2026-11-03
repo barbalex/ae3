@@ -13,6 +13,8 @@ const Home = () => (
     <ProgressiveImg
       src={image}
       placeholderSrc={placeholderSrc}
+      fetchPriority="high"
+      decoding="async"
     />
     <div className={styles.scrollContainer}>
       <div className={styles.cardContainer}>

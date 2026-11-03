@@ -1,8 +1,54 @@
 import { defineConfig } from 'vite'
+import type { Plugin } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
 import babel from '@rolldown/plugin-babel'
+
+// The home hero image (home.webp) is the LCP element, but it is rendered by
+// the lazy Home route chunk, so the browser only discovers it after the app
+// JS has run. This injects an inline script into <head> that preloads the
+// hashed asset with high priority — running during the initial HTML parse,
+// before any app JS is fetched (Lighthouse: "LCP request discovery"). The
+// SPA shares one index.html, so the script preloads only on the routes that
+// render Home; the segment list mirrors the index routes in Router.tsx.
+const preloadHomeImage = (): Plugin => ({
+  name: 'preload-home-image',
+  apply: 'build',
+  transformIndexHtml: {
+    order: 'post',
+    handler: (_html, ctx) => {
+      const homeImage = Object.values(ctx.bundle ?? {}).find(
+        (file) =>
+          file.type === 'asset' && /home-[^/]+\.webp$/.test(file.fileName),
+      )
+      if (!homeImage) {
+        throw new Error('preload-home-image: home.webp not in build output')
+      }
+      const href = `/${homeImage.fileName}`
+      const script = String.raw`(() => {
+  const homeSegments = ['Arten', 'Lebensräume', 'Eigenschaften-Sammlungen', 'Benutzer', 'Organisationen']
+  const segments = decodeURIComponent(window.location.pathname).split('/').filter(Boolean)
+  const isHome = segments.length === 0 || (segments.length === 1 && homeSegments.includes(segments[0]))
+  if (!isHome) return
+  const link = document.createElement('link')
+  link.rel = 'preload'
+  link.as = 'image'
+  link.type = 'image/webp'
+  link.setAttribute('fetchpriority', 'high')
+  link.href = '${href}'
+  document.head.appendChild(link)
+})()`
+      return [
+        {
+          tag: 'script',
+          children: script,
+          injectTo: 'head-prepend',
+        },
+      ]
+    },
+  },
+})
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -120,6 +166,7 @@ export default defineConfig({
     babel({
       presets: [reactCompilerPreset()],
     }),
+    preloadHomeImage(),
   ],
   css: {
     modules: {

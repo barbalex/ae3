@@ -11,17 +11,19 @@ type ProgressiveImgProps = Omit<ComponentProps<'img'>, 'src'> & {
 export const ProgressiveImg = ({
   placeholderSrc,
   src,
+  fetchPriority = 'auto',
   ...props
 }: ProgressiveImgProps) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
 
   useEffect(() => {
     const img = new Image()
+    img.fetchPriority = fetchPriority
     img.src = src
     img.onload = () => {
       setImgSrc(src)
     }
-  }, [src])
+  }, [src, fetchPriority])
 
   const isLoading = placeholderSrc && imgSrc === placeholderSrc
 
@@ -33,7 +35,7 @@ export const ProgressiveImg = ({
    */
   return (
     <img
-      {...{ src: imgSrc ?? src, ...props }}
+      {...{ src: imgSrc ?? src, fetchPriority, ...props }}
       alt={props.alt || ''}
       className={`${styles.img} ${isLoading ? styles.imgLoading : ''}`}
     />
