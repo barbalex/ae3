@@ -56,7 +56,7 @@ services:
     environment:
       # connects with the same authenticator and jwt secret postgraphile used:
       # tokens issued by ae.login remain valid.
-      # the secret contains a dollar sign, so .env escapes it as $$
+      # if the secret contains a dollar sign, .env must escape it as $$
       PGRST_DB_URI: ${DATABASE_URL}
       # v12 may otherwise try reading config from the database
       PGRST_DB_CONFIG: 'false'
