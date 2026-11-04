@@ -20,6 +20,7 @@ import {
   collectionSortDirection,
   fetchCollectionPages,
 } from '../../../modules/collectionExport'
+import loadingStyles from '../loading.module.css'
 import styles from './index.module.css'
 
 const rcoRowsPath = (
@@ -295,7 +296,7 @@ export const RCO = () => {
                   onClick={onClickXlsx}
                   variant="outlined"
                   color="inherit"
-                  className={`button ${xlsxExportLoading ? styles.buttonLoading : ''}`}
+                  className={`button ${xlsxExportLoading ? loadingStyles.buttonLoading : ''}`}
                 >
                   xlsx exportieren
                 </Button>
@@ -303,7 +304,7 @@ export const RCO = () => {
                   onClick={onClickCsv}
                   variant="outlined"
                   color="inherit"
-                  className={`button ${csvExportLoading ? styles.buttonLoading : ''}`}
+                  className={`button ${csvExportLoading ? loadingStyles.buttonLoading : ''}`}
                 >
                   csv exportieren
                 </Button>
@@ -321,7 +322,7 @@ export const RCO = () => {
                     onClick={onClickDelete}
                     variant="outlined"
                     color="inherit"
-                    className={`button ${deleteLoading ? styles.buttonLoading : ''}`}
+                    className={`button ${deleteLoading ? loadingStyles.buttonLoading : ''}`}
                   >
                     Daten löschen
                   </Button>

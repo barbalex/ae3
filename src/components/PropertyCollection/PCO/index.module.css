@@ -52,15 +52,4 @@
 
 .button {
   margin: 5px !important;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-}
-
-.buttonLoading {
-  font-style: italic;
-  animation: blinker 1s linear infinite;
-  animation: blinker 1s linear infinite;
 }
