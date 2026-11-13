@@ -1,9 +1,12 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
 import babel from '@rolldown/plugin-babel'
+
+const pkg = JSON.parse(readFileSync('./package.json', 'utf8'))
 
 // The home hero image (home.webp) is the LCP element, but it is rendered by
 // the lazy Home route chunk, so the browser only discovers it after the app
@@ -47,6 +50,26 @@ const preloadHomeImage = (): Plugin => ({
         },
       ]
     },
+  },
+})
+
+// the version-check banner fetches /version.json to compare the
+// deployed version against the running bundle (src/components/
+// VersionCheck). The file must never be cached — neither by the
+// service worker (globIgnores in the workbox options below) nor
+// by Vercel (headers in vercel.json).
+const emitVersionJson = (): Plugin => ({
+  name: 'emit-version-json',
+  apply: 'build',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'version.json',
+      source: JSON.stringify({
+        version: pkg.version,
+        versionDate: pkg.versionDate,
+      }),
+    })
   },
 })
 
@@ -104,7 +127,9 @@ export default defineConfig({
         // first import; don't make every first visit download it.
         // It is runtime-cached below after first use.
         // write-excel-file (export, ~71 KB) is small enough to precache
-        globIgnores: ['**/xlsx-*.js'],
+        // version.json must always come from the network (see
+        // emitVersionJson above)
+        globIgnores: ['version.json', '**/xlsx-*.js'],
         runtimeCaching: [
           {
             urlPattern: /\/assets\/xlsx-[^/]+\.js$/,
@@ -166,6 +191,7 @@ export default defineConfig({
     babel({
       presets: [reactCompilerPreset()],
     }),
+    emitVersionJson(),
     preloadHomeImage(),
   ],
   css: {

@@ -19,6 +19,7 @@ import {
 import { detectIE } from './modules/detectIE'
 import { Router } from './components/Router'
 import { Spinner } from './components/shared/Spinner'
+import { VersionCheck } from './components/VersionCheck'
 const Stacker = lazy(async () => ({
   default: (await import('./components/Stacker')).Stacker,
 }))
@@ -100,6 +101,7 @@ export const App = () => {
             <Suspense fallback={<div />}>
               <Stacker />
             </Suspense>
+            <VersionCheck />
           </ThemeProvider>
         </StyledEngineProvider>
       </QueryClientProvider>
