@@ -22,7 +22,15 @@ import type { TreeNode } from '../treeModel'
 
 import styles from './index.module.css'
 
-export const Row = ({ data }: { data: TreeNode }) => {
+export const Row = ({
+  data,
+  tabIndex,
+  onKeydown,
+}: {
+  data: TreeNode
+  tabIndex: number
+  onKeydown: (event: React.KeyboardEvent<HTMLDivElement>) => void
+}) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const navigate = useNavigate()
   const openTreeContextMenu = useSetAtom(treeContextMenuAtom)
@@ -125,6 +133,11 @@ export const Row = ({ data }: { data: TreeNode }) => {
       onClick={onClickNode}
       // need this id to scroll elements into view
       id={data.id}
+      role="treeitem"
+      aria-level={level}
+      aria-expanded={data.childrenCount ? nodeIsInActiveNodePath : undefined}
+      tabIndex={tabIndex}
+      onKeyDown={onKeydown}
       onContextMenu={onContextMenuNode}
       onPointerDown={onPointerDownNode}
       onPointerMove={onPointerMoveNode}

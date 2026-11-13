@@ -2,6 +2,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
+import { isEqual } from 'es-toolkit'
+import { useNavigate } from 'react-router'
 import { VList, type VListHandle } from 'virtua'
 
 import { Row } from './Row/index'
@@ -21,6 +23,7 @@ const keyId = (queryKey: readonly unknown[]) => queryKey.join('/')
 // of every subscribed list query (see below)
 export const VirtualizedTree = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const navigate = useNavigate()
   const loginToken = useAtomValue(loginTokenAtom)
   const hasToken = !!loginToken
   const queryClient = useQueryClient()
@@ -117,6 +120,100 @@ export const VirtualizedTree = () => {
     [queryClient],
   )
 
+  // keyboard navigation with a roving tabindex over the flat row list:
+  // without explicit focus the active row is the tab stop, otherwise
+  // the focused row is (loading/more rows are skipped)
+  const [focusIndex, setFocusIndex] = useState(-1)
+  const activeIndex = rows.findIndex(
+    (row) => row.type === 'row' && isEqual(row.data.url, activeNodeArray),
+  )
+  const tabIndexIndex = focusIndex === -1 ? activeIndex : focusIndex
+
+  const focusRow = (index: number) => {
+    if (index === tabIndexIndex) return
+    setFocusIndex(index)
+    listRef.current?.scrollToIndex(index, { align: 'nearest' })
+    // virtua only mounts rows near the viewport; focus after it has
+    // rendered the scrolled-to row
+    requestAnimationFrame(() => {
+      const row = rowsRef.current[index]
+      if (row?.type === 'row') {
+        document.getElementById(row.data.id)?.focus()
+      }
+    })
+  }
+  const nextRowIndex = (from: number, delta: number) => {
+    let index = from
+    do {
+      index += delta
+    } while (
+      index >= 0 &&
+      index < rows.length &&
+      rows[index].type !== 'row'
+    )
+    return index >= 0 && index < rows.length ? index : from
+  }
+
+  const onKeyDownRow = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    const row = rows[index]
+    if (row.type !== 'row') return
+    const url = row.data.url ?? []
+    const expanded =
+      url.length <= activeNodeArray.length &&
+      isEqual(activeNodeArray.slice(0, url.length), url)
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault()
+        focusRow(nextRowIndex(index, 1))
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        focusRow(nextRowIndex(index, -1))
+        break
+      case 'ArrowRight':
+        event.preventDefault()
+        if (!row.data.childrenCount) break
+        // expansion is url state: navigating into the node expands it,
+        // when already expanded move focus to the first child row
+        if (!expanded) {
+          navigate(`/${url.join('/')}`)
+        } else {
+          focusRow(nextRowIndex(index, 1))
+        }
+        break
+      case 'ArrowLeft':
+        event.preventDefault()
+        // collapsing activates the parent, like the open symbol does;
+        // a collapsed node moves focus to its parent row
+        if (expanded && url.length > 0) {
+          navigate(`/${url.toSpliced(-1).join('/')}`)
+        } else {
+          const parentIndex = rows.findIndex(
+            (r, i) =>
+              i < index && r.type === 'row' && r.data.url?.length === url.length - 1,
+          )
+          if (parentIndex !== -1) focusRow(parentIndex)
+        }
+        break
+      case 'Home':
+        event.preventDefault()
+        focusRow(nextRowIndex(-1, 1))
+        break
+      case 'End':
+        event.preventDefault()
+        focusRow(nextRowIndex(rows.length, -1))
+        break
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        if (!isEqual(url, activeNodeArray)) navigate(`/${url.join('/')}`)
+        break
+    }
+  }
+
   return (
     <TreeScrollProvider value={scrollToId}>
       <VList
@@ -124,6 +221,8 @@ export const VirtualizedTree = () => {
         // rows are 23px high (see Row/index.module.css); the hint
         // avoids scroll jumps while virtua measures
         itemSize={23}
+        role="tree"
+        aria-label="Baum"
         style={{
           height: `calc(100vh - ${constants.appBarHeight}px - 39px)`,
           flex: '1 1 auto',
@@ -132,7 +231,14 @@ export const VirtualizedTree = () => {
       >
         {rows.map((row, index) => {
           if (row.type === 'row') {
-            return <Row key={row.data.id} data={row.data} />
+            return (
+              <Row
+                key={row.data.id}
+                data={row.data}
+                tabIndex={index === tabIndexIndex ? 0 : -1}
+                onKeydown={(event) => onKeyDownRow(event, index)}
+              />
+            )
           }
           if (row.type === 'loading') {
             return <LoadingRow key={`loading-${index}`} level={row.level} />

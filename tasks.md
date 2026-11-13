@@ -10,3 +10,11 @@
 - [ ] 8. Type `apiFetch<T>` / `rpc<T>`; delete GraphQL-compat shims (.nodes/.totalCount wrapping); reduce `any` count (237)
 - [ ] 9. Tests for VirtualizedTree walk/render + import validation (after unification)
 - [ ] 10. Cleanup: sequential awaits → Promise.all (Objekt/index.tsx, Objekt/PC/index.tsx); export progress via Snackbar instead of console.log; dead code (isMobilePhone.ts, exportTooManyPropertiesAtom, identity reducer); stale mobx TODO; alt_query.sql/alt_function.sql; Projektbeschreibung.tsx → markdown
+
+---
+
+do we need a 'how to build/update production' documentation to prevent agents from having to find out themselves?
+
+---
+
+do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
