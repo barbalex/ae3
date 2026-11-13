@@ -1,5 +1,5 @@
 import { useState, useReducer } from 'react'
-import { omit, union } from 'es-toolkit'
+import { omit, uniq } from 'es-toolkit'
 import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
@@ -73,7 +73,7 @@ const getobjectIdsUnreal = ({
 const getImportDataFields = (importData: any[]) => {
   let fields: string[] = []
   importData.forEach((d) => {
-    fields = (union as unknown as (arr: any[]) => any[])([
+    fields = uniq([
       ...fields,
       ...Object.keys(d),
     ])
@@ -199,7 +199,7 @@ export const ImportPco = ({
         setImportData(data)
         let importDataFields: string[] = []
         data.forEach((d: any) => {
-          importDataFields = (union as unknown as (arr: any[]) => any[])([
+          importDataFields = uniq([
             ...importDataFields,
             ...Object.keys(d),
           ])
@@ -245,7 +245,7 @@ export const ImportPco = ({
           : undefined
         setPCOfOriginIds(uniquePCOfOriginIds)
 
-        const propertyKeys = (union as unknown as (arr: any[]) => any[])(
+        const propertyKeys = uniq<any>(
           data
             .map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))
             ?.flat?.(),
@@ -266,7 +266,7 @@ export const ImportPco = ({
               return k.includes('\\')
             })
           : undefined
-        const propertyValues = (union as unknown as (arr: any[]) => any[])(
+        const propertyValues = uniq<any>(
           data.map((d: any) => Object.values(d))?.flat?.(),
         )
         checkState.propertyValuesDontContainApostroph = !some(

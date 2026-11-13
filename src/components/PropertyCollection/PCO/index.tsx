@@ -1,5 +1,5 @@
 import { useState, Suspense } from 'react'
-import { union } from 'es-toolkit'
+import { uniq } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
@@ -167,7 +167,7 @@ export const PCO = () => {
     pcoData?.propertyCollectionById?.organizationByOrganizationId
       ?.organizationUsersByOrganizationId ?? []
   ).filter((u: any) => ['orgAdmin', 'orgCollectionWriter'].includes(u.role))
-  const writerNames = (union as unknown as (arr: any[]) => any[])(
+  const writerNames = uniq(
     pCOWriters.map((w: any) => w.userByUserId.name),
   )
   const userIsWriter = !!username && writerNames.includes(username)
