@@ -1,0 +1,25 @@
+# typecheck, unit tests and lint on every push and pull request.
+# e2e (playwright) is not run here: it needs the PostgREST backend
+# (backend-dev docker compose), see npm run test:e2e
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      # .npmrc uses force=true and save-exact=true; a plain install also
+      # respects the lockfile, matching the local setup closely enough
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx eslint .
