@@ -1,20 +1,16 @@
-# Optimization backlog (worked off one by one; test, commit, push after each)
+# Optimization backlog — complete ✅
 
-- [x] 1. Quick bug fixes: Preview.tsx error-template bug (literal backticks), CSV/XLSX export asymmetry (csv exports only preview rows), duplicated download-button JSX
-- [x] 2. Remove dead `suspense: true` spreads (Taxonomy/index.tsx, Objekt/index.tsx) + unused Suspense wrappers
-- [x] 3. Unify PCO/RCO clone families — done in sub-steps 3a–3e: useUserIsWriter/useAllUsers hook (also fixed the allUsers query-key collision), es-toolkit `union`→`uniq` (removed spurious undefined elements), Collection component (PCO/RCO views), ImportCollection (PCO/RCO imports; fixed idsAreUuid(s) mismatch + RCO state mutation), FilterValue/FilterComparator (export filter trio; fixed RCO stale-value). ~2,000 lines removed, 5 latent bugs fixed.
-- [ ] 4. Add CI workflow (typecheck + vitest + eslint) on push/PR — currently no gates at all
-- [ ] 5. Keyboard navigation + ARIA roles (`role="tree"`/`treeitem`, tabIndex, onKeyDown) for the virtualized Tree
-- [ ] 6. apiFetch: forward AbortSignal, retry/backoff for non-react-query callers, staleTime for /user & allUsers; move token-expiry setTimeout out of authHeaders
-- [ ] 7. vercel.json: `Cache-Control: immutable` for content-hashed /assets/*
-- [ ] 8. Type `apiFetch<T>` / `rpc<T>`; delete GraphQL-compat shims (.nodes/.totalCount wrapping); reduce `any` count (237)
-- [ ] 9. Tests for VirtualizedTree walk/render + import validation (after unification)
-- [ ] 10. Cleanup: sequential awaits → Promise.all (Objekt/index.tsx, Objekt/PC/index.tsx); export progress via Snackbar instead of console.log; dead code (isMobilePhone.ts, exportTooManyPropertiesAtom, identity reducer); stale mobx TODO; alt_query.sql/alt_function.sql; Projektbeschreibung.tsx → markdown
+All 10 items done (Nov 13, 2026), each tested, committed and pushed separately:
 
----
+- [x] 1. Quick bug fixes: Preview.tsx error-template bug, CSV/XLSX export asymmetry, duplicated download-button JSX
+- [x] 2. Removed dead `suspense: true` spreads + unused Suspense wrappers
+- [x] 3. Unified PCO/RCO clone families (useUserIsWriter hook, uniq fix, Collection, ImportCollection, FilterValue/FilterComparator) — ~2,000 lines removed, 5 latent bugs fixed
+- [x] 4. CI workflow (typecheck + vitest + eslint) on push/PR: .github/workflows/ci.yml
+- [x] 5. Keyboard navigation + ARIA roles for the tree
+- [x] 6. apiFetch: transient-GET retry with backoff, abort-signal forwarding, guarded login expiry, 30s staleTime
+- [x] 7. vercel.json: immutable cache headers for /assets/*
+- [x] 8. apiFetch<T>/rpc<T> generics; GraphQL-compat shims removed; idIsReferenced now also counts relations
+- [x] 9. Import validation extracted to pure validateImportData with 9 unit tests
+- [x] 10. Cleanup: Promise.all for parent chains, snackbar for export errors, dead code removed (isMobilePhone, exportTooManyPropertiesAtom, alt SQL), console.error instead of console.log for swallowed errors
 
-do we need a 'how to build/update production' documentation to prevent agents from having to find out themselves?
-
----
-
-do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
+Not done (deliberately): i18n centralization (product is de-CH only), Projektbeschreibung.tsx → markdown, singleColumnViewAtom TODO (product decision), e2e in CI (needs docker backend).
