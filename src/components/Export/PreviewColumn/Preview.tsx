@@ -66,6 +66,22 @@ export const Preview = () => {
 
   const sortFieldForQuery = getSortFieldForQuery(sortField)
 
+  // shared between the preview query and the full downloads (count: 0 = all rows)
+  const rpcArgs = (rowLimit: number) => ({
+    typ: type!.toLowerCase(),
+    taxonomies,
+    taxFields,
+    taxFilters,
+    pcoFilters,
+    pcoProperties,
+    rcoFilters,
+    rcoProperties,
+    useSynonyms: withSynonymData,
+    count: rowLimit,
+    objectIds: exportIds,
+    sortField: sortFieldForQuery,
+  })
+
   const onGridSort = (column: string | undefined, direction: string) => {
     if (direction === 'NONE') return setSortField(undefined)
     // setSortFields
@@ -150,20 +166,7 @@ export const Preview = () => {
       const data = await (async () => {
           const r = await rpc(
             'export_all_json',
-            {
-              typ: type!.toLowerCase(),
-              taxonomies,
-              taxFields,
-              taxFilters,
-              pcoFilters,
-              pcoProperties,
-              rcoFilters,
-              rcoProperties,
-              useSynonyms: withSynonymData,
-              count,
-              objectIds: exportIds,
-              sortField: sortFieldForQuery,
-            },
+            rpcArgs(count),
             // the wrapper takes one jsonb parameter
             { headers: { Prefer: 'params=single-object' } },
           )
@@ -199,52 +202,46 @@ export const Preview = () => {
 
   const anzFelder = fields.length ?? 0
 
-  const onClickXlsx = async () => {
-    // 1. download the full rows
-    // 2. rowsFromObjects
+  // fetches all rows (count: 0), like the xlsx export does
+  const fetchAllRows = async () => {
     const r = await rpc(
       'export_all_json',
-      {
-        typ: type!.toLowerCase(),
-        taxonomies,
-        taxFields,
-        taxFilters,
-        pcoFilters,
-        pcoProperties,
-        rcoFilters,
-        rcoProperties,
-        useSynonyms: withSynonymData,
-        count: 0,
-        objectIds: exportIds,
-        sortField: sortFieldForQuery,
-      },
+      rpcArgs(0),
       // the wrapper takes one jsonb parameter
       { headers: { Prefer: 'params=single-object' } },
     )
-    const data = {
-      data: {
-        exportAll: {
-          exportDatum: { count: r.count, exportData: r.export_data },
-        },
-      },
-    }
-    const rows =
-      data?.data?.exportAll?.exportDatum?.exportData ?
-        data?.data?.exportAll?.exportDatum?.exportData
-      : []
+    return r.export_data ?? []
+  }
+
+  const onClickXlsx = async () => {
+    // 1. download the full rows
+    // 2. rowsFromObjects
+    const rows = await fetchAllRows()
     const { exportXlsx } = await import('../../../modules/exportXlsx')
     exportXlsx({ rows, onSetMessage })
   }
 
   const onClickCsv = async () => {
+    const rows = await fetchAllRows()
     const { exportCsv } = await import('../../../modules/exportCsv')
     exportCsv(rows)
   }
 
+  const downloadButtons = (
+    <>
+      <Button className={styles.button} onClick={onClickXlsx} color="inherit">
+        .xlsx herunterladen
+      </Button>
+      <Button className={styles.button} onClick={onClickCsv} color="inherit">
+        .csv herunterladen
+      </Button>
+    </>
+  )
+
   if (exportError) {
     return (
       <div className={styles.errorContainer}>
-        `Error fetching data: ${exportError.message}`
+        {`Error fetching data: ${exportError.message}`}
       </div>
     )
   }
@@ -253,22 +250,7 @@ export const Preview = () => {
     <ErrorBoundary>
       <div className={styles.container}>
         {rowCount > 0 && (
-          <div className={styles.topButtonsContainer}>
-            <Button
-              className={styles.button}
-              onClick={onClickXlsx}
-              color="inherit"
-            >
-              .xlsx herunterladen
-            </Button>
-            <Button
-              className={styles.button}
-              onClick={onClickCsv}
-              color="inherit"
-            >
-              .csv herunterladen
-            </Button>
-          </div>
+          <div className={styles.topButtonsContainer}>{downloadButtons}</div>
         )}
         {rowCount > 0 && (
           <div className={styles.spreadsheetContainer}>
@@ -300,22 +282,7 @@ export const Preview = () => {
           </div>
         )}
         {rowCount > 0 && (
-          <div className={styles.buttonsContainer}>
-            <Button
-              className={styles.button}
-              onClick={onClickXlsx}
-              color="inherit"
-            >
-              .xlsx herunterladen
-            </Button>
-            <Button
-              className={styles.button}
-              onClick={onClickCsv}
-              color="inherit"
-            >
-              .csv herunterladen
-            </Button>
-          </div>
+          <div className={styles.buttonsContainer}>{downloadButtons}</div>
         )}
         <Snackbar
           className={styles.snackbar}
