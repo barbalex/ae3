@@ -99,7 +99,7 @@ const User = () => {
         const message = 'Email ist nicht gültig'
         return setEmailErrorText(message)
       }
-      return console.log(error)
+      return console.error(error)
     }
     refetch()
     // refetch to update

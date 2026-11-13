@@ -28,11 +28,13 @@ export const PC = ({ pcId, objId }: PCProps) => {
       if (!pC) return null
       // attach ancestor chains for url building
       // (formerly recursive graphql queries)
-      for (const r of pC.relations ?? []) {
-        if (r.objectByObjectIdRelation) {
-          await attachParentChain(r.objectByObjectIdRelation)
-        }
-      }
+      await Promise.all(
+        (pC.relations ?? []).map((r: any) =>
+          r.objectByObjectIdRelation ?
+            attachParentChain(r.objectByObjectIdRelation)
+          : undefined,
+        ),
+      )
       return pC
     },
   })

@@ -146,7 +146,7 @@ const getCustomStyles = (
 })
 
 export const Filter = () => {
-  // TODO: use local state instead of mobx for label, id
+  // TODO: use local state for label, id
   const treeFilterId = useAtomValue(treeFilterIdAtom)
   const setTreeFilter = useSetAtom(setTreeFilterAtom)
   const scrollIntoView = useSetAtom(scrollIntoViewAtom)

@@ -55,9 +55,7 @@ export const DataTable = ({
   data,
   order = 'ASC',
   orderBy = 'id',
-  setOrder = () => {
-    console.log('no setOrder function provided')
-  },
+  setOrder = () => {},
   idKey = 'id',
   sorted = false,
   uniqueKeyCombo,

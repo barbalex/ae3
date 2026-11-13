@@ -67,7 +67,7 @@ export const fetchLogin = async ({
       changeNameErrorText(message)
       return changePassErrorText(message)
     }
-    return console.log(error)
+    return console.error(error)
   }
   const jwtToken = res?.token
   if (jwtToken) {
@@ -83,7 +83,7 @@ export const fetchLogin = async ({
         queryKey: ['tree'],
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
     changeNameErrorText(null)
     changePassErrorText(null)

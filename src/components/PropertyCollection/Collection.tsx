@@ -2,6 +2,7 @@ import { useState, Suspense } from 'react'
 import type { ReactElement } from 'react'
 import { uniq } from 'es-toolkit'
 import Button from '@mui/material/Button'
+import Snackbar from '@mui/material/Snackbar'
 import {
   useQueryClient,
   useQuery,
@@ -212,6 +213,16 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
     }
   }
 
+  const [message, setMessage] = useState('')
+  // exportXlsx passes the caught Error; the snackbar needs its text
+  // (rendering the Error object itself would crash React)
+  const onSetMessage = (error: Error) => {
+    setMessage(error.message)
+    if (error.message) {
+      setTimeout(() => setMessage(''), 5000)
+    }
+  }
+
   const onClickXlsx = async () => {
     setXlsxExportLoading(true)
     try {
@@ -219,7 +230,7 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
       await exportXlsxFromPages({
         columns: keys,
         pages: exportPages(),
-        onSetMessage: console.log,
+        onSetMessage,
       })
     } finally {
       setXlsxExportLoading(false)
@@ -333,6 +344,11 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
         )}
         {showImport && <ImportComponent setImport={setImport} />}
       </Suspense>
+      <Snackbar
+        className={styles.snackbar}
+        open={!!message}
+        message={message}
+      />
     </div>
   )
 }

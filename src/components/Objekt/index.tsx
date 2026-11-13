@@ -54,9 +54,12 @@ export const Objekt = () => {
       if (!objekt) return { objekt: null, pcs: [] }
       // attach ancestor chains for url building (formerly recursive graphql)
       await attachParentChain(objekt)
-      for (const s of objekt.synonymsByObjectId ?? []) {
-        await attachParentChain(s.objectByObjectIdSynonym)
-      }
+      // every chain is its own api round trip; fetch them in parallel
+      await Promise.all(
+        (objekt.synonymsByObjectId ?? []).map((s: any) =>
+          attachParentChain(s.objectByObjectIdSynonym),
+        ),
+      )
       const pcs = await fetchPcsForObjectIds([objectId])
       return { objekt, pcs }
     },

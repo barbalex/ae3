@@ -53,3 +53,10 @@
 .button {
   margin: 5px !important;
 }
+
+.snackbar {
+  div {
+    min-width: auto;
+    background-color: var(--ae-green) !important;
+  }
+}
