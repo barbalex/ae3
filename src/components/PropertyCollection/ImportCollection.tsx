@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import type { ComponentType } from 'react'
-import { omit, uniq } from 'es-toolkit'
-import { some } from 'es-toolkit/compat'
 import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import Dropzone from 'react-dropzone'
@@ -12,15 +10,19 @@ import { apiFetch } from '../../modules/api'
 import { bulkUpsert } from '../../modules/bulkUpsert'
 import { parseImportFile } from '../../modules/parseImportFile'
 import { activeNodeArrayAtom } from '../../store'
-import { isUuid } from '../../modules/isUuid'
 import { DataTable } from '../shared/DataTable'
 import { CountInput } from '../Export/PreviewColumn/CountInput'
+import {
+  getImportDataFields,
+  validateImportData,
+} from './validateImportData'
+import type { ImportCheckState } from './validateImportData'
 
 import styles from './Import.module.css'
 
 // per-row validation results; all undefined until a file is dropped.
 // keys not used by a collection kind are simply never set
-type CheckState = Record<string, boolean | undefined>
+type CheckState = ImportCheckState
 
 // what differs between the PCO (properties) and RCO (relations) import
 export type ImportSpec = {
@@ -50,41 +52,8 @@ export type ImportSpec = {
   uniqueKeyCombo?: string[]
 }
 
-const getImportDataFields = (importData: any[]) => {
-  let fields: string[] = []
-  importData.forEach((d) => {
-    fields = uniq([...fields, ...Object.keys(d)])
-  })
-  return fields
-}
-
 const idsUnreal = ({ realIds, ids }: { realIds: any[]; ids: string[] }) =>
   ids.filter((i) => !realIds.includes(i))
-
-// validates one id column: sets the exist/uuid checks and returns the ids
-const checkIdField = ({
-  checkState,
-  importDataFields,
-  data,
-  dataKey,
-  existsKey,
-  uuidKey,
-}: {
-  checkState: CheckState
-  importDataFields: string[]
-  data: any[]
-  dataKey: string
-  existsKey: string
-  uuidKey: string
-}) => {
-  const fieldExists = importDataFields.includes(dataKey)
-  checkState[existsKey] = fieldExists
-  checkState[uuidKey] =
-    fieldExists ?
-      data.filter((d: any) => !isUuid(d[dataKey])).length === 0
-    : undefined
-  return data.map((d: any) => d[dataKey]).filter((d: any) => d !== undefined)
-}
 
 export const ImportCollection = ({
   spec,
@@ -235,107 +204,15 @@ export const ImportCollection = ({
         const data = await parseImportFile(reader.result as ArrayBuffer)
         // test the data
         setImportData(data)
-        const importDataFields = getImportDataFields(data)
-        const checkState: CheckState = {}
-        checkState.existsNoDataWithoutKey =
-          data.filter((d: any) => !!d.__EMPTY).length === 0
-        const ids = data
-          .map((d: any) => d.id)
-          .filter((d: any) => d !== undefined)
-        const _idsExist = ids.length > 0
-        checkState.idsExist = _idsExist
-        checkState.idsAreUuids =
-          _idsExist ?
-            !ids.map((d: any) => isUuid(d)).includes(false)
-          : undefined
-        checkState.idsAreUnique =
-          _idsExist ? ids.length === new Set(ids).size : undefined
-
-        setObjectIds(
-          checkIdField({
-            checkState,
-            importDataFields,
-            data,
-            dataKey: 'objectId',
-            existsKey: 'objectIdsExist',
-            uuidKey: 'objectIdsAreUuid',
-          }),
+        const validation = validateImportData(
+          data,
+          spec.relationField,
+          spec.requiresRelationType,
         )
-        if (relation) {
-          setObjectRelationIds(
-            checkIdField({
-              checkState,
-              importDataFields,
-              data,
-              dataKey: relation.dataKey,
-              existsKey: relation.existsKey,
-              uuidKey: relation.uuidKey,
-            }),
-          )
-        }
-        if (spec.requiresRelationType) {
-          // relationType is carried along with objectIdRelation; a row
-          // without it cannot match the unique constraint
-          const relationTypes = data
-            .map((d: any) => d.relationType)
-            .filter((d: any) => d !== undefined)
-          checkState.relationTypeExist =
-            importDataFields.includes('objectIdRelation') &&
-            relationTypes.length === data.length
-        }
-
-        const _pCOfOriginIds = data
-          .map((d: any) => d.propertyCollectionOfOrigin)
-          .filter((d: any) => d !== undefined)
-        const uniquePCOfOriginIds = [...new Set(_pCOfOriginIds)]
-        const _pCOfOriginIdsExist = uniquePCOfOriginIds.length > 0
-        checkState.pCOfOriginIdsExist = _pCOfOriginIdsExist
-        checkState.pCOfOriginIdsAreUuid =
-          _pCOfOriginIdsExist ?
-            !uniquePCOfOriginIds.map((d: any) => isUuid(d)).includes(false)
-          : undefined
-        setPCOfOriginIds(uniquePCOfOriginIds)
-
-        const propertyKeys = uniq<any>(
-          data
-            .map((d: any) => Object.keys(omit(d, ['id', 'objectId'])))
-            ?.flat?.(),
-        )
-        const _existsPropertyKey = propertyKeys.length > 0
-        checkState.existsPropertyKey = _existsPropertyKey
-        checkState.propertyKeysDontContainApostroph =
-          _existsPropertyKey ?
-            !some(propertyKeys, (k) => {
-              if (!k || !k.includes) return false
-              return k.includes('"')
-            })
-          : undefined
-        checkState.propertyKeysDontContainBackslash =
-          _existsPropertyKey ?
-            !some(propertyKeys, (k) => {
-              if (!k || !k.includes) return false
-              return k.includes('\\')
-            })
-          : undefined
-        const propertyValues = uniq<any>(
-          data.map((d: any) => Object.values(d))?.flat?.(),
-        )
-        checkState.propertyValuesDontContainApostroph = !some(
-          propertyValues,
-          (k) => {
-            if (!k || !k.includes) return false
-            return k.includes('"')
-          },
-        )
-        checkState.propertyValuesDontContainBackslash = !some(
-          propertyValues,
-          (k) => {
-            if (!k || !k.includes) return false
-            return k.includes('\\')
-          },
-        )
-
-        setCheckState(checkState)
+        setObjectIds(validation.objectIds)
+        setObjectRelationIds(validation.objectRelationIds)
+        setPCOfOriginIds(validation.pCOfOriginIds)
+        setCheckState(validation.checkState)
       }
       reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
