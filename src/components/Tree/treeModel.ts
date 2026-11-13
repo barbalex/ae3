@@ -61,10 +61,10 @@ const makeListQuery = (queryKey: readonly string[], path: string): TreeListQuery
   // a refetch (e.g. after a mutation invalidated ['tree']) fetches at
   // least as many rows as were loaded before, so loaded pages survive.
   // The query client is passed in the context as `client`
-  queryFn: async ({ queryKey, client }: any) => {
+  queryFn: async ({ queryKey, client, signal }: any) => {
     const cachedRows = client.getQueryData(queryKey)?.rows?.length ?? 0
     const limit = Math.max(treePageSize, cachedRows)
-    const rows = await apiFetch(`${path}&limit=${limit}`)
+    const rows = await apiFetch(`${path}&limit=${limit}`, { signal })
     return { rows, complete: rows.length < limit, loading: false }
   },
   path,

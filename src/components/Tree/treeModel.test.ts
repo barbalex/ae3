@@ -358,6 +358,7 @@ describe('list queryFn', () => {
 
     expect(apiFetch).toHaveBeenCalledWith(
       expect.stringContaining(`&limit=${treePageSize}`),
+      { signal: undefined },
     )
     expect(result).toEqual({
       rows: [{ id: 'tax1', name: 'CSCF' }],
@@ -389,6 +390,7 @@ describe('list queryFn', () => {
 
     expect(apiFetch).toHaveBeenCalledWith(
       expect.stringContaining('&limit=1200'),
+      { signal: undefined },
     )
   })
 })

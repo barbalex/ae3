@@ -71,6 +71,9 @@ export const App = () => {
       defaultOptions: {
         queries: {
           refetchOnWindowFocus: false, // prevent tree refetching in dev mode
+          // reference data changes rarely; mutations invalidate
+          // explicitly, so a short stale window cuts refetch churn
+          staleTime: 30_000,
         },
       },
     })

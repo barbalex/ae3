@@ -24,9 +24,10 @@ export type UserWithOrgs = {
 export const useAllUsers = () =>
   useQuery({
     queryKey: ['allUsers'],
-    queryFn: () =>
+    queryFn: ({ signal }: { signal: AbortSignal }) =>
       apiFetch(
         '/user?select=id,name,email,organizationUsersByUserId:organization_user(id,organizationId:organization_id,role,organizationByOrganizationId:organization_id(id,name))',
+        { signal },
       ) as Promise<UserWithOrgs[]>,
   })
 
