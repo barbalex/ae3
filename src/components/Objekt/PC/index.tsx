@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 
 import { PcPresentation } from './PCO'
@@ -49,15 +48,15 @@ export const PC = ({ pcId, objId }: PCProps) => {
   const pC = data
 
   if (error) {
-    return <div className={styles.errorContainer}>{`Fehler: ${error.message}`}</div>
+    return (
+      <div className={styles.errorContainer}>{`Fehler: ${error.message}`}</div>
+    )
   }
 
   // don't want too many spinners
   return (
     <ErrorBoundary>
-      <Suspense fallback={null}>
-        <PcPresentation pC={pC} />
-      </Suspense>
+      <PcPresentation pC={pC} />
     </ErrorBoundary>
   )
 }

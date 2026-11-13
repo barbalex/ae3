@@ -1,7 +1,7 @@
 # Optimization backlog (worked off one by one; test, commit, push after each)
 
-- [ ] 1. Quick bug fixes: Preview.tsx error-template bug (literal backticks), CSV/XLSX export asymmetry (csv exports only preview rows), duplicated download-button JSX
-- [ ] 2. Remove dead `suspense: true` spreads (Taxonomy/index.tsx, Objekt/index.tsx) + unused Suspense wrappers
+- [x] 1. Quick bug fixes: Preview.tsx error-template bug (literal backticks), CSV/XLSX export asymmetry (csv exports only preview rows), duplicated download-button JSX
+- [x] 2. Remove dead `suspense: true` spreads (Taxonomy/index.tsx, Objekt/index.tsx) + unused Suspense wrappers
 - [ ] 3. Unify PCO/RCO clone families (~1,500 lines): PCO/RCO index, Import components, Export filter trio (Value.tsx/Comparator.tsx); extract `useIsWriter()`/`useAllUsers` hook; fix the 11× duplicated es-toolkit cast
 - [ ] 4. Add CI workflow (typecheck + vitest + eslint) on push/PR — currently no gates at all
 - [ ] 5. Keyboard navigation + ARIA roles (`role="tree"`/`treeitem`, tabIndex, onKeyDown) for the virtualized Tree

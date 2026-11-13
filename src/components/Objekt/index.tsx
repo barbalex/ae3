@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { uniqBy } from 'es-toolkit'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -10,7 +9,6 @@ import { getActiveObjectIdFromNodeArray } from '../../modules/getActiveObjectIdF
 import { apiFetch } from '../../modules/api'
 import { attachParentChain } from '../../modules/attachParentChain'
 import { activeNodeArrayAtom } from '../../store'
-import { Spinner } from '../shared/Spinner'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
 
 import styles from './index.module.css'
@@ -63,7 +61,6 @@ export const Objekt = () => {
       return { objekt, pcs }
     },
     enabled: !!unsafeObjectId,
-    ...{ suspense: true },
   })
   const objekt = objectData?.objekt
   const synonyms = objekt?.synonymsByObjectId ?? []
@@ -73,7 +70,6 @@ export const Objekt = () => {
     placeholderData: keepPreviousData,
     queryFn: () => fetchPcsForObjectIds(synonymIds),
     enabled: synonymIds.length > 0,
-    ...{ suspense: true },
   })
   // guard against keepPreviousData showing pcs of a previous object's
   // synonyms when the current object has none
@@ -96,56 +92,52 @@ export const Objekt = () => {
       <div className={styles.container}>
         <div style={{ maxHeight: '100%', overflow: 'auto' }}>
           <h3 className={styles.firstTitle}>Taxonomie</h3>
-          <Suspense fallback={<Spinner />}>
-            <TaxonomyObject
-              objekt={objekt}
-              refetch={refetch}
+          <TaxonomyObject
+            objekt={objekt}
+            refetch={refetch}
+          />
+          {synonymObjects.length > 0 && (
+            <h3 className={styles.title}>
+              {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
+              <span className={styles.titleSpan}>
+                {synonymObjects.length > 1 ? ` (${synonymObjects.length})` : ''}
+              </span>
+            </h3>
+          )}
+          <TaxonomyObjects objects={synonymObjects} />
+          {pcs.length > 0 && (
+            <h3 className={styles.title}>
+              Eigenschaften
+              <span className={styles.titleSpan}>{` (${pcs.length} ${
+                pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+              })`}</span>
+            </h3>
+          )}
+          {pcs.map((pc) => (
+            <PC
+              key={pc.id}
+              pcId={pc.id}
+              objId={objekt?.id}
+              isSynonym={false}
             />
-            {synonymObjects.length > 0 && (
-              <h3 className={styles.title}>
-                {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
-                <span className={styles.titleSpan}>
-                  {synonymObjects.length > 1 ?
-                    ` (${synonymObjects.length})`
-                  : ''}
-                </span>
-              </h3>
-            )}
-            <TaxonomyObjects objects={synonymObjects} />
-            {pcs.length > 0 && (
-              <h3 className={styles.title}>
-                Eigenschaften
-                <span className={styles.titleSpan}>{` (${pcs.length} ${
-                  pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-                })`}</span>
-              </h3>
-            )}
-            {pcs.map((pc) => (
-              <PC
-                key={pc.id}
-                pcId={pc.id}
-                objId={objekt?.id}
-                isSynonym={false}
-              />
-            ))}
-            {(synonymPcs ?? []).length > 0 && (
-              <h3 className={styles.title}>
-                Eigenschaften von Synonymen
-                <span className={styles.titleSpan}>
-                  {` (${synonymPcs.length} ${
-                    synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-                  })`}
-                </span>
-              </h3>
-            )}
-            {(synonymPcs ?? []).map((pc) => (
-              <PC
-                key={pc.id}
-                pcId={pc.id}
-                objId={synonyms?.[0]?.objectIdSynonym}
-              />
-            ))}
-          </Suspense>
+          ))}
+          {(synonymPcs ?? []).length > 0 && (
+            <h3 className={styles.title}>
+              Eigenschaften von Synonymen
+              <span className={styles.titleSpan}>
+                {` (${synonymPcs.length} ${
+                  synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+                })`}
+              </span>
+            </h3>
+          )}
+          {(synonymPcs ?? []).map((pc) => (
+            <PC
+              key={pc.id}
+              pcId={pc.id}
+              objId={synonyms?.[0]?.objectIdSynonym}
+            />
+          ))}
         </div>
       </div>
     </ErrorBoundary>
