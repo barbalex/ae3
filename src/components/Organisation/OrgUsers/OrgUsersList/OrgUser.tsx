@@ -13,6 +13,7 @@ import { useAtomValue } from 'jotai'
 
 import { activeNodeArrayAtom } from '../../../../store'
 import { apiFetch } from '../../../../modules/api'
+import { useAllUsers } from '../../../shared/useUserIsWriter'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary'
 
 import styles from './OrgUser.module.css'
@@ -26,10 +27,7 @@ export const OrgUser = ({ orgUser, orgUsersRefetch }: OrgUserProps) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const name = activeNodeArray.length > 1 ? activeNodeArray[1] : 'none'
 
-  const { data: allUsersData, error: allUsersError } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: () => apiFetch('/user?select=id,name'),
-  })
+  const { data: allUsersData, error: allUsersError } = useAllUsers()
 
   const {
     data: orgData,

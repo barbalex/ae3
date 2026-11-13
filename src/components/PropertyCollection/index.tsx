@@ -12,17 +12,25 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import { format } from 'date-fns'
-import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  keepPreviousData,
+} from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 
 import { Property } from './Property'
 import { DateField } from '../shared/Date'
 import { onBlurDo } from './onBlur'
 import { apiFetch, apiCount } from '../../modules/api'
+import {
+  collectionWriterRoles,
+  useUserIsWriter,
+} from '../shared/useUserIsWriter'
 import { PropertyReadOnly } from '../shared/PropertyReadOnly'
 import { ErrorBoundary } from '../shared/ErrorBoundary'
-import { editingPCsAtom, loginUsernameAtom } from '../../store'
+import { editingPCsAtom } from '../../store'
 
 import styles from './index.module.css'
 
@@ -30,16 +38,6 @@ export const PropertyCollection = () => {
   const { pcId } = useParams()
   const queryClient = useQueryClient()
   const [editingPCs, setEditingPCs] = useAtom(editingPCsAtom)
-  const username = useAtomValue(loginUsernameAtom)
-
-  const { data: dataAllUsers, error: allUsersError } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: () =>
-      apiFetch(
-        '/user?select=id,name,email,organizationUsersByUserId:organization_user(id,organizationId:organization_id,role,organizationByOrganizationId:organization_id(id,name))',
-      ),
-  })
-  const allUsers = dataAllUsers ?? []
 
   const {
     data: dataPc,
@@ -69,19 +67,12 @@ export const PropertyCollection = () => {
 
   const pC = pcData?.propertyCollectionById ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
-  const user = allUsers.find((u: any) => u.name === username)
-  // PostgREST returns the org users as a plain array (no .nodes
-  // wrapper like the former graphql result)
-  const orgsUserIsPCWriter = (user?.organizationUsersByUserId ?? [])
-    .filter((o: any) => ['orgCollectionWriter', 'orgAdmin'].includes(o.role))
-    .map((o: any) => ({
-      id: o.organizationId,
-      name: o?.organizationByOrganizationId?.name ?? '',
-    }))
-  const userIsPCWriter = orgsUserIsPCWriter.length > 0
-  const userIsThisPCWriter =
-    !!orgsUserIsPCWriter.find((o: any) => o.id === pC.organizationId) ||
-    (userIsPCWriter && !pC.organizationId)
+  const {
+    allUsers,
+    orgsUserIsWriter: orgsUserIsPCWriter,
+    userIsThisWriter: userIsThisPCWriter,
+    error: allUsersError,
+  } = useUserIsWriter(collectionWriterRoles, pC.organizationId)
   const idIsReferenced =
     (pC?.propertyCollectionObjectsByPropertyCollectionId?.totalCount ?? 0) >
       0 ||
@@ -130,9 +121,7 @@ export const PropertyCollection = () => {
       queryClient,
       refetch,
     })
-  const onChangeLastUpdated = (event: {
-    target: { value: string | null }
-  }) =>
+  const onChangeLastUpdated = (event: { target: { value: string | null } }) =>
     onBlurDo({
       field: 'lastUpdated',
       pC,

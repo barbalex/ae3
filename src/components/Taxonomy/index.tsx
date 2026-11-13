@@ -21,9 +21,9 @@ import { Property } from './PropertyArten'
 import { PropertyLr } from './PropertyLr'
 import { onBlurArten } from './onBlurArten'
 import { onBlurLr } from './onBlurLr'
+import { taxonomyWriterRoles, useUserIsWriter } from '../shared/useUserIsWriter'
 import { apiFetch } from '../../modules/api'
 import {
-  loginUsernameAtom,
   editingTaxonomiesAtom,
   scrollIntoViewAtom,
   activeNodeArrayAtom,
@@ -39,18 +39,9 @@ export const Taxonomy = () => {
   const [editingTaxonomies, setEditingTaxonomies] = useAtom(
     editingTaxonomiesAtom,
   )
-  const username = useAtomValue(loginUsernameAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const taxId = activeNodeArray?.[1] || '99999999-9999-9999-9999-999999999999'
   const queryClient = useQueryClient()
-
-  const { data: allUsersData, error: allUsersError } = useQuery({
-    queryKey: ['allUsers'],
-    queryFn: () =>
-      apiFetch(
-        '/user?select=id,name,email,organizationUsersByUserId:organization_user(id,organizationId:organization_id,role,organizationByOrganizationId:organization_id(id,name))',
-      ),
-  })
 
   const {
     data: taxData,
@@ -66,26 +57,18 @@ export const Taxonomy = () => {
   })
 
   const tax = taxData?.[0]
+  const {
+    allUsers,
+    orgsUserIsWriter: orgsUserIsTaxWriter,
+    userIsThisWriter: userIsThisTaxWriter,
+    error: allUsersError,
+  } = useUserIsWriter(taxonomyWriterRoles, tax?.organizationId)
   const importedByName = tax?.userByImportedBy?.name
   const organizationName = tax?.organizationByOrganizationId?.name
   const editing = editingTaxonomies
   // graphql returned the enum values, PostgREST the enum labels
   const editingArten = editing && tax?.type === 'Art'
   const editingLr = editing && tax?.type === 'Lebensraum'
-  const allUsers = allUsersData ?? []
-  const user = allUsers.find((u: any) => u.name === username)
-  // PostgREST returns the org users as a plain array (no .nodes
-  // wrapper like the former graphql result)
-  const orgsUserIsTaxWriter = (user?.organizationUsersByUserId ?? [])
-    .filter((o: any) => ['orgTaxonomyWriter', 'orgAdmin'].includes(o.role))
-    .map((o: any) => ({
-      id: o.organizationId,
-      name: o?.organizationByOrganizationId?.name ?? '',
-    }))
-  const userIsTaxWriter = orgsUserIsTaxWriter.length > 0
-  const userIsThisTaxWriter =
-    !!orgsUserIsTaxWriter.find((o: any) => o.id === tax?.organizationId) ||
-    (userIsTaxWriter && !tax?.organizationId)
 
   const onClickStopEditing = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
