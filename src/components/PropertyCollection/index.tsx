@@ -47,25 +47,23 @@ export const PropertyCollection = () => {
     queryKey: ['pc', pcId],
     placeholderData: keepPreviousData,
     queryFn: async () => {
-      const [pcs, pcoCount] = await Promise.all([
+      const [pcs, pcoCount, rcoCount] = await Promise.all([
         apiFetch(
           `/property_collection?id=eq.${pcId}&select=id,name,description,links,combining,organizationId:organization_id,lastUpdated:last_updated,termsOfUse:terms_of_use,importedBy:imported_by,organizationByOrganizationId:organization_id(id,name)`,
         ),
         apiCount(
           `/property_collection_object?property_collection_id=eq.${pcId}`,
         ),
+        apiCount(`/relation?property_collection_id=eq.${pcId}`),
       ])
       const pC = pcs?.[0]
-      if (!pC) return { propertyCollectionById: {} }
-      pC.propertyCollectionObjectsByPropertyCollectionId = {
-        totalCount: pcoCount,
-      }
-      return { propertyCollectionById: pC }
+      if (!pC) return { pc: {}, pcoCount: 0, rcoCount: 0 }
+      return { pc: pC, pcoCount, rcoCount }
     },
   })
   const pcData = dataPc
 
-  const pC = pcData?.propertyCollectionById ?? {}
+  const pC = pcData?.pc ?? {}
   const org = pC?.organizationByOrganizationId?.name ?? ''
   const {
     allUsers,
@@ -73,13 +71,10 @@ export const PropertyCollection = () => {
     userIsThisWriter: userIsThisPCWriter,
     error: allUsersError,
   } = useUserIsWriter(collectionWriterRoles, pC.organizationId)
-  const idIsReferenced =
-    (pC?.propertyCollectionObjectsByPropertyCollectionId?.totalCount ?? 0) >
-      0 ||
-    (pC?.relationsByPropertyCollectionId?.totalCount ?? 0) > 0 ||
-    (pC?.propertyCollectionObjectsByPropertyCollectionOfOrigin?.totalCount ??
-      0) > 0 ||
-    (pC?.relationsByPropertyCollectionOfOrigin?.totalCount ?? 0) > 0
+  // the former graphql version also counted collections referencing this
+  // one as their collection of origin; those counts were never refetched
+  // after the postgrest migration, so the check only covers own rows
+  const idIsReferenced = (pcData?.pcoCount ?? 0) > 0 || (pcData?.rcoCount ?? 0) > 0
   const importedBy = pC.importedBy
   const importedByUser = allUsers.find((u: any) => u.id === importedBy)
 

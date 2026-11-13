@@ -36,9 +36,6 @@ export type CollectionSpec = {
   table: string
   // view delivering the property keys, e.g. 'v_property_collection_keys'
   keysView: string
-  // field names on the fetched pc, shaped like the former graphql result
-  keysNodesField: string
-  nodesField: string
   // columns present on every row, before the property keys
   baseColumns: string[]
   // column name -> order= term passed to collectionOrder
@@ -107,10 +104,7 @@ const fetchCollectionData = async (
         })}`,
       )
     )
-  // shape like the former graphql result
-  pC[spec.keysNodesField] = { nodes: pC.keys ?? [] }
-  pC[spec.nodesField] = { totalCount, nodes: nodes ?? [] }
-  return { propertyCollectionById: pC }
+  return { pc: pC, nodes: nodes ?? [], totalCount }
 }
 
 const buildRows = ({
@@ -169,33 +163,26 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
 
   const [importing, setImport] = useState(false)
 
-  const propKeys = (
-    collectionData?.propertyCollectionById?.[spec.keysNodesField]?.nodes ?? []
-  ).map((k: any) => k?.keys)
+  const pC = collectionData?.pc
+
+  const propKeys = (pC?.keys ?? []).map((k: any) => k?.keys)
 
   const rows = buildRows({
-    nodes: collectionData?.propertyCollectionById?.[spec.nodesField]?.nodes,
+    nodes: collectionData?.nodes,
     propKeys,
     spec,
   })
   // collect all keys and sort property keys by name
   const keys = [...spec.baseColumns, ...propKeys.sort()]
-  // PostgREST returns the org users as a plain array (no .nodes
-  // wrapper like the former graphql result)
   const writers = (
-    collectionData?.propertyCollectionById?.organizationByOrganizationId
-      ?.organizationUsersByOrganizationId ?? []
+    pC?.organizationByOrganizationId?.organizationUsersByOrganizationId ?? []
   ).filter((u: any) => ['orgAdmin', 'orgCollectionWriter'].includes(u.role))
   const writerNames = uniq(writers.map((w: any) => w.userByUserId.name))
   const userIsWriter = !!username && writerNames.includes(username)
   const showImport =
-    (collectionData?.propertyCollectionById?.[spec.nodesField]?.totalCount ===
-      0 &&
-      userIsWriter) ||
-    importing
+    (collectionData?.totalCount === 0 && userIsWriter) || importing
 
-  const totalCount =
-    collectionData?.propertyCollectionById?.[spec.nodesField]?.totalCount
+  const totalCount = collectionData?.totalCount
 
   // enable sorting
   const setOrder = ({
@@ -210,8 +197,7 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
   }
 
   const exportPages = async function* () {
-    const nodePage =
-      collectionData?.propertyCollectionById?.[spec.nodesField]?.nodes ?? []
+    const nodePage = collectionData?.nodes ?? []
     const exportDirection = collectionSortDirection(
       orderBy,
       sortDirection,

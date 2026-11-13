@@ -108,7 +108,10 @@ const fetchGetWithRetry = async (
  * Returns the parsed json body (any: PostgREST rows are dynamic) or
  * null for empty responses.
  */
-export const apiFetch = async (path: string, options: RequestInit = {}): Promise<any> => {
+export const apiFetch = async <T = any>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T | null> => {
   const headers = await authHeaders()
   const method = options.method?.toUpperCase() ?? 'GET'
   // mutations return no body by default: rls often hides the affected
@@ -135,8 +138,12 @@ export const apiFetch = async (path: string, options: RequestInit = {}): Promise
 }
 
 // call a db function, e.g. rpc('login', { username, pass })
-export const rpc = (fn: string, args?: any, options: RequestInit = {}): Promise<any> =>
-  apiFetch(`/rpc/${fn}`, {
+export const rpc = <T = any>(
+  fn: string,
+  args?: any,
+  options: RequestInit = {},
+): Promise<T | null> =>
+  apiFetch<T>(`/rpc/${fn}`, {
     ...options,
     method: 'POST',
     headers: {

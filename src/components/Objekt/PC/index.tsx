@@ -26,16 +26,8 @@ export const PC = ({ pcId, objId }: PCProps) => {
       )
       const pC = pcs?.[0]
       if (!pC) return null
-      // shape like the former graphql result and attach ancestor chains
-      // for url building (formerly recursive graphql queries)
-      pC.propertyCollectionObjectsByPropertyCollectionId = {
-        totalCount: pC.pcos?.length ?? 0,
-        nodes: pC.pcos ?? [],
-      }
-      pC.relationsByPropertyCollectionId = {
-        totalCount: pC.relations?.length ?? 0,
-        nodes: pC.relations ?? [],
-      }
+      // attach ancestor chains for url building
+      // (formerly recursive graphql queries)
       for (const r of pC.relations ?? []) {
         if (r.objectByObjectIdRelation) {
           await attachParentChain(r.objectByObjectIdRelation)

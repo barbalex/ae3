@@ -6,8 +6,6 @@ const spec: CollectionSpec = {
   queryKey: 'rcoPreviewQuery',
   table: 'relation',
   keysView: 'v_relation_collection_keys',
-  keysNodesField: 'vRelationCollectionKeysByPropertyCollectionId',
-  nodesField: 'relationsByPropertyCollectionId',
   baseColumns: [
     'Objekt ID',
     'Objekt Name',

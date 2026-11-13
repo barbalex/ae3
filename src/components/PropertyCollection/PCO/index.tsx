@@ -6,8 +6,6 @@ const spec: CollectionSpec = {
   queryKey: 'pcoPreviewQuery',
   table: 'property_collection_object',
   keysView: 'v_property_collection_keys',
-  keysNodesField: 'vPropertyCollectionKeysByPropertyCollectionId',
-  nodesField: 'propertyCollectionObjectsByPropertyCollectionId',
   baseColumns: ['Objekt ID', 'Objekt Name'],
   orderColumns: {
     'Objekt ID': 'object_id',
