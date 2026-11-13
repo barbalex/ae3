@@ -20,7 +20,7 @@ services:
       # host port 5433 (not 5432): this stack must coexist with other local
       # projects claiming 5432 (apf2, bb4, ps). Ae3 dev port block: 5433/8093.
       # Update DATABASE_URL in .env when changing this.
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
