@@ -1,13 +1,19 @@
+import { useEffect } from 'react'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
 import { setLoginAtom } from '../../store'
+import { reportError } from '../../modules/errorTelemetry'
 
 import styles from './RouterErrorBoundary.module.css'
 
 export const RouterErrorBoundary = () => {
   const error = useRouteError() as Error
+
+  useEffect(() => {
+    void reportError('boundary', error)
+  }, [error])
 
   const setLogin = useSetAtom(setLoginAtom)
 

@@ -85,6 +85,10 @@ export default defineConfig({
   // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
   // TODO: remove this and uninstall esbuild when the issue is fixed
   build: {
+    // sourcemaps symbolicate the minified stacks collected in
+    // ae.error_report; they deploy alongside the chunks (public) and are
+    // not precached by the service worker (globPatterns)
+    sourcemap: true,
     cssMinify: 'esbuild',
     rollupOptions: {
       output: {

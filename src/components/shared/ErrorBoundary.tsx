@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
 import { setLoginAtom } from '../../store'
+import { reportError } from '../../modules/errorTelemetry'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -65,6 +66,7 @@ export const ErrorBoundary = ({ children }: { children?: React.ReactNode }) => {
   return (
     <ErrorBoundaryComponent
       FallbackComponent={ErrorFallback}
+      onError={(error) => void reportError('boundary', error)}
       onReset={onReset}
     >
       {children}

@@ -68,11 +68,21 @@ The frontend deploys itself via Vercel (`npm run deploy`). The backend is deploy
 - Seed backend-dev from production: `npm run fetchBackup` ([fetchBackup.mjs](scripts/fetchBackup.mjs)) triggers the server backup (cheap when unchanged — fingerprint skip), downloads `last.backup` into `backend-dev/db/ae.backup`, then rebuild the dev stack against it: `docker compose -f backend-dev/docker-compose.yaml down -v && docker compose -f backend-dev/docker-compose.yaml up -d --build` (deletes local dev data; the test users are seeded automatically on the fresh volume).
 - `api.artdaten.ch` (139.162.190.8) runs a content-identical twin of the same stack (verified by fingerprint) — no own backups, no cron; only api.arteigenschaften.ch is backed up.
 
+## Error telemetry (error_report)
+
+Production client errors are collected in the `ae.error_report` PostgREST table (same pipeline as apflora):
+
+- Client: [errorTelemetry.ts](src/modules/errorTelemetry.ts) — opt-in via `VITE_ERROR_TELEMETRY_URL`, set only in the committed [.env.production](.env.production) (`https://api.arteigenschaften.ch/postgrest/error_report`); without it (dev) every export is a no-op. `installErrorTelemetry()` in [main.tsx](src/main.tsx) hooks `window.error`/`unhandledrejection`; the ErrorBoundary/RouterErrorBoundary fallbacks report via `reportError('boundary', …)`. Payload: message, stack, url (path+search), user agent, release (package.json version) — deliberately no user identity. Fire-and-forget (`keepalive`, never rejects); capped at 25 events/session and 3 repeats/message.
+- DB: table + insert-only RLS in [2026-11-14-error-report.sql](backend/db/migrations/2026-11-14-error-report.sql), canonical copy [errorReport.sql](src/sql/errorReport.sql). `anon` may only INSERT — read reports via `docker exec -it ae_db psql -U postgres -d ae` (`select … from ae.error_report order by created_at desc limit 50`). The migration ends with `NOTIFY pgrst, 'reload schema'` — postgrest runs with `PGRST_DB_CONFIG=false` and does not see new tables until notified (or restarted).
+- Notifications: [notify-error-reports.sh](backend/notify-error-reports.sh) runs from cron on the server (deployed as `/root/ae/error-notify.sh`, with a mode-600 `.error-notify.env` next to it holding the ntfy-style `NOTIFY_URL`) and pushes one aggregated phone notification per 5 minutes. Reports land only on api.arteigenschaften.ch — both frontends POST to that fixed URL (CORS is open), the artdaten twin stack receives none — and `error_report` is not in backup.sh's explicit fingerprint table list, so it never triggers backup runs.
+- Stacks are minified: symbolicate against the deployed sourcemaps (`build.sourcemap` is on; `.map` files are public but not precached).
+
 ## Source of truth for the database schema
 
 [src/sql/](src/sql/) holds the canonical Postgres DDL/functions — **not** applied by the build, but the reference for the `ae` schema behind PostgREST:
 - `createTables.sql`, `createTypes.sql`, `createRoles.sql`, `createPolicies.sql` (row-level security), `createViews.sql`, `createFunctions.sql`
 - `exportFunction.sql` — the server-side export query (large; drives the Export UI)
+- `errorReport.sql` — client error telemetry table (insert-only for `anon`)
 - `treeFunction.sql` / `tree_*.sql` — builds the navigation tree
 - [src/sql/one-offs/](src/sql/one-offs/) — dated migration scripts
 
