@@ -27,6 +27,8 @@ Testing: [vitest.config.ts](vitest.config.ts) (jsdom, deliberately separate from
 
 Installing deps: the project pins exact versions and guards against supply-chain risk via `.npmrc` (`force=true`, `save-exact=true`, `allow-git=none`) and updates through `npm run ncu using cooldown` (`ncu --cooldown 5 --interactive` — skips packages released <5 days ago). The canonical install command uses an `sfw` wrapper: `npm run how-to-install-using-sfw`.
 
+Coming back after a pull (e.g. on the notebook): follow the refresh runbook in [readme.md](readme.md#refresh-the-dev-environment-after-pulling) — Node 24, `npm install`, check `backend-dev/.env` against `.env.example`, `cd backend-dev && docker compose up -d --build`, then re-apply `backend/db/migrations/*.sql` to `ae_db` (they are idempotent and every backup predates the newest ones).
+
 ## Backend (Docker)
 
 Two compose stacks under [backend/](backend/) (production) and [backend-dev/](backend-dev/) (local dev):
