@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. It is symlinked as `AGENTS.md` so agent tools following that convention (ZCode, Cursor, …) load it too.
 
 ## Project
 
@@ -23,7 +23,7 @@ npm run deploy major ae # same with a major bump, but only fast-forward the ae b
 
 There is **no `lint`/`format` npm script**. ESLint config exists at [eslint.config.ts](eslint.config.ts) (TS config file; requires the `jiti` devDependency) — run linter directly with `npx eslint .`. Prettier is a dependency but has no config file (defaults).
 
-Testing: [vitest.config.ts](vitest.config.ts) (jsdom, deliberately separate from vite.config.ts — no PWA/svgr/babel plugins). Tests are co-located as `*.test.ts(x)` next to the module/component. E2e specs live in [e2e/](e2e/) with [playwright.config.ts](playwright.config.ts), which starts the dev server itself but needs the PostgREST backend on localhost:8093 (`cd backend-dev && docker compose up`).
+Testing: [vitest.config.ts](vitest.config.ts) (jsdom, deliberately separate from vite.config.ts — no PWA/svgr/babel plugins). Tests are co-located as `*.test.ts(x)` next to the module/component. E2e specs live in [e2e/](e2e/) with [playwright.config.ts](playwright.config.ts), which starts the dev server itself but needs the PostgREST backend on localhost:8093 (`cd backend-dev && docker compose up`); [e2e/roles.spec.ts](e2e/roles.spec.ts) additionally needs the seeded test users (see "Testing user roles"). CI ([ci.yml](.github/workflows/ci.yml)) runs typecheck + unit tests + eslint on every push/PR using **Node 24** — match that version locally.
 
 Installing deps: the project pins exact versions and guards against supply-chain risk via `.npmrc` (`force=true`, `save-exact=true`, `allow-git=none`) and updates through `npm run ncu using cooldown` (`ncu --cooldown 5 --interactive` — skips packages released <5 days ago). The canonical install command uses an `sfw` wrapper: `npm run how-to-install-using-sfw`.
 
@@ -35,9 +35,35 @@ Two compose stacks under [backend/](backend/) (production) and [backend-dev/](ba
 - **`postgrest`** (container `ae_postgrest`) — PostgREST v12.2.3 exposing the `ae` schema as a REST API, on host port **8093** in dev (3000 inside the container). Stock image configured via `PGRST_*` env (`PGRST_DB_SCHEMAS: ae`, `PGRST_DB_ANON_ROLE: anon`, `PGRST_JWT_SECRET` from the shared `JWT_SECRET`, CORS enabled). Tokens issued by `ae.login` are Bearer tokens for this API; the JWT secret must be ≥32 chars (PostgREST's jose library rejects shorter HMAC secrets).
 - **`caddy`** — only in [backend/](backend/), terminates TLS and reverse-proxies `api.arteigenschaften.ch/postgrest/*` → `ae_postgrest:3000`. [backend-dev/](backend-dev/) omits Caddy and exposes db (5433) and postgrest (8093) directly, with `DATABASE_URL` pointing at `host.docker.internal`.
 
-Local backend: `cd backend-dev && docker compose up`. The frontend's [api.ts](src/modules/api.ts) (`postgrestUri()`) targets `http://localhost:8093` on localhost, else `https://api.<hostname>/postgrest`. DB roles: `anon`, `authenticator`, `org_admin`, `org_writer`. `orgTaxonomyWriter` is *not* a DB role — it is an application-level role on `ae.organization_user.role` granting taxonomy write access.
+Local backend: `cd backend-dev && docker compose up`. The frontend's [api.ts](src/modules/api.ts) (`postgrestUri()`) targets `http://localhost:8093` on localhost, else `https://api.<hostname>/postgrest`. Open psql in the dev db with `docker exec -it ae_db psql -U postgres -d ae`. DB roles: `anon`, `authenticator`, `org_admin`, `org_writer`. `orgTaxonomyWriter` is *not* a DB role — it is an application-level role on `ae.organization_user.role` granting taxonomy write access.
 
-Credentials/secrets live in `.env` (`JWT_SECRET`, `DATABASE_URL`, `POSTGRES_PASSWORD`, `AUTHENTICATOR_PASSWORD`).
+Credentials/secrets live in `.env` (`JWT_SECRET`, `DATABASE_URL`, `POSTGRES_PASSWORD`, `AUTHENTICATOR_PASSWORD`); both stacks have a committed `.env.example` documenting the values and their traps (`$$`-escaping, the unsupervised `${AUTHENTICATOR_PASSWORD}` literal in 01_db_users_roles.sql). `ae.backup` is gitignored — a fresh clone gets it from the nightly Nextcloud backup (see "Deploying the backend") or from the production server.
+
+## Testing user roles
+
+Two role layers — don't confuse them:
+
+- **DB roles**: `anon`, `authenticator`, `org_admin`, `org_writer` ([createRoles.sql](src/sql/createRoles.sql)). `ae.user.role` holds one (enforced by the `ensure_user_role_exists` trigger — it must exist in `pg_roles`); `ae.login` puts it into the JWT and PostgREST switches to it. Row-level security lives in [createPolicies.sql](src/sql/createPolicies.sql).
+- **Application roles**: `orgAdmin`, `orgTaxonomyWriter`, `orgCollectionWriter` on `ae.organization_user.role` (FK into `ae.role`). They gate UI and writes per organization: client-side in [useUserIsWriter.ts](src/components/shared/useUserIsWriter.ts) and the `taxWriterOnly` tree context menus ([menuConfig.ts](src/components/Tree/contextmenu/menuConfig.ts)), server-side through the views in [createViews.sql](src/sql/createViews.sql) (`current_user_writable_taxonomies`, `current_user_writable_collections`, …).
+
+The dev backend seeds three test users via [05_test_users.sql](backend-dev/db/init/05_test_users.sql) (runs automatically on first volume creation; on an existing volume apply with `docker exec -i ae_db psql -U postgres -d ae < backend-dev/db/init/05_test_users.sql` — it is idempotent, safe to re-run any time). Password for all three: `ae3-test-pass`. Dev-only — never seed them in production.
+
+| user | ae.user.role (DB) | organization_user.role (app) | effect |
+|---|---|---|---|
+| `test-org-admin` | org_admin | orgAdmin | everything: writes, org user management, writer menus |
+| `test-taxonomy-writer` | org_writer | orgTaxonomyWriter | taxonomy/object writes, writer context menus |
+| `test-collection-writer` | org_writer | orgCollectionWriter | property collection writes, **no** writer menus |
+
+Log in through the UI at `/Login` (the login fires on blur of the pass field once both fields are filled). [e2e/roles.spec.ts](e2e/roles.spec.ts) covers login plus the writer-menu gating; run it like the other e2e specs.
+
+## Deploying the backend (production)
+
+The frontend deploys itself via Vercel (`npm run deploy`). The backend is deployed manually — no CI touches it:
+
+- Host `api.arteigenschaften.ch`; the stack (a copy of [backend/](backend/): db + postgrest + caddy) lives at `/root/ae`. Caddy terminates TLS and proxies `api.arteigenschaften.ch/postgrest/*` → `ae_postgrest:3000`. The db port is bound to `127.0.0.1:5432` (loopback-only) — reach it through an SSH tunnel.
+- Apply changes by copying the changed files of `backend/` to the server and running `docker compose up -d --build` there. (Transport is inferred from past ops commits — e.g. adb4adf — adjust this line if the actual flow differs.)
+- Migrations in [backend/db/migrations/](backend/db/migrations/) are applied manually on the server db, e.g. `docker exec -i ae_db psql -U postgres -d ae < migrations/2026-11-02-export-all-on-commit-drop.sql`. Nothing applies them automatically.
+- Backups: [backend/db/backup.sh](backend/db/backup.sh) pg_dumps `ae` and uploads it via rclone to Nextcloud (`rclone.conf` mounted read-only from `/root/backup/rclone.conf`); it is run regularly on the server (cron). This Nextcloud folder (or the server) is also where a fresh `ae.backup` for backend-dev comes from.
 
 ## Source of truth for the database schema
 

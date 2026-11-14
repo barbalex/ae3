@@ -35,6 +35,7 @@ ae.backup
 .env.production.local
 .env
 .env.*
+!.env.example
 
 #sql file to build db
 *ae.sql
