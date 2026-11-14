@@ -20,6 +20,7 @@
     "test:e2e": "playwright test",
     "bump": "node scripts/bumpVersion.ts",
     "deploy": "node scripts/deploy.ts",
+    "fetchBackup": "node scripts/fetchBackup.mjs",
     "how-to-install-using-sfw": "sfw npm install -f",
     "ncu using cooldown": "ncu --cooldown 5 --interactive"
   },

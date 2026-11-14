@@ -1,9 +1,38 @@
 # dumps ae db
 # prepends the datetime to filename
 # uploads the backup to nextcloud
-# but only if the size of the dump changed
+# but only if the data fingerprint changed
 # BEWARE: rclone config is expected at /root/.config/rclone/rclone.conf
 # it is mounted from the host file /root/backup/rclone.conf, see docker-compose.yml
+
+# data fingerprint: deterministic md5 over every ae table's rows.
+# replaces the old size-equality check - equal size with different
+# content silently skipped backups. ~3s on the current data volume.
+FINGERPRINT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d ae -At -c "
+  select coalesce(md5(string_agg(row_text, '' order by row_text)), '') from (
+    select (to_jsonb(t))::text as row_text from ae.object t
+    union all select (to_jsonb(t))::text from ae.pco_of_object t
+    union all select (to_jsonb(t))::text from ae.rco_of_object t
+    union all select (to_jsonb(t))::text from ae.relation t
+    union all select (to_jsonb(t))::text from ae.property_collection_object t
+    union all select (to_jsonb(t))::text from ae.synonym t
+    union all select (to_jsonb(t))::text from ae.property_collection t
+    union all select (to_jsonb(t))::text from ae.taxonomy t
+    union all select (to_jsonb(t))::text from ae.\"user\" t
+    union all select (to_jsonb(t))::text from ae.organization t
+    union all select (to_jsonb(t))::text from ae.organization_user t
+    union all select (to_jsonb(t))::text from ae.role t
+    union all select (to_jsonb(t))::text from ae.tree_category t
+  ) s")
+# an empty fingerprint (failed query) must never satisfy the skip check
+if [ -z "$FINGERPRINT" ]; then
+  echo "ERROR: computing the data fingerprint failed"
+  exit 1
+fi
+if [ -f /sik_data/last.fingerprint ] && [ "$FINGERPRINT" = "$(cat /sik_data/last.fingerprint)" ]; then
+  echo "data fingerprint unchanged - not dumping"
+  exit 0
+fi
 
 echo "creating dump file..."
 FILENAME=$(date +"%Y-%m-%d_%H-%M-%S_ae.backup")
@@ -22,22 +51,10 @@ upload() {
   fi
 }
 
-if [ ! -f /sik_data/last.backup ]; then
-  echo "previous backup does not exist"
-  upload
-else
-  # dump files contain creation metadata, so comparing contents does not work
-  # only compare file size: https://stackoverflow.com/a/17009642/712005
-  if (( $(stat -c%s "/sik_data/$FILENAME") == $(stat -c%s "/sik_data/last.backup") )); then
-    echo "backup is identical to previous - not uploading"
-    rm -f "/sik_data/$FILENAME"
-    exit 0
-  fi
-  echo "backup differs from previous"
-  upload
-fi
+upload
 
-# only replace last.backup after a successful upload
+# only replace last.backup and the fingerprint after a successful upload
 rm -f /sik_data/last.backup
 mv -f "/sik_data/$FILENAME" /sik_data/last.backup
+echo "$FINGERPRINT" > /sik_data/last.fingerprint
 echo "backed up $FILENAME"

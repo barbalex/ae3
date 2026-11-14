@@ -63,7 +63,7 @@ export default [
   },
   {
     // root config files, scripts and e2e specs run in node, not the browser
-    files: ['*.config.ts', 'scripts/**/*.ts', 'e2e/**/*.ts'],
+    files: ['*.config.ts', 'scripts/**/*.{ts,mjs}', 'e2e/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
