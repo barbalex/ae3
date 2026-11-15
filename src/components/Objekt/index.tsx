@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai'
 import { TaxonomyObjects } from './TaxonomyObjects'
 import { TaxonomyObject } from './TaxonomyObjects/TaxonomyObject'
 import { PC } from './PC'
+import { OpenSectionsContext, useOpenSections } from './openSections'
 import { getActiveObjectIdFromNodeArray } from '../../modules/getActiveObjectIdFromNodeArray'
 import { apiFetch } from '../../modules/api'
 import { attachParentChain } from '../../modules/attachParentChain'
@@ -82,6 +83,10 @@ export const Objekt = () => {
 
   const synonymObjects = synonyms.map((s: any) => s.objectByObjectIdSynonym)
 
+  // the taxonomy card of the object itself is the only section open by
+  // default; its id seeds the ?open= param when the first toggle happens
+  const openSections = useOpenSections([objekt?.id])
+
   if (objectError) {
     return (
       <div
@@ -92,57 +97,59 @@ export const Objekt = () => {
 
   return (
     <ErrorBoundary>
-      <div className={styles.container}>
-        <div style={{ maxHeight: '100%', overflow: 'auto' }}>
-          <h3 className={styles.firstTitle}>Taxonomie</h3>
-          <TaxonomyObject
-            objekt={objekt}
-            refetch={refetch}
-          />
-          {synonymObjects.length > 0 && (
-            <h3 className={styles.title}>
-              {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
-              <span className={styles.titleSpan}>
-                {synonymObjects.length > 1 ? ` (${synonymObjects.length})` : ''}
-              </span>
-            </h3>
-          )}
-          <TaxonomyObjects objects={synonymObjects} />
-          {pcs.length > 0 && (
-            <h3 className={styles.title}>
-              Eigenschaften
-              <span className={styles.titleSpan}>{` (${pcs.length} ${
-                pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-              })`}</span>
-            </h3>
-          )}
-          {pcs.map((pc) => (
-            <PC
-              key={pc.id}
-              pcId={pc.id}
-              objId={objekt?.id}
-              isSynonym={false}
+      <OpenSectionsContext.Provider value={openSections}>
+        <div className={styles.container}>
+          <div style={{ maxHeight: '100%', overflow: 'auto' }}>
+            <h3 className={styles.firstTitle}>Taxonomie</h3>
+            <TaxonomyObject
+              objekt={objekt}
+              refetch={refetch}
             />
-          ))}
-          {(synonymPcs ?? []).length > 0 && (
-            <h3 className={styles.title}>
-              Eigenschaften von Synonymen
-              <span className={styles.titleSpan}>
-                {` (${synonymPcs.length} ${
-                  synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
-                })`}
-              </span>
-            </h3>
-          )}
-          {(synonymPcs ?? []).map((pc) => (
-            <PC
-              key={pc.id}
-              pcId={pc.id}
-              objId={synonyms?.[0]?.objectIdSynonym}
-            />
-          ))}
+            {synonymObjects.length > 0 && (
+              <h3 className={styles.title}>
+                {synonymObjects.length > 1 ? 'Synonyme' : 'Synonym'}
+                <span className={styles.titleSpan}>
+                  {synonymObjects.length > 1 ? ` (${synonymObjects.length})` : ''}
+                </span>
+              </h3>
+            )}
+            <TaxonomyObjects objects={synonymObjects} />
+            {pcs.length > 0 && (
+              <h3 className={styles.title}>
+                Eigenschaften
+                <span className={styles.titleSpan}>{` (${pcs.length} ${
+                  pcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+                })`}</span>
+              </h3>
+            )}
+            {pcs.map((pc) => (
+              <PC
+                key={pc.id}
+                pcId={pc.id}
+                objId={objekt?.id}
+                isSynonym={false}
+              />
+            ))}
+            {(synonymPcs ?? []).length > 0 && (
+              <h3 className={styles.title}>
+                Eigenschaften von Synonymen
+                <span className={styles.titleSpan}>
+                  {` (${synonymPcs.length} ${
+                    synonymPcs.length > 1 ? 'Sammlungen' : 'Sammlung'
+                  })`}
+                </span>
+              </h3>
+            )}
+            {(synonymPcs ?? []).map((pc) => (
+              <PC
+                key={pc.id}
+                pcId={pc.id}
+                objId={synonyms?.[0]?.objectIdSynonym}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      </OpenSectionsContext.Provider>
     </ErrorBoundary>
   )
 }

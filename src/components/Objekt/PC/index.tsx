@@ -50,7 +50,10 @@ export const PC = ({ pcId, objId }: PCProps) => {
   // don't want too many spinners
   return (
     <ErrorBoundary>
-      <PcPresentation pC={pC} />
+      <PcPresentation
+        pC={pC}
+        objId={objId}
+      />
     </ErrorBoundary>
   )
 }

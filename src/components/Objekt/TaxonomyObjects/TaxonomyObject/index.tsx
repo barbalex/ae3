@@ -37,6 +37,7 @@ import { Property } from './Property'
 import LinkMenu from './LinkMenu'
 import Properties from './Properties'
 import { getUrlForObject } from '../../../../modules/getUrlForObject'
+import { useOpenSectionsContext } from '../../openSections'
 import {
   scrollIntoViewAtom,
   loginUsernameAtom,
@@ -70,8 +71,23 @@ export const TaxonomyObject = ({ objekt, showLink, refetch }: TaxonomyObjectProp
       ),
   })
 
-  const [expanded, setExpanded] = useState(showLink ? false : true)
+  // the section is tracked in the ?open= param by object id; while the
+  // object is still loading there is no id, so fall back to local state
+  const [fallbackExpanded, setFallbackExpanded] = useState(!showLink)
   const [taxExpanded, setTaxExpanded] = useState(false)
+  const openSections = useOpenSectionsContext()
+  const sectionId = objekt?.id
+  const expanded =
+    sectionId && openSections ?
+      openSections.isSectionOpen(sectionId, !showLink)
+    : fallbackExpanded
+  const setExpanded = (open: boolean) => {
+    if (sectionId && openSections) {
+      openSections.setSectionOpen(sectionId, !showLink, open)
+    } else {
+      setFallbackExpanded(open)
+    }
+  }
 
   const organizationUsers = data ?? []
   const editing = editingTaxonomies

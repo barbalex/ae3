@@ -15,17 +15,36 @@ import { PCDescription } from '../../../shared/PCDescription'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary'
 import { RelationList } from './RelationList'
 import { PropertyList } from './PropertyList'
+import { useOpenSectionsContext } from '../../openSections'
 
 import { parseProperties } from '../../../../modules/parseProperties'
 import styles from './index.module.css'
 
 type PcPresentationProps = {
   pC?: any
+  objId?: string
 }
 
-export const PcPresentation = ({ pC }: PcPresentationProps) => {
-  const [expanded, setExpanded] = useState(false)
+export const PcPresentation = ({ pC, objId }: PcPresentationProps) => {
+  // the section is tracked in the ?open= param by `<objId>/<pcId>` (the
+  // same collection can appear for the object and for a synonym); while
+  // data is still loading there is no id, so fall back to local state
+  const [fallbackExpanded, setFallbackExpanded] = useState(false)
   const [pCDescriptionExpanded, setPCDescriptionExpanded] = useState(false)
+  const openSections = useOpenSectionsContext()
+  const sectionId =
+    pC?.id ? (objId ? `${objId}/${pC.id}` : pC.id) : undefined
+  const expanded =
+    sectionId && openSections ?
+      openSections.isSectionOpen(sectionId, false)
+    : fallbackExpanded
+  const setExpanded = (open: boolean) => {
+    if (sectionId && openSections) {
+      openSections.setSectionOpen(sectionId, false, open)
+    } else {
+      setFallbackExpanded(open)
+    }
+  }
 
   const pCO = pC?.pcos?.[0]
   const relations = pC?.relations ?? []
