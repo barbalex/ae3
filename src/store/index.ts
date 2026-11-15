@@ -155,3 +155,64 @@ export const exportWithSynonymDataAtom = atom<boolean>(true)
 
 // Export add filter fields atom
 export const exportAddFilterFieldsAtom = atom<boolean>(true)
+
+// The export*Atom family aggregated into one object: single read/write
+// point for serialising the export configuration into the URL
+export type ExportConfig = {
+  type: string | null
+  taxonomies: string[]
+  ids: string[]
+  taxProperties: TaxProperty[]
+  pcoProperties: PcoProperty[]
+  rcoProperties: RcoProperty[]
+  taxFilters: TaxFilter[]
+  pcoFilters: PcoFilter[]
+  rcoFilters: RcoFilter[]
+  withSynonymData: boolean
+  addFilterFields: boolean
+}
+
+export const createDefaultExportConfig = (): ExportConfig => ({
+  type: null,
+  taxonomies: [],
+  ids: [],
+  taxProperties: [],
+  pcoProperties: [],
+  rcoProperties: [],
+  taxFilters: [],
+  pcoFilters: [],
+  rcoFilters: [],
+  withSynonymData: true,
+  addFilterFields: true,
+})
+
+export const exportConfigAtom = atom<ExportConfig>((get) => ({
+  type: get(exportTypeAtom),
+  taxonomies: get(exportTaxonomiesAtom),
+  ids: get(exportIdsAtom),
+  taxProperties: get(exportTaxPropertiesAtom),
+  pcoProperties: get(exportPcoPropertiesAtom),
+  rcoProperties: get(exportRcoPropertiesAtom),
+  taxFilters: get(exportTaxFiltersAtom),
+  pcoFilters: get(exportPcoFiltersAtom),
+  rcoFilters: get(exportRcoFiltersAtom),
+  withSynonymData: get(exportWithSynonymDataAtom),
+  addFilterFields: get(exportAddFilterFieldsAtom),
+}))
+
+export const setExportConfigAtom = atom(
+  null,
+  (get, set, config: ExportConfig) => {
+    set(exportTypeAtom, config.type)
+    set(exportTaxonomiesAtom, config.taxonomies)
+    set(exportIdsAtom, config.ids)
+    set(exportTaxPropertiesAtom, config.taxProperties)
+    set(exportPcoPropertiesAtom, config.pcoProperties)
+    set(exportRcoPropertiesAtom, config.rcoProperties)
+    set(exportTaxFiltersAtom, config.taxFilters)
+    set(exportPcoFiltersAtom, config.pcoFilters)
+    set(exportRcoFiltersAtom, config.rcoFilters)
+    set(exportWithSynonymDataAtom, config.withSynonymData)
+    set(exportAddFilterFieldsAtom, config.addFilterFields)
+  },
+)
