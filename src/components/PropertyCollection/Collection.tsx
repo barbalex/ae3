@@ -8,11 +8,16 @@ import {
   useQuery,
   keepPreviousData,
 } from '@tanstack/react-query'
-import { useParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { booleanToJaNein } from '../../modules/booleanToJaNein'
 import { apiFetch, apiCount, rpc } from '../../modules/api'
+import {
+  collectionListSearchParams,
+  collectionListStateFromParams,
+  type CollectionListState,
+} from '../../modules/collectionListUrl'
 import { loginUsernameAtom } from '../../store'
 import { Spinner } from '../shared/Spinner'
 import { DataTable } from '../shared/DataTable'
@@ -146,9 +151,18 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
 
   const username = useAtomValue(loginUsernameAtom)
 
-  const [count, setCount] = useState(15)
-  const [orderBy, setOrderBy] = useState('Objekt Name')
-  const [sortDirection, setSortDirection] = useState('asc')
+  // list state lives in the URL so a configured view is a shareable link
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { count, orderBy, sortDirection } =
+    collectionListStateFromParams(searchParams)
+  const setListState = (partial: Partial<CollectionListState>) =>
+    setSearchParams(
+      collectionListSearchParams(
+        { count, orderBy, sortDirection, ...partial },
+        searchParams,
+      ),
+      { replace: true },
+    )
 
   const [xlsxExportLoading, setXlsxExportLoading] = useState(false)
   const [csvExportLoading, setCsvExportLoading] = useState(false)
@@ -193,8 +207,10 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
     orderBy: string
     direction: string
   }) => {
-    setOrderBy(orderBy)
-    setSortDirection(direction.toLowerCase())
+    setListState({
+      orderBy,
+      sortDirection: direction.toLowerCase() === 'desc' ? 'desc' : 'asc',
+    })
   }
 
   const exportPages = async function* () {
@@ -284,7 +300,7 @@ export const Collection = ({ spec }: { spec: CollectionSpec }) => {
             }${rows.length > 0 ? ':' : ''}, Erste `}
             <CountInput
               count={count}
-              setCount={setCount}
+              setCount={(nextCount) => setListState({ count: nextCount })}
             />
             {' :'}
           </div>
