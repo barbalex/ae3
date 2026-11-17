@@ -26,6 +26,8 @@ html {
   --ae-bg-card: rgba(255, 255, 255, 0.6);
   --ae-brand-accent: #d84315;
   --ae-brand-hover: #f57c00;
+  /* no dark variant: the AppBar keeps this orange in dark mode too */
+  --ae-brand-appbar: #c24600;
   --ae-green: #2e7d32;
   --ae-tab-selected: #c24600;
   --ae-text-shadow-color: #fff;

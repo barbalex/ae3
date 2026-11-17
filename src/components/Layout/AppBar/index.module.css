@@ -8,7 +8,7 @@
 }
 
 .appBar {
-  background-color: #c24600 !important;
+  background-color: var(--ae-brand-appbar) !important;
   @media print {
     display: none !important;
   }
