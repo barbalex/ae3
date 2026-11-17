@@ -6,6 +6,12 @@ import {
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 
+// statically imported on purpose: the boundary renders exactly when the app
+// is already failing — a lazy chunk fetch that fails then would swallow the
+// original error (error_report 2026-11-17: "Unable to preload CSS for
+// RouterErrorBoundary-*" instead of the actual error)
+import { RouterErrorBoundary } from './shared/RouterErrorBoundary'
+
 const Layout = lazy(() => import('./Layout/index'))
 const Home = lazy(() => import('./Home'))
 const Benutzer = lazy(() => import('./Benutzer/index'))
@@ -40,10 +46,6 @@ const Export = lazy(async () => ({
 }))
 const Data = lazy(async () => ({
   default: (await import('./Data/index')).Data,
-}))
-const RouterErrorBoundary = lazy(async () => ({
-  default: (await import('./shared/RouterErrorBoundary'))
-    .RouterErrorBoundary,
 }))
 
 // Use react-router with outlets
