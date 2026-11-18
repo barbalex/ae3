@@ -4,7 +4,7 @@
  * but is not compatible with older browsers
  */
 export const getUrlParamByName = (name: string): string | null => {
-  name = name.replace(/[\[\]]/g, '\\$&') // eslint-disable-line no-useless-escape
+  name = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results =
     typeof window !== 'undefined' ? regex.exec(window.location.href) : null
