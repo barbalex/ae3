@@ -164,12 +164,10 @@ export const Preview = () => {
       if (taxonomies.length === 0) return []
 
       const data = await (async () => {
-          const r = await rpc(
-            'export_all_json',
-            rpcArgs(count),
-            // the wrapper takes one jsonb parameter
-            { headers: { Prefer: 'params=single-object' } },
-          )
+          // the wrapper takes a single jsonb parameter named "params";
+          // passed as a named argument (Prefer: params=single-object was
+          // dropped in postgrest v13)
+          const r = await rpc('export_all_json', { params: rpcArgs(count) })
           return {
             data: {
               exportAll: {
@@ -204,12 +202,9 @@ export const Preview = () => {
 
   // fetches all rows (count: 0), like the xlsx export does
   const fetchAllRows = async () => {
-    const r = await rpc(
-      'export_all_json',
-      rpcArgs(0),
-      // the wrapper takes one jsonb parameter
-      { headers: { Prefer: 'params=single-object' } },
-    )
+    // single jsonb parameter named "params" (Prefer: params=single-object
+    // was dropped in postgrest v13)
+    const r = await rpc('export_all_json', { params: rpcArgs(0) })
     return r.export_data ?? []
   }
 

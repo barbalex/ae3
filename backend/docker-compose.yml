@@ -33,7 +33,7 @@ services:
   postgrest:
     container_name: ae_postgrest
     restart: always
-    image: postgrest/postgrest:v12.2.3
+    image: postgrest/postgrest:v16.5
     networks:
       - network
     expose:
@@ -49,12 +49,14 @@ services:
       # tokens issued by ae.login remain valid.
       # if the secret contains a dollar sign, .env must escape it as $$
       PGRST_DB_URI: ${DATABASE_URL}
-      # v12 may otherwise try reading config from the database
+      # v16 defaults db-config to true and would try reading config
+      # from the database
       PGRST_DB_CONFIG: 'false'
       PGRST_DB_SCHEMAS: ae
       PGRST_DB_ANON_ROLE: anon
       PGRST_JWT_SECRET: ${JWT_SECRET}
-      PGRST_SERVER_CORS_ENABLED: true
+      # v16 dropped server-cors-enabled; with server-cors-allowed-origins
+      # unset (default) CORS accepts requests from any domain, as before
   caddy:
     build:
       context: ./caddy
