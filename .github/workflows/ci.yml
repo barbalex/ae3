@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 26
           cache: npm
       # .npmrc uses force=true and save-exact=true; a plain install also
       # respects the lockfile, matching the local setup closely enough
